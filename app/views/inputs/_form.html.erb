@@ -1,0 +1,48 @@
+<%= form_with(model: input, multipart: true, local: true) do |f| %>
+  <div class="mb-3">
+    <%= f.label :name %>
+    <%= f.text_field :name, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :input_type_id, "Tipo de Insumo" %>
+    <%= f.collection_select :input_type_id, InputType.all, :id, :name, { include_blank: true }, class: "form-select" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :supplier_id, "Fornecedor" %>
+    <%= f.collection_select :supplier_id, Supplier.all, :id, :name, { include_blank: true }, class: "form-select" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :brand_id, "Marca" %>
+    <%= f.collection_select :brand_id, Brand.all, :id, :name, { include_blank: true }, class: "form-select" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :cost, "Custo (R$)" %>
+    <%= f.number_field :cost, step: "any", class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :weight, "Peso" %>
+    <%= f.number_field :weight, step: "any", class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :unit_of_measurement, "Unidade de Medida" %>
+    <%= f.select :unit_of_measurement, ['kg', 'g', 'mL', 'L'], {}, class: "form-select" %>
+  </div>
+
+  <div>
+    <%= f.label :image, "Imagem", style: "display: block" %>
+    <%= f.file_field :image %>
+  </div>
+
+  <div>
+    <%= f.submit class: "btn btn-primary" %>
+  </div>
+  <div>
+    <%= link_to "Voltar", inputs_path, class: "btn btn-secondary" %>
+  </div>
+<% end %>

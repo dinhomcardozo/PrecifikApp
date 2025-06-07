@@ -1,2 +1,42 @@
-<h1>Inputs#index</h1>
-<p>Find me in app/views/inputs/index.html.erb</p>
+<h1>Insumos</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Insumo</th>
+      <th>Tipo</th>
+      <th>Custo (R$)</th>
+      <th>Fornecedor</th>
+      <th>Peso</th>
+      <th>Unidade</th>
+      <th>Imagem</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @inputs.each do |input| %>
+      <tr>
+        <td><%= input.id %></td>
+        <td><%= input.name %></td>
+        <td><%= input.input_type&.name || "-" %></td>
+        <td>R$ <%= number_with_precision(input.cost, precision: 2, separator: ',', delimiter: '.') %></td>
+        <td><%= input.supplier&.name || "-" %></td>
+        <td><%= input.weight %></td>
+        <td><%= input.unit_of_measurement %></td>
+        <td>
+          <% if input.image.attached? %>
+            <%= image_tag input.image, size: "50x50", alt: input.name %>
+          <% else %>
+            Nenhuma
+          <% end %>
+        </td>
+        <td>
+          <%= link_to "Editar", edit_input_path(input), class: "btn btn-sm btn-primary" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to "Novo Insumo", new_input_path, class: "btn btn-success" %>

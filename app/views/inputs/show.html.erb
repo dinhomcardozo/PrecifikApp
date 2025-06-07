@@ -1,2 +1,17 @@
-<h1>Inputs#show</h1>
-<p>Find me in app/views/inputs/show.html.erb</p>
+<h1><%= @input.name %></h1>
+
+<p><strong>ID:</strong> <%= @input.id %></p>
+<p><strong>Tipo de Insumo:</strong> <%= @input.input_type&.name || "-" %></p>
+<p><strong>Custo (R$):</strong> <%= number_to_currency(@input.cost) %></p>
+<p><strong>Fornecedor:</strong> <%= @input.supplier&.name || "-" %></p>
+<p><strong>Unidade:</strong> <%= @input.unit_of_measurement %></p>
+<p><strong>Peso:</strong> <%= @input.weight %></p>
+<p><strong>Marca:</strong> <%= @input.brand&.name || "-" %></p>
+
+<% if @input.image.attached? %>
+  <%= image_tag @input.image.variant(resize_to_limit: [300, 300]), size: "300x300", alt: @input.name %>
+<% else %>
+  <p>Sem imagem.</p>
+<% end %>
+
+<%= link_to "Voltar", inputs_path, class: "btn btn-secondary" %>

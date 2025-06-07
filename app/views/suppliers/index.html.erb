@@ -1,2 +1,24 @@
-<h1>Suppliers#index</h1>
-<p>Find me in app/views/suppliers/index.html.erb</p>
+<h1>Fornecedores</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% Supplier.all.each do |supplier| %>
+      <tr>
+        <td><%= supplier.id %></td>
+        <td><%= supplier.name %></td>
+        <td>
+          <%= link_to "Editar", edit_supplier_path(supplier), class: "btn btn-sm btn-primary" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to "Novo Fornecedor", new_supplier_path, class: "btn btn-success" %>

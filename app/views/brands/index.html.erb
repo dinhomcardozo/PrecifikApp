@@ -1,2 +1,24 @@
-<h1>Brands#index</h1>
-<p>Find me in app/views/brands/index.html.erb</p>
+<h1>Marcas</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome da Marca</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @brands.each do |brand| %>
+      <tr>
+        <td><%= brand.id %></td>
+        <td><%= brand.name %></td>
+        <td>
+          <%= link_to "Editar", edit_brand_path(brand), class: "btn btn-sm btn-primary" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to "Nova Marca", new_brand_path, class: "btn btn-success" %>
