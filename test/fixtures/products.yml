@@ -1,0 +1,27 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  description: MyText
+  unit_of_measurement: MyString
+  tax: 1.5
+  financial_cost: 1.5
+  total_weight: 1.5
+  total_cost: 1.5
+  profit_margin_retail: 1.5
+  profit_margin_wholesale: 1.5
+  sale_price_retail: 1.5
+  sale_price_wholesale: 1.5
+  brand: one
+
+two:
+  description: MyText
+  unit_of_measurement: MyString
+  tax: 1.5
+  financial_cost: 1.5
+  total_weight: 1.5
+  total_cost: 1.5
+  profit_margin_retail: 1.5
+  profit_margin_wholesale: 1.5
+  sale_price_retail: 1.5
+  sale_price_wholesale: 1.5
+  brand: two

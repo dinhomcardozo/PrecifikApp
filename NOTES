@@ -1,0 +1,59 @@
+**** IMPORT MAPS
+
+app/javascript/
+├── controllers/       # Para Stimulus controllers
+├── custom/            # Para scripts personalizados (opcional)
+└── application.js      # Ponto de entrada principal
+
+Configurar Import MAPS
+  touch config/importmap.rb #cria arquivo
+  
+-----------------------------------------------
+
+git init
+
+git add .
+
+git commit -m "Descreva o commit"
+
+git push -u origin main
+
+https://github.com/dinhomcardozo/PrecifikApp.git
+
+
+- mandar projeto para o Github pela 1ª vez
+
+git init
+
+git status
+
+git add .
+
+git status
+
+git commit -m "Commit Home Index Painel Admin"
+
+git branch -M main
+
+git remote add origin https://github.com/dinhomcardozo/PrecifikApp.git
+
+git push -u origin main
+
+--------------------
+
+
+http://localhost:3000/clients/sign_in
+
+Client: dinhobear.ness@gmail.com - h4rdc0r3
+
+
+
+http://localhost:3000/clients/sign_in
+
+Provider: Provider Cardozo - provider@gmail.com - h4rdc0r3
+
+---------------------
+
+PostgreSQL
+
+user: 

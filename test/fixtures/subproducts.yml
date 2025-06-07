@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  weight: 1.5
+  cost: 1.5
+  unit_of_measurement: MyString
+  brand: one
+
+two:
+  name: MyString
+  weight: 1.5
+  cost: 1.5
+  unit_of_measurement: MyString
+  brand: two
