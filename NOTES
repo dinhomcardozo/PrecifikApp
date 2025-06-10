@@ -16,7 +16,7 @@ git add .
 
 git commit -m "Descreva o commit"
 
-git push -u origin main https://github.com/dinhomcardozo/PrecifikApp.git
+git push -u origin main
 
 
 - mandar projeto para o Github pela 1ª vez

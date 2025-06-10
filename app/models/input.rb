@@ -24,4 +24,9 @@ class Input < ApplicationRecord
         0 # valor padrão caso a unidade seja desconhecida
         end
     end
+
+    def cost_per_gram
+        return 0.0 if weight_in_grams.zero?
+    cost / weight_in_grams
+    end
 end

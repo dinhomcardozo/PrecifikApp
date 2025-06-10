@@ -1,0 +1,5 @@
+<h2>Composição do Subproduto</h2>
+
+<%= form_with(model: @subproduct, url: composicao_subproduct_path(@subproduct), method: :patch, local: true) do |f| %>
+  <%= render 'form_composition', f: f %>
+<% end %>

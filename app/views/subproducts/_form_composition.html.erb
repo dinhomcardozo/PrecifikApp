@@ -1,0 +1,27 @@
+<div class="fields_container">
+  <h4 class="mb-3">Composição do Subproduto</h4>
+  <table class="table table-sm table-bordered">
+    <thead>
+      <tr>
+        <th>Insumo</th>
+        <th>Quantidade (g)</th>
+        <th>Custo da Quantidade (R$)</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="compositions">
+      <%= f.fields_for :subproduct_compositions do |sc| %>
+        <%= render 'subproduct_compositions_fields', f: sc %>
+      <% end %>
+      <tr>
+        <td colspan="4">
+          <%= link_to_add_fields "Adicionar Insumo", f, :subproduct_compositions %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
+  <%= f.submit "Finalizar Cadastro", class: "btn btn-success" %>
+</div>

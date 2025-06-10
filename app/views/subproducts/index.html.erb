@@ -1,2 +1,28 @@
-<h1>Subproducts#index</h1>
-<p>Find me in app/views/subproducts/index.html.erb</p>
+<h1>Subprodutos</h1>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Unidade</th>
+      <th>Peso Total (g)</th>
+      <th>Custo Total (R$)</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @subproducts.each do |sp| %>
+      <tr>
+        <td><%= sp.name %></td>
+        <td><%= sp.unit_of_measurement %></td>
+        <td><%= sp.subproduct_compositions.sum(&:quantity_for_a_unit) %></td>
+        <td>R$ <%= number_with_precision(sp.subproduct_compositions.sum(&:quantity_cost), precision: 2) %></td>
+        <td>
+          <%= link_to "Editar", edit_subproduct_path(sp), class: "btn btn-sm btn-primary" %>
+          <%= link_to "Excluir", subproduct_path(sp), data: { turbo_method: :delete, turbo_confirm: "Tem certeza que deseja excluir?" }, class: "btn btn-sm btn-danger" %>        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to "Novo Subproduto", new_subproduct_path, class: "btn btn-success" %>

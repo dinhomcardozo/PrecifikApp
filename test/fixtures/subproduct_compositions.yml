@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  subproduct: one
+  input: one
+  quantity_for_a_unit: 1.5
+
+two:
+  subproduct: two
+  input: two
+  quantity_for_a_unit: 1.5
