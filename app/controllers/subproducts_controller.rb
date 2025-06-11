@@ -57,9 +57,11 @@ class SubproductsController < ApplicationController
 
   def destroy
     @subproduct = Subproduct.find(params[:id])
+    @subproduct.subproduct_compositions.destroy_all # ← exclui todas as composições associadas
     @subproduct.destroy
     redirect_to subproducts_url, notice: "Subproduto excluído com sucesso."
   end
+
 
   private
 
