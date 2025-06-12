@@ -4,8 +4,8 @@
   <thead>
     <tr>
       <th>Nome</th>
-      <th>Unidade</th>
-      <th>Peso Total (g)</th>
+      <th>Unidade Original</th>
+      <th>Peso Total (em g)</th>
       <th>Custo Total (R$)</th>
       <th>Ações</th>
     </tr>
@@ -18,7 +18,8 @@
         <td><%= sp.subproduct_compositions.sum(&:quantity_for_a_unit) %></td>
         <td>R$ <%= number_with_precision(sp.subproduct_compositions.sum(&:quantity_cost), precision: 2) %></td>
         <td>
-          <%= link_to "Editar", edit_subproduct_path(sp), class: "btn btn-sm btn-primary" %>
+          <%= link_to "Editar Subproduto", edit_subproduct_path(sp), class: "btn btn-sm btn-outline-primary me-2" %>
+          <%= link_to "Editar Composição", edit_composition_subproduct_path(sp), class: "btn btn-sm btn-primary" %>
           <%= link_to "Excluir", subproduct_path(sp), data: { turbo_method: :delete, turbo_confirm: "Tem certeza que deseja excluir?" }, class: "btn btn-sm btn-danger" %>        </td>
       </tr>
     <% end %>

@@ -26,8 +26,8 @@ Rails.application.routes.draw do
     end
 
     member do
-      get 'composicao', to: 'subproducts#edit_composition'
-      patch 'composicao', to: 'subproducts#update_composition'
+      get 'composicao', to: 'subproducts#edit_composition', as: 'edit_composition'
+      patch 'composicao', to: 'subproducts#update_composition', as: 'update_composition'
     end
   end
 

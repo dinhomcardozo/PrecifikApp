@@ -12,7 +12,7 @@ class SubproductsController < ApplicationController
     @subproduct = Subproduct.find(params[:id])
 
     if @subproduct.update(subproduct_params)
-      redirect_to subproducts_path, notice: "Composição atualizada com sucesso."
+      redirect_to subproducts_path, notice: "Subproduto atualizado com sucesso."
     else
       render :edit_composition
     end

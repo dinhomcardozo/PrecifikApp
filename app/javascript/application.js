@@ -1,27 +1,43 @@
 // app/javascript/application.js
 
 import "@hotwired/turbo-rails"
+import "@rails/activestorage"
 import "controllers"
+
+console.log("JavaScript do formulário aninhado carregado.");
+
+let adicionarInsumoJSLoaded = false;
 
 document.addEventListener("turbo:load", function () {
   document.body.addEventListener("click", function (e) {
-    // Adicionar nova linha de composição
     if (e.target.classList.contains("add_fields")) {
+      e.preventDefault();
+
       const id = e.target.dataset.id;
-      const fields = e.target.dataset.fields.replace(/NEW_RECORD/g, new Date().getTime());
-      const container = e.target.closest("table")?.querySelector("tbody");
+      let fields = e.target.dataset.fields;
 
-      if (container) {
-        const newElement = document.createElement("div");
-        newElement.innerHTML = fields;
+      fields = fields.replace(/NEW_RECORD/g, new Date().getTime());
 
-        container.insertBefore(newElement.firstChild, container.querySelector("tr:last-child"));
+      // Captura a tabela pelo ID diretamente
+      const container = document.querySelector("#compositions tbody");
+
+      if (!container) {
+        console.warn("TBody NÃO encontrado");
+        return;
       }
 
-      e.preventDefault();
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = fields;
+
+      const lastRow = container.querySelector("tr:last-child");
+
+      if (lastRow) {
+        container.insertBefore(tempDiv.firstChild, lastRow);
+      } else {
+        container.appendChild(tempDiv.firstChild);
+      }
     }
 
-    // Remover linha de composição
     if (e.target.classList.contains("remove_fields")) {
       const row = e.target.closest("tr");
       if (row) {
