@@ -26,7 +26,7 @@
         <td><%= input.unit_of_measurement %></td>
         <td>
           <% if input.image.attached? %>
-            <%= image_tag input.image.url, class: "index_images", alt: input.name %>
+            <%= image_tag input.image.url, class: "index_image", alt: input.name %>
           <% else %>
             Nenhuma
           <% end %>
@@ -39,4 +39,4 @@
   </tbody>
 </table>
 
-<%= link_to "Novo Insumo", new_input_path, class: "btn btn-success" %>
+<%= link_to "Novo Insumo", new_input_path, class: "standart-button" %>

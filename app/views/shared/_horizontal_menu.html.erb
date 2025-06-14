@@ -1,51 +1,13 @@
-<!-- app/views/shared/_horizontal_menu.html.erb -->
-
-<style>
-  .menu-horizontal {
-    background-color: #16160b;
-    padding: 15px;
-    font-family: 'Raleway', sans-serif;
-    display: flex;
-    align-items: center; /* Alinhamento vertical automático */
-    gap: 1rem;
-  }
-
-  .menu-horizontal a:not(.logo-link) {
-    color: white;
-    text-decoration: none;
-    font-weight: 300;
-    padding: 0.75rem 1rem;
-    border-radius: 10px;
-    transition: background-color 0.3s, color 0.3s;
-  }
-
-  .menu-horizontal a:hover,
-  .menu-horizontal a:focus {
-    background-color: #d3db23;
-    color: black;
-  }
-
-  .logo-link img {
-    width: 120px;
-    height: auto;
-    transition: transform 0.3s ease;
-  }
-
-  .logo-link:hover img {
-    transform: scale(1.05); /* Leve zoom na imagem ao passar o mouse */
-  }
-</style>
-
-<div class="menu-horizontal d-flex align-items-center mb-4">
-  <%= link_to root_path, class: "logo-link me-4" do %>
+<div class="menu-horizontal">
+  <a href="/" class="logo-link">
     <%= image_tag("precifikA-negative.png", width: 120, alt: "Logo PrecifikApp") %>
-  <% end %>
+  </a>
 
-  <%= link_to "Dashboard", root_path, class: "me-3" %>
-  <%= link_to "Produtos", products_path, class: "me-3" %>
-  <%= link_to "Subprodutos", subproducts_path, class: "me-3" %>
-  <%= link_to "Insumos", inputs_path, class: "me-3" %>
-  <%= link_to "Tipos de Insumo", input_types_path, class: "me-3" %>
-  <%= link_to "Fornecedores", suppliers_path, class: "me-3" %>
-  <%= link_to "Marcas", brands_path %>
+  <%= link_to "Dashboard", root_path, class: "menu-item" %>
+  <%= link_to "Produtos", products_path, class: "menu-item" %>
+  <%= link_to "Subprodutos", subproducts_path, class: "menu-item" %>
+  <%= link_to "Insumos", inputs_path, class: "menu-item" %>
+  <%= link_to "Tipos de Insumo", input_types_path, class: "menu-item" %>
+  <%= link_to "Fornecedores", suppliers_path, class: "menu-item" %>
+  <%= link_to "Marcas", brands_path, class: "menu-item" %>
 </div>

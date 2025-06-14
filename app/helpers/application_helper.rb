@@ -10,6 +10,6 @@ module ApplicationHelper
       "#",
       class: "add_input_fields",
       data: { id: id, fields: fields.gsub("\n", "").gsub(/<!--.*?-->/m, "") }
-    )
+    ).html_safe
   end
 end

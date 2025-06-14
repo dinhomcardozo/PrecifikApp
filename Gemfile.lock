@@ -385,7 +385,7 @@ DEPENDENCIES
   brakeman
   capybara
   debug
-  image_processing (~> 1.14)
+  image_processing (~> 1.2)
   importmap-rails
   jbuilder
   kamal
