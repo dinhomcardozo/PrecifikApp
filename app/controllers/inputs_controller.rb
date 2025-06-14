@@ -1,4 +1,6 @@
 class InputsController < ApplicationController
+  before_action :set_url_options, only: [:index, :show]
+
   def index
     @inputs = Input.all.includes(:supplier, :input_type)
   end
@@ -62,5 +64,13 @@ class InputsController < ApplicationController
         whitelisted[:weight] = whitelisted[:weight].to_f * 1000
       end
     end
+  end
+
+  def set_url_options
+    ActiveStorage::Current.url_options = {
+      protocol: request.protocol,
+      host: request.host,
+      port: request.port
+    }
   end
 end

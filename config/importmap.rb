@@ -8,3 +8,4 @@ pin_all_from "app/javascript/controllers", under: "controllers"
 pin "@rails/activestorage", to: "@rails--activestorage.js" # @8.0.200
 pin "@hotwired/turbo", to: "@hotwired--turbo.js" # @8.0.13
 pin "@rails/actioncable/src", to: "@rails--actioncable--src.js" # @8.0.200
+pin "tailwindcss" # @4.1.10

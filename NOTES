@@ -7,7 +7,7 @@ app/javascript/
 
 Configurar Import MAPS
   touch config/importmap.rb #cria arquivo
-  
+
 -----------------------------------------------
 
 git init

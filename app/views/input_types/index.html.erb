@@ -14,11 +14,11 @@
         <td><%= input_type.id %></td>
         <td><%= input_type.name %></td>
         <td>
-          <%= link_to "Editar", edit_input_type_path(input_type), class: "btn btn-sm btn-primary" %>
+          <%= link_to "Editar", edit_input_type_path(input_type), class: "action-button" %>
         </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<%= link_to "Novo Tipo de Insumo", new_input_type_path, class: "btn btn-success" %>
+<%= link_to "Novo Tipo de Insumo", new_input_type_path, class: "standart-button" %>

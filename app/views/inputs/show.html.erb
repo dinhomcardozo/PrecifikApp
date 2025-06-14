@@ -8,10 +8,10 @@
 <p><strong>Peso:</strong> <%= @input.weight %></p>
 <p><strong>Marca:</strong> <%= @input.brand&.name || "-" %></p>
 
-<% if @input.image.attached? %>
-  <%= image_tag @input.image.variant(resize_to_limit: [300, 300]), size: "300x300", alt: @input.name %>
+<% if input.image.attached? %>
+  <%= image_tag input.image.url, class: "index_images", alt: input.name %>
 <% else %>
-  <p>Sem imagem.</p>
+  Nenhuma
 <% end %>
 
-<%= link_to "Voltar", inputs_path, class: "btn btn-secondary" %>
+<%= link_to "Voltar", inputs_path, class: "standart-button" %>

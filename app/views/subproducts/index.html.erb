@@ -18,12 +18,13 @@
         <td><%= sp.subproduct_compositions.sum(&:quantity_for_a_unit) %></td>
         <td>R$ <%= number_with_precision(sp.subproduct_compositions.sum(&:quantity_cost), precision: 2) %></td>
         <td>
-          <%= link_to "Editar Subproduto", edit_subproduct_path(sp), class: "btn btn-sm btn-outline-primary me-2" %>
-          <%= link_to "Editar Composição", edit_composition_subproduct_path(sp), class: "btn btn-sm btn-primary" %>
-          <%= link_to "Excluir", subproduct_path(sp), data: { turbo_method: :delete, turbo_confirm: "Tem certeza que deseja excluir?" }, class: "btn btn-sm btn-danger" %>        </td>
+          <%= link_to "Editar Subproduto", edit_subproduct_path(sp), class: "action-button" %>
+          <%= link_to "Editar Composição", edit_composition_subproduct_path(sp), class: "action-button" %>
+          <%= link_to "Excluir", subproduct_path(sp), data: { turbo_method: :delete, turbo_confirm: "Tem certeza que deseja excluir?" }, class: "action-button" %>
+        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<%= link_to "Novo Subproduto", new_subproduct_path, class: "btn btn-success" %>
+<%= link_to "Novo Subproduto", new_subproduct_path, class: "standart-button" %>

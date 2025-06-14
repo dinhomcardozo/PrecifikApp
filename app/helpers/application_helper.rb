@@ -8,7 +8,7 @@ module ApplicationHelper
     link_to(
       name,
       "#",
-      class: "add_fields btn btn-sm btn-success",
+      class: "add_input_fields",
       data: { id: id, fields: fields.gsub("\n", "").gsub(/<!--.*?-->/m, "") }
     )
   end

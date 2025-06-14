@@ -8,33 +8,12 @@
   <td class="cost-display">
     <% if f.object.input_id.present? && f.object.quantity_for_a_unit.to_f > 0 %>
       <% input = Input.find_by(id: f.object.input_id) %>
-      <% cost_per_gram = input&.cost / input&.weight_in_grams || 0.0 %>
-      R$ <%= number_with_precision(f.object.quantity_for_a_unit * cost_per_gram, precision: 2) %>
-    <% else %>
-      -
-    <% end %>
-  </td>
-  <td>
-    <%= link_to "Remover", "#", class: "remove_fields btn btn-sm btn-outline-danger" %>
-  </td>
-</tr>
-
-<tr class="fields">
-  <td>
-    <%= f.collection_select :input_id, Input.all, :id, :name, include_blank: true, class: "form-select" %>
-  </td>
-  <td>
-    <%= f.number_field :quantity_for_a_unit, step: "any", class: "form-control composition-quantity" %>
-  </td>
-  <td class="cost-display">
-    <% if f.object.input_id.present? && f.object.quantity_for_a_unit.to_f > 0 %>
-      <% input = Input.find_by(id: f.object.input_id) %>
       R$ <%= number_with_precision(f.object.quantity_cost, precision: 2) %>
     <% else %>
       -
     <% end %>
   </td>
   <td>
-    <%= link_to "Remover", "#", class: "remove_fields btn btn-sm btn-outline-danger" %>
+    <%= link_to "Remover", "#", class: "remove_input_fields", class: "action-button" %>
   </td>
 </tr>

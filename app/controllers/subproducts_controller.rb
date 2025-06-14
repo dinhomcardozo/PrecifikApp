@@ -4,7 +4,9 @@ class SubproductsController < ApplicationController
   #Actions para criação básica do subproduct antes de ir para subproduct_compositions
   def edit_composition
     @subproduct = Subproduct.find(params[:id])
-    3.times { @subproduct.subproduct_compositions.build } unless @subproduct.subproduct_compositions.any?
+    unless @subproduct.subproduct_compositions.any?
+      3.times { @subproduct.subproduct_compositions.build }
+    end
     render 'edit_composition'
   end
 
@@ -37,7 +39,7 @@ class SubproductsController < ApplicationController
     @subproduct = Subproduct.new(subproduct_params.except(:subproduct_compositions_attributes))
 
     if @subproduct.save
-      redirect_to composicao_subproduct_path(@subproduct) # ← aqui estava errado
+      redirect_to edit_composition_subproduct_path(@subproduct)
     else
       render :new
     end

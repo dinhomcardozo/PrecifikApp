@@ -26,13 +26,13 @@
         <td><%= input.unit_of_measurement %></td>
         <td>
           <% if input.image.attached? %>
-            <%= image_tag input.image, size: "50x50", alt: input.name %>
+            <%= image_tag input.image.url, class: "index_images", alt: input.name %>
           <% else %>
             Nenhuma
           <% end %>
         </td>
         <td>
-          <%= link_to "Editar", edit_input_path(input), class: "btn btn-sm btn-primary" %>
+          <%= link_to "Editar", edit_input_path(input), class: "action-button" %>
         </td>
       </tr>
     <% end %>

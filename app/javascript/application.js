@@ -8,9 +8,9 @@ console.log("JavaScript do formulário aninhado carregado.");
 
 let adicionarInsumoJSLoaded = false;
 
-document.addEventListener("turbo:load", function () {
+document.addEventListener("turbo:render", function () {
   document.body.addEventListener("click", function (e) {
-    if (e.target.classList.contains("add_fields")) {
+    if (e.target.classList.contains("add_input_fields")) {
       e.preventDefault();
 
       const id = e.target.dataset.id;
@@ -38,7 +38,7 @@ document.addEventListener("turbo:load", function () {
       }
     }
 
-    if (e.target.classList.contains("remove_fields")) {
+    if (e.target.classList.contains("remove_input_fields")) {
       const row = e.target.closest("tr");
       if (row) {
         row.remove();

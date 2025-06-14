@@ -14,11 +14,11 @@
         <td><%= supplier.id %></td>
         <td><%= supplier.name %></td>
         <td>
-          <%= link_to "Editar", edit_supplier_path(supplier), class: "btn btn-sm btn-primary" %>
+          <%= link_to "Editar", edit_supplier_path(supplier), class: "action-button" %>
         </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<%= link_to "Novo Fornecedor", new_supplier_path, class: "btn btn-success" %>
+<%= link_to "Novo Fornecedor", new_supplier_path, class: "standart-button" %>
