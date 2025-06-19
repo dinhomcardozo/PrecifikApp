@@ -3,7 +3,6 @@ class SubproductsController < ApplicationController
 
   #Actions para criação básica do subproduct antes de ir para subproduct_compositions
   def edit_composition
-    @subproduct = Subproduct.find(params[:id])
     unless @subproduct.subproduct_compositions.any?
       3.times { @subproduct.subproduct_compositions.build }
     end
@@ -11,12 +10,10 @@ class SubproductsController < ApplicationController
   end
 
   def update_composition
-    @subproduct = Subproduct.find(params[:id])
-
     if @subproduct.update(subproduct_params)
       redirect_to subproducts_path, notice: "Subproduto atualizado com sucesso."
     else
-      render :edit_composition
+      render :edit_composition, status: :unprocessable_entity
     end
   end
 
@@ -36,12 +33,12 @@ class SubproductsController < ApplicationController
   end
 
   def create
-    @subproduct = Subproduct.new(subproduct_params.except(:subproduct_compositions_attributes))
+    @subproduct = Subproduct.new(subproduct_params)
 
     if @subproduct.save
       redirect_to edit_composition_subproduct_path(@subproduct)
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -53,19 +50,20 @@ class SubproductsController < ApplicationController
     if @subproduct.update(subproduct_params)
       redirect_to subproducts_path, notice: "Subproduto atualizado com sucesso."
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
     @subproduct = Subproduct.find(params[:id])
-    @subproduct.subproduct_compositions.destroy_all # ← exclui todas as composições associadas
+    @subproduct.subproduct_compositions.destroy_all
     @subproduct.destroy
     redirect_to subproducts_url, notice: "Subproduto excluído com sucesso."
   end
 
-
   private
+
+    private
 
   def set_subproduct
     @subproduct = Subproduct.find(params[:id])

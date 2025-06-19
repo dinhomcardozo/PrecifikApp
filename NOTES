@@ -1,13 +1,20 @@
-**** IMPORT MAPS
+**** REMOVENDO IMPORT MAPS
 
-app/javascript/
-├── controllers/       # Para Stimulus controllers
-├── custom/            # Para scripts personalizados (opcional)
-└── application.js      # Ponto de entrada principal
+remove tags from application.rb
+replace: <%= javascript_importmap_tags %>
 
-Configurar Import MAPS
-  touch config/importmap.rb #cria arquivo
+Passaremos a usar o Propshaft
+<%= javascript_include_tag "application" %>
+gem 'propshaft', '~> 1.1'
 
+bin/importmap unpin @hotwired/turbo-rails
+bin/importmap unpin @hotwired/turbo-rails
+
+Instalar Hotwire:
+
+rails javascript:install:webpack
+
+rails stimulus:install
 -----------------------------------------------
 
 git init

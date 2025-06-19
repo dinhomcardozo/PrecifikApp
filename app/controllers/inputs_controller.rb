@@ -7,6 +7,10 @@ class InputsController < ApplicationController
 
   def show
     @input = Input.find(params[:id])
+    respond_to do |format|
+      format.html { render layout: false }
+      format.json { render json: @input }
+    end
   end
 
   def new

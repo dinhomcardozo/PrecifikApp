@@ -1,19 +1,12 @@
-<tr class="fields">
+<tr class="fields" data-nested-form-target="container">
   <td>
-    <%= f.collection_select :input_id, Input.all, :id, :name, include_blank: true, class: "form-select" %>
+    <%= f.collection_select :input_id, Input.all, :id, :name, include_blank: true, class: "form-select", data: { action: "input->nested-form#updateCost" } %>
   </td>
   <td>
-    <%= f.number_field :quantity_for_a_unit, step: "any", class: "form-control composition-quantity" %>
+    <%= f.number_field :quantity_for_a_unit, step: "any", class: "composition-quantity form-control", data: { action: "input->nested-form#updateCost" } %>
   </td>
-  <td class="cost-display">
-    <% if f.object.input_id.present? && f.object.quantity_for_a_unit.to_f > 0 %>
-      <% input = Input.find_by(id: f.object.input_id) %>
-      R$ <%= number_with_precision(f.object.quantity_cost, precision: 2) %>
-    <% else %>
-      -
-    <% end %>
-  </td>
+  <td class="cost-display">-</td>
   <td>
-    <%= link_to "Remover", "#", class: "remove_input_fields", class: "action-button" %>
+    <%= link_to "Remover", "#", class: "remove_input_fields action-button", data: { action: "nested-form#removeField" } %>
   </td>
 </tr>

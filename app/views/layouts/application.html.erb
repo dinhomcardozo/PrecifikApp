@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
 
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600&display=swap" rel="stylesheet">
     
     <%= csrf_meta_tags %>
@@ -14,15 +14,11 @@
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
-    <%= favicon_link_tag 'precifikA-positive-logo.png', rel: 'icon', type: 'image/png' %>
+    <%= favicon_link_tag 'favoicon.png', rel: 'icon', type: 'image/png' %>
   </head>
-
   <body>
     <%= render 'shared/horizontal_menu' %>
     <%= yield %>
-    <%= javascript_importmap_tags %>
+    <%= javascript_include_tag "application" %>
   </body>
 </html>
