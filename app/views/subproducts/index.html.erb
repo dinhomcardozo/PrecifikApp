@@ -20,7 +20,7 @@
         <td>
           <%= link_to "Editar Subproduto", edit_subproduct_path(sp), class: "action-button" %>
           <%= link_to "Editar Composição", edit_composition_subproduct_path(sp), class: "action-button" %>
-          <%= link_to "Excluir", subproduct_path(sp), data: { turbo_method: :delete, turbo_confirm: "Tem certeza que deseja excluir?" }, class: "action-button" %>
+          <%= button_to "Excluir", subproduct_path(sp), method: :delete, data: { turbo_confirm: "Tem certeza que deseja excluir?" }, class: "action-button" %>
         </td>
       </tr>
     <% end %>

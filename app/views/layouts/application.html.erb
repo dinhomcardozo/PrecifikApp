@@ -19,6 +19,6 @@
   <body>
     <%= render 'shared/horizontal_menu' %>
     <%= yield %>
-    <%= javascript_include_tag "application" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
   </body>
 </html>

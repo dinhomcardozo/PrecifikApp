@@ -370,7 +370,7 @@ DEPENDENCIES
   brakeman
   capybara
   debug
-  image_processing (~> 1.2)
+  image_processing (~> 1.12, >= 1.12.2)
   jbuilder
   kamal
   mini_magick (~> 4.9, >= 4.9.5)

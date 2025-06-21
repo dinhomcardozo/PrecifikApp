@@ -1,27 +1,28 @@
-<%= form_with(model: @subproduct, url: update_composition_subproduct_path(@subproduct), method: :patch, local: false) do |f| %>
-  <table id="compositions" class="table table-sm table-bordered">
+<h3>Editar Composição do Subproduto</h3>
+
+<%= turbo_frame_tag "compositions" do %>
+  <table class="table table-sm table-bordered">
     <thead>
       <tr>
         <th>Insumo</th>
         <th>Quantidade (g)</th>
         <th>Custo da Quantidade (R$)</th>
-        <th></th>
+        <th>Ações</th>
       </tr>
     </thead>
-    <tbody id="compositions-tbody" data-controller="subproduct-nested-form" data-subproduct-nested-form-container-target="container">
-      <%= f.fields_for :subproduct_compositions do |sc| %>
-        <%= render 'subproduct_compositions_fields', f: sc %>
+    <tbody>
+      <% @subproduct.subproduct_compositions.each do |composition| %>
+        <%= render partial: "subproducts/subproduct_compositions_fields", locals: { subproduct_composition: composition } %>
       <% end %>
-
-      <tr>
-        <td colspan="4">
-          <%= link_to_add_fields "Adicionar Insumo", f, :subproduct_compositions, class: "add_input_fields", data: { action: "nested-form#addField" } %>
-        </td>
-      </tr>
     </tbody>
   </table>
-
-  <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
-    <%= f.submit "Finalizar Cadastro", class: "standart-button", data: { loading_text: "Salvando..." } %>
-  </div>
 <% end %>
+
+<div class="my-3">
+  <form action="<%= subproduct_subproduct_compositions_path(@subproduct) %>" method="post" data-turbo-stream="true">
+    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+    <input type="submit" value="Adicionar Insumo" class="btn btn-secondary" />
+  </form>
+</div>
+
+<%= link_to "Finalizar Cadastro", subproducts_path, class: "standart-button" %>

@@ -1,10 +1,11 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
+  static identifier = "subproduct-nested-form"
   static targets = ["container", "costDisplay"]
 
   connect() {
-    console.log("Formulário aninhado carregado");
+    console.log("Formulário aninhado carregado.");
   }
 
   addField(e) {
@@ -21,10 +22,14 @@ export default class extends Controller {
     this.containerTarget.insertBefore(tempDiv.firstChild, e.target.closest("tr"));
   }
 
-  removeField(e) {
-    const row = e.target.closest("tr");
-    if (row) row.remove();
-    e.preventDefault();
+  removeField(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const row = event.target.closest("tr");
+    if (row) {
+      row.remove();
+    }
   }
 
   updateCost(e) {

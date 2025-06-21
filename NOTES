@@ -6,6 +6,7 @@ replace: <%= javascript_importmap_tags %>
 Passaremos a usar o Propshaft
 <%= javascript_include_tag "application" %>
 gem 'propshaft', '~> 1.1'
+local oficial: app/assets/javascript
 
 bin/importmap unpin @hotwired/turbo-rails
 bin/importmap unpin @hotwired/turbo-rails

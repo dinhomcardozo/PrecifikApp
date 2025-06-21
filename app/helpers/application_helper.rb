@@ -1,22 +1,19 @@
 module ApplicationHelper
   def link_to_add_fields(name, f, association, options = {})
     new_object = f.object.send(association).klass.new
-    id = new_object.object_id
+    marker = "NEW_RECORD"
 
-    fields = f.fields_for(association, new_object, child_index: id) do |builder|
+    fields = f.fields_for(association, new_object, child_index: marker) do |builder|
       render("#{association}_fields", f: builder)
     end
 
     link_to(
       name,
       "#",
-      options.merge(
-        class: "add_input_fields #{options[:class] || ""}".strip,
-        data: {
-          id: id,
-          fields: fields.gsub("\n", "").gsub(/<!--.*?-->/m, "")
-        }
-      )
+      options.merge(data: {
+        id: marker,
+        fields: fields.gsub("\n", "").gsub(/<!--.*?-->/m, "")
+      })
     ).html_safe
   end
 end

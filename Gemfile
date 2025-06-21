@@ -4,8 +4,6 @@ source "https://rubygems.org"
 gem "rails", "~> 8.0.2"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem 'propshaft', '~> 1.1'
-
-gem "image_processing", "~> 1.2"
 gem 'mini_magick', '~> 4.9', '>= 4.9.5'
 gem 'ruby-vips', '~> 2.0', '>= 2.0.16'
 # Use postgresql as the database for Active Record
@@ -13,6 +11,7 @@ gem "pg", "~> 1.1"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 
+gem 'image_processing', '~> 1.12', '>= 1.12.2'
 # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 gem "turbo-rails"
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]

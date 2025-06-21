@@ -34,11 +34,15 @@ class SubproductsController < ApplicationController
 
   def create
     @subproduct = Subproduct.new(subproduct_params)
-
+    
     if @subproduct.save
-      redirect_to edit_composition_subproduct_path(@subproduct)
+      respond_to do |format|
+        # Se estiver usando Turbo, pode enviar um Turbo Stream que redirecione ou atualize uma frame:
+        format.turbo_stream { render turbo_stream: turbo_stream.replace("form_container", partial: "subproducts/form_composition", locals: { subproduct: @subproduct }) }
+        format.html { redirect_to edit_composition_subproduct_path(@subproduct) }
+      end
     else
-      render :new, status: :unprocessable_entity
+      render :new
     end
   end
 
