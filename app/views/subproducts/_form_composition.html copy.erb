@@ -19,11 +19,10 @@
 <% end %>
 
 <div class="my-3">
-  <%= button_to "Adicionar Insumo", subproduct_subproduct_compositions_path(@subproduct), 
-    method: :post,
-    data: { turbo_stream: true },
-    class: "action-button" %>
-  </div>
-<br>
+  <form action="<%= subproduct_subproduct_compositions_path(@subproduct) %>" method="post" data-turbo-stream="true">
+    <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+    <input type="submit" value="Adicionar Insumo" class="action-button" />
+  </form>
+</div>
 
 <%= link_to "Finalizar Cadastro", subproducts_path, class: "standart-button" %>

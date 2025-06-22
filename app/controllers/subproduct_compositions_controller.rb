@@ -2,11 +2,10 @@ class SubproductCompositionsController < ApplicationController
   before_action :set_subproduct
   before_action :set_subproduct_composition, only: [:update, :destroy]
 
-def create
-    # Utiliza build para permitir validações (ou create se quiser usar create!)
-    @subproduct_composition = @subproduct.subproduct_compositions.build(quantity_for_a_unit: 0)
+  def create
+    @subproduct_composition = @subproduct.subproduct_compositions.build(subproduct_composition_params)
     # Se precisar, atribua valores default (por exemplo, quantidade zero ou outro valor aceitável)
-    # @subproduct_composition.quantity_for_a_unit ||= 0
+    @subproduct_composition.quantity_for_a_unit ||= 0 if @subproduct_composition.quantity_for_a_unit.blank?
 
     if @subproduct_composition.save
       respond_to do |format|
@@ -26,9 +25,10 @@ def create
             locals: { subproduct: @subproduct }
           )
         end
-        format.html { render :edit_composition, status: :unprocessable_entity }
+        format.html { render "subproducts/edit_composition", status: :unprocessable_entity }
       end
     end
+  end
 
   def update
     if @subproduct_composition.update(subproduct_composition_params)
@@ -36,7 +36,7 @@ def create
         format.turbo_stream do
           render turbo_stream: turbo_stream.replace(
             dom_id(@subproduct_composition),
-            partial: "subproducts/subproduct_composition", 
+            partial: "subproducts/subproduct_compositions_fields", 
             locals: { subproduct_composition: @subproduct_composition }
           )
         end
@@ -70,6 +70,6 @@ def create
   end
 
   def subproduct_composition_params
-    params.require(:subproduct_composition).permit(:input_id, :quantity_for_a_unit)
+    params.fetch(:subproduct_composition, {}).permit(:input_id, :quantity_for_a_unit)
   end
 end

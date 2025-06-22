@@ -2,7 +2,7 @@ class SubproductComposition < ApplicationRecord
   belongs_to :subproduct
   belongs_to :input
 
-  validates :quantity_for_a_unit, presence: true, numericality: { greater_than_or_equal_to: 0.0 }
+  validates :quantity_for_a_unit, presence: true, numericality: { greater_than: 0 }
   validates :input_id, uniqueness: { scope: :subproduct_id, message: "já está na lista" }
   validates_presence_of :input_id, :quantity_for_a_unit
 
