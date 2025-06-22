@@ -18,10 +18,10 @@
       </td>
       <td>
         <% if subproduct_composition.persisted? %>
-          <%= link_to "Remover", subproduct_subproduct_composition_path(subproduct_composition.subproduct, subproduct_composition), 
-                      method: :delete, 
-                      data: { turbo_confirm: "Confirma exclusão?" }, 
-                      class: "remove_input_fields action-button" %>
+          <%= button_to "Remover", subproduct_subproduct_composition_path(subproduct_composition.subproduct, subproduct_composition), 
+                  method: :delete, 
+                  data: { turbo_confirm: "Confirma exclusão?" }, 
+                  class: "remove_input_fields action-button" %>
         <% else %>
           <%= link_to "Remover", "#", class: "remove_input_fields action-button", data: { action: "subproduct-nested-form#removeField" } %>
         <% end %>
