@@ -1,2 +1,77 @@
-<h1>Products#show</h1>
-<p>Find me in app/views/products/show.html.erb</p>
+<h1>Detalhes do Produto</h1>
+
+<div class="product-info">
+  <p><strong>Produto:</strong> <%= @product.description %></p>
+  <p><strong>Marca:</strong> <%= @product.brand.try(:name) %></p>
+  <p><strong>Margem de Lucro Atacado (%):</strong> <%= @product.profit_margin_wholesale %></p>
+  <p><strong>Margem de Lucro Varejo (%):</strong> <%= @product.profit_margin_retail %></p>
+  <p><strong>Custo de transação financeira (%):</strong> <%= @product.financial_cost %></p>
+  <p><strong>Custo de plataforma de venda (%):</strong> <%= @product.sales_channel_cost %></p>
+  <p><strong>Custo de comissão (%):</strong> <%= @product.commission_cost %></p>
+  <p><strong>Custo de envio (R$):</strong> <%= @product.freight_cost %></p>
+  <p><strong>Custo de Armazenagem (R$):</strong> <%= @product.storage_cost %></p>
+</div>
+
+<h2>Composição do Produto</h2>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Subproduto</th>
+      <th>Quantidade (g)</th>
+      <th>Quantity Cost (R$)</th>
+      <th>Lucro Bruto Varejo (R$)</th>
+      <th>Lucro Bruto Atacado (R$)</th>
+      <th>Lucro Líquido Varejo (R$)</th>
+      <th>Lucro Líquido Atacado (R$)</th>
+      <th>Preço Varejo Sugerido (R$)</th>
+      <th>Preço Atacado Sugerido (R$)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @product.product_subproducts.each do |ps| %>
+      <tr>
+        <td><%= ps.subproduct.description %></td>
+        <td><%= ps.quantity %> g</td>
+        <td>
+          <% qs = ps.quantity.to_f * ps.subproduct.cost_per_gram.to_f %>
+          R$ <%= number_with_precision(qs, precision: 2) %>
+        </td>
+        <td>
+          <% suggested_retail = qs * (1 + @product.profit_margin_retail.to_f/100) %>
+          R$ <%= number_with_precision(suggested_retail - qs, precision: 2) %>
+        </td>
+        <td>
+          <% suggested_wholesale = qs * (1 + @product.profit_margin_wholesale.to_f/100) %>
+          R$ <%= number_with_precision(suggested_wholesale - qs, precision: 2) %>
+        </td>
+        <td>
+          <% # Cálculo do lucro líquido para varejo: subtrai os custos agregados (proporcionalmente)
+             aggregated = ( ( @product.financial_cost.to_f + @product.sales_channel_cost.to_f + @product.commission_cost.to_f )/100 * qs ) + (@product.freight_cost.to_f + @product.storage_cost.to_f)
+          %>
+          R$ <%= number_with_precision(suggested_retail - qs - aggregated, precision: 2) %>
+        </td>
+        <td>
+          R$ <%= number_with_precision(suggested_wholesale - qs - aggregated, precision: 2) %>
+        </td>
+        <td>
+          R$ <%= number_with_precision(suggested_retail, precision: 2) %>
+        </td>
+        <td>
+          R$ <%= number_with_precision(suggested_wholesale, precision: 2) %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="product-summary">
+  <h2>Resumo do Produto</h2>
+  <p><strong>Total Peso:</strong> <%= @product.total_weight %> g</p>
+  <p><strong>Total Custo:</strong> R$ <%= number_with_precision(@product.total_cost, precision: 2) %></p>
+  <p><strong>Preço Sugerido Varejo:</strong> R$ <%= number_with_precision(@product.suggested_retail_price, precision: 2) %></p>
+  <p><strong>Preço Sugerido Atacado:</strong> R$ <%= number_with_precision(@product.suggested_wholesale_price, precision: 2) %></p>
+  <p><strong>Lucro Bruto Varejo:</strong> R$ <%= number_with_precision(@product.gross_profit_retail, precision: 2) %></p>
+  <p><strong>Lucro Bruto Atacado:</strong> R$ <%= number_with_precision(@product.gross_profit_wholesale, precision: 2) %></p>
+  <p><strong>Lucro Líquido Varejo:</strong> R$ <%= number_with_precision(@product.net_profit_retail, precision: 2) %></p>
+  <p><strong>Lucro Líquido Atacado:</strong> R$ <%= number_with_precision(@product.net_profit_wholesale, precision: 2) %></p>
+</div>

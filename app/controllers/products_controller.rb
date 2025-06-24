@@ -3,7 +3,8 @@
 class ProductsController < ApplicationController
   def new
     @product = Product.new
-    2.times { @product.product_subproducts.build } # Adiciona 2 campos vazios
+    # Inicialize alguns subprodutos vazios (por exemplo, 1 ou 2)
+    2.times { @product.product_subproducts.build }
   end
 
   def create
@@ -23,8 +24,9 @@ class ProductsController < ApplicationController
 
   def product_params
     params.require(:product).permit(
-      :description, :unit_of_measurement, :tax, :financial_cost,
-      :total_weight, :total_cost, :profit_margin_retail, :profit_margin_wholesale,
+      :description, :brand_id, :weight, :unit_of_measurement,
+      :profit_margin_wholesale, :profit_margin_retail, 
+      :financial_cost, :sales_channel_cost, :commission_cost, :freight_cost, :storage_cost,
       product_subproducts_attributes: [:id, :subproduct_id, :quantity, :_destroy]
     )
   end

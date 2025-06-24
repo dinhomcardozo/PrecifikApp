@@ -1,0 +1,27 @@
+<div id="product-composition" data-controller="product-composition">
+  <h3>Composição do Produto</h3>
+  <table class="table table-sm table-bordered">
+    <thead>
+      <tr>
+        <th>Subproduto</th>
+        <th>Quantidade (g)</th>
+        <th>Custo da Quantidade (R$)</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody data-target="composition.list">
+      <%= f.fields_for :product_subproducts do |ps| %>
+        <%= render "product_subproduct_fields", f: ps %>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="my-3">
+    <%= link_to "Adicionar Subproduto", "#", data: { action: "composition#addField" }, class: "action-button" %>
+  </div>
+  <div>
+    <strong>Total Peso: <span data-target="composition.totalWeight"><%= @product.total_weight || 0 %></span> g</strong>
+  </div>
+  <div>
+    <strong>Total Custo: R$ <span data-target="composition.totalCost"><%= @product.total_cost || 0 %></span></strong>
+  </div>
+</div>

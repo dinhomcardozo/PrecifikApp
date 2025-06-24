@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_09_220441) do
+ActiveRecord::Schema[8.0].define(version: 2025_06_24_212451) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -94,6 +94,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_09_220441) do
     t.bigint "brand_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "sales_channel_cost", precision: 8, scale: 2, default: "0.0", null: false
+    t.decimal "commission_cost", precision: 8, scale: 2, default: "0.0", null: false
+    t.decimal "freight_cost", precision: 8, scale: 2, default: "0.0", null: false
+    t.decimal "storage_cost", precision: 8, scale: 2, default: "0.0", null: false
     t.index ["brand_id"], name: "index_products_on_brand_id"
   end
 

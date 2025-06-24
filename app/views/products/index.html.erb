@@ -1,2 +1,34 @@
-<h1>Products#index</h1>
-<p>Find me in app/views/products/index.html.erb</p>
+<h1>Produtos</h1>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Produto</th>
+      <th>Total Custo (R$)</th>
+      <th>Total Quantidade (g)</th>
+      <th>Preço Sugerido Varejo (R$)</th>
+      <th>Preço Sugerido Atacado (R$)</th>
+      <th>Lucro Bruto Varejo (R$)</th>
+      <th>Lucro Bruto Atacado (R$)</th>
+      <th>Lucro Líquido Varejo (R$)</th>
+      <th>Lucro Líquido Atacado (R$)</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @products.each do |product| %>
+      <tr>
+        <td><%= product.description %></td>
+        <td>R$ <%= number_with_precision(product.total_cost, precision: 2) %></td>
+        <td><%= product.total_weight %> g</td>
+        <td>R$ <%= number_with_precision(product.suggested_retail_price, precision: 2) %></td>
+        <td>R$ <%= number_with_precision(product.suggested_wholesale_price, precision: 2) %></td>
+        <td>R$ <%= number_with_precision(product.gross_profit_retail, precision: 2) %></td>
+        <td>R$ <%= number_with_precision(product.gross_profit_wholesale, precision: 2) %></td>
+        <td>R$ <%= number_with_precision(product.net_profit_retail, precision: 2) %></td>
+        <td>R$ <%= number_with_precision(product.net_profit_wholesale, precision: 2) %></td>
+        <td><%= link_to "Ver", product_path(product) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

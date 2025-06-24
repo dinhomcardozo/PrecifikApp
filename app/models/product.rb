@@ -3,4 +3,79 @@ class Product < ApplicationRecord
 
   has_many :product_subproducts
   has_many :subproducts, through: :product_subproducts
+
+
+  class Product < ApplicationRecord
+  belongs_to :brand, optional: false
+
+  has_many :product_subproducts, inverse_of: :product, dependent: :destroy
+  has_many :subproducts, through: :product_subproducts
+
+  # Permite que o formulário aninhado crie/edite product_subproducts
+  accepts_nested_attributes_for :product_subproducts, allow_destroy: true
+
+  # 1 - Product Configuration
+
+  # (Vazio) Only margem varejo x margem atacado %
+
+  # 2 - Aggregate_costs
+
+  def total_aggregate_costs
+    [
+      financial_cost.to_f,
+      (sales_channel_cost.to_f if respond_to?(:sales_channel_cost)),
+      (commission_cost.to_f if respond_to?(:commission_cost)),
+      (freight_cost.to_f if respond_to?(:freight_cost)),
+      (storage_cost.to_f if respond_to?(:storage_cost))
+    ].compact.sum
+  end
+
+  # 3 - Product Composition
+
+  def total_weight
+    product_subproducts.sum(&:quantity)
+  end
+
+  def total_cost
+    product_subproducts.sum do |ps|
+      ps.quantity.to_f * ps.subproduct.try(:cost_per_gram).to_f
+    end
+  end
+
+  # 4 - Pricing
+
+  # Preço sugerido varejo = total_cost * (1 + profit_margin_retail/100)
+  def suggested_retail_price
+    total_cost * (1 + profit_margin_retail.to_f / 100)
+  end
+
+  # Preço sugerido atacado = total_cost * (1 + profit_margin_wholesale.to_f / 100)
+  def suggested_wholesale_price
+    total_cost * (1 + profit_margin_wholesale.to_f / 100)
+  end
+
+  # Lucro bruto é a diferença entre o preço sugerido e o custo
+  def gross_profit_retail
+    suggested_retail_price - total_cost
+  end
+
+  def gross_profit_wholesale
+    suggested_wholesale_price - total_cost
+  end
+
+  # Lucro líquido: subtrai dos lucros brutos os custos agregados
+  def net_profit_retail
+    gross_profit_retail - aggregated_costs_total
+  end
+
+  def net_profit_wholesale
+    gross_profit_wholesale - aggregated_costs_total
+  end
+
+  # Método auxiliar para somar os custos agregados (que estão na tabela products)
+  def aggregated_costs_total
+    # Certifique-se de que esses campos retornem valores numéricos (ou use to_f)
+    financial_cost.to_f + sales_channel_cost.to_f + commission_cost.to_f +
+      freight_cost.to_f + storage_cost.to_f
+  end
 end

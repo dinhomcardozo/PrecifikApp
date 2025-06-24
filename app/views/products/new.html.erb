@@ -1,2 +1,21 @@
-<h1>Products#new</h1>
-<p>Find me in app/views/products/new.html.erb</p>
+<h2>Novo Produto</h2>
+
+<%= form_with(model: @product, local: true, data: { controller: "product-wizard" }) do |f| %>
+  <div id="step1">
+    <%= render "product_configurations", f: f %>
+  </div>
+  
+  <div id="step2">
+    <%= render "aggregated_costs", f: f %>
+  </div>
+  
+  <div id="step3">
+    <%= render "product_composition", f: f %>
+  </div>
+  
+  <div id="step4">
+    <%= render "pricing", f: f %>
+  </div>
+  
+  <%= f.submit "Finalizar Cadastro", class: "standart-button" %>
+<% end %>
