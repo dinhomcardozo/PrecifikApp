@@ -1,24 +1,11 @@
 <div id="pricing" data-controller="pricing">
-  <h3>Precificação</h3>
-  <div>
-    <strong>Lucro Bruto Atacado (R$):</strong> R$ <span data-target="pricing.grossWholesale">0.00</span>
-  </div>
-  <div>
-    <strong>Lucro Bruto Varejo (R$):</strong> R$ <span data-target="pricing.grossRetail">0.00</span>
-  </div>
-  <div>
-    <strong>Lucro Líquido Varejo (R$):</strong> R$ <span data-target="pricing.netRetail">0.00</span>
-  </div>
-  <div>
-    <strong>Lucro Líquido Atacado (R$):</strong> R$ <span data-target="pricing.netWholesale">0.00</span>
-  </div>
-  <div>
-    <strong>Full Cost (R$):</strong> R$ <span data-target="pricing.fullCost">0.00</span>
-  </div>
-  <div>
-    <strong>Preço Atacado (R$):</strong> R$ <span data-target="pricing.wholesalePrice">0.00</span>
-  </div>
-  <div>
-    <strong>Preço Varejo (R$):</strong> R$ <span data-target="pricing.retailPrice">0.00</span>
-  </div>
+  <h3>Resultado da Precificação</h3>
+  <p>Total Custo: R$ <%= number_with_precision(product.total_cost, 2) %></p>
+  <p>Preço Varejo: R$ <%= number_with_precision(product.suggested_retail_price, 2) %></p>
+  <p>Preço Atacado: R$ <%= number_with_precision(product.suggested_wholesale_price, 2) %></p>
+  <p>Lucro Bruto Varejo: R$ <%= number_with_precision(product.gross_profit_retail, 2) %></p>
+  <p>Lucro Bruto Atacado: R$ <%= number_with_precision(product.gross_profit_wholesale, 2) %></p>
+  <p>Lucro Líquido Varejo: R$ <%= number_with_precision(product.net_profit_retail, 2) %></p>
+  <p>Lucro Líquido Atacado: R$ <%= number_with_precision(product.net_profit_wholesale, 2) %></p>
+  <%= link_to "Finalizar Cadastro", product_path(product), class: "btn btn-success" %>
 </div>

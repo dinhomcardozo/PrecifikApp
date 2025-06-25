@@ -1,27 +1,45 @@
 <div id="product-composition" data-controller="product-composition">
+
+  <template id="new-product-subproduct">
+    <tr>
+      <td>
+        <select name="product[product_subproducts_attributes][][subproduct_id]">
+          <option value="">Selecione</option>
+          <% Subproduct.all.each do |sp| %>
+            <option value="<%= sp.id %>"><%= sp.name %></option>
+          <% end %>
+        </select>
+      </td>
+      <td><input name="product[product_subproducts_attributes][][quantity]" type="number" step="any" /></td>
+      <td>
+        <input type="hidden" name="product[product_subproducts_attributes][][_destroy]" value="false" />
+        <input type="checkbox" name="product[product_subproducts_attributes][][_destroy]" value="1" /> Remover
+      </td>
+    </tr>
+  </template>
+
   <h3>Composição do Produto</h3>
-  <table class="table table-sm table-bordered">
-    <thead>
-      <tr>
-        <th>Subproduto</th>
-        <th>Quantidade (g)</th>
-        <th>Custo da Quantidade (R$)</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody data-target="composition.list">
-      <%= f.fields_for :product_subproducts do |ps| %>
-        <%= render "product_subproduct_fields", f: ps %>
-      <% end %>
-    </tbody>
-  </table>
-  <div class="my-3">
-    <%= link_to "Adicionar Subproduto", "#", data: { action: "composition#addField" }, class: "action-button" %>
-  </div>
-  <div>
-    <strong>Total Peso: <span data-target="composition.totalWeight"><%= @product.total_weight || 0 %></span> g</strong>
-  </div>
-  <div>
-    <strong>Total Custo: R$ <span data-target="composition.totalCost"><%= @product.total_cost || 0 %></span></strong>
-  </div>
+    <%= form_with model: product,
+                  url: product_path(product, step: 3),
+                  method: :patch,
+                  local: false,
+                  data: { turbo_frame: "product-composition" } do |f| %>
+      <div data-controller="product-composition">
+        <h3>Composição do Produto</h3>
+        <table class="table">
+          <thead>
+            <tr><th>Subproduto</th><th>Qtd (g)</th><th>Ações</th></tr>
+          </thead>
+          <tbody data-product-composition-target="list">
+            <%= f.fields_for :product_subproducts do |ps| %>
+              <%= render "product_subproduct_fields", f: ps %>
+            <% end %>
+          </tbody>
+        </table>
+        <%= link_to "Adicionar Subproduto", "#",
+              data: { action: "product-composition#addField" },
+              class: "btn btn-sm btn-secondary" %>
+        <%= f.submit "Salvar e continuar", class: "btn btn-primary" %>
+      </div>
+    <% end %>
 </div>

@@ -1,5 +1,10 @@
-<div id="aggregated-costs">
-  <h3>Custos Agregados</h3>
+<!-- app/views/products/_aggregated_costs.html.erb -->
+<%= form_with model: product,
+              url: product_path(product, step: 2),
+              method: :patch,
+              data: { turbo_frame: "aggregated-costs" },
+              local: false do |f| %>
+  <h3>Etapa 2 – Custos Agregados</h3>
   <div>
     <%= f.label :financial_cost, "Custo de transação financeira (%)" %>
     <%= f.number_field :financial_cost, step: "any" %>
@@ -20,7 +25,5 @@
     <%= f.label :storage_cost, "Custo de Armazenagem (R$)" %>
     <%= f.number_field :storage_cost, step: "any" %>
   </div>
-  <div>
-    <strong>Total Agregado de Custos: R$ <span data-target="aggregated.totalCosts"><%= f.object.total_aggregate_costs || 0 %></span></strong>
-  </div>
-</div>
+  <%= f.submit "Salvar e continuar", class: "action-button" %>
+<% end %>

@@ -1,5 +1,8 @@
 <h1>Produtos</h1>
 
+<%= link_to "Novo Produto", new_product_path, class: "action-button" %>
+<br>
+
 <table class="table table-bordered">
   <thead>
     <tr>
@@ -27,7 +30,16 @@
         <td>R$ <%= number_with_precision(product.gross_profit_wholesale, precision: 2) %></td>
         <td>R$ <%= number_with_precision(product.net_profit_retail, precision: 2) %></td>
         <td>R$ <%= number_with_precision(product.net_profit_wholesale, precision: 2) %></td>
-        <td><%= link_to "Ver", product_path(product) %></td>
+        <td>
+          <%= link_to "Editar",
+                      edit_product_path(product),
+                      class: "action-button" %>
+          <%= button_to "Excluir",
+                        product_path(product),
+                        method: :delete,
+                        data: { confirm: "Tem certeza?" },
+                        class: "action-button ms-2" %>
+        </td>
       </tr>
     <% end %>
   </tbody>

@@ -1,6 +1,6 @@
 <tr data-new-field>
   <td>
-    <%= f.collection_select :subproduct_id, Subproduct.all, :id, :description, { include_blank: "Selecione" }, { class: "form-select", data: { action: "product-composition#updateCost", cost_per_gram: "0" } } %>
+    <%= f.collection_select :subproduct_id, Subproduct.all, :id, :name, { include_blank: "Selecione" }, { class: "form-select", data: { action: "product-composition#updateCost", cost_per_gram: "0" } } %>
   </td>
   <td>
     <%= f.number_field :quantity, step: "any", class: "composition-quantity form-control", data: { action: "product-composition#updateCost" } %>

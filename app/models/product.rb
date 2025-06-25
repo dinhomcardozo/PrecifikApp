@@ -1,11 +1,4 @@
 class Product < ApplicationRecord
-  belongs_to :brand, optional: true
-
-  has_many :product_subproducts
-  has_many :subproducts, through: :product_subproducts
-
-
-  class Product < ApplicationRecord
   belongs_to :brand, optional: false
 
   has_many :product_subproducts, inverse_of: :product, dependent: :destroy
@@ -13,6 +6,9 @@ class Product < ApplicationRecord
 
   # Permite que o formulário aninhado crie/edite product_subproducts
   accepts_nested_attributes_for :product_subproducts, allow_destroy: true
+
+  # torna weight “somente em memória” - peso que o usuário digita
+  attr_accessor :weight
 
   # 1 - Product Configuration
 
@@ -33,12 +29,12 @@ class Product < ApplicationRecord
   # 3 - Product Composition
 
   def total_weight
-    product_subproducts.sum(&:quantity)
+    product_subproducts.sum { |ps| ps.quantity.to_f }
   end
 
   def total_cost
     product_subproducts.sum do |ps|
-      ps.quantity.to_f * ps.subproduct.try(:cost_per_gram).to_f
+      (ps.quantity.to_f) * (ps.subproduct.try(:cost_per_gram).to_f)
     end
   end
 
@@ -65,17 +61,21 @@ class Product < ApplicationRecord
 
   # Lucro líquido: subtrai dos lucros brutos os custos agregados
   def net_profit_retail
-    gross_profit_retail - aggregated_costs_total
+    gross_profit_retail - aggregated_costs
   end
 
   def net_profit_wholesale
-    gross_profit_wholesale - aggregated_costs_total
+    gross_profit_wholesale - aggregated_costs
   end
 
   # Método auxiliar para somar os custos agregados (que estão na tabela products)
-  def aggregated_costs_total
-    # Certifique-se de que esses campos retornem valores numéricos (ou use to_f)
-    financial_cost.to_f + sales_channel_cost.to_f + commission_cost.to_f +
-      freight_cost.to_f + storage_cost.to_f
+  def aggregated_costs
+    pct = (financial_cost.to_f +
+           sales_channel_cost.to_f +
+           commission_cost.to_f) / 100.0
+
+    total_cost * pct +
+      freight_cost.to_f +
+      storage_cost.to_f
   end
 end

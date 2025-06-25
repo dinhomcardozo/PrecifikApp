@@ -78,6 +78,8 @@ class SubproductsController < ApplicationController
       :name,
       :unit_of_measurement,
       :brand_id,
+      :cost,
+      :weight_in_grams,
       subproduct_compositions_attributes: [
         :id,
         :input_id,
