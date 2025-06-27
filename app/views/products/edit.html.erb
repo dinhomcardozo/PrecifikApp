@@ -1,3 +1,18 @@
 <!-- app/views/products/edit.html.erb -->
 <h2>Editar Produto</h2>
-<%= render "form", product: @product %>
+
+<%= turbo_frame_tag "product_configurations" do %>
+  <%= render "product_configurations", product: @product %>
+<% end %>
+
+<%= turbo_frame_tag "aggregated_costs" do %>
+  <%= render "aggregated_costs", product: @product %>
+<% end %>
+
+<%= turbo_frame_tag "product_composition" do %>
+  <%= render "product_composition", product: @product %>
+<% end %>
+
+<%= turbo_frame_tag "pricing" do %>
+  <%= render "pricing", product: @product %>
+<% end %>

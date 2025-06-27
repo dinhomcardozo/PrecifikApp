@@ -2,19 +2,20 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["list", "totalWeight", "totalCost"];
+  static targets = [
+    "list",         // <tbody> que recebe as linhas
+    "template",     // <template> oculto para clonar linhas
+    "totalWeight",  // <th> ou <span> onde exibe peso total
+    "totalCost"     // <th> ou <span> onde exibe custo total
+  ];
 
-  // Quando o usuário clicar em "Adicionar Subproduto"
   addField(event) {
     event.preventDefault();
-    const template = document.querySelector("#new-product-subproduct");
-    if (!template) return;
-    const clone = template.content.cloneNode(true);
+    const clone = this.templateTarget.content.cloneNode(true);
     this.listTarget.appendChild(clone);
     this.updateTotals();
   }
 
-  // Ao clicar em "Remover"
   removeField(event) {
     event.preventDefault();
     const row = event.currentTarget.closest("tr");
@@ -24,39 +25,38 @@ export default class extends Controller {
     }
   }
 
-  // Sempre que mudar o select ou quantidade
+  // Disparado por click em “Atualizar” ou por change/input nos campos
   updateCost(event) {
+    event.preventDefault();
     const row = event.currentTarget.closest("tr");
-    const quantityField = row.querySelector(".composition-quantity");
-    const selectField   = row.querySelector(".form-select");
-    const costDisplay   = row.querySelector("[data-target='product-composition.fieldCost']");
+    const qtyEl    = row.querySelector(".composition-quantity");
+    const selectEl = row.querySelector("[data-cost-per-gram]");
+    const costEl   = row.querySelector("[data-target='product-composition.fieldCost']");
 
-    const costPerGram = parseFloat(selectField.dataset.costPerGram || "0");
-    const quantity    = parseFloat(quantityField.value || "0");
+    const costPerGram = parseFloat(selectEl.dataset.costPerGram) || 0;
+    const quantity    = parseFloat(qtyEl.value)              || 0;
     const lineCost    = costPerGram * quantity;
 
-    if (costDisplay) {
-      costDisplay.textContent = lineCost.toFixed(2);
-    }
-
+    costEl.textContent = lineCost.toFixed(2);
     this.updateTotals();
   }
 
-  // Recalcula os totais de peso e custo de TODAS as linhas
+  // Soma peso e custo de todas as linhas e atualiza os targets
   updateTotals() {
-    let totalWeight = 0;
-    let totalCost   = 0;
+    let totalW = 0;
+    let totalC = 0;
 
     this.listTarget.querySelectorAll("tr").forEach(row => {
-      const qty = parseFloat(row.querySelector(".composition-quantity").value || "0");
-      totalWeight += qty;
+      const qty   = parseFloat(row.querySelector(".composition-quantity").value) || 0;
+      const cost  = parseFloat(
+                      row.querySelector("[data-target='product-composition.fieldCost']").textContent
+                    ) || 0;
 
-      const costText = row.querySelector("[data-target='product-composition.fieldCost']").textContent;
-      const lineCost = parseFloat(costText) || 0;
-      totalCost   += lineCost;
+      totalW += qty;
+      totalC += cost;
     });
 
-    this.totalWeightTarget.textContent = totalWeight.toFixed(2);
-    this.totalCostTarget.textContent   = totalCost.toFixed(2);
+    this.totalWeightTarget.textContent = totalW.toFixed(2);
+    this.totalCostTarget.textContent   = totalC.toFixed(2);
   }
 }

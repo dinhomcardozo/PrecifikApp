@@ -1,3 +1,9 @@
-<!-- app/views/products/new.html.erb -->
 <h2>Novo Produto</h2>
-<%= render "form", product: @product %>
+
+<%= turbo_frame_tag "product_configurations" do %>
+  <%= render "product_configurations", product: @product %>
+<% end %>
+
+<%= turbo_frame_tag "aggregated_costs" %>
+<%= turbo_frame_tag "product_composition" %>
+<%= turbo_frame_tag "pricing" %>
