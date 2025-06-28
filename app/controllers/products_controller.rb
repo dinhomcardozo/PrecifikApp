@@ -16,9 +16,14 @@ class ProductsController < ApplicationController
   def create
     @product = Product.new(step1_params)
     if @product.save
-      render partial: "products/aggregated_costs", locals: { product: @product }
+      render partial: "products/aggregated_costs",
+             locals: { product: @product },
+             layout:  false
     else
-      render :new, status: :unprocessable_entity
+      render partial: "products/product_configurations",
+             locals: { product: @product },
+             status:  :unprocessable_entity,
+             layout:  false
     end
   end
 
@@ -29,15 +34,24 @@ class ProductsController < ApplicationController
     when "2"
       if @product.update(step2_params)
         render partial: "products/product_composition",
-              locals: { product: @product }
+               locals: { product: @product },
+               layout:  false
       else
-        head :unprocessable_entity
+        render partial: "products/aggregated_costs",
+               locals: { product: @product },
+               status:  :unprocessable_entity,
+               layout:  false
       end
     when "3"
       if @product.update(step3_params)
-        render partial: "products/pricing", locals: { product: @product }
+        render partial: "products/pricing",
+               locals: { product: @product },
+               layout:  false
       else
-        head :unprocessable_entity
+        render partial: "products/product_composition",
+               locals: { product: @product },
+               status:  :unprocessable_entity,
+               layout:  false
       end
     else
       head :bad_request

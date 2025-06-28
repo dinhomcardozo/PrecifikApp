@@ -2,6 +2,10 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
+  connect() {
+    console.log("✔️ product-composition controller conectado");
+    this.updateTotals();
+  }
   static targets = [
     "list",         // <tbody> que recebe as linhas
     "template",     // <template> oculto para clonar linhas

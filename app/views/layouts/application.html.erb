@@ -15,6 +15,7 @@
     <%= yield :head %>
 
     <%= favicon_link_tag 'favoicon.png', rel: 'icon', type: 'image/png' %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
   </head>
   <body>
     <%= render 'shared/horizontal_menu' %>

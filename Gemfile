@@ -4,6 +4,7 @@ source "https://rubygems.org"
 gem "rails", "~> 8.0.2"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem 'propshaft', '~> 1.1'
+gem 'jsbundling-rails', '~> 1.0', '>= 1.0.2'
 gem 'mini_magick', '~> 4.9', '>= 4.9.5'
 gem 'ruby-vips', '~> 2.0', '>= 2.0.16'
 # Use postgresql as the database for Active Record

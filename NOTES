@@ -1,3 +1,6 @@
+Stack:
+  Hotwire + Stimulus + Propshaft com esbuild (27/06/2025)
+
 **** REMOVENDO IMPORT MAPS
 
 remove tags from application.rb

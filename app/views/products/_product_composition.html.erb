@@ -1,42 +1,51 @@
-<%= form_with model: product,
-              url: product_path(product, step: 3),
-              method: :patch,
-              data: {
-                turbo_frame:  "product_composition",    # id do Turbo Frame
-                controller:   "product-composition"     # nome do seu Stimulus
-              } do |f| %>
+<!-- app/views/products/_product_composition.html.erb -->
 
-  <h3>3) Composição do Produto</h3>
+<%= turbo_frame_tag "product_steps" do %>
+  <%= form_with model: product,
+                url: product_path(product, step: 3),
+                method: :patch,
+                data: {
+                  turbo_frame: "product_steps",
+                  controller:  "product-composition"
+                },
+                local: false do |f| %>
 
-  <!-- template invisível para clonar -->
-  <template data-product-composition-target="template">
-    <%= f.fields_for :product_subproducts,
-                     product.product_subproducts.build,
-                     child_index: "NEW_RECORD" do |ps| %>
-      <%= render "product_composition_fields", f: ps %>
-    <% end %>
-  </template>
+    <h3>3) Composição do Produto</h3>
 
-  <table class="table">
-    <thead>…</thead>
-    <tbody data-product-composition-target="list">
-      <%= f.fields_for :product_subproducts do |ps| %>
+    <!-- template invisível para clonagem -->
+    <template data-product-composition-target="template">
+      <%= f.fields_for :product_subproducts,
+                       product.product_subproducts.build,
+                       child_index: "NEW_RECORD" do |ps| %>
         <%= render "product_composition_fields", f: ps %>
       <% end %>
-    </tbody>
-    <tfoot>
-      <tr>
-        <th>Total</th>
-        <th data-product-composition-target="totalWeight">0.00</th>
-        <th data-product-composition-target="totalCost">0.00</th>
-        <th></th>
-      </tr>
-    </tfoot>
-  </table>
+    </template>
 
-  <%= link_to "Adicionar Insumo", "#",
-              class: "action-button",
-              data: { action: "product-composition#addField" } %>
+    <table class="table mt-2">
+      <thead>…</thead>
+      <tbody data-product-composition-target="list">
+        <%= f.fields_for :product_subproducts do |ps| %>
+          <%= render "product_composition_fields", f: ps %>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th>Total</th>
+          <th data-product-composition-target="totalWeight">0.00</th>
+          <th data-product-composition-target="totalCost">0.00</th>
+          <th></th>
+        </tr>
+      </tfoot>
+    </table>
 
-  <%= f.submit "Salvar e continuar", class: "action-button" %>
+    <div class="mt-2">
+      <%= link_to "Adicionar Insumo", "#",
+                  class: "action-button",
+                  data: { action: "product-composition#addField" } %>
+    </div>
+
+    <div class="actions mt-3">
+      <%= f.submit "Salvar e continuar", class: "action-button" %>
+    </div>
+  <% end %>
 <% end %>

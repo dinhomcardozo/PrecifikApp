@@ -1,5 +1,5 @@
 <!-- app/views/products/_pricing.html.erb -->
-<%= turbo_frame_tag "pricing" do %>
+<%= turbo_frame_tag "product_steps" do %>
   <h3>4) Precificação Final</h3>
 
   <p>Total Custo: R$ <%= number_with_precision(product.total_cost, precision: 2) %></p>
@@ -11,6 +11,8 @@
   <p>Lucro Líquido Atacado: R$ <%= number_with_precision(product.net_profit_wholesale, precision: 2) %></p>
 
   <% if product.persisted? %>
-    <%= link_to "Concluir Cadastro", product_path(product), class: "action-button" %>
+    <div class="mt-3">
+      <%= link_to "Concluir Cadastro", product_path(product), class: "action-button" %>
+    </div>
   <% end %>
 <% end %>

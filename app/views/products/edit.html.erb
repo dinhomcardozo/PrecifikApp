@@ -1,18 +1,16 @@
-<!-- app/views/products/edit.html.erb -->
-<h2>Editar Produto</h2>
+<%= render "shared/horizontal_menu" %>
 
-<%= turbo_frame_tag "product_configurations" do %>
-  <%= render "product_configurations", product: @product %>
-<% end %>
-
-<%= turbo_frame_tag "aggregated_costs" do %>
-  <%= render "aggregated_costs", product: @product %>
-<% end %>
-
-<%= turbo_frame_tag "product_composition" do %>
-  <%= render "product_composition", product: @product %>
-<% end %>
-
-<%= turbo_frame_tag "pricing" do %>
-  <%= render "pricing", product: @product %>
-<% end %>
+<main class="container">
+  <%= turbo_frame_tag "product_steps" do %>
+    <% case params[:step].to_s %>
+    <% when "2" %>
+      <%= render "products/aggregated_costs", product: @product %>
+    <% when "3" %>
+      <%= render "products/product_composition", product: @product %>
+    <% when "4" %>
+      <%= render "products/pricing", product: @product %>
+    <% else %>
+      <%= render "products/product_configurations", product: @product %>
+    <% end %>
+  <% end %>
+</main>

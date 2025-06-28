@@ -1,9 +1,5 @@
-<h2>Novo Produto</h2>
-
-<%= turbo_frame_tag "product_configurations" do %>
-  <%= render "product_configurations", product: @product %>
-<% end %>
-
-<%= turbo_frame_tag "aggregated_costs" %>
-<%= turbo_frame_tag "product_composition" %>
-<%= turbo_frame_tag "pricing" %>
+<main class="container mt-4">
+  <%= turbo_frame_tag "product_steps" do %>
+    <%= render "products/product_configurations", product: @product %>
+  <% end %>
+</main>

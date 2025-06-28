@@ -1,3 +1,4 @@
+<!-- app/views/products/_product_composition_fields.html.erb -->
 <tr>
   <td>
     <%= f.collection_select :subproduct_id,
@@ -5,14 +6,14 @@
                             { prompt: "Selecione" },
                             class: "form-select",
                             data: {
-                              cost_per_gram:   f.object.subproduct&.cost_per_gram || 0,
-                              action:          "change->product-composition#updateCost"
+                              cost_per_gram: f.object.subproduct&.cost_per_gram || 0,
+                              action:        "change->product-composition#updateCost"
                             } %>
   </td>
   <td>
     <%= f.number_field :quantity,
                        step: "any",
-                       class: "composition-quantity",
+                       class: "composition-quantity form-control",
                        data: { action: "input->product-composition#updateCost" } %>
   </td>
   <td data-target="product-composition.fieldCost">0.00</td>
