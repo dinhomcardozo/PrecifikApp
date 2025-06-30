@@ -5,6 +5,9 @@ Rails.application.routes.draw do
     collection do
       get :search
     end
+
+    # aninha as composições do produto (o join table)
+    resources :product_subproducts, only: %i[create update destroy]
   end
 
   resources :brands

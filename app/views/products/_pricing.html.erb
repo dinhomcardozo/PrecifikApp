@@ -1,5 +1,10 @@
 <!-- app/views/products/_pricing.html.erb -->
-<%= turbo_frame_tag "product_steps" do %>
+<%= form_with model: product,
+              url: product_path(product, step: 4),
+              method: :patch,
+              local: false,
+              data: { turbo_frame: "product_steps" } do |f| %>
+                
   <h3>4) Precificação Final</h3>
 
   <p>Total Custo: R$ <%= number_with_precision(product.total_cost, precision: 2) %></p>

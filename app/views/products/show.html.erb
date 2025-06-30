@@ -30,7 +30,7 @@
   <tbody>
     <% @product.product_subproducts.each do |ps| %>
       <tr>
-        <td><%= ps.subproduct.description %></td>
+        <td><%= ps.subproduct.name %></td>
         <td><%= ps.quantity %> g</td>
         <td>
           <% qs = ps.quantity.to_f * ps.subproduct.cost_per_gram.to_f %>
