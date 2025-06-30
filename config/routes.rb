@@ -37,6 +37,5 @@ Rails.application.routes.draw do
     resources :subproduct_compositions, only: [:create, :update, :destroy]
   end
 
-  # Rota alternativa para a tela de composição (opcional)
   get 'criar-subproduto/composicao/:id', to: 'subproducts#edit_composition', as: 'new_subproduct_composition'
 end

@@ -20,6 +20,7 @@ class ProductsController < ApplicationController
             locals: { product: @product },
             layout:  false
     else
+      session[:product_weight] = @product.weight
       render partial: "products/product_configurations",
             locals: { product: @product },
             status:  :unprocessable_entity,
@@ -81,7 +82,7 @@ class ProductsController < ApplicationController
 
   def step1_params
     params.require(:product).permit(
-      :description, :brand_id, :weight,
+      :description, :brand_id,
       :profit_margin_wholesale, :profit_margin_retail
     )
   end
