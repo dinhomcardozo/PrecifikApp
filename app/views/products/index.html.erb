@@ -1,46 +1,55 @@
-<h1>Produtos</h1>
+<main class="container mt-4">
+  <%= turbo_frame_tag "product_steps" do %>
+    <h1>Produtos</h1>
 
-<%= link_to "Novo Produto", new_product_path, class: "action-button" %>
-<br>
+    <%= link_to "Novo Produto",
+            new_product_path,
+            class: "action-button",
+            data:  { turbo_frame: "product_steps" } %>
+    <br>
 
-<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th>Produto</th>
-      <th>Total Custo (R$)</th>
-      <th>Total Quantidade (g)</th>
-      <th>Preço Sugerido Varejo (R$)</th>
-      <th>Preço Sugerido Atacado (R$)</th>
-      <th>Lucro Bruto Varejo (R$)</th>
-      <th>Lucro Bruto Atacado (R$)</th>
-      <th>Lucro Líquido Varejo (R$)</th>
-      <th>Lucro Líquido Atacado (R$)</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @products.each do |product| %>
-      <tr>
-        <td><%= product.description %></td>
-        <td>R$ <%= number_with_precision(product.total_cost, precision: 2) %></td>
-        <td><%= product.total_weight %> g</td>
-        <td>R$ <%= number_with_precision(product.suggested_retail_price, precision: 2) %></td>
-        <td>R$ <%= number_with_precision(product.suggested_wholesale_price, precision: 2) %></td>
-        <td>R$ <%= number_with_precision(product.gross_profit_retail, precision: 2) %></td>
-        <td>R$ <%= number_with_precision(product.gross_profit_wholesale, precision: 2) %></td>
-        <td>R$ <%= number_with_precision(product.net_profit_retail, precision: 2) %></td>
-        <td>R$ <%= number_with_precision(product.net_profit_wholesale, precision: 2) %></td>
-        <td>
-          <%= link_to "Editar",
-                      edit_product_path(product),
-                      class: "action-button" %>
-          <%= button_to "Excluir",
-                        product_path(product),
-                        method: :delete,
-                        data: { confirm: "Tem certeza?" },
-                        class: "action-button ms-2" %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Produto</th>
+          <th>Total Custo (R$)</th>
+          <th>Total Quantidade (g)</th>
+          <th>Preço Sugerido Varejo (R$)</th>
+          <th>Preço Sugerido Atacado (R$)</th>
+          <th>Lucro Bruto Varejo (R$)</th>
+          <th>Lucro Bruto Atacado (R$)</th>
+          <th>Lucro Líquido Varejo (R$)</th>
+          <th>Lucro Líquido Atacado (R$)</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @products.each do |product| %>
+          <tr>
+            <td><%= product.description %></td>
+            <td>R$ <%= number_with_precision(product.total_cost, precision: 2) %></td>
+            <td><%= product.total_weight %> g</td>
+            <td>R$ <%= number_with_precision(product.suggested_retail_price, precision: 2) %></td>
+            <td>R$ <%= number_with_precision(product.suggested_wholesale_price, precision: 2) %></td>
+            <td>R$ <%= number_with_precision(product.gross_profit_retail, precision: 2) %></td>
+            <td>R$ <%= number_with_precision(product.gross_profit_wholesale, precision: 2) %></td>
+            <td>R$ <%= number_with_precision(product.net_profit_retail, precision: 2) %></td>
+            <td>R$ <%= number_with_precision(product.net_profit_wholesale, precision: 2) %></td>
+            <td>
+              <%= link_to "Editar",
+                          edit_product_path(product, step: 1),
+                          class: "action-button",
+                          data:  { turbo_frame: "product_steps" } %>
+
+              <%= button_to "Excluir",
+                            product_path(product),
+                            method: :delete,
+                            form:   { data: { turbo_frame: "product_steps", turbo_confirm: "Tem certeza?" } },
+                            class:  "action-button ms-2" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</main>

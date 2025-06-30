@@ -1,14 +1,28 @@
-<tr data-new-field>
+<tr>
   <td>
-    <%= f.collection_select :subproduct_id, Subproduct.all, :id, :name, { include_blank: "Selecione" }, { class: "form-select", data: { action: "product-composition#updateCost", cost_per_gram: "0" } } %>
+    <%= f.collection_select :subproduct_id,
+                            Subproduct.all, :id, :name,
+                            { prompt: "Selecione" },
+                            class: "form-select",
+                            data: {
+                              cost_per_gram: f.object.subproduct&.cost_per_gram || 0,
+                              action:        "change->product-composition#updateCost"
+                            } %>
   </td>
   <td>
-    <%= f.number_field :quantity, step: "any", class: "composition-quantity form-control", data: { action: "product-composition#updateCost" } %>
+    <%= f.number_field :quantity,
+                       step: "any",
+                       class: "composition-quantity form-control",
+                       data: { action: "input->product-composition#updateCost" } %>
   </td>
-  <td class="cost-display">
-    R$ <span data-product-composition-target="fieldCost">0.00</span>
-  </td>
+  <td data-product-composition-target="fieldCost">0.00</td>
   <td>
-    <%= link_to "Remover", "#", class: "remove_field action-button", data: { action: "product-composition#removeField" } %>
+    <%= f.hidden_field :_destroy, value: false %>
+    <%= link_to "Remover", "#",
+                class: "text-danger action-button",
+                data: { action: "product-composition#removeField" } %>
+    <%= link_to "Atualizar", "#",
+                class: "action-button ml-2",
+                data: { action: "click->product-composition#updateCost" } %>
   </td>
 </tr>

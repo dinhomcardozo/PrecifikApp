@@ -10,7 +10,8 @@ export default class extends Controller {
     "list",         // <tbody> que recebe as linhas
     "template",     // <template> oculto para clonar linhas
     "totalWeight",  // <th> ou <span> onde exibe peso total
-    "totalCost"     // <th> ou <span> onde exibe custo total
+    "totalCost",    // <th> ou <span> onde exibe custo total
+    "fieldCost"     // celular de custo do subproduto em cada linha
   ];
 
   addField(event) {
@@ -30,19 +31,26 @@ export default class extends Controller {
   }
 
   // Disparado por click em “Atualizar” ou por change/input nos campos
-  updateCost(event) {
-    event.preventDefault();
-    const row = event.currentTarget.closest("tr");
-    const qtyEl    = row.querySelector(".composition-quantity");
-    const selectEl = row.querySelector("[data-cost-per-gram]");
-    const costEl   = row.querySelector("[data-target='product-composition.fieldCost']");
+  updateCost(e) {
+    e.preventDefault()
+    const row        = e.currentTarget.closest("tr")
+    const select     = row.querySelector("select")
+    const qtyInput   = row.querySelector("input[name*='[quantity]']")
+    const costInput  = row.querySelector("input[name*='[cost]']")
+    const costSpan   = row.querySelector("[data-product-composition-target='fieldCost']")
 
-    const costPerGram = parseFloat(selectEl.dataset.costPerGram) || 0;
-    const quantity    = parseFloat(qtyEl.value)              || 0;
-    const lineCost    = costPerGram * quantity;
+    // custo por grama vem do data-cost-per-gram
+    const costPerGram = parseFloat(select.dataset.costPerGram) || 0
+    const quantity    = parseFloat(qtyInput.value) || 0
 
-    costEl.textContent = lineCost.toFixed(2);
-    this.updateTotals();
+    const cost = costPerGram * quantity
+
+    // atualiza o input hidden e o span
+    costInput.value    = cost.toFixed(2)
+    costSpan.textContent = cost.toFixed(2)
+
+    // recalcula totais na tabela
+    this.updateTotals()
   }
 
   // Soma peso e custo de todas as linhas e atualiza os targets

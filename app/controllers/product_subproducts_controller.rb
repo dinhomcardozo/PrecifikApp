@@ -33,8 +33,8 @@ class ProductSubproductsController < ApplicationController
 
   def render_partial_line
     render partial: "products/product_composition_fields",
-           locals: { f: form_builder_for(@ps) },
-           layout:  false
+           locals: { f: form_builder_for(@ps) }
+           # layout:  false
   end
 
   # gera um form builder compatível com f.fields_for

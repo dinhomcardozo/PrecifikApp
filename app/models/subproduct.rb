@@ -7,6 +7,11 @@ class Subproduct < ApplicationRecord
 
   accepts_nested_attributes_for :subproduct_compositions, allow_destroy: true
 
+  def cost_per_gram
+    return 0 if weight_in_grams.to_f.zero?
+    cost.to_f / weight_in_grams.to_f
+  end
+  
   private
   
   # ignora campos vazios

@@ -1,4 +1,9 @@
 <!-- app/views/products/_product_configurations.html.erb -->
+<% if product.persisted? %>
+  <% form_url, form_method = product_path(product, step: 1), :patch %>
+<% else %>
+  <% form_url, form_method = products_path, :post %>
+<% end %>
 
 <%= form_with model: product,
               url: products_path,

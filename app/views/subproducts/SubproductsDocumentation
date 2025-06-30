@@ -1,0 +1,5 @@
+new.html.erb (Novo subproduto)
+    _form.html.erb
+edit.html.erb (Edita Subproduto)
+edit_composition (Edita composição)
+    _subproduct_compositions_fields (campos)

@@ -16,7 +16,12 @@
                        class: "composition-quantity form-control",
                        data: { action: "input->product-composition#updateCost" } %>
   </td>
-  <td data-target="product-composition.fieldCost">0.00</td>
+  <td>
+    <%= f.hidden_field :cost, value: f.object.cost, data: {} %>
+    <span data-product-composition-target="fieldCost">
+      <%= number_with_precision(f.object.cost || 0, precision: 2) %>
+    </span>
+  </td>
   <td>
     <%= f.hidden_field :_destroy, value: false %>
     <%= link_to "Remover", "#",

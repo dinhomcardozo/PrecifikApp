@@ -69,6 +69,10 @@ class Product < ApplicationRecord
   end
 
   # Método auxiliar para somar os custos agregados (que estão na tabela products)
+  def total_cost
+    product_subproducts.sum(:cost)
+  end
+  
   def aggregated_costs
     pct = (financial_cost.to_f +
            sales_channel_cost.to_f +
