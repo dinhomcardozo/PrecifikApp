@@ -16,4 +16,14 @@ module ApplicationHelper
       })
     ).html_safe
   end
+
+    # retorna um ActionView::Helpers::FormBuilder já configurado para partials de composição
+  def form_builder_for(ps)
+    ActionView::Helpers::FormBuilder.new(
+      :product_subproduct,
+      ps,
+      self,
+      { parent: @product, index: ps.persisted? ? ps.id : "NEW_RECORD" }
+    )
+  end
 end

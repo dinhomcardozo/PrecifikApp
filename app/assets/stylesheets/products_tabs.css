@@ -1,0 +1,107 @@
+body {
+  font-family: 'Raleway', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-light);
+}
+
+.nav-tabs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  background-color: #24241a;
+  border-radius: 0.375rem;
+  overflow: hidden;
+}
+
+.nav-tabs .nav-item {
+  flex: 1;
+}
+
+.nav-tabs .nav-link {
+  display: block;
+  text-align: center;
+  padding: 0.75rem 0;
+  color: var(--accent-color);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.nav-tabs .nav-link:hover {
+  background-color: var(--accent-hover);
+  color: var(--text-dark);
+}
+
+.nav-tabs .nav-link.active {
+  background-color: var(--accent-color);
+  color: var(--text-dark);
+}
+
+.tab-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: calc(100% / 4);
+  height: 3px;
+  background-color: var(--accent-hover);
+  transition: transform 0.3s ease;
+}
+
+.tab-content {
+  background-color: var(--bg-color);
+  padding: 1.5rem;
+  border-radius: 0 0.375rem 0.375rem 0.375rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.active {
+  display: block;
+}
+
+.btn,
+.action-button {
+  background-color: var(--accent-color);
+  color: var(--text-dark);
+  border: none;
+  border-radius: 0.375rem;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn:hover,
+.action-button:hover {
+  background-color: var(--accent-hover);
+  color: var(--text-dark);
+}
+
+/* Formulários e Tabela */
+.form-control,
+.form-select {
+  background-color: #ffffff;
+  border: 1px solid #3a3a32;
+  border-radius: 0.2rem;
+  color: var(--text-light);
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 0.2rem rgba(211, 219, 35, 0.25);
+}
+
+.table-sm th {
+  background-color: var(--bg-color);
+  color: var(--accent-color);
+}
+
+.table-sm td {
+  vertical-align: middle;
+}

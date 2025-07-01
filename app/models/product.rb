@@ -5,7 +5,12 @@ class Product < ApplicationRecord
   has_many :subproducts, through: :product_subproducts
 
   # Permite que o formulário aninhado crie/edite product_subproducts
-  accepts_nested_attributes_for :product_subproducts, allow_destroy: true
+
+  accepts_nested_attributes_for :product_subproducts,
+                                allow_destroy: true,
+                                reject_if:     proc { |attrs|
+                                  attrs['subproduct_id'].blank?
+                                }
 
   # torna weight “somente em memória” - peso que o usuário digita
   attr_accessor :weight
@@ -30,12 +35,6 @@ class Product < ApplicationRecord
 
   def total_weight
     product_subproducts.sum { |ps| ps.quantity.to_f }
-  end
-
-  def total_cost
-    product_subproducts.sum do |ps|
-      (ps.quantity.to_f) * (ps.subproduct.try(:cost_per_gram).to_f)
-    end
   end
 
   # 4 - Pricing

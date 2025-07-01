@@ -1,5 +1,8 @@
+
+index.html.erb
 new.html.erb (Novo subproduto)
-    _form.html.erb
+    _form.html.erb (Gera HTML normal - Não turbo)
 edit.html.erb (Edita Subproduto)
+_form_compositions.html.erb (<turbo_frame_tag "compositions">)
 edit_composition (Edita composição)
     _subproduct_compositions_fields (campos)

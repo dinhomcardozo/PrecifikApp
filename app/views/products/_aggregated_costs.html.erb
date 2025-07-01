@@ -1,71 +1,39 @@
 <!-- app/views/products/_aggregated_costs.html.erb -->
-<%= form_with model: product,
-              url: product_path(product, step: 2),
-              method: :patch,
-              local: false,
-              data: {
-                turbo_frame: "product_steps",
-                controller:  "aggregated-costs"
-              } do |f| %>
-
-  <h3>2) Custos Agregados</h3>
-
-  <div class="field">
-    <%= f.label :financial_cost, "Custo financeiro (%)" %><br>
+<h5>2) Custos Agregados</h5>
+<div class="row">
+  <div class="col-md-4 mb-3">
+    <%= f.label :financial_cost, "Custo Financeiro (%)" %>
     <%= f.number_field :financial_cost,
                        step: "any",
                        class: "form-control",
-                       data: {
-                         aggregated_costs_target: "input",
-                         action:                   "input->aggregated-costs#updateTotal"
-                       } %>
+                       data: { action: "input->product-pricing#recalculate" } %>
   </div>
-
-  <div class="field">
-    <%= f.label :sales_channel_cost, "Custo do canal de vendas (%)" %><br>
+  <div class="col-md-4 mb-3">
+    <%= f.label :sales_channel_cost, "Custo Canal (%)" %>
     <%= f.number_field :sales_channel_cost,
                        step: "any",
                        class: "form-control",
-                       data: {
-                         aggregated_costs_target: "input",
-                         action:                   "input->aggregated-costs#updateTotal"
-                       } %>
+                       data: { action: "input->product-pricing#recalculate" } %>
   </div>
-
-  <div class="field">
-    <%= f.label :commission_cost, "Custo de comissão (%)" %><br>
+  <div class="col-md-4 mb-3">
+    <%= f.label :commission_cost, "Custo Comissão (%)" %>
     <%= f.number_field :commission_cost,
                        step: "any",
                        class: "form-control",
-                       data: {
-                         aggregated_costs_target: "input",
-                         action:                   "input->aggregated-costs#updateTotal"
-                       } %>
+                       data: { action: "input->product-pricing#recalculate" } %>
   </div>
-
-  <div class="field">
-    <%= f.label :freight_cost, "Custo de frete (R$)" %><br>
+  <div class="col-md-4 mb-3">
+    <%= f.label :freight_cost, "Frete (R$)" %>
     <%= f.number_field :freight_cost,
                        step: "any",
                        class: "form-control",
-                       data: {
-                         aggregated_costs_target: "input",
-                         action:                   "input->aggregated-costs#updateTotal"
-                       } %>
+                       data: { action: "input->product-pricing#recalculate" } %>
   </div>
-
-  <div class="field">
-    <%= f.label :storage_cost, "Custo de armazenagem (R$)" %><br>
+  <div class="col-md-4 mb-3">
+    <%= f.label :storage_cost, "Armazenagem (R$)" %>
     <%= f.number_field :storage_cost,
                        step: "any",
                        class: "form-control",
-                       data: {
-                         aggregated_costs_target: "input",
-                         action:                   "input->aggregated-costs#updateTotal"
-                       } %>
+                       data: { action: "input->product-pricing#recalculate" } %>
   </div>
-
-  <div class="actions mt-3">
-    <%= f.submit "Salvar e continuar", class: "action-button" %>
-  </div>
-<% end %>
+</div>

@@ -1,34 +1,31 @@
 <!-- app/views/products/_product_composition_fields.html.erb -->
-<tr>
+<tr id="<%= dom_id(f.object) %>">
   <td>
     <%= f.collection_select :subproduct_id,
-                            Subproduct.all, :id, :name,
+                            Subproduct.all,
+                            :id,
+                            :name,
                             { prompt: "Selecione" },
                             class: "form-select",
                             data: {
                               cost_per_gram: f.object.subproduct&.cost_per_gram || 0,
-                              action:        "change->product-composition#updateCost"
+                              action:        "change->product-composition#recalculate"
                             } %>
   </td>
   <td>
     <%= f.number_field :quantity,
                        step: "any",
-                       class: "composition-quantity form-control",
-                       data: { action: "input->product-composition#updateCost" } %>
+                       class: "form-control",
+                       data: { action: "input->product-composition#recalculate" } %>
   </td>
   <td>
-    <%= f.hidden_field :cost, value: f.object.cost, data: {} %>
-    <span data-product-composition-target="fieldCost">
-      <%= number_with_precision(f.object.cost || 0, precision: 2) %>
-    </span>
+    <%= f.hidden_field :cost %>
+    R$ <span data-product-composition-target="fieldCost">0.00</span>
   </td>
   <td>
-    <%= f.hidden_field :_destroy, value: false %>
+    <%= f.hidden_field :_destroy %>
     <%= link_to "Remover", "#",
-                class: "text-danger action-button",
+                class: "action-button",
                 data: { action: "product-composition#removeField" } %>
-    <%= link_to "Atualizar", "#",
-                class: "action-button ml-2",
-                data: { action: "click->product-composition#updateCost" } %>
   </td>
 </tr>

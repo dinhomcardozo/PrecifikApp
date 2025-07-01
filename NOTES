@@ -1,6 +1,14 @@
 Stack:
   Hotwire + Stimulus + Propshaft com esbuild (27/06/2025)
 
+A cada alteração em css ou js, rodar:
+
+'npm run build:css' para atualizar 'app/assets/builds/application.css'
+'npm run build:js' para atualizar 'app/assets/builds/application.js'
+
+
+--------------------------------
+
 **** REMOVENDO IMPORT MAPS
 
 remove tags from application.rb

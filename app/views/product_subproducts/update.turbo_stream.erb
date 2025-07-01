@@ -1,0 +1,3 @@
+<%= turbo_stream.replace dom_id(@ps),
+      partial: "products/product_subproduct_fields",
+      locals: { f: form_builder_for(@product.product_subproducts.build), ps: @ps } %>

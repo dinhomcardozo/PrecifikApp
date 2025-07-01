@@ -1,0 +1,44 @@
+.menu-horizontal {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 15px;
+  background-color: var(--bg-menu-color);
+  font-family: 'Raleway', sans-serif;
+}
+
+.menu-horizontal .logo-link {
+  display: inline-block;
+  padding: 0.75rem 1rem;
+  font-weight: bold;
+  color: #fff;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.menu-horizontal .logo-link:hover img,
+.menu-horizontal .logo-link:focus img {
+  transform: scale(1.05);
+}
+
+.menu-horizontal .menu-item {
+  display: inline-block;
+  padding: 0.75rem 1rem;
+  font-weight: 300;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 10px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.menu-horizontal .menu-item:hover,
+.menu-horizontal .menu-item:focus {
+  background-color: var(--accent-color);
+  color: var(--text-dark);
+}
+
+.index_image {
+  max-height: 50px;
+  width: auto;
+  border-radius: 4px;
+}

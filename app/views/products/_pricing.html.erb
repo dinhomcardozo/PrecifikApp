@@ -1,23 +1,18 @@
 <!-- app/views/products/_pricing.html.erb -->
-<%= form_with model: product,
-              url: product_path(product, step: 4),
-              method: :patch,
-              local: false,
-              data: { turbo_frame: "product_steps" } do |f| %>
-                
-  <h3>4) Precificação Final</h3>
-
-  <p>Total Custo: R$ <%= number_with_precision(product.total_cost, precision: 2) %></p>
-  <p>Preço Varejo: R$ <%= number_with_precision(product.suggested_retail_price, precision: 2) %></p>
-  <p>Preço Atacado: R$ <%= number_with_precision(product.suggested_wholesale_price, precision: 2) %></p>
-  <p>Lucro Bruto Varejo: R$ <%= number_with_precision(product.gross_profit_retail, precision: 2) %></p>
-  <p>Lucro Bruto Atacado: R$ <%= number_with_precision(product.gross_profit_wholesale, precision: 2) %></p>
-  <p>Lucro Líquido Varejo: R$ <%= number_with_precision(product.net_profit_retail, precision: 2) %></p>
-  <p>Lucro Líquido Atacado: R$ <%= number_with_precision(product.net_profit_wholesale, precision: 2) %></p>
-
-  <% if product.persisted? %>
-    <div class="mt-3">
-      <%= link_to "Concluir Cadastro", product_path(product), class: "action-button" %>
-    </div>
+<h5>4) Precificação</h5>
+<ul class="list-group">
+  <% {
+    "Custo Total"           => f.object.total_cost,
+    "Preço Varejo"          => f.object.suggested_retail_price,
+    "Preço Atacado"         => f.object.suggested_wholesale_price,
+    "Lucro Bruto Varejo"    => f.object.gross_profit_retail,
+    "Lucro Bruto Atacado"   => f.object.gross_profit_wholesale,
+    "Lucro Líquido Varejo"  => f.object.net_profit_retail,
+    "Lucro Líquido Atacado" => f.object.net_profit_wholesale
+  }.each do |label, value| %>
+    <li class="list-group-item d-flex justify-content-between">
+      <%= label %>
+      <strong>R$ <%= number_with_precision(value, precision: 2) %></strong>
+    </li>
   <% end %>
-<% end %>
+</ul>

@@ -1,14 +1,12 @@
 <main class="container mt-4">
   <%= turbo_frame_tag "product_steps" do %>
     <h1>Produtos</h1>
-
     <%= link_to "Novo Produto",
-            new_product_path,
-            class: "action-button",
-            data:  { turbo_frame: "product_steps" } %>
-    <br>
+                new_product_path,
+                data: { turbo_frame: "product_steps" },
+                class: "action-button" %>
 
-    <table class="table table-bordered">
+    <table class="table table-bordered mt-3">
       <thead>
         <tr>
           <th>Produto</th>
@@ -24,28 +22,27 @@
         </tr>
       </thead>
       <tbody>
-        <% @products.each do |product| %>
-          <tr>
-            <td><%= product.description %></td>
-            <td>R$ <%= number_with_precision(product.total_cost, precision: 2) %></td>
-            <td><%= product.total_weight %> g</td>
-            <td>R$ <%= number_with_precision(product.suggested_retail_price, precision: 2) %></td>
-            <td>R$ <%= number_with_precision(product.suggested_wholesale_price, precision: 2) %></td>
-            <td>R$ <%= number_with_precision(product.gross_profit_retail, precision: 2) %></td>
-            <td>R$ <%= number_with_precision(product.gross_profit_wholesale, precision: 2) %></td>
-            <td>R$ <%= number_with_precision(product.net_profit_retail, precision: 2) %></td>
-            <td>R$ <%= number_with_precision(product.net_profit_wholesale, precision: 2) %></td>
+        <% @products.each do |p| %>
+          <tr id="<%= dom_id(p) %>">
+            <td><%= p.description %></td>
+            <td>R$ <%= number_with_precision(p.total_cost, precision: 2) %></td>
+            <td><%= p.total_weight %> g</td>
+            <td>R$ <%= number_with_precision(p.suggested_retail_price, precision: 2) %></td>
+            <td>R$ <%= number_with_precision(p.suggested_wholesale_price, precision: 2) %></td>
+            <td>R$ <%= number_with_precision(p.gross_profit_retail, precision: 2) %></td>
+            <td>R$ <%= number_with_precision(p.gross_profit_wholesale, precision: 2) %></td>
+            <td>R$ <%= number_with_precision(p.net_profit_retail, precision: 2) %></td>
+            <td>R$ <%= number_with_precision(p.net_profit_wholesale, precision: 2) %></td>
             <td>
               <%= link_to "Editar",
-                          edit_product_path(product, step: 1),
-                          class: "action-button",
-                          data:  { turbo_frame: "product_steps" } %>
-
+                          edit_product_path(p, step: 1),
+                          data: { turbo_frame: "product_steps" },
+                          class: "action-button" %>
               <%= button_to "Excluir",
-                            product_path(product),
+                            product_path(p),
                             method: :delete,
-                            form:   { data: { turbo_frame: "product_steps", turbo_confirm: "Tem certeza?" } },
-                            class:  "action-button ms-2" %>
+                            form: { data: { turbo_frame: "product_steps", turbo_confirm: "Confirma?" } },
+                            class: "action-button ms-2" %>
             </td>
           </tr>
         <% end %>

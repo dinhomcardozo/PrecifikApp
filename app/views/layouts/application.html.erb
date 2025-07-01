@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Precifik App" %></title>
+    <title><%= content_for(:title) || "Maxximiza | Precificação Empresarial" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -15,11 +15,13 @@
     <%= yield :head %>
 
     <%= favicon_link_tag 'favoicon.png', rel: 'icon', type: 'image/png' %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+    <%= javascript_include_tag "application",
+                             type: "module",
+                             "data-turbo-track": "reload" %>
   </head>
   <body>
     <%= render 'shared/horizontal_menu' %>
     <%= yield %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", type: "module", "data-turbo-track": "reload" %>
   </body>
 </html>

@@ -1,0 +1,9 @@
+:root {
+  --bg-color: #fffefe;
+  --bg-menu-color:       #16160b;
+  --accent-color:   #d3db23;
+  --accent-hover:   #e0e83a;
+  --text-light:     #f5f55;
+  --text-dark:      #16160b;
+  --font-family:    "Raleway", sans-serif;
+}

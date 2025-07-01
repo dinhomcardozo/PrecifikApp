@@ -1,14 +1,4 @@
-<main class="container">
-  <%= turbo_frame_tag "product_steps" do %>
-    <% case params[:step].to_s %>
-    <% when "2" %>
-      <%= render "products/aggregated_costs", product: @product %>
-    <% when "3" %>
-      <%= render "products/product_composition", product: @product %>
-    <% when "4" %>
-      <%= render "products/pricing", product: @product %>
-    <% else %>
-      <%= render "products/product_configurations", product: @product %>
-    <% end %>
-  <% end %>
+<main class="container mt-4">
+  <h1>Editar Produto</h1>
+  <%= render "form" %>
 </main>

@@ -1,56 +1,22 @@
 <!-- app/views/products/_product_composition.html.erb -->
+<h5>3) Composição do Produto</h5>
 
-<%= form_with model: product,
-              url: product_path(product, step: 3),
-              method: :patch,
-              local: false,
-              data: {
-                turbo_frame: "product_steps",
-                controller:  "product-composition"
-              } do |f| %>
-
-  <h3>3) Composição do Produto</h3>
-
-  <!-- template invisível para clonagem -->
-  <template data-product-composition-target="template">
-    <%= f.fields_for :product_subproducts,
-                    product.product_subproducts.build,
-                    child_index: "NEW_RECORD" do |ps| %>
+<table class="table table-sm">
+  <thead>
+    <tr>
+      <th>Subproduto</th>
+      <th>Quantidade (g)</th>
+      <th>Custo (R$)</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody data-product-composition-target="list">
+    <%= f.fields_for :product_subproducts do |ps| %>
       <%= render "product_composition_fields", f: ps %>
     <% end %>
-  </template>
+  </tbody>
+</table>
 
-  <table class="table mt-2">
-    <thead>
-      <tr>
-        <th>Insumo</th>
-        <th>Quantidade</th>
-        <th>Custo</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody data-product-composition-target="list">
-      <%= f.fields_for :product_subproducts do |ps| %>
-        <%= render "product_composition_fields", f: ps %>
-      <% end %>
-    </tbody>
-    <tfoot>
-      <tr>
-        <th>Total</th>
-        <th data-product-composition-target="totalWeight">0.00</th>
-        <th data-product-composition-target="totalCost">0.00</th>
-        <th></th>
-      </tr>
-    </tfoot>
-  </table>
-
-  <div class="mt-2">
-    <%= link_to "Adicionar Insumo", "#",
-                class: "action-button",
-                data: { action: "product-composition#addField" } %>
-  </div>
-
-  <div class="actions mt-3">
-    <%= f.submit "Salvar e continuar", class: "action-button" %>
-  </div>
-<% end %>
+<%= link_to "Adicionar Linha", "#",
+            class: "action-button",
+            data: { action: "product-composition#addField" } %>

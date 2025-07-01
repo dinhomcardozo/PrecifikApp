@@ -1,77 +1,44 @@
 # app/controllers/products_controller.rb
 class ProductsController < ApplicationController
-  before_action :set_product, only: %i[show edit update destroy]
-  
+  before_action :set_product, only: %i[ edit update show destroy ]
+
   def index
     @products = Product.all
   end
 
-  # GET /products/new
   def new
     @product = Product.new
     2.times { @product.product_subproducts.build }
   end
 
-  # POST /products  — Etapa 1
+  def edit
+    build_subproducts
+  end
+
   def create
-    @product = Product.new(step1_params)
+    @product = Product.new(product_params)
     if @product.save
-      render partial: "products/aggregated_costs",
-            locals: { product: @product }
-            # layout:  false 
+      redirect_to products_path, notice: "Produto criado com sucesso"
     else
-      session[:product_weight] = @product.weight
-      render partial: "products/product_configurations",
-            locals: { product: @product },
-            status:  :unprocessable_entity
-            # layout:  false
+      build_subproducts
+      render :new, status: :unprocessable_entity
     end
   end
 
-
-  # PATCH /products/:id?step=n — Etapas 2 e 3
   def update
-    case params[:step]
-    when "2"
-      if @product.update(step2_params)
-        render partial: "products/product_composition",
-              locals: { product: @product }
-              # layout:  false
-      else
-        render partial: "products/aggregated_costs",
-              locals: { product: @product },
-              status:  :unprocessable_entity
-              # layout:  false
-      end
-    when "3"
-      if @product.update(step3_params)
-        render partial: "products/pricing",
-              locals: { product: @product }
-              # layout:  false
-      else
-        render partial: "products/product_composition",
-              locals: { product: @product },
-              status:  :unprocessable_entity
-              # layout:  false
-      end
+    if @product.update(product_params)
+      redirect_to products_path, notice: "Produto atualizado com sucesso"
     else
-      head :bad_request
+      build_subproducts
+      render :edit, status: :unprocessable_entity
     end
   end
 
+  def show; end
 
-  # GET /products/:id
-  def show
-    # @product já vem do set_product
-  end
-
-  # DELETE /products/:id
   def destroy
     @product.destroy
-    respond_to do |format|
-      format.html { redirect_to products_path, notice: "Produto excluído com sucesso." }
-      format.turbo_stream { render turbo_stream: turbo_stream.remove(dom_id(@product)) }
-    end
+    redirect_to products_path, notice: "Produto excluído"
   end
 
   private
@@ -80,23 +47,22 @@ class ProductsController < ApplicationController
     @product = Product.find(params[:id])
   end
 
-  def step1_params
+  def build_subproducts
+    # garante pelo menos 2 linhas
+    (2 - @product.product_subproducts.size).times do
+      @product.product_subproducts.build
+    end
+  end
+
+  def product_params
     params.require(:product).permit(
       :description, :brand_id,
-      :profit_margin_wholesale, :profit_margin_retail
-    )
-  end
-
-  def step2_params
-    params.require(:product).permit(
+      :profit_margin_wholesale, :profit_margin_retail,
       :financial_cost, :sales_channel_cost,
-      :commission_cost, :freight_cost, :storage_cost
-    )
-  end
-
-  def step3_params
-    params.require(:product).permit(
-      product_subproducts_attributes: %i[id subproduct_id quantity cost _destroy]
+      :commission_cost, :freight_cost, :storage_cost,
+      product_subproducts_attributes: %i[
+        id subproduct_id quantity cost _destroy
+      ]
     )
   end
 end
