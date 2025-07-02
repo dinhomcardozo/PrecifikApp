@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   # === Produtos e subprodutos aninhados ===
   resources :products do
     resources :product_subproducts, only: %i[create update destroy]
+    collection do
+      get "tab", action: :tab
+  end
   end
 
   # === Marcas, fornecedores, tipos de input e inputs ===

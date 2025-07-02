@@ -9,10 +9,10 @@ export default class extends Controller {
 
   addField(e) {
     e.preventDefault()
-    const index   = Date.now()
-    const template = this.element.querySelector("template").innerHTML
-    const html     = template.replace(/NEW_RECORD/g, index)
-    this.listTarget.insertAdjacentHTML("beforeend", html)
+    const content = this.templateValue.replace(/NEW_RECORD/g, new Date().getTime())
+    const wrapper = document.createElement("tbody")
+    wrapper.innerHTML = content
+    this.listTarget.appendChild(wrapper.firstElementChild)
   }
 
   removeField(e) {

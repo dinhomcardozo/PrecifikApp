@@ -1,64 +1,53 @@
-<%= form_with model: @product, local: true, html: { id: "product-form" } do |f| %>
-  <ul class="nav nav-tabs" data-controller="tabs">
+<!-- app/views/products/_form.html.erb -->
+<%= form_with model: @product, local: true, html: { data: { controller: "tabs" } } do |f| %>
+  <ul class="nav nav-tabs">
     <li class="nav-item">
-      <button 
-        class="nav-link active"
-        data-action="tabs#switch"
-        data-tabs-target="tab"
-        data-tabs-url="<%= url_for(action: :partial, tab: 'config') %>"
-        data-tabs-panel="#tab-config">
+      <a href="#" class="nav-link active"
+         data-action="tabs#switch"
+         data-tabs-panel="panel-config">
         Configurações
-      </button>
+      </a>
     </li>
     <li class="nav-item">
-      <button 
-        class="nav-link"
-        data-action="tabs#switch"
-        data-tabs-target="tab"
-        data-tabs-url="<%= url_for(action: :partial, tab: 'costs') %>"
-        data-tabs-panel="#tab-costs">
-        Custos Agregados
-      </button>
+      <a href="#" class="nav-link"
+         data-action="tabs#switch"
+         data-tabs-panel="panel-costs">
+        Custos
+      </a>
     </li>
     <li class="nav-item">
-      <button 
-        class="nav-link"
-        data-action="tabs#switch"
-        data-tabs-target="tab"
-        data-tabs-url="<%= url_for(action: :partial, tab: 'compo') %>"
-        data-tabs-panel="#tab-compo">
+      <a href="#" class="nav-link"
+         data-action="tabs#switch"
+         data-tabs-panel="panel-composition">
         Composição
-      </button>
+      </a>
     </li>
     <li class="nav-item">
-      <button 
-        class="nav-link"
-        data-action="tabs#switch"
-        data-tabs-target="tab"
-        data-tabs-url="<%= url_for(action: :partial, tab: 'pricing') %>"
-        data-tabs-panel="#tab-price">
+      <a href="#" class="nav-link"
+         data-action="tabs#switch"
+         data-tabs-panel="panel-pricing">
         Precificação
-      </button>
+      </a>
     </li>
   </ul>
 
-  <div class="tab-content border p-3 mt-2">
-    <div id="tab-config" class="tab-pane fade show active"
-         data-tabs-target="panel"></div>
-
-    <div id="tab-costs" class="tab-pane fade" data-tabs-target="panel"></div>
-
-    <div id="tab-compo" class="tab-pane fade" data-tabs-target="panel"
-         data-controller="product-composition">
+  <div class="tab-content mt-3">
+    <div id="panel-config" class="tab-pane active">
+      <%= render "product_configurations", f: f %>
     </div>
-
-    <div id="tab-price" class="tab-pane fade" data-tabs-target="panel"
-         data-controller="product-pricing">
+    <div id="panel-costs" class="tab-pane d-none">
+      <%= render "aggregated_costs", f: f %>
+    </div>
+    <div id="panel-composition" class="tab-pane d-none">
+      <%= render "product_composition", f: f %>
+    </div>
+    <div id="panel-pricing" class="tab-pane d-none">
+      <%= render "pricing", f: f %>
     </div>
   </div>
 
-  <div class="mt-3 text-end">
-    <%= f.submit(@product.new_record? ? "Criar Produto" : "Atualizar Produto",
-                 class: "btn btn-primary") %>
+  <div class="mt-4 text-end">
+    <%= f.submit @product.new_record? ? "Criar Produto" : "Atualizar Produto",
+                  class: "btn btn-primary" %>
   </div>
 <% end %>

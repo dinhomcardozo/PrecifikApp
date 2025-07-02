@@ -20,7 +20,9 @@
   </td>
   <td>
     <%= f.hidden_field :cost %>
-    R$ <span data-product-composition-target="fieldCost">0.00</span>
+    R$ <span data-product-composition-target="fieldCost">
+      <%= number_with_precision(f.object.cost || 0, precision: 2) %>
+    </span>
   </td>
   <td>
     <%= f.hidden_field :_destroy %>

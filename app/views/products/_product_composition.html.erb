@@ -2,21 +2,18 @@
 <h5>3) Composição do Produto</h5>
 
 <table class="table table-sm">
-  <thead>
-    <tr>
-      <th>Subproduto</th>
-      <th>Quantidade (g)</th>
-      <th>Custo (R$)</th>
-      <th></th>
-    </tr>
-  </thead>
+  <thead> … </thead>
   <tbody data-product-composition-target="list">
-    <%= f.fields_for :product_subproducts do |ps| %>
-      <%= render "product_composition_fields", f: ps %>
+    <%= f.fields_for :product_subproducts do |ps_form| %>
+      <%= render partial: "products/product_composition_fields", locals: { f: ps_form } %>
     <% end %>
   </tbody>
 </table>
 
 <%= link_to "Adicionar Linha", "#",
             class: "action-button",
-            data: { action: "product-composition#addField" } %>
+            data: {
+              controller: "product-composition",
+              action:     "product-composition#addField",
+              template:   j( product_composition_fields_template(f) )
+            } %>
