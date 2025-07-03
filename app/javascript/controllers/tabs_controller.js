@@ -1,27 +1,33 @@
-// app/javascript/controllers/tabs_controller.js
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = []
+  static targets = ["link", "panel", "hidden"]
 
-  switch(e) {
-    e.preventDefault()
-    const link = e.currentTarget
-    const panelId = link.dataset.tabsPanel
-
-    // 1) marca o tab
-    this.element
-      .querySelectorAll(".nav-link")
-      .forEach(a => a.classList.remove("active"))
-    link.classList.add("active")
-
-    // 2) mostra o painel e esconde os outros
-    this.element
-      .querySelectorAll(".tab-pane")
-      .forEach(p => {
-        p.id === panelId
-          ? p.classList.remove("d-none")
-          : p.classList.add("d-none")
-      })
+  connect() {
+    const active = this.hiddenTarget.value
+    this.showTab(active)
   }
+
+  switch(event) {
+    event.preventDefault()
+    const name = event.currentTarget.dataset.tabsPanel.replace("panel-", "")
+    this.hiddenTarget.value = name
+    this.showTab(name)
+  }
+  
+  showTab(name) {
+    this.linkTargets.forEach(link => {
+      const linkName = link.dataset.tabsPanel.replace("panel-", "")
+      link.classList.toggle("active", linkName === name)
+    })
+    this.panelTargets.forEach(panel => {
+      panel.id === `panel-${name}`
+        ? panel.classList.remove("d-none")
+        : panel.classList.add("d-none")
+    })
+  }
+  
 }
+
+// expose globally
+window.TabsController = Controller

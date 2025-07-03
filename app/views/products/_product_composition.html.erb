@@ -1,19 +1,37 @@
 <!-- app/views/products/_product_composition.html.erb -->
 <h5>3) Composição do Produto</h5>
 
-<table class="table table-sm">
-  <thead> … </thead>
-  <tbody data-product-composition-target="list">
-    <%= f.fields_for :product_subproducts do |ps_form| %>
-      <%= render partial: "products/product_composition_fields", locals: { f: ps_form } %>
-    <% end %>
-  </tbody>
-</table>
+<div data-controller="product-composition">
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <th>Subproduto</th>
+        <th>Quantidade (g)</th>
+        <th>Custo (R$)</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody data-product-composition-target="list">
+      <%= f.fields_for :product_subproducts do |ps| %>
+        <%= render partial: "products/product_composition_fields",
+                  locals: { f: ps } %>
+      <% end %>
+    </tbody>
+  </table>
 
-<%= link_to "Adicionar Linha", "#",
-            class: "action-button",
-            data: {
-              controller: "product-composition",
-              action:     "product-composition#addField",
-              template:   j( product_composition_fields_template(f) )
-            } %>
+
+  <template data-product-composition-target="template">
+    <%# Gera um builder com child_index="NEW_RECORD" %>
+    <%= f.fields_for :product_subproducts, ProductSubproduct.new,
+                    child_index: "NEW_RECORD" do |ps| %>
+      <%= render partial: "products/product_composition_fields",
+                locals: { f: ps } %>
+    <% end %>
+  </template>
+
+  <button type="button"
+          class="action-button"
+          data-action="click->product-composition#addField">
+    Adicionar Linha
+  </button>
+</div>

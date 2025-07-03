@@ -18,22 +18,39 @@ class ProductsController < ApplicationController
   def create
     @product = Product.new(product_params)
     if @product.save
-      redirect_to products_path, notice: "Produto criado com sucesso"
+      # renderiza um turbo stream que substitui o frame e aciona JS para mudar aba
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_to edit_product_path(@product, active_tab: "costs") }
+      end
     else
-      build_subproducts
+      flash.now[:alert] = "Corrija os erros abaixo"
       render :new, status: :unprocessable_entity
     end
   end
 
   def update
     if @product.update(product_params)
-      redirect_to products_path, notice: "Produto atualizado com sucesso"
+      # Decide qual será a próxima aba
+      @next_tab =
+        case params[:active_tab]
+        when "config"      then "costs"
+        when "costs"       then "composition"
+        when "composition" then "pricing"
+        else                   "config"
+        end
+
+      respond_to do |format|
+        format.turbo_stream { render :update }
+        format.html { redirect_to edit_product_path(@product, active_tab: params[:active_tab]),
+                                 notice: "Atualizado com sucesso" }
+      end
     else
-      build_subproducts
+      flash.now[:alert] = "Corrija os erros"
       render :edit, status: :unprocessable_entity
     end
   end
-
+  
   def show; end
 
   def destroy

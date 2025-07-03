@@ -1,6 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
+  static values = { template: String }
   static targets = ["list", "fieldCost"]
 
   connect() {
@@ -9,20 +10,21 @@ export default class extends Controller {
 
   addField(e) {
     e.preventDefault()
-    const content = this.templateValue.replace(/NEW_RECORD/g, new Date().getTime())
-    const wrapper = document.createElement("tbody")
-    wrapper.innerHTML = content
-    this.listTarget.appendChild(wrapper.firstElementChild)
+    const html = this.templateTarget.innerHTML
+                    .replace(/NEW_RECORD/g, Date.now())
+    this.listTarget.insertAdjacentHTML("beforeend", html)
   }
 
   removeField(e) {
     e.preventDefault()
-    const tr = e.currentTarget.closest("tr")
-    tr.querySelector("input[name*='_destroy']").value = "1"
-    tr.style.display = "none"
-    this.dispatchChange()
+    const row = e.currentTarget.closest("tr")
+    if (row.dataset.newRecord === "true") {
+      row.remove()
+    } else {
+      row.querySelector("input[name*='_destroy']").value = 1
+      row.style.display = "none"
+    }
   }
-
   recalculate(e) {
     const tr     = e.currentTarget.closest("tr")
     const qty    = parseFloat(tr.querySelector("input[name*='[quantity]']").value) || 0

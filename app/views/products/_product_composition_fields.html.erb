@@ -1,16 +1,11 @@
 <!-- app/views/products/_product_composition_fields.html.erb -->
-<tr id="<%= dom_id(f.object) %>">
+<tr id="<%= dom_id(f.object) %>"
+    data-new-record="<%= f.object.new_record? %>">
   <td>
-    <%= f.collection_select :subproduct_id,
-                            Subproduct.all,
-                            :id,
-                            :name,
-                            { prompt: "Selecione" },
-                            class: "form-select",
-                            data: {
-                              cost_per_gram: f.object.subproduct&.cost_per_gram || 0,
-                              action:        "change->product-composition#recalculate"
-                            } %>
+    <%= f.collection_select :subproduct_id, Subproduct.all, :id, :name,
+                            { prompt: "Selecione" }, class: "form-select",
+                            data: { cost_per_gram: f.object.subproduct&.cost_per_gram || 0,
+                                    action: "change->product-composition#recalculate" } %>
   </td>
   <td>
     <%= f.number_field :quantity,

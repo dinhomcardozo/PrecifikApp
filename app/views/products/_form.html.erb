@@ -1,53 +1,74 @@
 <!-- app/views/products/_form.html.erb -->
-<%= form_with model: @product, local: true, html: { data: { controller: "tabs" } } do |f| %>
+<% active_tab ||= "config" %>
+
+<%= form_with model: @product,
+              url: (@product.new_record? ?
+                      products_path(active_tab: active_tab) :
+                      product_path(@product, active_tab: active_tab)),
+              method: (@product.new_record? ? :post : :patch),
+              data: { controller: "tabs" } do |f| %>
+                
   <ul class="nav nav-tabs">
     <li class="nav-item">
-      <a href="#" class="nav-link active"
-         data-action="tabs#switch"
-         data-tabs-panel="panel-config">
+      <a href="#"
+        class="nav-link <%= "active" if active_tab == "config" %>"
+        data-action="tabs#switch"
+        data-tabs-panel="panel-config">
         Configurações
       </a>
     </li>
     <li class="nav-item">
-      <a href="#" class="nav-link"
-         data-action="tabs#switch"
-         data-tabs-panel="panel-costs">
+      <a href="#"
+        class="nav-link <%= "active" if active_tab == "costs" %>"
+        data-action="tabs#switch"
+        data-tabs-panel="panel-costs">
         Custos
       </a>
     </li>
     <li class="nav-item">
-      <a href="#" class="nav-link"
-         data-action="tabs#switch"
-         data-tabs-panel="panel-composition">
+      <a href="#"
+        class="nav-link <%= "active" if active_tab == "composition" %>"
+        data-action="tabs#switch"
+        data-tabs-panel="panel-composition">
         Composição
       </a>
     </li>
     <li class="nav-item">
-      <a href="#" class="nav-link"
-         data-action="tabs#switch"
-         data-tabs-panel="panel-pricing">
+      <a href="#"
+        class="nav-link <%= "active" if active_tab == "pricing" %>"
+        data-action="tabs#switch"
+        data-tabs-panel="panel-pricing">
         Precificação
       </a>
     </li>
   </ul>
 
   <div class="tab-content mt-3">
-    <div id="panel-config" class="tab-pane active">
+    <div id="panel-config"
+         class="tab-pane <%= "active" if active_tab == "config" %> d-flex"
+         data-tabs-target="panel">
       <%= render "product_configurations", f: f %>
     </div>
-    <div id="panel-costs" class="tab-pane d-none">
+    <div id="panel-costs"
+         class="tab-pane <%= "active" if active_tab == "costs" %> d-none"
+         data-tabs-target="panel">
       <%= render "aggregated_costs", f: f %>
     </div>
-    <div id="panel-composition" class="tab-pane d-none">
+    <div id="panel-composition"
+         class="tab-pane <%= "active" if active_tab == "composition" %> d-none"
+         data-tabs-target="panel">
       <%= render "product_composition", f: f %>
     </div>
-    <div id="panel-pricing" class="tab-pane d-none">
+    <div id="panel-pricing"
+         class="tab-pane <%= "active" if active_tab == "pricing" %> d-none"
+         data-tabs-target="panel">
       <%= render "pricing", f: f %>
     </div>
   </div>
 
+
   <div class="mt-4 text-end">
     <%= f.submit @product.new_record? ? "Criar Produto" : "Atualizar Produto",
-                  class: "btn btn-primary" %>
+                 class: "action-button" %>
   </div>
 <% end %>
