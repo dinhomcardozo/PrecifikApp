@@ -1,7 +1,7 @@
 <main class="container mt-4">
   <%= turbo_frame_tag "product_steps" do %>
     <h1>Produtos</h1>
-    <%= link_to "Novo Produto",
+    <%= link_to "[+] Novo Produto",
                 new_product_path,
                 data: { turbo_frame: "product_steps" },
                 class: "action-button" %>

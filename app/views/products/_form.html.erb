@@ -8,18 +8,24 @@
               method: (@product.new_record? ? :post : :patch),
               data: { controller: "tabs" } do |f| %>
                 
+  <%= hidden_field_tag :active_tab,
+                        active_tab,
+                        data: { tabs_target: "hidden" } %>
+                
   <ul class="nav nav-tabs">
     <li class="nav-item">
       <a href="#"
-        class="nav-link <%= "active" if active_tab == "config" %>"
-        data-action="tabs#switch"
-        data-tabs-panel="panel-config">
-        Configurações
-      </a>
+       class="nav-link <%= "active" if active_tab == "config" %>"
+       data-tabs-target="link"
+       data-action="tabs#switch"
+       data-tabs-panel="panel-config">
+      Configurações
+    </a>
     </li>
     <li class="nav-item">
       <a href="#"
         class="nav-link <%= "active" if active_tab == "costs" %>"
+        data-tabs-target="link"
         data-action="tabs#switch"
         data-tabs-panel="panel-costs">
         Custos
@@ -28,6 +34,7 @@
     <li class="nav-item">
       <a href="#"
         class="nav-link <%= "active" if active_tab == "composition" %>"
+        data-tabs-target="link"
         data-action="tabs#switch"
         data-tabs-panel="panel-composition">
         Composição
@@ -36,6 +43,7 @@
     <li class="nav-item">
       <a href="#"
         class="nav-link <%= "active" if active_tab == "pricing" %>"
+        data-tabs-target="link"
         data-action="tabs#switch"
         data-tabs-panel="panel-pricing">
         Precificação

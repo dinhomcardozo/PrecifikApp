@@ -2,14 +2,25 @@ class SubproductComposition < ApplicationRecord
   belongs_to :subproduct
   belongs_to :input
 
-  validates :quantity_for_a_unit, presence: true, numericality: { greater_than: 0 }
-  validates :input_id, uniqueness: { scope: :subproduct_id, message: "já está na lista" }
-  validates_presence_of :input_id, :quantity_for_a_unit
+  # antes de salvar linha, calcula e armazena quantity_cost
+  before_validation :set_default_quantity
+  before_save       :compute_quantity_cost
 
-  def quantity_cost
-    return 0.0 if input.nil? || quantity_for_a_unit <= 0
-    (input.cost / input.weight_in_grams) * quantity_for_a_unit
-  rescue ZeroDivisionError
-    0.0
+  delegate :cost_per_gram, to: :input, allow_nil: true
+
+  validates :input_id, presence: true, uniqueness: { scope: :subproduct_id }
+  validates :quantity_for_a_unit,
+            presence: true,
+            numericality: { greater_than: 0 }
+  
+
+  private
+
+  def set_default_quantity
+    self.quantity_for_a_unit ||= 0
+  end
+
+  def compute_quantity_cost
+    self.quantity_cost = (cost_per_gram.to_f * quantity_for_a_unit.to_f).round(2)
   end
 end

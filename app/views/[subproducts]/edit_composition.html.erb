@@ -19,16 +19,11 @@
 <% end %>
 
 <div class="my-3">
-  <%= form_with(url: subproduct_subproduct_compositions_path(@subproduct),
-                method: :post,
-                data: { turbo_stream: true },
-                local: true) do |form| %>
-    <%= form.fields_for :subproduct_composition, SubproductComposition.new do |f| %>
-      <%= f.hidden_field :input_id, value: "" %>
-      <%= f.hidden_field :quantity_for_a_unit, value: "" %>
-    <% end %>
-    <%= form.submit "Adicionar Insumo", class: "action-button" %>
-  <% end %>
-</div>
+  <%= button_to "Adicionar Insumo", subproduct_subproduct_compositions_path(@subproduct), 
+    method: :post,
+    data: { turbo_stream: true },
+    class: "action-button" %>
+  </div>
+<br>
 
 <%= link_to "Finalizar Cadastro", subproducts_path, class: "standart-button" %>

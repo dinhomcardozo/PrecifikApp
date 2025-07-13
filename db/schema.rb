@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_06_30_230539) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_09_224754) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -108,6 +108,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_30_230539) do
     t.float "quantity_for_a_unit"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "quantity_cost", precision: 10, scale: 2, default: "0.0", null: false
     t.index ["input_id"], name: "index_subproduct_compositions_on_input_id"
     t.index ["subproduct_id"], name: "index_subproduct_compositions_on_subproduct_id"
   end

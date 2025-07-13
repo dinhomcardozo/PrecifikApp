@@ -1,15 +1,20 @@
 class InputsController < ApplicationController
-  before_action :set_url_options, only: [:index, :show]
+  before_action :set_url_options, only: %i[index show]
+  before_action :set_input,       only: %i[show edit update]
 
   def index
     @inputs = Input.all.includes(:supplier, :input_type)
   end
 
   def show
-    @input = Input.find(params[:id])
     respond_to do |format|
       format.html { render layout: false }
-      format.json { render json: @input }
+      format.json do
+        render json: {
+          cost:             @input.cost.to_f,
+          weight_in_grams:  @input.weight.to_f
+        }
+      end
     end
   end
 
@@ -73,8 +78,12 @@ class InputsController < ApplicationController
   def set_url_options
     ActiveStorage::Current.url_options = {
       protocol: request.protocol,
-      host: request.host,
-      port: request.port
+      host:     request.host,
+      port:     request.port
     }
+  end
+
+  def set_input
+    @input = Input.find(params[:id])
   end
 end

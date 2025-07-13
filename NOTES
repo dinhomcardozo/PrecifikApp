@@ -1,3 +1,11 @@
+Últimas alterações:
+
+09/07
+'quantity_cost' criado na tabela 'subproduct_composition'; Cost é a soma de todos os quantity_cost; 
+
+
+---------------------------
+
 Stack:
   Hotwire + Stimulus + Propshaft com esbuild (27/06/2025)
 

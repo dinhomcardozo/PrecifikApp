@@ -25,8 +25,8 @@ class Input < ApplicationRecord
         end
     end
 
-    def cost_per_gram
-        return 0.0 if weight_in_grams.zero?
-    cost / weight_in_grams
-    end
+  def cost_per_gram
+    return 0.0 if weight_in_grams.to_f.zero?
+    (cost.to_f / weight_in_grams.to_f).round(4)
+  end
 end

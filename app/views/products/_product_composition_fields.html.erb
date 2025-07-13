@@ -1,28 +1,47 @@
-<!-- app/views/products/_product_composition_fields.html.erb -->
-<tr id="<%= dom_id(f.object) %>"
+<tr data-controller="composition-row"
+    data-composition-row-cost-per-gram-value="<%= f.object.subproduct&.cost_per_gram.to_f %>"
     data-new-record="<%= f.object.new_record? %>">
+
   <td>
-    <%= f.collection_select :subproduct_id, Subproduct.all, :id, :name,
-                            { prompt: "Selecione" }, class: "form-select",
-                            data: { cost_per_gram: f.object.subproduct&.cost_per_gram || 0,
-                                    action: "change->product-composition#recalculate" } %>
+    <%= f.select :subproduct_id,
+      options_for_select(
+        Subproduct.all.map { |s|
+          [ s.name,
+            s.id,
+            { 'data-cost-per-gram': s.cost_per_gram }
+          ]
+        },
+        f.object.subproduct_id
+      ),
+      { prompt: "Selecione" },
+      class: "form-select",
+      data: { action: "change->composition-row#updateCostPerGram" } %>
   </td>
+
   <td>
+    <%= f.label :quantity, "Quantidade (g)", class: "form-label visually-hidden" %>  
     <%= f.number_field :quantity,
-                       step: "any",
-                       class: "form-control",
-                       data: { action: "input->product-composition#recalculate" } %>
+          step: "any",
+          placeholder: "Ex: 100",
+          class: "form-control",
+          data: { action: "input->composition-row#calculate" } %>
   </td>
+
   <td>
-    <%= f.hidden_field :cost %>
-    R$ <span data-product-composition-target="fieldCost">
-      <%= number_with_precision(f.object.cost || 0, precision: 2) %>
-    </span>
-  </td>
+    <%= f.label :cost, "Custo (R$)", class: "form-label visually-hidden" %>
+    <%= f.number_field :cost,
+        step: "any",
+        readonly: true,
+        placeholder: "0.00",
+        class: "form-control",
+        "data-composition-row-target": "cost"  %>
+  </td>       
   <td>
     <%= f.hidden_field :_destroy %>
-    <%= link_to "Remover", "#",
-                class: "action-button",
-                data: { action: "product-composition#removeField" } %>
+    <button type="button"
+            class="action-button"
+            data-action="composition-row#removeRow">
+      Remover
+    </button>
   </td>
 </tr>

@@ -4,6 +4,8 @@ export default class extends Controller {
   static targets = ["link", "panel", "hidden"]
 
   connect() {
+    if (!this.hasHiddenTarget) return
+    this.showTab(this.hiddenTarget.value)
     const active = this.hiddenTarget.value
     this.showTab(active)
   }

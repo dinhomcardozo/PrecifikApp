@@ -1,34 +1,28 @@
-<%= turbo_frame_tag dom_id(subproduct_composition) do %>
-  <%= form_with(model: [subproduct_composition.subproduct, subproduct_composition], remote: true, data: { turbo_frame: dom_id(subproduct_composition) }) do |f| %>
-    <tr>
-      <td>
-        <%= f.collection_select :input_id, Input.all, :id, :name, { include_blank: true }, class: "form-select", data: { action: "input->subproduct-nested-form#updateCost" } %>
-      </td>
-      <td>
-        <%= f.number_field :quantity_for_a_unit, step: "any", class: "composition-quantity form-control", data: { action: "input->subproduct-nested-form#updateCost" } %>
-      </td>
-      <td class="cost-display">
-        <% if subproduct_composition.input_id.present? && subproduct_composition.quantity_for_a_unit.to_f.positive? %>
-          <% input = Input.find_by(id: subproduct_composition.input_id) %>
-          <% cost_per_gram = (input&.cost.to_f || 0) / (input&.weight_in_grams || 1) %>
-          R$ <%= number_with_precision(subproduct_composition.quantity_for_a_unit * cost_per_gram, precision: 2) %>
-        <% else %>
-          -
-        <% end %>
-      </td>
-      <td>
-        <% if subproduct_composition.persisted? %>
-          <%= button_to "Remover", subproduct_subproduct_composition_path(subproduct_composition.subproduct, subproduct_composition), 
-                  method: :delete, 
-                  data: { turbo_confirm: "Confirma exclusão?" }, 
-                  class: "remove_input_fields action-button" %>
-        <% else %>
-          <%= link_to "Remover", "#", class: "remove_input_fields action-button", data: { action: "subproduct-nested-form#removeField" } %>
-        <% end %>
-      </td>
-      <td>
-        <%= f.submit "Atualizar", class: "action-button" %>
-      </td>
-    </tr>
-  <% end %>
-<% end %>
+<!-- app/views/subproducts/_subproduct_compositions_fields.html.erb -->
+<tr data-new-record="<%= f.index %>">
+  <td>
+    <%= f.collection_select :input_id, Input.all, :id, :name,
+                            { include_blank: "Escolha insumo" },
+                            class: "form-select",
+                            data: { action: "change->nested-form#updateCost" } %>
+  </td>
+  <td>
+    <%= f.number_field :quantity_for_a_unit,
+                       class: "form-control",
+                       step: :any,
+                       data: { action: "input->nested-form#updateCost" } %>
+    <%= f.hidden_field :quantity_cost,
+                      value: f.object.quantity_cost,
+                      class: "quantity-cost-field" %>
+  </td>
+  <td class="cost-display">
+    <% qc = f.object.quantity_cost.to_f %>
+    <%= qc.positive? ? number_with_precision(qc, precision: 2) : "-" %>
+  </td>
+  <td>
+    <%= f.hidden_field :_destroy %>
+    <%= link_to "Remover", "#",
+                class: "action-button",
+                data: { action: "nested-form#removeField" } %>
+  </td>
+</tr>

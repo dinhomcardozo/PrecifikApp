@@ -2,17 +2,10 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static values = { template: String }
-  static targets = ["list", "fieldCost"]
+  static targets = ["list", "template", "fieldCost"]
 
   connect() {
     this.updateAllCosts()
-  }
-
-  addField(e) {
-    e.preventDefault()
-    const html = this.templateTarget.innerHTML
-                    .replace(/NEW_RECORD/g, Date.now())
-    this.listTarget.insertAdjacentHTML("beforeend", html)
   }
 
   removeField(e) {
@@ -26,18 +19,21 @@ export default class extends Controller {
     }
   }
   recalculate(e) {
-    const tr     = e.currentTarget.closest("tr")
-    const qty    = parseFloat(tr.querySelector("input[name*='[quantity]']").value) || 0
-    const cpg    = parseFloat(
-      tr.querySelector("select").dataset.costPerGram
-    ) || 0
-    const cost   = (qty * cpg).toFixed(2)
+    const row = e.target.closest("tr")
 
-    tr.querySelector("input[name*='[cost]']").value = cost
-    tr.querySelector("[data-product-composition-target='fieldCost']")
-      .textContent = cost
+    // 1) pega quantidade
+    const qtyField = row.querySelector("input[name*='[quantity]']")
+    const qty = parseFloat(qtyField.value) || 0
 
-    this.dispatchChange()
+    // 2) pega option selecionada e lê data-cost-per-gram
+    const select = row.querySelector("select[name*='[subproduct_id]']")
+    const selectedOption = select.options[select.selectedIndex]
+    const costPerGram = parseFloat(selectedOption.dataset.costPerGram) || 0
+
+    // 3) calcula e aplica
+    const cost = (qty * costPerGram).toFixed(2)
+    row.querySelector("input[name*='[cost]']").value = cost
+    row.querySelector("[data-product-composition-target='fieldCost']").textContent = cost
   }
 
   updateAllCosts() {
@@ -46,7 +42,19 @@ export default class extends Controller {
     })
   }
 
-  dispatchChange() {
-    this.element.dispatchEvent(new CustomEvent("composition:changed"))
+  addField(e) {
+    e.preventDefault()
+    const html = this.templateTarget.innerHTML.replace(/NEW_RECORD/g, Date.now())
+    this.listTarget.insertAdjacentHTML("beforeend", html)
+  }
+
+  refreshAll(e) {
+    e.preventDefault()
+    this.listTarget
+      .querySelectorAll("input[name*='[quantity]']")
+      .forEach(input => input.dispatchEvent(new Event("input", { bubbles: true })))
+    this.listTarget
+      .querySelectorAll("select[name*='[subproduct_id]']")
+      .forEach(select => select.dispatchEvent(new Event("change", { bubbles: true })))
   }
 }

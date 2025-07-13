@@ -1,0 +1,52 @@
+<!-- app/views/subproducts/_form_composition.html.erb -->
+<h3>Editar Composição do Subproduto</h3>
+
+<%= turbo_frame_tag "compositions" do %>
+  <%= render "subproducts/total_composition_cost", subproduct: @subproduct %>
+
+  <table class="table table-sm table-bordered">
+    <thead>
+      <tr>
+        <th>Insumo</th>
+        <th>Quantidade (g)</th>
+        <th>Custo da Quantidade (R$)</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @subproduct.subproduct_compositions.each do |composition| %>
+        <%= render "subproducts/subproduct_compositions_fields",
+                   subproduct_composition: composition %>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<div class="my-3">
+  <%= form_with url: subproduct_subproduct_compositions_path(@subproduct),
+                scope: :subproduct_composition,
+                data: { turbo_stream: true },
+                local: false do |f| %>
+
+    <div class="mb-2">
+      <%= f.collection_select :input_id,
+                              Input.all,
+                              :id,
+                              :name,
+                              { include_blank: "Escolha um insumo" },
+                              class: "form-select" %>
+    </div>
+
+    <div class="mb-2">
+      <%= f.number_field :quantity_for_a_unit,
+                         step: "any",
+                         placeholder: "Quantidade (g)",
+                         class: "form-control" %>
+    </div>
+
+    <%= f.submit "Adicionar Insumo", class: "action-button" %>
+  <% end %>
+</div>
+
+<%= link_to "Finalizar Cadastro", subproducts_path,
+            class: "standart-button" %>

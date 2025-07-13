@@ -1,0 +1,30 @@
+<!-- app/views/subproducts/_subproduct_compositions_fields.html.erb -->
+<%= turbo_frame_tag dom_id(subproduct_composition) do %>
+  <%= form_with(model: [subproduct_composition.subproduct, subproduct_composition], remote: true, data: { turbo_frame: dom_id(subproduct_composition) }) do |f| %>
+    <tr>
+      <td>
+        <%= f.collection_select :input_id, Input.all, :id, :name, { include_blank: true }, class: "form-select", data: { action: "input->subproduct-nested-form#updateCost" } %>
+      </td>
+      <td>
+        <%= f.number_field :quantity_for_a_unit, step: "any", class: "composition-quantity form-control", data: { action: "input->subproduct-nested-form#updateCost" } %>
+      </td>
+      <td class="cost-display">
+        <% qc = subproduct_composition.quantity_cost.to_f %>
+        <%= qc.positive? ? "R$ #{number_with_precision(qc, 2)}" : "-" %>
+      </td>
+      <td>
+        <% if subproduct_composition.persisted? %>
+          <%= button_to "Remover", subproduct_subproduct_composition_path(subproduct_composition.subproduct, subproduct_composition), 
+                  method: :delete, 
+                  data: { turbo_confirm: "Confirma exclusão?" }, 
+                  class: "remove_input_fields action-button" %>
+        <% else %>
+          <%= link_to "Remover", "#", class: "remove_input_fields action-button", data: { action: "subproduct-nested-form#removeField" } %>
+        <% end %>
+      </td>
+      <td>
+        <%= f.submit "Atualizar", class: "action-button" %>
+      </td>
+    </tr>
+  <% end %>
+<% end %>
