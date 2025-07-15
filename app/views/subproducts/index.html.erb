@@ -14,11 +14,14 @@
       <tr>
         <td><%= sp.name %></td>
         <td><%= sp.subproduct_compositions.sum(&:quantity_for_a_unit) %></td>
-        <td>R$ <%= number_with_precision(sp.cost || 0.0, precision: 2) %></td>
+        <td>R$ <%= number_with_precision(sp.total_composition_cost, precision: 2) %></td>
         <td>
-          <%= link_to "Editar Subproduto", edit_subproduct_path(sp), class: "standart-button" %>
-          <%= link_to "Editar Composição", edit_composition_subproduct_path(sp), class: "standart-button" %>
-          <%= button_to "Excluir", subproduct_path(sp), method: :delete, data: { turbo_confirm: "Tem certeza que deseja excluir?" }, class: "action-button" %>
+          <%= link_to "Editar", edit_subproduct_path(sp), class: "standart-button" %>
+          <%= button_to "Excluir",
+                        subproduct_path(sp),
+                        method: :delete,
+                        data: { turbo_confirm: "Tem certeza?" },
+                        class: "action-button" %>
         </td>
       </tr>
     <% end %>

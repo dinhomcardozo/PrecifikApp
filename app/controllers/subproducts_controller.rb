@@ -2,7 +2,7 @@ class SubproductsController < ApplicationController
   before_action :set_subproduct, only: %i[edit update destroy]
 
   def index
-    @subproducts = Subproduct.all
+    @subproducts = Subproduct.includes(:subproduct_compositions).all
   end
 
   def new

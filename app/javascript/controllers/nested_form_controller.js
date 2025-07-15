@@ -5,7 +5,8 @@ export default class extends Controller {
   static targets = ["container", "quantityCostField", "costDisplay"];
 
   connect() {
-    console.log("NestedForm conectado. containerTarget =", this.containerTarget);
+    console.log("NestedForm conectado, somando itens existentes");
+    this.updateTotal();
   }
 
   addField(event) {

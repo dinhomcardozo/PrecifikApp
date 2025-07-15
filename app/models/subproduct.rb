@@ -12,7 +12,7 @@ class Subproduct < ApplicationRecord
 
   # Helper para view do total
   def total_composition_cost
-    subproduct_compositions.sum(&:quantity_cost).round(2)
+    subproduct_compositions.sum(&:quantity_cost).to_f.round(2)
   end
   
   private
