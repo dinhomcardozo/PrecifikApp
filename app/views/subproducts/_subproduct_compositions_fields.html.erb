@@ -1,5 +1,5 @@
 <!-- app/views/subproducts/_subproduct_compositions_fields.html.erb -->
-<tr data-new-record="<%= f.index %>">
+<tr>
   <td>
     <%= f.collection_select :input_id, Input.all, :id, :name,
                             { include_blank: "Escolha insumo" },
@@ -12,10 +12,10 @@
                        step: :any,
                        data: { action: "input->nested-form#updateCost" } %>
     <%= f.hidden_field :quantity_cost,
-                      value: f.object.quantity_cost,
-                      class: "quantity-cost-field" %>
+                       value: f.object.quantity_cost,
+                       data: { nested_form_target: "quantityCostField" } %>
   </td>
-  <td class="cost-display">
+  <td data-nested-form-target="costDisplay" class="cost-display">
     <% qc = f.object.quantity_cost.to_f %>
     <%= qc.positive? ? number_with_precision(qc, precision: 2) : "-" %>
   </td>
@@ -23,6 +23,6 @@
     <%= f.hidden_field :_destroy %>
     <%= link_to "Remover", "#",
                 class: "action-button",
-                data: { action: "nested-form#removeField" } %>
+                data: { action: "click->nested-form#removeField", turbo: false } %>
   </td>
 </tr>

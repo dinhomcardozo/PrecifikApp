@@ -1,11 +1,12 @@
 <%= turbo_frame_tag dom_id(subproduct) do %>
-  <%= form_with model: subproduct, html: { multipart: true } do |f| %>
+  <%= form_with model: subproduct,
+                data: { controller: "nested-form", turbo_frame: "_top" } do |f| %>
+    
     <h4>Configurações do Subproduto</h4>
-
-    <div class="mb-3">
-      <%= f.label :name, "Nome do Subproduto" %>
-      <%= f.text_field :name, class: "form-control" %>
-    </div>
+      <div class="mb-3">
+        <%= f.label :name, "Nome do Subproduto" %>
+        <%= f.text_field :name, class: "form-control" %>
+      </div>
 
     <div class="mb-3">
       <%= f.label :brand_id, "Marca" %>
@@ -14,39 +15,43 @@
                               class: "form-select" %>
     </div>
 
-    <h4>Composição do Subproduto</h4>
-
-    <div id="subproduct_total_cost" class="mb-2">
+    <h4>Composição</h4>
+    <div id="subproduct_total_cost">
       Custo Total: R$ <%= number_with_precision(subproduct.total_composition_cost, precision: 2) %>
     </div>
-
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>Insumo</th>
-          <th>Quantidade</th>
-          <th>Custo (R$)</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody data-controller="nested-form" data-nested-form-target="container">
-        <%= f.fields_for :subproduct_compositions do |ff| %>
+  
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Insumo</th>
+            <th>Quantidade</th>
+            <th>Custo (R$)</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+          <tbody data-nested-form-target="container">
+            <%= f.fields_for :subproduct_compositions do |ff| %>
+              <%= render "subproducts/subproduct_compositions_fields", f: ff %>
+            <% end %>
+          </tbody>
+      </table>
+        <!-- template escondido -->
+      <template id="composition-fields-template">
+        <%= f.fields_for :subproduct_compositions,
+                        SubproductComposition.new,
+                        child_index: "NEW_RECORD" do |ff| %>
           <%= render "subproducts/subproduct_compositions_fields", f: ff %>
         <% end %>
-      </tbody>
-    </table>
+      </template>
 
-    <%= link_to "Adicionar Insumo", "#",
-                class: "action-button",
-                data: {
-                  action: "nested-form#addField",
-                  association: "subproduct_compositions",
-                  id: Time.now.to_i,
-                  fields: f.fields_for(:subproduct_compositions, SubproductComposition.new, child_index: "NEW_RECORD") do |ff|
-                    render("subproducts/subproduct_compositions_fields", f: ff)
-                  end.delete("\n")
-                } %>
-    
+    <a href="#"
+       class="action-button"
+       data-turbo="false"
+       data-action="click->nested-form#addField"
+       data-template-id="composition-fields-template">
+      Adicionar Insumo
+    </a>
+
 <br>
     <div class="mt-4">
       <%= f.submit "Salvar subproduto", class: "standart-button" %>
