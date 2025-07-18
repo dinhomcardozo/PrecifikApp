@@ -1,5 +1,10 @@
 <h1>Subprodutos</h1>
 
+<%= link_to "Novo Subproduto",
+            new_subproduct_path,
+            class: "standart-button",
+            data: { turbo_frame: "_top" } %>
+
 <table class="table table-hover">
   <thead>
     <tr>
@@ -27,8 +32,3 @@
     <% end %>
   </tbody>
 </table>
-
-<%= link_to "Novo Subproduto",
-            new_subproduct_path,
-            class: "standart-button",
-            data: { turbo_frame: "_top" } %>

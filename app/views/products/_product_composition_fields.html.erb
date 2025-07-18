@@ -3,13 +3,11 @@
     data-new-record="<%= f.object.new_record? %>">
 
   <td>
+    <%= f.label :subproduct_id, "Subproduto" %>
     <%= f.select :subproduct_id,
       options_for_select(
         Subproduct.all.map { |s|
-          [ s.name,
-            s.id,
-            { 'data-cost-per-gram': s.cost_per_gram }
-          ]
+          [ s.name, s.id, { "data-cost-per-gram": s.cost_per_gram } ]
         },
         f.object.subproduct_id
       ),
@@ -24,18 +22,22 @@
           step: "any",
           placeholder: "Ex: 100",
           class: "form-control",
-          data: { action: "input->composition-row#calculate" } %>
+          data: {
+            action:    "input->composition-row#calculate",
+            "composition-row-target": "quantity"
+          } %>
   </td>
 
   <td>
     <%= f.label :cost, "Custo (R$)", class: "form-label visually-hidden" %>
     <%= f.number_field :cost,
-        step: "any",
-        readonly: true,
-        placeholder: "0.00",
-        class: "form-control",
-        "data-composition-row-target": "cost"  %>
-  </td>       
+          step: "any",
+          readonly: true,
+          placeholder: "0.00",
+          class: "form-control",
+          data: { "composition-row-target": "cost" } %>
+  </td>
+
   <td>
     <%= f.hidden_field :_destroy %>
     <button type="button"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_09_224754) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_18_214755) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -113,22 +113,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_09_224754) do
     t.index ["subproduct_id"], name: "index_subproduct_compositions_on_subproduct_id"
   end
 
-  create_table "subproduct_inputs", force: :cascade do |t|
-    t.bigint "subproduct_id", null: false
-    t.bigint "input_id", null: false
-    t.float "quantity"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["input_id"], name: "index_subproduct_inputs_on_input_id"
-    t.index ["subproduct_id"], name: "index_subproduct_inputs_on_subproduct_id"
-  end
-
   create_table "subproducts", force: :cascade do |t|
     t.string "name"
     t.float "weight_in_grams"
     t.float "cost"
     t.string "unit_of_measurement"
-    t.bigint "brand_id", null: false
+    t.bigint "brand_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["brand_id"], name: "index_subproducts_on_brand_id"
@@ -150,7 +140,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_09_224754) do
   add_foreign_key "products", "brands"
   add_foreign_key "subproduct_compositions", "inputs"
   add_foreign_key "subproduct_compositions", "subproducts"
-  add_foreign_key "subproduct_inputs", "inputs"
-  add_foreign_key "subproduct_inputs", "subproducts"
   add_foreign_key "subproducts", "brands"
 end

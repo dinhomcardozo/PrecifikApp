@@ -2,28 +2,30 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static values  = { costPerGram: Number }
-  static targets = [ "cost" ]
+  static targets = ["quantity", "cost"]
 
   connect() {
+    console.log("composition-row conectado:", this.costPerGramValue)
     this.calculate()
   }
 
   updateCostPerGram(e) {
-    const opt = e.currentTarget.selectedOptions[0]
-    this.costPerGramValue = parseFloat(opt.dataset.costPerGram) || 0
+    this.costPerGramValue = parseFloat(
+      e.target.selectedOptions[0].dataset.costPerGram
+    ) || 0
+    console.log("► nova costPerGram:", this.costPerGramValue)
     this.calculate()
   }
 
   calculate() {
-    const qtyField = this.element.querySelector("input[name*='[quantity]']")
-    const qty      = parseFloat(qtyField.value) || 0
-    const cost     = (qty * this.costPerGramValue).toFixed(2)
-
-    this.costTarget.value = cost
+    const qty = parseFloat(this.quantityTarget.value) || 0
+    const c   = (qty * this.costPerGramValue).toFixed(2)
+    console.log("→ calculate:", qty, "×", this.costPerGramValue, "=", c)
+    this.costTarget.value = c
   }
 
-  removeRow(e) {
-    e.preventDefault()
+  removeRow(event) {
+    event.preventDefault()
     const destroyInput = this.element.querySelector("input[name*='[_destroy]']")
     if (this.element.dataset.newRecord === "true") {
       this.element.remove()

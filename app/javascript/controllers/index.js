@@ -14,3 +14,9 @@ application.register("pricing",                 PricingController)
 application.register("nested-form",  NestedFormController)
 application.register("tabs", TabsController)
 application.register("composition-row", CompositionRowController)
+
+const context = import.meta.globEager("./**/*_controller.js")
+
+application.load(definitionsFromContext(context))
+
+window.Stimulus = application
