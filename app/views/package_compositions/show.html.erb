@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @package_composition %>
+
+<div>
+  <%= link_to "Edit this package composition", edit_package_composition_path(@package_composition) %> |
+  <%= link_to "Back to package compositions", package_compositions_path %>
+
+  <%= button_to "Destroy this package composition", @package_composition, method: :delete %>
+</div>

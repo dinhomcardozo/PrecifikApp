@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_18_214755) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_19_155924) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -48,6 +48,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_18_214755) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "channels", force: :cascade do |t|
+    t.string "description"
+    t.decimal "channel_cost"
+    t.string "channel_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "input_types", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -68,6 +76,34 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_18_214755) do
     t.index ["brand_id"], name: "index_inputs_on_brand_id"
     t.index ["input_type_id"], name: "index_inputs_on_input_type_id"
     t.index ["supplier_id"], name: "index_inputs_on_supplier_id"
+  end
+
+  create_table "package_compositions", force: :cascade do |t|
+    t.bigint "package_id", null: false
+    t.bigint "product_id", null: false
+    t.float "weight"
+    t.decimal "discount"
+    t.decimal "price"
+    t.decimal "subprice"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["package_id"], name: "index_package_compositions_on_package_id"
+    t.index ["product_id"], name: "index_package_compositions_on_product_id"
+  end
+
+  create_table "packages", force: :cascade do |t|
+    t.string "description"
+    t.bigint "brand_id", null: false
+    t.bigint "channel_id", null: false
+    t.float "total_weight"
+    t.decimal "general_discount", precision: 5, scale: 2
+    t.decimal "subtotal_price", precision: 10, scale: 2
+    t.decimal "total_price", precision: 10, scale: 2
+    t.decimal "final_price", precision: 10, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["brand_id"], name: "index_packages_on_brand_id"
+    t.index ["channel_id"], name: "index_packages_on_channel_id"
   end
 
   create_table "product_subproducts", force: :cascade do |t|
@@ -100,6 +136,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_18_214755) do
     t.decimal "freight_cost", precision: 8, scale: 2, default: "0.0", null: false
     t.decimal "storage_cost", precision: 8, scale: 2, default: "0.0", null: false
     t.index ["brand_id"], name: "index_products_on_brand_id"
+  end
+
+  create_table "sales_targets", force: :cascade do |t|
+    t.bigint "package_id", null: false
+    t.integer "monthly_target"
+    t.bigint "channel_id", null: false
+    t.date "start_date"
+    t.date "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["channel_id"], name: "index_sales_targets_on_channel_id"
+    t.index ["package_id"], name: "index_sales_targets_on_package_id"
   end
 
   create_table "subproduct_compositions", force: :cascade do |t|
@@ -135,9 +183,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_18_214755) do
   add_foreign_key "inputs", "brands"
   add_foreign_key "inputs", "input_types"
   add_foreign_key "inputs", "suppliers"
+  add_foreign_key "package_compositions", "packages"
+  add_foreign_key "package_compositions", "products"
+  add_foreign_key "packages", "brands"
+  add_foreign_key "packages", "channels"
   add_foreign_key "product_subproducts", "products"
   add_foreign_key "product_subproducts", "subproducts"
   add_foreign_key "products", "brands"
+  add_foreign_key "sales_targets", "channels"
+  add_foreign_key "sales_targets", "packages"
   add_foreign_key "subproduct_compositions", "inputs"
   add_foreign_key "subproduct_compositions", "subproducts"
   add_foreign_key "subproducts", "brands"

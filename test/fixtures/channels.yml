@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+   description: MyString
+   channel_cost: 9.99
+   channel_type: MyString
+
+two:
+   description: MyString
+   channel_cost: 9.99
+   channel_type: MyString

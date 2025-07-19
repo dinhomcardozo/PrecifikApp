@@ -1,0 +1,11 @@
+<% content_for :title, "New sales target" %>
+
+<h1>New sales target</h1>
+
+<%= render "form", sales_target: @sales_target %>
+
+<br>
+
+<div>
+  <%= link_to "Back to sales targets", sales_targets_path %>
+</div>

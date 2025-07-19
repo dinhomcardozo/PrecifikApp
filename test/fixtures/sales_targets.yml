@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  package: one
+  monthly_target: 1
+  channel: one
+  start_date: 2025-07-19
+  end_date: 2025-07-19
+
+two:
+  package: two
+  monthly_target: 1
+  channel: two
+  start_date: 2025-07-19
+  end_date: 2025-07-19

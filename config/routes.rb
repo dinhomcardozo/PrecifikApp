@@ -1,12 +1,19 @@
 Rails.application.routes.draw do
   root "products#index"
 
+  resources :channels
+  resources :sales_targets
+
   # Produtos e subprodutos aninhados
   resources :products do
     resources :product_subproducts, only: %i[create update destroy]
     collection do
       get :tab
     end
+  end
+
+  resources :packages do
+    resources :package_compositions, only: %i[create update destroy]
   end
 
   # Marcas, Fornecedores, Tipos de Input, Inputs

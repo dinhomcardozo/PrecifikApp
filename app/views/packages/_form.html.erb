@@ -1,0 +1,23 @@
+<%= form_with model: @package do |f| %>
+  <%= f.text_field :description %>
+  <%= f.collection_select :brand_id, Brand.all, :id, :name %>
+  <%= f.collection_select :channel_id, Channel.all, :id, :name %>
+  <%= f.number_field :general_discount, step: :any %>
+
+  <h4>Composição de Products</h4>
+  <table>
+    <thead>
+      <tr>
+        <th>Produto</th><th>Peso (g)</th><th>Desconto (%)</th><th>Preço</th><th>Subprice</th><th>Ações</th>
+      </tr>
+    </thead>
+    <tbody data-controller="nested-form" data-nested-form-target="container">
+      <%= f.fields_for :package_compositions do |pc| %>
+        <%= render "packages/package_composition_fields", f: pc %>
+      <% end %>
+    </tbody>
+  </table>
+  <%= render "packages/add_composition_button", f: f %>
+
+  <%= f.submit %>
+<% end %>

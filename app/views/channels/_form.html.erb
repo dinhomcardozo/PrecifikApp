@@ -1,0 +1,6 @@
+<%= form_with(model: channel) do |f| %>
+  <%= f.text_field    :description %>
+  <%= f.number_field  :channel_cost, step: "0.01" %>
+  <%= f.select        :channel_type, Channel::CHANNEL_TYPES.map { |t| [t.humanize, t] }, prompt: "Tipo de canal" %>
+  <%= f.submit %>
+<% end %>

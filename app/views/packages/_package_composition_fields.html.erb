@@ -1,0 +1,14 @@
+<tr>
+  <td>
+    <%= f.collection_select :product_id, Product.all, :id, :name,
+                            include_blank: "Selecione", class: "form-select" %>
+  </td>
+  <td><%= f.number_field :weight, step: :any, class: "form-control" %></td>
+  <td><%= f.number_field :discount, step: :any, class: "form-control" %></td>
+  <td readonly><%= f.number_field :price, class: "form-control", readonly: true %></td>
+  <td readonly><%= f.number_field :subprice, class: "form-control", readonly: true %></td>
+  <td>
+    <%= f.hidden_field :_destroy %>
+    <button type="button" data-action="nested-form#removeField">Remover</button>
+  </td>
+</tr>
