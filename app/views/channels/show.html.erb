@@ -3,8 +3,7 @@
 <%= render @channel %>
 
 <div>
-  <%= link_to "Edit this channel", edit_channel_path(@channel) %> |
-  <%= link_to "Back to channels", channels_path %>
-
-  <%= button_to "Destroy this channel", @channel, method: :delete %>
+  <%= link_to "Editar", edit_channel_path(@channel), class: "action-button" %> |
+  <%= link_to "Voltar", channels_path, class: "action-button" %> |
+  <%= button_to "Excluir", @channel, method: :delete, class: "standart-button" %>
 </div>

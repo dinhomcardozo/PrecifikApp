@@ -6,7 +6,6 @@ class Input < ApplicationRecord
     has_many :subproduct_inputs
     has_many :subproducts, through: :subproduct_inputs
 
-    # Upload de imagem
     has_one_attached :image
 
     validates :name, presence: true
@@ -21,7 +20,7 @@ class Input < ApplicationRecord
         when 'L' then weight * 1000
         when 'mL' then weight
         else
-        0 # valor padrão caso a unidade seja desconhecida
+        0
         end
     end
 

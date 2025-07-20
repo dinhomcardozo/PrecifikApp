@@ -1,5 +1,7 @@
 <!-- app/views/products/_form.html.erb -->
-<% active_tab ||= "config" %>
+<h1><%= @product.new_record? ? "Novo Produto" : "Editar Produto" %></h1>
+
+<% active_tab ||= local_assigns[:active_tab] || params[:active_tab] || "config" %>
 
 <%= form_with model: @product,
               url: (@product.new_record? ?
@@ -9,33 +11,24 @@
               data: { controller: "tabs" } do |f| %>
                 
   <%= hidden_field_tag :active_tab,
-                        active_tab,
-                        data: { tabs_target: "hidden" } %>
+                       active_tab,
+                       data: { tabs_target: "hidden" } %>
                 
   <ul class="nav nav-tabs">
     <li class="nav-item">
       <a href="#"
-       class="nav-link <%= "active" if active_tab == "config" %>"
-       data-tabs-target="link"
-       data-action="tabs#switch"
-       data-tabs-panel="panel-config">
-      Configurações
-    </a>
-    </li>
-    <li class="nav-item">
-      <a href="#"
-        class="nav-link <%= "active" if active_tab == "costs" %>"
+        class="nav-link <%= "active" if active_tab == "config" %>"
         data-tabs-target="link"
-        data-action="tabs#switch"
-        data-tabs-panel="panel-costs">
-        Custos
+        data-action="click->tabs#switch"
+        data-tabs-panel="panel-config">
+        Configurações
       </a>
     </li>
     <li class="nav-item">
       <a href="#"
         class="nav-link <%= "active" if active_tab == "composition" %>"
         data-tabs-target="link"
-        data-action="tabs#switch"
+        data-action="click->tabs#switch"
         data-tabs-panel="panel-composition">
         Composição
       </a>
@@ -44,7 +37,7 @@
       <a href="#"
         class="nav-link <%= "active" if active_tab == "pricing" %>"
         data-tabs-target="link"
-        data-action="tabs#switch"
+        data-action="click->tabs#switch"
         data-tabs-panel="panel-pricing">
         Precificação
       </a>
@@ -56,11 +49,6 @@
          class="tab-pane <%= "active" if active_tab == "config" %> d-flex"
          data-tabs-target="panel">
       <%= render "product_configurations", f: f %>
-    </div>
-    <div id="panel-costs"
-         class="tab-pane <%= "active" if active_tab == "costs" %> d-none"
-         data-tabs-target="panel">
-      <%= render "aggregated_costs", f: f %>
     </div>
     <div id="panel-composition"
          class="tab-pane <%= "active" if active_tab == "composition" %> d-none"
@@ -76,7 +64,7 @@
 
 
   <div class="mt-4 text-end">
-    <%= f.submit @product.new_record? ? "Criar Produto" : "Atualizar Produto",
+    <%= f.submit @product.new_record? ? "Criar e Avançar ->" : "Atualizar e Avançar ->",
                  class: "action-button" %>
   </div>
 <% end %>

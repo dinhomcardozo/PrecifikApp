@@ -4,6 +4,7 @@ export default class extends Controller {
   static targets = ["link", "panel", "hidden"]
 
   connect() {
+    console.log("TabsController connected, hidden value:", this.hiddenTarget.value)
     if (!this.hasHiddenTarget) return
     this.showTab(this.hiddenTarget.value)
     const active = this.hiddenTarget.value

@@ -1,0 +1,38 @@
+<%= form_with(model: fixed_cost, local: false) do |f| %>
+  <% if fixed_cost.errors.any? %>
+    <div class="alert alert-danger">
+      <ul>
+        <% fixed_cost.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= f.label :description, "Descrição do Custo Fixo" %>
+    <%= f.text_field :description,
+          class: "form-control",
+          required: true %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :monthly_cost, "Custo Mensal (R$)" %>
+    <%= f.number_field :monthly_cost,
+          step: "0.01",
+          class: "form-control",
+          required: true %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :fixed_cost_type, "Tipo de Custo Fixo" %>
+    <%= f.select :fixed_cost_type,
+         FixedCost::FIXED_COST_TYPES.map { |t| [t, t] },
+         { prompt: "Selecione tipo" },
+         { class: "form-select", required: true } %>
+  </div>
+
+  <div class="mt-3">
+    <%= f.submit "Salvar", class: "standart-button" %>
+  </div>
+<% end %>

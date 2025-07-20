@@ -1,0 +1,11 @@
+<% content_for :title, "New fixed cost" %>
+
+<h1>Novo Custo Fixo</h1>
+
+<%= render "form", fixed_cost: @fixed_cost %>
+
+<br>
+
+<div>
+  <%= link_to "Voltar", fixed_costs_path, class: "standart-button" %>
+</div>

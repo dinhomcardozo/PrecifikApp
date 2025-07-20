@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   root "products#index"
-
+  
+  resources :fixed_costs
   resources :channels
   resources :sales_targets
 

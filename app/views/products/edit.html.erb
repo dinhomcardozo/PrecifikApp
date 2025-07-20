@@ -1,4 +1,5 @@
 <%= turbo_frame_tag "product_steps" do %>
-  <h1>Editar Produto</h1>
-  <%= render "form", active_tab: local_assigns[:active_tab] || params[:active_tab] %>
+  <%= render "steps",
+        product:    @product,
+        active_tab: (local_assigns[:active_tab] || params[:active_tab] || "config") %>
 <% end %>

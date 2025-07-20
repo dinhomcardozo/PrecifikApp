@@ -1,16 +1,16 @@
 <p style="color: green"><%= notice %></p>
 
-<% content_for :title, "Channels" %>
+<% content_for :title, "Canais" %>
 
 <h1>Channels</h1>
+
+<%= link_to "Novo Canal", new_channel_path, class: 'standart-button' %>
 
 <div id="channels">
   <% @channels.each do |channel| %>
     <%= render channel %>
     <p>
-      <%= link_to "Show this channel", channel %>
+      <%= link_to "Mostrar", channel %>
     </p>
   <% end %>
 </div>
-
-<%= link_to "New channel", new_channel_path %>

@@ -1,3 +1,7 @@
 <%= turbo_stream.replace "product_steps" do %>
-  <%= render template: "products/edit", locals: { active_tab: @next_tab } %>
+  <%= turbo_frame_tag "product_steps" do %>
+    <%= render "steps",
+          product:    @product,
+          active_tab: @next_tab %>
+  <% end %>
 <% end %>
