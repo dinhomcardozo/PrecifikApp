@@ -5,7 +5,8 @@
     "build":     "npm run build:js && npm run build:css",
     "watch:js":  "esbuild app/javascript/application.js --bundle --target=es2017 --outfile=app/assets/builds/application.js --watch",
     "watch:css": "esbuild app/assets/stylesheets/application.css --bundle --outfile=app/assets/builds/application.css --watch",
-    "watch":     "npm run watch:js & npm run watch:css"
+    "watch":     "npm run watch:js & npm run watch:css",
+    "dev:js":   "esbuild app/javascript/application.js --bundle --target=es2017 --outfile=app/assets/builds/application.js --watch"
   },
   "devDependencies": {
     "esbuild": "^0.25.5"

@@ -1,18 +1,69 @@
 <!-- app/views/products/_pricing.html.erb -->
-<h5>4) Precificação</h5>
-<ul class="list-group">
-  <% {
-    "Custo Total"           => f.object.total_cost,
-    "Preço Varejo"          => f.object.suggested_retail_price,
-    "Preço Atacado"         => f.object.suggested_wholesale_price,
-    "Lucro Bruto Varejo"    => f.object.gross_profit_retail,
-    "Lucro Bruto Atacado"   => f.object.gross_profit_wholesale,
-    "Lucro Líquido Varejo"  => f.object.net_profit_retail,
-    "Lucro Líquido Atacado" => f.object.net_profit_wholesale
-  }.each do |label, value| %>
-    <li class="list-group-item d-flex justify-content-between">
-      <%= label %>
-      <strong>R$ <%= number_with_precision(value, precision: 2) %></strong>
-    </li>
-  <% end %>
-</ul>
+<h5>3) Precificação e Tributos</h5>
+<div class="row gx-4">
+  <!-- Coluna Esquerda: Tributos Fixos -->
+  <div class="col-md-6">
+    <h6>Tributos Fixos</h6>
+
+    <!-- Switch Default vs Personalizado -->
+    <div class="form-check form-switch">
+      <%= f.check_box :use_custom_taxes,
+                      data: { action: "cost-mode#toggle" },
+                      class: "form-check-input" %>
+      <%= f.label :use_custom_taxes, "Usar impostos personalizados?", class: "form-check-label" %>
+    </div>
+
+    <!-- Default: exibe o perfil escolhido -->
+    <div data-cost-mode-target="defaults" class="<%= 'd-none' if f.object.use_custom_taxes? %>">
+      <% (f.object.tax_profile&.items || []).each do |item| %>
+        <p><strong><%= item.name.upcase %>:</strong>
+          <%= number_to_percentage(item.value, precision: 2) %>
+          (<%= item.tax_type.humanize %>)</p>
+      <% end %>
+    </div>
+
+    <!-- Custom: gera campos em branco -->
+    <div data-cost-mode-target="customs" class="<%= 'd-none' unless f.object.use_custom_taxes? %>">
+      <% %w[icms ipi pis_cofins iss difal cbs ibs].each do |tax_name| %>
+        <% override = f.object.product_tax_overrides
+                      .find { |o| o.name == tax_name } ||
+                      f.object.product_tax_overrides.build(name: tax_name) %>
+
+        <%= f.fields_for :product_tax_overrides, override do |ot| %>
+          <%= ot.hidden_field :name %>
+          <div class="row mb-2">
+            <div class="col-6">
+              <%= ot.label :value, "#{tax_name.upcase} (%)" %>
+              <%= ot.number_field :value, step: "any", class: "form-control" %>
+            </div>
+            <div class="col-6">
+              <%= ot.label :tax_type, "Tipo" %>
+              <%= ot.select :tax_type,
+                            ProductTaxOverride.tax_types.keys.map { |k| [k.humanize, k] },
+                            {}, class: "form-select" %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+
+<div class="col-md-6">
+    <h6>Resumo de Precificação</h6>
+    <ul class="list-group">
+      <% {
+        "Custo Total"           => f.object.total_cost,
+        "Preço Varejo"          => f.object.suggested_retail_price,
+        "Preço Atacado"         => f.object.suggested_wholesale_price,
+        "Lucro Bruto Varejo"    => f.object.gross_profit_retail,
+        "Lucro Bruto Atacado"   => f.object.gross_profit_wholesale,
+        "Lucro Líquido Varejo"  => f.object.net_profit_retail,
+        "Lucro Líquido Atacado" => f.object.net_profit_wholesale
+      }.each do |label, value| %>
+        <li class="list-group-item d-flex justify-content-between">
+          <%= label %>
+          <strong>R$ <%= number_with_precision(value, precision: 2) %></strong>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>

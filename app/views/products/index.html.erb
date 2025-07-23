@@ -1,13 +1,15 @@
-<main class="container mt-4">
+<main class="index-container">
   <%= turbo_frame_tag "product_steps" do %>
-    <h1>Produtos</h1>
-    <%= link_to "[+] Novo Produto",
-                new_product_path,
-                data: { turbo_frame: "product_steps" },
-                class: "action-button" %>
-  <br>                            
-    <table class="table table-bordered mt-3">
-    <br>
+    <h1 class="index-title">Produtos</h1>
+
+    <div class="index-actions">
+      <%= link_to "[+] Novo Produto",
+                  new_product_path,
+                  data: { turbo_frame: "product_steps" },
+                  class: "index-button" %>
+    </div>
+
+    <table class="index-table index-table--bordered">
       <thead>
         <tr>
           <th>Produto</th>
@@ -19,9 +21,11 @@
           <th>Lucro Bruto Atacado (R$)</th>
           <th>Lucro Líquido Varejo (R$)</th>
           <th>Lucro Líquido Atacado (R$)</th>
-          <th>Ações</th>
+          <th> </th>
+          <th> </th>
         </tr>
       </thead>
+
       <tbody>
         <% @products.each do |p| %>
           <tr id="<%= dom_id(p) %>">
@@ -34,16 +38,18 @@
             <td>R$ <%= number_with_precision(p.gross_profit_wholesale, precision: 2) %></td>
             <td>R$ <%= number_with_precision(p.net_profit_retail, precision: 2) %></td>
             <td>R$ <%= number_with_precision(p.net_profit_wholesale, precision: 2) %></td>
-            <td>
+            <td class="cell-actions">
               <%= link_to "Editar",
                           edit_product_path(p, step: 1),
                           data: { turbo_frame: "product_steps" },
-                          class: "action-button" %>
+                          class: "index-button" %>
+            </td>
+            <td class="cell-actions"
               <%= button_to "Excluir",
                             product_path(p),
                             method: :delete,
                             form: { data: { turbo_frame: "product_steps", turbo_confirm: "Confirma?" } },
-                            class: "action-button ms-2" %>
+                            class: "index-button" %>
             </td>
           </tr>
         <% end %>

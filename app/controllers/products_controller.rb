@@ -83,8 +83,12 @@ class ProductsController < ApplicationController
       :profit_margin_wholesale, :profit_margin_retail,
       :financial_cost, :sales_channel_cost,
       :commission_cost, :freight_cost, :storage_cost,
+      :use_default_taxes,
       product_subproducts_attributes: %i[
         id subproduct_id quantity cost _destroy
+      ],
+      product_tax_overrides_attributes: %i[
+        id name value tax_type _destroy
       ]
     )
   end

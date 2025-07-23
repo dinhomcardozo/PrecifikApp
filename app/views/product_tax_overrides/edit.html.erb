@@ -1,0 +1,12 @@
+<% content_for :title, "Editing product tax override" %>
+
+<h1>Editing product tax override</h1>
+
+<%= render "form", product_tax_override: @product_tax_override %>
+
+<br>
+
+<div>
+  <%= link_to "Show this product tax override", @product_tax_override %> |
+  <%= link_to "Back to product tax overrides", product_tax_overrides_path %>
+</div>

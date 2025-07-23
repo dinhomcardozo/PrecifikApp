@@ -9,7 +9,17 @@
                       product_path(@product, active_tab: active_tab)),
               method: (@product.new_record? ? :post : :patch),
               data: { controller: "tabs" } do |f| %>
-                
+  <% if f.object.errors.any? %>
+    <div class="alert alert-danger">
+      <h5><%= pluralize(f.object.errors.count, "erro") %> impediram o salvamento:</h5>
+      <ul>
+        <% f.object.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
   <%= hidden_field_tag :active_tab,
                        active_tab,
                        data: { tabs_target: "hidden" } %>

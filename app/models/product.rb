@@ -1,8 +1,14 @@
 class Product < ApplicationRecord
   belongs_to :brand, optional: false
+  before_save :apply_non_recoverable_taxes
 
   has_many :product_subproducts, inverse_of: :product, dependent: :destroy
   has_many :subproducts, through: :product_subproducts
+  has_many :product_tax_overrides, dependent: :destroy
+  accepts_nested_attributes_for :product_tax_overrides, allow_destroy: true
+
+  validates :description, presence: true
+  validates :brand_id,    presence: true
 
   # Permite que o formulário aninhado crie/edite product_subproducts
 
@@ -80,5 +86,13 @@ class Product < ApplicationRecord
     total_cost * pct +
       freight_cost.to_f +
       storage_cost.to_f
+  end
+
+  def apply_non_recoverable_taxes
+    return if use_default_taxes?   # agora existe!
+
+    overrides     = product_tax_overrides.non_recoverable
+    total_percent = overrides.sum(&:value) / 100.0
+    self.cost_with_taxes = total_cost * (1 + total_percent)
   end
 end

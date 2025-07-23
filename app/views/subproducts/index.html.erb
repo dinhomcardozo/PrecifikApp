@@ -1,34 +1,41 @@
-<h1>Subprodutos</h1>
+<main class="index-container">
+  <h1 class="index-title">Subprodutos</h1>
 
-<%= link_to "Novo Subproduto",
-            new_subproduct_path,
-            class: "standart-button",
-            data: { turbo_frame: "_top" } %>
+  <div class="index-actions">
+    <%= link_to "[+] Novo Subproduto",
+                new_subproduct_path,
+                class: "index-button",
+                data: { turbo_frame: "_top" } %>
+  </div>
 
-<table class="table table-hover">
-  <thead>
-    <tr>
-      <th>Nome</th>
-      <th>Peso Total (em g/ml)</th>
-      <th>Custo Total (R$)</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @subproducts.each do |sp| %>
+  <table class="index-table index-table--bordered"
+    <thead>
       <tr>
-        <td><%= sp.name %></td>
-        <td><%= sp.subproduct_compositions.sum(&:quantity_for_a_unit) %></td>
-        <td>R$ <%= number_with_precision(sp.total_composition_cost, precision: 2) %></td>
-        <td>
-          <%= link_to "Editar", edit_subproduct_path(sp), class: "standart-button" %>
-          <%= button_to "Excluir",
-                        subproduct_path(sp),
-                        method: :delete,
-                        data: { turbo_confirm: "Tem certeza?" },
-                        class: "action-button" %>
-        </td>
+        <th>Nome</th>
+        <th>Peso Total (em g/ml)</th>
+        <th>Custo Total (R$)</th>
+        <th> </th>
+        <th> </th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @subproducts.each do |sp| %>
+        <tr>
+          <td><%= sp.name %></td>
+          <td><%= sp.subproduct_compositions.sum(&:quantity_for_a_unit) %></td>
+          <td>R$ <%= number_with_precision(sp.total_composition_cost, precision: 2) %></td>
+          <td class="cell-actions">
+            <%= link_to "Editar", edit_subproduct_path(sp), class: "index-button" %>
+          </td>
+          <td class="cell-actions">
+            <%= button_to "Excluir",
+                          subproduct_path(sp),
+                          method: :delete,
+                          data: { turbo_confirm: "Tem certeza?" },
+                          class: "index-button" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</main>

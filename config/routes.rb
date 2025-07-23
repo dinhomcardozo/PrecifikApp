@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   root "products#index"
   
+  resources :product_tax_overrides
+  resources :tax_profiles
+  
   resources :fixed_costs
   resources :channels
   resources :sales_targets
@@ -28,17 +31,12 @@ Rails.application.routes.draw do
   # Subprodutos
   resources :subproducts do
     # 1) Tela de edição da composição
-    #   GET  /subproducts/:id/composicao => edit_composition
-    #   PATCH/PUT /subproducts/:id/composicao => update_composition (se precisar)
     member do
       get   :composicao, action: :edit_composition,   as: :edit_composition
       patch :composicao, action: :update_composition, as: :update_composition
     end
 
     # 2) Itens da composição (nested resource)
-    #    POST   /subproducts/:subproduct_id/composicao
-    #    PATCH  /subproducts/:subproduct_id/composicao/:id
-    #    DELETE /subproducts/:subproduct_id/composicao/:id
     resources :subproduct_compositions,
               path: "composicao",
               only: %i[create update destroy show]

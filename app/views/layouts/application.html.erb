@@ -14,14 +14,16 @@
 
     <%= yield :head %>
 
-    <%= favicon_link_tag 'favoicon.png', rel: 'icon', type: 'image/png' %>
+    <%= favicon_link_tag 'favicon.png', rel: 'icon', type: 'image/png' %>
     <%= javascript_include_tag "application",
                              type: "module",
                              "data-turbo-track": "reload" %>
   </head>
   <body>
-    <%= render 'shared/horizontal_menu' %>
-    <%= yield %>
+    <%= render "shared/horizontal_menu" %>
+    <div class="main-content-application">
+      <%= yield %>
+    </div>
     <%= javascript_include_tag "application", type: "module", "data-turbo-track": "reload" %>
   </body>
 </html>

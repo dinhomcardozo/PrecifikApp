@@ -1,0 +1,12 @@
+<% content_for :title, "Maxximiza | Editar Perfil de Tributo" %>
+
+<h1>Editar Perfil de Tributo</h1>
+
+<%= render "form", tax_profile: @tax_profile %>
+
+<br>
+
+<div>
+  <%= link_to "Mostrar", @tax_profile %> |
+  <%= link_to "Voltar", tax_profiles_path %>
+</div>

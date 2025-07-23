@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_19_215837) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_23_022329) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -62,6 +62,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_19_215837) do
     t.string "fixed_cost_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "fixed_taxes", force: :cascade do |t|
+    t.string "description"
+    t.decimal "icms"
+    t.decimal "ipi"
+    t.decimal "pis_cofins"
+    t.decimal "iss"
+    t.decimal "difal"
+    t.decimal "ibs"
+    t.decimal "cbs"
+    t.boolean "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "tax_type", default: "recoverable", null: false
   end
 
   create_table "input_types", force: :cascade do |t|
@@ -125,6 +140,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_19_215837) do
     t.index ["subproduct_id"], name: "index_product_subproducts_on_subproduct_id"
   end
 
+  create_table "product_tax_overrides", force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.string "name"
+    t.decimal "value"
+    t.string "tax_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_product_tax_overrides_on_product_id"
+  end
+
   create_table "products", force: :cascade do |t|
     t.text "description"
     t.string "unit_of_measurement"
@@ -143,7 +168,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_19_215837) do
     t.decimal "commission_cost", precision: 8, scale: 2, default: "0.0", null: false
     t.decimal "freight_cost", precision: 8, scale: 2, default: "0.0", null: false
     t.decimal "storage_cost", precision: 8, scale: 2, default: "0.0", null: false
+    t.boolean "use_default_taxes", default: true, null: false
+    t.bigint "tax_profile_id"
+    t.boolean "use_custom_taxes", default: false, null: false
     t.index ["brand_id"], name: "index_products_on_brand_id"
+    t.index ["tax_profile_id"], name: "index_products_on_tax_profile_id"
   end
 
   create_table "sales_targets", force: :cascade do |t|
@@ -186,6 +215,24 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_19_215837) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "tax_profile_items", force: :cascade do |t|
+    t.bigint "tax_profile_id", null: false
+    t.string "name"
+    t.decimal "value"
+    t.string "tax_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tax_profile_id"], name: "index_tax_profile_items_on_tax_profile_id"
+  end
+
+  create_table "tax_profiles", force: :cascade do |t|
+    t.string "description"
+    t.boolean "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "default", default: false, null: false
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "inputs", "brands"
@@ -197,10 +244,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_19_215837) do
   add_foreign_key "packages", "channels"
   add_foreign_key "product_subproducts", "products"
   add_foreign_key "product_subproducts", "subproducts"
+  add_foreign_key "product_tax_overrides", "products"
   add_foreign_key "products", "brands"
+  add_foreign_key "products", "tax_profiles"
   add_foreign_key "sales_targets", "channels"
   add_foreign_key "sales_targets", "packages"
   add_foreign_key "subproduct_compositions", "inputs"
   add_foreign_key "subproduct_compositions", "subproducts"
   add_foreign_key "subproducts", "brands"
+  add_foreign_key "tax_profile_items", "tax_profiles"
 end

@@ -1,0 +1,37 @@
+<%= form_with(model: product_tax_override) do |form| %>
+  <% if product_tax_override.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(product_tax_override.errors.count, "error") %> prohibited this product_tax_override from being saved:</h2>
+
+      <ul>
+        <% product_tax_override.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :product_id, style: "display: block" %>
+    <%= form.text_field :product_id %>
+  </div>
+
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :value, style: "display: block" %>
+    <%= form.text_field :value %>
+  </div>
+
+  <div>
+    <%= form.label :tax_type, style: "display: block" %>
+    <%= form.text_field :tax_type %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
