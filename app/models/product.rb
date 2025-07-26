@@ -1,9 +1,11 @@
 class Product < ApplicationRecord
   belongs_to :brand, optional: false
-  before_save :apply_non_recoverable_taxes
+  belongs_to :tax,   optional: true
 
-  has_many :product_subproducts, inverse_of: :product, dependent: :destroy
-  has_many :subproducts, through: :product_subproducts
+  before_validation :calculate_pricing, if: :pricing_attributes_changed?
+
+  has_many   :product_subproducts, inverse_of: :product, dependent: :destroy
+  has_many   :subproducts, through: :product_subproducts
 
   # Permite que o formulário aninhado crie/edite product_subproducts
 
@@ -16,70 +18,85 @@ class Product < ApplicationRecord
   # torna weight “somente em memória” - peso que o usuário digita
   attr_accessor :weight
 
-  # 1 - Product Configuration
-
-  # (Vazio) Only margem varejo x margem atacado %
-
-  # 2 - Aggregate_costs
-
-  def total_aggregate_costs
-    [
-      financial_cost.to_f,
-      (sales_channel_cost.to_f if respond_to?(:sales_channel_cost)),
-      (commission_cost.to_f if respond_to?(:commission_cost)),
-      (freight_cost.to_f if respond_to?(:freight_cost)),
-      (storage_cost.to_f if respond_to?(:storage_cost))
-    ].compact.sum
+  def total_cost
+    product_subproducts.sum(:cost)
   end
 
-  # 3 - Product Composition
-
+# 1 – Composição
   def total_weight
     product_subproducts.sum { |ps| ps.quantity.to_f }
   end
 
-  # 4 - Pricing
-
-  # Preço sugerido varejo = total_cost * (1 + profit_margin_retail/100)
-  def suggested_retail_price
-    total_cost * (1 + profit_margin_retail.to_f / 100)
+  # 2 – Cálculos de margem “sugerida”
+  def suggested_price_retail
+    total_cost.to_f * (1 + profit_margin_retail.to_f / 100)
   end
 
-  # Preço sugerido atacado = total_cost * (1 + profit_margin_wholesale.to_f / 100)
-  def suggested_wholesale_price
-    total_cost * (1 + profit_margin_wholesale.to_f / 100)
+  def suggested_price_wholesale
+    total_cost.to_f * (1 + profit_margin_wholesale.to_f / 100)
   end
 
-  # Lucro bruto é a diferença entre o preço sugerido e o custo
-  def gross_profit_retail
-    suggested_retail_price - total_cost
+  # 3 – TRIBUTOS
+
+      # Custo total com tributos
+  def total_cost_with_taxes
+    (total_cost + total_taxes_amount).round(2)
   end
 
-  def gross_profit_wholesale
-    suggested_wholesale_price - total_cost
+      # Soma de todos os % de tributos sobre total_cost
+  def total_taxes_amount
+    return 0 unless tax
+
+    %i[icms ipi pis_cofins difal iss cbs ibs].sum do |field|
+      (tax.send(field).to_f / 100.0) * total_cost
+    end.round(2)
   end
 
-  # Lucro líquido: subtrai dos lucros brutos os custos agregados
+   # 4. Preços sugeridos
+  def suggested_price_retail
+    (total_cost_with_taxes * (1 + profit_margin_retail.to_f / 100.0)).round(2)
+  end
+
+  def suggested_price_wholesale
+    (total_cost_with_taxes * (1 + profit_margin_wholesale.to_f / 100.0)).round(2)
+  end
+
+  # lucro líquido | varejo e atacado
   def net_profit_retail
-    gross_profit_retail - aggregated_costs
+    (suggested_price_retail - total_cost_with_taxes).round(2)
   end
 
   def net_profit_wholesale
-    gross_profit_wholesale - aggregated_costs
+    (suggested_price_wholesale - total_cost_with_taxes).round(2)
   end
 
-  # Método auxiliar para somar os custos agregados (que estão na tabela products)
-  def total_cost
-    product_subproducts.sum(:cost)
-  end
-  
-  def aggregated_costs
-    pct = (financial_cost.to_f +
-           sales_channel_cost.to_f +
-           commission_cost.to_f) / 100.0
+  private
 
-    total_cost * pct +
-      freight_cost.to_f +
-      storage_cost.to_f
+  def pricing_attributes_changed?
+    total_cost_changed? ||
+      tax_id_changed? ||
+      profit_margin_retail_changed? ||
+      profit_margin_wholesale_changed? ||
+      product_subproducts.any?(&:changed?)
+  end
+
+  def calculate_pricing
+    return unless tax && total_cost.present?
+
+    # soma de alíquotas em percentual
+    total_factor = 1 + %i[icms ipi pis_cofins difal iss cbs ibs]
+                       .map { |attr| tax.send(attr).to_f / 100.0 }
+                       .sum
+
+    self.total_cost_with_taxes    = (total_cost * total_factor).round(2)
+    self.suggested_price_retail    = (total_cost_with_taxes * 
+                                      (1 + profit_margin_retail.to_f / 100.0)).round(2)
+    self.suggested_price_wholesale = (total_cost_with_taxes * 
+                                      (1 + profit_margin_wholesale.to_f / 100.0)).round(2)
+  end
+
+  def compute_pricing
+    self.suggested_price_retail    = suggested_price_retail
+    self.suggested_price_wholesale = suggested_price_wholesale
   end
 end

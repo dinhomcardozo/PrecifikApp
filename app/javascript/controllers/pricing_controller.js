@@ -1,25 +1,53 @@
-import { Controller } from "@hotwired/stimulus";
+import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["grossWholesale", "grossRetail", "netRetail", "netWholesale", "fullCost", "wholesalePrice", "retailPrice"]
+  static targets = [
+    "taxSelect",
+    "icms","ipi","pis_cofins","difal","iss","cbs","ibs",
+    "totalCostWithTaxes","suggestedRetail","suggestedWholesale"
+  ]
 
-  // Esse controller teria métodos para calcular as margens e preços automaticamente.
-  // Você pode chamar um método updatePrices() quando os valores relevantes mudarem.
-  updatePrices() {
-    // Exemplo: utilize valores dos campos (que podem ser obtidos via data attributes ou via query selectors)
-    // Este é apenas um exemplo genérico.
-    const totalCost = parseFloat(document.querySelector("[data-target='composition.totalCost']").textContent) || 0;
-    const financialCost = parseFloat(document.querySelector("#aggregated-costs input[name='product[financial_cost]']").value) || 0;
-    // Outras variáveis: sales_channel_cost, commission_cost, freight_cost, storage_cost, margens, etc.
-    // Calcule os indicadores, por exemplo:
-    const fullCost = totalCost + financialCost; // Exemplo simples
-    const marginWholesale = parseFloat(document.querySelector("#product_configurations input[name='product[profit_margin_wholesale]']").value) || 0;
-    const wholesalePrice = fullCost * (1 + marginWholesale / 100);
+  static values = {
+    baseCost: Number,
+    marginRetail: Number,
+    marginWholesale: Number
+  }
 
-    // Atualize os targets:
-    this.fullCostTarget.textContent = fullCost.toFixed(2);
-    this.wholesalePriceTarget.textContent = wholesalePrice.toFixed(2);
+  connect() {
+    // valores iniciais das margens
+    this.marginRetailValue     = parseFloat(this.element.dataset.marginRetail)     || 0
+    this.marginWholesaleValue  = parseFloat(this.element.dataset.marginWholesale)  || 0
 
-    // Em uma implementação real, você faria todos os cálculos (margem bruta, líquida, varejo, etc.)
+    this.fillTaxFields()
+    this.recalculate()
+  }
+
+  fillTaxFields() {
+    const json  = this.taxSelectTarget.selectedOptions[0]?.dataset.json || '{}'
+    const tax   = JSON.parse(json)
+
+    this.icmsTarget.value       = (tax.icms     * 100).toFixed(2)
+    this.ipiTarget.value        = (tax.ipi      * 100).toFixed(2)
+    this.pis_cofinsTarget.value = (tax.pis_cofins* 100).toFixed(2)
+    this.difalTarget.value      = (tax.difal    * 100).toFixed(2)
+    this.issTarget.value        = (tax.iss      * 100).toFixed(2)
+    this.cbsTarget.value        = (tax.cbs      * 100).toFixed(2)
+    this.ibsTarget.value        = (tax.ibs      * 100).toFixed(2)
+  }
+
+  recalculate() {
+    const rates = [
+      this.icmsTarget, this.ipiTarget, this.pis_cofinsTarget,
+      this.difalTarget, this.issTarget, this.cbsTarget, this.ibsTarget
+    ].map(i => (parseFloat(i.value) || 0) / 100)
+
+    const totalTaxFactor    = 1 + rates.reduce((sum, r) => sum + r, 0)
+    const costWithTaxes     = this.baseCostValue * totalTaxFactor
+
+    this.totalCostWithTaxesTarget.value = costWithTaxes.toFixed(2)
+    this.suggestedRetailTarget.value    =
+      (costWithTaxes * (1 + this.marginRetailValue / 100)).toFixed(2)
+    this.suggestedWholesaleTarget.value =
+      (costWithTaxes * (1 + this.marginWholesaleValue / 100)).toFixed(2)
   }
 }

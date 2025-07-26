@@ -1,6 +1,7 @@
 # app/controllers/products_controller.rb
 class ProductsController < ApplicationController
-  before_action :set_product, only: %i[ edit update show destroy ]
+  before_action :set_product, only: %i[edit update show destroy]
+  before_action :build_subproducts, only: %i[edit]
 
   def index
     @products = Product.all
@@ -11,9 +12,7 @@ class ProductsController < ApplicationController
     2.times { @product.product_subproducts.build }
   end
 
-  def edit
-    build_subproducts
-  end
+  def edit; end
 
   def create
     @product = Product.new(product_params)
@@ -72,7 +71,7 @@ class ProductsController < ApplicationController
   end
 
   def build_subproducts
-    # garante pelo menos 2 linhas
+    # garante pelo menos 2 linhas no form
     (2 - @product.product_subproducts.size).times do
       @product.product_subproducts.build
     end
@@ -80,16 +79,27 @@ class ProductsController < ApplicationController
 
   def product_params
     params.require(:product).permit(
-      :description, :brand_id,
-      :profit_margin_wholesale, :profit_margin_retail,
-      :financial_cost, :sales_channel_cost,
-      :commission_cost, :freight_cost, :storage_cost,
-      :use_default_taxes,
+      :description,
+      :brand_id,
+      :tax_id,
+      :profit_margin_wholesale,
+      :profit_margin_retail,
+      :total_cost_with_taxes,
+      :suggested_price_retail,
+      :suggested_price_wholesale,
       product_subproducts_attributes: %i[
-        id subproduct_id quantity cost _destroy
+        id
+        subproduct_id
+        quantity
+        cost
+        _destroy
       ],
       product_tax_overrides_attributes: %i[
-        id name value tax_type _destroy
+        id
+        name
+        value
+        tax_type
+        _destroy
       ]
     )
   end

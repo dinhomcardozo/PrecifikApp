@@ -2,7 +2,6 @@ Rails.application.routes.draw do
   resources :taxes
   root "products#index"
   
-  
   resources :fixed_costs
   resources :channels
   resources :sales_targets

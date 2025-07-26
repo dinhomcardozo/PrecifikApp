@@ -1,18 +1,77 @@
 <!-- app/views/products/_pricing.html.erb -->
-<h5>4) Precificação</h5>
-<ul class="list-group">
-  <% {
-    "Custo Total"           => f.object.total_cost,
-    "Preço Varejo"          => f.object.suggested_retail_price,
-    "Preço Atacado"         => f.object.suggested_wholesale_price,
-    "Lucro Bruto Varejo"    => f.object.gross_profit_retail,
-    "Lucro Bruto Atacado"   => f.object.gross_profit_wholesale,
-    "Lucro Líquido Varejo"  => f.object.net_profit_retail,
-    "Lucro Líquido Atacado" => f.object.net_profit_wholesale
-  }.each do |label, value| %>
-    <li class="list-group-item d-flex justify-content-between">
-      <%= label %>
-      <strong>R$ <%= number_with_precision(value, precision: 2) %></strong>
-    </li>
+<% product = f.object %>
+
+<section
+  class="pricing-section"
+  data-controller="pricing"
+  data-pricing-base-cost-value="<%= product.total_cost %>"
+  data-pricing-margin-retail-value="<%= product.profit_margin_retail %>"
+  data-pricing-margin-wholesale-value="<%= product.profit_margin_wholesale %>"
+>
+  <h2>TRIBUTOS</h2>
+
+  <!-- select de imposto -->
+    <div class="field">
+      <%= f.label :tax_id, "Imposto" %>
+      <%= f.select :tax_id,
+          options_for_select(
+            Tax.all.map do |t|
+              [
+                t.description,
+                t.id,
+                { 'data-json': t.to_json }
+              ]
+            end,
+            product.tax_id
+          ),
+          { prompt: "– escolha um imposto –" },
+          {
+            data: {
+              pricing_target: "taxSelect",
+              action: "change->pricing#fillTaxFields change->pricing#recalculate"
+            }
+          }
+      %>
+    </div>
+
+  <!-- linhas de alíquotas -->
+  <% [:icms, :ipi, :pis_cofins, :difal, :iss, :cbs, :ibs].each do |attr| %>
+    <div class="field-inline">
+      <%= label_tag attr, attr.to_s.upcase, class: "inline-label" %>
+      <%= number_field_tag nil,
+            (product.tax&.send(attr).to_f * 100).round(2),
+            readonly: true,
+            step: 0.01,
+            data: { pricing_target: attr } %>
+    </div>
   <% end %>
-</ul>
+
+  <hr>
+
+  <!-- custo total com tributos -->
+  <div class="field-inline">
+    <%= f.label :total_cost_with_taxes, "Custo c/ Tributos (R$)", class: "inline-label" %>
+    <%= f.number_field :total_cost_with_taxes,
+          readonly: true,
+          step: 0.01,
+          data: { pricing_target: "totalCostWithTaxes" } %>
+  </div>
+
+  <!-- preço sugerido varejo -->
+  <div class="field-inline">
+    <%= f.label :suggested_price_retail, "Preço Sugerido Varejo (R$)", class: "inline-label" %>
+    <%= f.number_field :suggested_price_retail,
+          readonly: true,
+          step: 0.01,
+          data: { pricing_target: "suggestedRetail" } %>
+  </div>
+
+  <!-- preço sugerido atacado -->
+  <div class="field-inline">
+    <%= f.label :suggested_price_wholesale, "Preço Sugerido Atacado (R$)", class: "inline-label" %>
+    <%= f.number_field :suggested_price_wholesale,
+          readonly: true,
+          step: 0.01,
+          data: { pricing_target: "suggestedWholesale" } %>
+  </div>
+</section>

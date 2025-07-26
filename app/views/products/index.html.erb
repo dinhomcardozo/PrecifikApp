@@ -1,7 +1,7 @@
+<!-- app/views/products/index.html.erb -->
 <main class="index-container">
   <%= turbo_frame_tag "product_steps" do %>
     <h1 class="index-title">Produtos</h1>
-
     <div class="index-actions">
       <%= link_to "[+] Novo Produto",
                   new_product_path,
@@ -14,15 +14,12 @@
         <tr>
           <th>Produto</th>
           <th>Total Custo (R$)</th>
-          <th>Total Quantidade (g)</th>
+          <th>Total c/ Tributos (R$)</th>
           <th>Preço Sugerido Varejo (R$)</th>
           <th>Preço Sugerido Atacado (R$)</th>
-          <th>Lucro Bruto Varejo (R$)</th>
-          <th>Lucro Bruto Atacado (R$)</th>
           <th>Lucro Líquido Varejo (R$)</th>
           <th>Lucro Líquido Atacado (R$)</th>
-          <th> </th>
-          <th> </th>
+          <th>Ações</th>
         </tr>
       </thead>
 
@@ -30,25 +27,36 @@
         <% @products.each do |p| %>
           <tr id="<%= dom_id(p) %>">
             <td><%= p.description %></td>
-            <td>R$ <%= number_with_precision(p.total_cost, precision: 2) %></td>
-            <td><%= p.total_weight %> g</td>
-            <td>R$ <%= number_with_precision(p.suggested_retail_price, precision: 2) %></td>
-            <td>R$ <%= number_with_precision(p.suggested_wholesale_price, precision: 2) %></td>
-            <td>R$ <%= number_with_precision(p.gross_profit_retail, precision: 2) %></td>
-            <td>R$ <%= number_with_precision(p.gross_profit_wholesale, precision: 2) %></td>
-            <td>R$ <%= number_with_precision(p.net_profit_retail, precision: 2) %></td>
-            <td>R$ <%= number_with_precision(p.net_profit_wholesale, precision: 2) %></td>
+            <td>
+              <%= number_to_currency(p.total_cost,               unit: "R$ ") %>
+            </td>
+            <td>
+              <%= number_to_currency(p.total_cost_with_taxes,    unit: "R$ ") %>
+            </td>
+            <td>
+              <%= number_to_currency(p.suggested_price_retail,   unit: "R$ ") %>
+            </td>
+            <td>
+              <%= number_to_currency(p.suggested_price_wholesale,unit: "R$ ") %>
+            </td>
+            <td>
+              <%= number_to_currency(p.net_profit_retail,        unit: "R$ ") %>
+            </td>
+            <td>
+              <%= number_to_currency(p.net_profit_wholesale,     unit: "R$ ") %>
+            </td>
             <td class="cell-actions">
               <%= link_to "Editar",
                           edit_product_path(p, step: 1),
                           data: { turbo_frame: "product_steps" },
                           class: "index-button" %>
-            </td>
-            <td class="cell-actions"
               <%= button_to "Excluir",
                             product_path(p),
                             method: :delete,
-                            form: { data: { turbo_frame: "product_steps", turbo_confirm: "Confirma?" } },
+                            data: {
+                              turbo_frame: "product_steps",
+                              turbo_confirm: "Confirma?"
+                            },
                             class: "index-button" %>
             </td>
           </tr>
