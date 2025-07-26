@@ -1,16 +1,9 @@
 class Product < ApplicationRecord
-  belongs_to :tax, optional: true  belongs_to :tax, optional: true
   belongs_to :brand, optional: false
   before_save :apply_non_recoverable_taxes
 
-  delegate :rate, to: :tax, prefix: true, allow_nil: true
   has_many :product_subproducts, inverse_of: :product, dependent: :destroy
   has_many :subproducts, through: :product_subproducts
-  has_many :product_tax_overrides, dependent: :destroy
-  accepts_nested_attributes_for :product_tax_overrides, allow_destroy: true
-
-  validates :description, presence: true
-  validates :brand_id,    presence: true
 
   # Permite que o formulário aninhado crie/edite product_subproducts
 
@@ -27,6 +20,18 @@ class Product < ApplicationRecord
 
   # (Vazio) Only margem varejo x margem atacado %
 
+  # 2 - Aggregate_costs
+
+  def total_aggregate_costs
+    [
+      financial_cost.to_f,
+      (sales_channel_cost.to_f if respond_to?(:sales_channel_cost)),
+      (commission_cost.to_f if respond_to?(:commission_cost)),
+      (freight_cost.to_f if respond_to?(:freight_cost)),
+      (storage_cost.to_f if respond_to?(:storage_cost))
+    ].compact.sum
+  end
+
   # 3 - Product Composition
 
   def total_weight
@@ -34,17 +39,6 @@ class Product < ApplicationRecord
   end
 
   # 4 - Pricing
-
-    # Custo antes de imposto
-  def pre_tax_cost
-    cost_of_subproducts + total_aggregate_costs
-  end
-
-  # Valor em reais do imposto
-  def tax_amount
-    return 0 unless tax_rate.present?
-    pre_tax_cost * (tax_rate / 100.0)
-  end
 
   # Preço sugerido varejo = total_cost * (1 + profit_margin_retail/100)
   def suggested_retail_price
