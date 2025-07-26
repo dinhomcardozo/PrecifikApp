@@ -1,6 +1,8 @@
 # app/controllers/products_controller.rb
 class ProductsController < ApplicationController
   before_action :set_product, only: %i[ edit update show destroy ]
+  before_action :build_compositions, only: [:new, :edit]
+  before_action :assign_tax_and_inspect_costs, only: [:create, :update]
 
   def index
     @products = Product.all
@@ -17,6 +19,7 @@ class ProductsController < ApplicationController
 
   def create
     @product = Product.new(product_params)
+
     if @product.save
       @next_tab = "composition"      # após config, vai direto pra composition
       respond_to do |format|
@@ -92,4 +95,6 @@ class ProductsController < ApplicationController
       ]
     )
   end
+
+  
 end

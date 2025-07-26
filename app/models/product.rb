@@ -1,7 +1,9 @@
 class Product < ApplicationRecord
+  belongs_to :tax, optional: true  belongs_to :tax, optional: true
   belongs_to :brand, optional: false
   before_save :apply_non_recoverable_taxes
 
+  delegate :rate, to: :tax, prefix: true, allow_nil: true
   has_many :product_subproducts, inverse_of: :product, dependent: :destroy
   has_many :subproducts, through: :product_subproducts
   has_many :product_tax_overrides, dependent: :destroy
@@ -25,18 +27,6 @@ class Product < ApplicationRecord
 
   # (Vazio) Only margem varejo x margem atacado %
 
-  # 2 - Aggregate_costs
-
-  def total_aggregate_costs
-    [
-      financial_cost.to_f,
-      (sales_channel_cost.to_f if respond_to?(:sales_channel_cost)),
-      (commission_cost.to_f if respond_to?(:commission_cost)),
-      (freight_cost.to_f if respond_to?(:freight_cost)),
-      (storage_cost.to_f if respond_to?(:storage_cost))
-    ].compact.sum
-  end
-
   # 3 - Product Composition
 
   def total_weight
@@ -44,6 +34,17 @@ class Product < ApplicationRecord
   end
 
   # 4 - Pricing
+
+    # Custo antes de imposto
+  def pre_tax_cost
+    cost_of_subproducts + total_aggregate_costs
+  end
+
+  # Valor em reais do imposto
+  def tax_amount
+    return 0 unless tax_rate.present?
+    pre_tax_cost * (tax_rate / 100.0)
+  end
 
   # Preço sugerido varejo = total_cost * (1 + profit_margin_retail/100)
   def suggested_retail_price
@@ -86,13 +87,5 @@ class Product < ApplicationRecord
     total_cost * pct +
       freight_cost.to_f +
       storage_cost.to_f
-  end
-
-  def apply_non_recoverable_taxes
-    return if use_default_taxes?   # agora existe!
-
-    overrides     = product_tax_overrides.non_recoverable
-    total_percent = overrides.sum(&:value) / 100.0
-    self.cost_with_taxes = total_cost * (1 + total_percent)
   end
 end

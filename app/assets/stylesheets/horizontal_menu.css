@@ -43,3 +43,23 @@
   width: auto;
   border-radius: 4px;
 }
+
+.submenu-horizontal .submenu-item {
+  display: inline-block;
+  padding: 0.50rem 0.8rem;
+  font-weight: 500;
+  font-size: 0.5rem;
+  color: var(--text-dark);
+  text-decoration: none;
+  border-radius: 10px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.submenu-horizontal {
+  display: flex;
+  align-items: left;
+  gap: 0.8rem;
+  padding: 10px;
+  background-color: #c7c7c7;
+  font-family: 'Raleway', sans-serif;
+}

@@ -1,0 +1,16 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Taxes" %>
+
+<h1>Taxes</h1>
+
+<div id="taxes">
+  <% @taxes.each do |tax| %>
+    <%= render tax %>
+    <p>
+      <%= link_to "Show this tax", tax %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New tax", new_tax_path %>

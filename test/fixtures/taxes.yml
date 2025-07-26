@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  description: MyText
+  icms: 9.99
+  ipi: 9.99
+  pis_cofins: 9.99
+  difal: 9.99
+  iss: 9.99
+  cbs: 9.99
+  ibs: 9.99
+  note: MyText
+
+two:
+  description: MyText
+  icms: 9.99
+  ipi: 9.99
+  pis_cofins: 9.99
+  difal: 9.99
+  iss: 9.99
+  cbs: 9.99
+  ibs: 9.99
+  note: MyText

@@ -1,0 +1,28 @@
+[33me401376[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Created TaxProfile scaffold and TaxProfileItem model; Study the possibility of even excluding the TaxProfileItem model since the fields are now nested within TaxProfile
+[33m701f834[m Excluido tab 'cost' do cadastro de products; Criado scaffold para 'fixed_costs'.
+[33mc36e16b[m Created scaffold for 'packages', 'package_composition', 'fixed_costs', 'sales_targets' and 'channels'
+[33m9f0f714[m Cost calculation in ProductSubproducts fixed; Removed brand_id from Products
+[33mf5237b9[m Edit and Delete actions fixed in index; Cost Sum adjusted in _form and index.
+[33m4782c72[m Fixed Subproduct Registration, Add Inputs and Calculate Quantity Cost and Cost
+[33m036d0e6[m Quantity cost calculation corrected. 'Add input' needs to be corrected to make it work
+[33mfb4463e[m Fixed the entire nav-tab flow; The 'cost' is missing to be calculated correctly in the 'compositions' tab.
+[33m5ab4732[m Creating tabs in product registration.
+[33m878da8a[m Created app/assets/config/manifest.js/ 'application.css' now 'app/assets/stylesheets/application.css.scss'; css for 'products_tabs'; Installed sass-rails 6.0; Reconfigured css with propshaft and esbuild; Fixed subproducts area (index code was wrongly replaced)
+[33m36bdc60[m 'cost' field created in the ProductSubproducts table; cost_per_gram in the Subproduct model (before it was only calculated in the view); product saved, but still without turbo_frame working; cost determined as 'not null' in the model and in the database.
+[33m9e33c2d[m removed 'weight' field that was as attr_accessor. It was a fictitious weight entered by the user. Now the real weight will be 'total_weight' of products
+[33m588fe3d[m Translated the 'aggregated-costs' fields; Created ProductSubprodutcs Controller; Routes with this join within products;
+[33m158c9ae[m esbuild installed, JS folder was changed from 'app/assets/javascript' to 'app/javascript/controllers'
+[33mca08f51[m Before installing gem jsbundling-rails; Views partially corrected; Deleted _form.html.erb from products
+[33m671d5c9[m renamed 'weight' to 'weight_in_grams' in Subproduct (it wasn't saving); Inserted 'new' in the 'Product/Index' view; include 'Edit' and 'Destroy' in the Index actions.
+[33m4a0aca5[m Fields migrated to the 'products' table; Views, controllers (rb and js) and validations were created in the Model - still without specific tests
+[33mf2ee02c[m Botão 'remover' insumo da composicao corrigido
+[33m7e7ca40[m edit_composition agora renderiza _form_composition [cleancode], botão Adicionar Insumo ccorrigido e permitindo 'atualizar' e 'finalizar cadastro'
+[33m1ea1f1f[m Botão 'Excluir' de 'subproducts' foi corrigido (substituito 'link_to' por 'button')
+[33m76eae43[m Webpack and Importmaps Uninstalled - replaced by Propshaft - Hotwire (Turbo + Stimulus) installed
+[33m4eb846b[m Adjusted menu items styles
+[33ma9804e1[m Created standart-button and action-button in CSS; Image sizing in index and show - correcting image_processing gem problem
+[33m795d7f2[m Fixed some subproduct views; 'edit_composition.html.erb' form; Separated 'subproduct' and 'composition' editing in Index
+[33m7285896[m Destroy subproduct correted - Delete all subproduct_compositions [inputs]  before destroy
+[33mbb3da07[m subproduct area implemented, 'Add Input' needs to be corrected
+[33ma5d2419[m 250607-1500 - view, activestorage, menu, brands, suppliers, input e input_types
+[33mfc4cb13[m 250606-2330 - Scaffolds iniciais

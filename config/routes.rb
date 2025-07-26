@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :taxes
   root "products#index"
   
   resources :product_tax_overrides

@@ -7,7 +7,11 @@
   <%= link_to "Produtos", products_path, class: "menu-item" %>
   <%= link_to "Subprodutos", subproducts_path, class: "menu-item" %>
   <%= link_to "Insumos", inputs_path, class: "menu-item" %>
-  <%= link_to "Tipos de Insumo", input_types_path, class: "menu-item" %>
-  <%= link_to "Fornecedores", suppliers_path, class: "menu-item" %>
-  <%= link_to "Marcas", brands_path, class: "menu-item" %>
+</div>
+<div class="submenu-horizontal">
+  <%= link_to "Tributos", taxes_path, class: "submenu-item" %>
+  <%= link_to "Custos", fixed_costs_path, class: "submenu-item" %>
+  <%= link_to "Marcas", brands_path, class: "submenu-item" %>
+  <%= link_to "Tipos de Insumo", input_types_path, class: "submenu-item" %>
+  <%= link_to "Fornecedores", suppliers_path, class: "submenu-item" %>
 </div>
