@@ -2,8 +2,6 @@ Rails.application.routes.draw do
   resources :taxes
   root "products#index"
   
-  resources :product_tax_overrides
-  resources :tax_profiles
   
   resources :fixed_costs
   resources :channels
