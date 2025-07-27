@@ -12,6 +12,7 @@ export default class extends Controller {
   }
 
   switch(event) {
+    console.log("tabs#switch disparado para:", event.currentTarget.dataset.tabsPanel)
     event.preventDefault()
     const name = event.currentTarget.dataset.tabsPanel.replace("panel-", "")
     this.hiddenTarget.value = name

@@ -35,28 +35,36 @@ class ProductsController < ApplicationController
 
   def update
     if @product.update(product_params)
-      @next_tab =
-        case params[:active_tab]
-        when "config"      then "composition"
-        when "composition" then "pricing"
-        else                       "config"
-        end
+        if params[:finalize]
+          respond_to do |format|
+            format.turbo_stream { redirect_to product_path(@product) }
+            format.html        { redirect_to @product, notice: "Produto finalizado com sucesso" }
+          end
+        else
+        # fluxo original de Avançar entre abas
+        @next_tab =
+          case params[:active_tab]
+          when "config"      then "composition"
+          when "composition" then "pricing"
+          else                       "config"
+          end
 
-      respond_to do |format|
-        format.turbo_stream      # renderiza update.turbo_stream.erb
-        format.html do
-          redirect_to edit_product_path(
-                        @product,
-                        active_tab: params[:active_tab]
-                      ),
-                      notice: "Atualizado com sucesso"
+        respond_to do |format|
+          format.turbo_stream      # renderiza update.turbo_stream.erb
+          format.html do
+            redirect_to edit_product_path(
+                          @product,
+                          active_tab: params[:active_tab]
+                        ),
+                        notice: "Atualizado com sucesso"
+          end
         end
       end
     else
       render :edit, status: :unprocessable_entity
     end
   end
-  
+
   def show; end
 
   def destroy

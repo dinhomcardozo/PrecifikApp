@@ -9,6 +9,7 @@
                       product_path(@product, active_tab: active_tab)),
               method: (@product.new_record? ? :post : :patch),
               data: { controller: "tabs" } do |f| %>
+
   <% if f.object.errors.any? %>
     <div class="alert alert-danger">
       <h5><%= pluralize(f.object.errors.count, "erro") %> impediram o salvamento:</h5>
@@ -23,7 +24,7 @@
   <%= hidden_field_tag :active_tab,
                        active_tab,
                        data: { tabs_target: "hidden" } %>
-                
+    
   <ul class="nav nav-tabs">
     <li class="nav-item">
       <a href="#"
@@ -54,6 +55,21 @@
     </li>
   </ul>
 
+
+  <div class="mt-4 text-end">
+    <!-- Botão padrão Criar/Atualizar e Avançar -->
+    <%= f.submit @product.new_record? ? "Criar e Avançar →" : "Atualizar e Avançar →", 
+                class: "action-button" %>
+
+    <% if active_tab == "pricing" %>
+      <!-- Botão Finalizar -->
+      <%= f.submit "Finalizar", 
+                  name: "finalize", 
+                  class: "standart-button" %>
+    <% end %>
+  </div>
+
+
   <div class="tab-content mt-3">
     <div id="panel-config"
          class="tab-pane <%= "active" if active_tab == "config" %> d-flex"
@@ -70,11 +86,5 @@
          data-tabs-target="panel">
       <%= render "pricing", f: f %>
     </div>
-  </div>
-
-
-  <div class="mt-4 text-end">
-    <%= f.submit @product.new_record? ? "Criar e Avançar ->" : "Atualizar e Avançar ->",
-                 class: "action-button" %>
   </div>
 <% end %>

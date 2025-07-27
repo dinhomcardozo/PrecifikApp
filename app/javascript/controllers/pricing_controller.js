@@ -14,40 +14,42 @@ export default class extends Controller {
   }
 
   connect() {
-    // valores iniciais das margens
-    this.marginRetailValue     = parseFloat(this.element.dataset.marginRetail)     || 0
-    this.marginWholesaleValue  = parseFloat(this.element.dataset.marginWholesale)  || 0
-
+    // popula margens com valores do elemento
+    // (eles já vêm dos data-attributes)
     this.fillTaxFields()
     this.recalculate()
   }
 
   fillTaxFields() {
-    const json  = this.taxSelectTarget.selectedOptions[0]?.dataset.json || '{}'
-    const tax   = JSON.parse(json)
+    const opt = this.taxSelectTarget.selectedOptions[0]
+    if (!opt) return
 
-    this.icmsTarget.value       = (tax.icms     * 100).toFixed(2)
-    this.ipiTarget.value        = (tax.ipi      * 100).toFixed(2)
-    this.pis_cofinsTarget.value = (tax.pis_cofins* 100).toFixed(2)
-    this.difalTarget.value      = (tax.difal    * 100).toFixed(2)
-    this.issTarget.value        = (tax.iss      * 100).toFixed(2)
-    this.cbsTarget.value        = (tax.cbs      * 100).toFixed(2)
-    this.ibsTarget.value        = (tax.ibs      * 100).toFixed(2)
+    const tax = JSON.parse(opt.dataset.json || "{}")
+
+    this.icmsTarget.value       = tax.icms.toFixed(2)
+    this.ipiTarget.value        = tax.ipi.toFixed(2)
+    this.pis_cofinsTarget.value = tax.pis_cofins.toFixed(2)
+    this.difalTarget.value      = tax.difal.toFixed(2)
+    this.issTarget.value        = tax.iss.toFixed(2)
+    this.cbsTarget.value        = tax.cbs.toFixed(2)
+    this.ibsTarget.value        = tax.ibs.toFixed(2)
   }
 
   recalculate() {
-    const rates = [
+    const base = this.baseCostValue || 0
+
+    const sumRates = [
       this.icmsTarget, this.ipiTarget, this.pis_cofinsTarget,
       this.difalTarget, this.issTarget, this.cbsTarget, this.ibsTarget
-    ].map(i => (parseFloat(i.value) || 0) / 100)
+    ].reduce((sum, el) => sum + ((parseFloat(el.value) || 0) / 100), 0)
 
-    const totalTaxFactor    = 1 + rates.reduce((sum, r) => sum + r, 0)
-    const costWithTaxes     = this.baseCostValue * totalTaxFactor
+    const totalWithTaxes = base * (1 + sumRates)
+    this.totalCostWithTaxesTarget.value = totalWithTaxes.toFixed(2)
 
-    this.totalCostWithTaxesTarget.value = costWithTaxes.toFixed(2)
-    this.suggestedRetailTarget.value    =
-      (costWithTaxes * (1 + this.marginRetailValue / 100)).toFixed(2)
-    this.suggestedWholesaleTarget.value =
-      (costWithTaxes * (1 + this.marginWholesaleValue / 100)).toFixed(2)
+    const retail = this.marginRetailValue || 0
+    const wholesale = this.marginWholesaleValue || 0
+
+    this.suggestedRetailTarget.value    = (totalWithTaxes * (1 + retail/100)).toFixed(2)
+    this.suggestedWholesaleTarget.value = (totalWithTaxes * (1 + wholesale/100)).toFixed(2)
   }
 }
