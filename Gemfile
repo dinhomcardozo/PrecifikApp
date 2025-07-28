@@ -9,7 +9,7 @@ gem 'sass-rails', '~> 6.0'
 gem 'mini_magick', '~> 4.9', '>= 4.9.5'
 gem 'ruby-vips', '~> 2.0', '>= 2.0.16'
 # Use postgresql as the database for Active Record
-gem "pg", "~> 1.1"
+gem "pg", "~> 1.6"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 
