@@ -1,8 +1,51 @@
+<!-- app/views/sales_targets/_form.html.erb -->
 <%= form_with(model: sales_target) do |f| %>
-  <%= f.collection_select :package_id, Package.all, :id, :description, prompt: "Selecione pacote" %>
-  <%= f.collection_select :channel_id, Channel.all, :id, :description, prompt: "Selecione canal" %>
-  <%= f.number_field :monthly_target %>
-  <%= f.date_field   :start_date %>
-  <%= f.date_field   :end_date %>
-  <%= f.submit %>
+  <%# Pacote %>
+  <div class="field">
+    <%= f.label :package_id, "Pacote" %>
+    <%= f.collection_select :package_id,
+          Package.all,
+          :id,
+          :description,
+          { prompt: "Selecione pacote" },
+          { class: "form-control" } %>
+  </div>
+
+  <%# Canal de Venda %>
+  <div class="field">
+    <%= f.label :channel_id, "Canal de Venda" %>
+    <%= f.collection_select :channel_id,
+          Channel.all,
+          :id,
+          :description,
+          { prompt: "Selecione canal" },
+          { class: "form-control" } %>
+  </div>
+
+  <%# Meta mensal (unitária) %>
+  <div class="field">
+    <%= f.label :monthly_target, "Meta mensal (unitária)" %>
+    <%= f.number_field :monthly_target,
+          class: "form-control",
+          step: 1,
+          min: 0 %>
+  </div>
+
+  <%# Data de início %>
+  <div class="field">
+    <%= f.label :start_date, "Data de início" %>
+    <%= f.date_field :start_date,
+          class: "form-control" %>
+  </div>
+
+  <%# Data final %>
+  <div class="field">
+    <%= f.label :end_date, "Data final" %>
+    <%= f.date_field :end_date,
+          class: "form-control" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit class: "btn btn-primary" %>
+  </div>
 <% end %>

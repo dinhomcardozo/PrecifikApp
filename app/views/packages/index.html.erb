@@ -2,15 +2,15 @@
 
 <% content_for :title, "Packages" %>
 
-<h1>Packages</h1>
+<%= link_to "[+]Criar pacote", new_package_path %>
+
+<h1>Pacotes</h1>
 
 <div id="packages">
   <% @packages.each do |package| %>
     <%= render package %>
     <p>
-      <%= link_to "Show this package", package %>
+      <%= link_to "Ver", package %>
     </p>
   <% end %>
 </div>
-
-<%= link_to "New package", new_package_path %>

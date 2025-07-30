@@ -10,15 +10,11 @@
   <h2>TRIBUTOS</h2>
 
   <!-- select de imposto -->
-  <%= f.select :tax_id,
+  <div class="field-inline">
+    <%= f.label :tax_id, "Imposto", class: "inline-label" %>
+    <%= f.select :tax_id,
         options_for_select(
-          Tax.all.map { |t|
-            [
-              t.description,
-              t.id,
-              { "data-json": t.to_json }
-            ]
-          },
+          Tax.all.map { |t| [ t.description, t.id, { "data-json": t.to_json } ] },
           product.tax_id
         ),
         { prompt: "– escolha um imposto –" },
@@ -26,7 +22,8 @@
           pricing_target: "taxSelect",
           action: "change->pricing#fillTaxFields change->pricing#recalculate"
         }
-  %>
+    %>
+  </div>
 
   <!-- linhas de alíquotas -->
   <% [:icms, :ipi, :pis_cofins, :difal, :iss, :cbs, :ibs].each do |attr| %>
@@ -36,7 +33,7 @@
             product.tax&.public_send(attr).to_f.round(2),
             readonly: true,
             step: 0.01,
-            data: { pricing_target: attr } %>
+            data: { pricing_target: attr.to_s } %>
     </div>
   <% end %>
 

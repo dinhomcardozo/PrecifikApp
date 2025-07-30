@@ -14,10 +14,14 @@ export default class extends Controller {
   }
 
   connect() {
-    // popula margens com valores do elemento
-    // (eles já vêm dos data-attributes)
+    // Preenche campos e recalc ao carregar
     this.fillTaxFields()
     this.recalculate()
+    // Sempre que mudar o select, atualiza e recalcula
+    this.taxSelectTarget.addEventListener("change", () => {
+      this.fillTaxFields()
+      this.recalculate()
+    })
   }
 
   fillTaxFields() {
@@ -25,7 +29,6 @@ export default class extends Controller {
     if (!opt) return
 
     const tax = JSON.parse(opt.dataset.json || "{}")
-
     this.icmsTarget.value       = tax.icms.toFixed(2)
     this.ipiTarget.value        = tax.ipi.toFixed(2)
     this.pis_cofinsTarget.value = tax.pis_cofins.toFixed(2)
@@ -41,15 +44,20 @@ export default class extends Controller {
     const sumRates = [
       this.icmsTarget, this.ipiTarget, this.pis_cofinsTarget,
       this.difalTarget, this.issTarget, this.cbsTarget, this.ibsTarget
-    ].reduce((sum, el) => sum + ((parseFloat(el.value) || 0) / 100), 0)
+    ].reduce((sum, el) =>
+      sum + ((parseFloat(el.value) || 0) / 100),
+      0
+    )
 
     const totalWithTaxes = base * (1 + sumRates)
-    this.totalCostWithTaxesTarget.value = totalWithTaxes.toFixed(2)
+    this.totalCostWithTaxesTarget.value       = totalWithTaxes.toFixed(2)
 
-    const retail = this.marginRetailValue || 0
+    const retail    = this.marginRetailValue || 0
     const wholesale = this.marginWholesaleValue || 0
 
-    this.suggestedRetailTarget.value    = (totalWithTaxes * (1 + retail/100)).toFixed(2)
-    this.suggestedWholesaleTarget.value = (totalWithTaxes * (1 + wholesale/100)).toFixed(2)
+    this.suggestedRetailTarget.value    =
+      (totalWithTaxes * (1 + retail/100)).toFixed(2)
+    this.suggestedWholesaleTarget.value =
+      (totalWithTaxes * (1 + wholesale/100)).toFixed(2)
   }
 }

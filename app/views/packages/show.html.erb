@@ -3,8 +3,8 @@
 <%= render @package %>
 
 <div>
-  <%= link_to "Edit this package", edit_package_path(@package) %> |
-  <%= link_to "Back to packages", packages_path %>
+  <%= link_to "Editar", edit_package_path(@package) %> |
+  <%= link_to "Voltar", packages_path %>
 
-  <%= button_to "Destroy this package", @package, method: :delete %>
+  <%= button_to "Excluir", @package, method: :delete %>
 </div>

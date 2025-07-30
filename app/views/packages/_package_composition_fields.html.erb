@@ -1,14 +1,43 @@
+<!-- app/views/packages/_package_composition_fields.html.erb -->
 <tr>
   <td>
-    <%= f.collection_select :product_id, Product.all, :id, :name,
-                            include_blank: "Selecione", class: "form-select" %>
+    <%= f.collection_select :product_id,
+          Product.all,
+          :id,
+          :description,
+          { include_blank: "Selecione" },
+          { class: "form-select" } %>
   </td>
-  <td><%= f.number_field :weight, step: :any, class: "form-control" %></td>
-  <td><%= f.number_field :discount, step: :any, class: "form-control" %></td>
-  <td readonly><%= f.number_field :price, class: "form-control", readonly: true %></td>
-  <td readonly><%= f.number_field :subprice, class: "form-control", readonly: true %></td>
+  <td>
+    <%= f.number_field :weight,
+          step: :any,
+          class: "form-control" %>
+  </td>
+  <td>
+    <%= f.number_field :discount,
+          step: :any,
+          class: "form-control" %>
+  </td>
+  <td>
+    <%= f.number_field :price,
+          class: "form-control",
+          readonly: true %>
+  </td>
+  <td>
+    <%= f.number_field :subprice,
+          class: "form-control",
+          readonly: true %>
+  </td>
   <td>
     <%= f.hidden_field :_destroy %>
-    <button type="button" data-action="nested-form#removeField">Remover</button>
+
+    <!-- aqui, chamamos o package-nested-form#removeField -->
+    <button
+      type="button"
+      data-action="package-nested-form#removeField"
+      class="btn btn-sm btn-outline-danger"
+    >
+      Remover
+    </button>
   </td>
 </tr>

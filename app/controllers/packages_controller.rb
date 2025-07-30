@@ -65,6 +65,17 @@ class PackagesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def package_params
-      params.expect(package: [ : description, : brand_id, : channel_id, : total_weight, : general_discount, : subtotal_price, : total_price, : final_price ])
+      params
+        .require(:package)
+        .permit(
+          :description,
+          :brand_id,
+          :channel_id,
+          :total_weight,
+          :general_discount,
+          :subtotal_price,
+          :total_price,
+          :final_price
+        )
     end
 end

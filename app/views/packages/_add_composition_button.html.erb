@@ -1,13 +1,15 @@
-<button type="button"
-        data-action="click->nested-form#addField"
-        data-template-id="composition-fields-template">
+<!-- _add_composition_button.html.erb -->
+<button
+  type="button"
+  data-action="package-nested-form#addField"
+>
   Adicionar Product
 </button>
 
 <template id="composition-fields-template">
   <%= f.fields_for :package_compositions,
-                   PackageComposition.new,
-                   child_index: "NEW_RECORD" do |pc| %>
+        PackageComposition.new,
+        child_index: "NEW_RECORD" do |pc| %>
     <%= render "packages/package_composition_fields", f: pc %>
   <% end %>
 </template>
