@@ -14,10 +14,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :packages do
-    resources :package_compositions, only: %i[create update destroy]
-  end
-
   # Marcas, Fornecedores, Tipos de Input, Inputs
   resources :brands
   resources :suppliers
