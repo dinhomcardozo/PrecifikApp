@@ -48,6 +48,17 @@
           data: { pricing_target: "totalCostWithTaxes" } %>
   </div>
 
+  <!-- custo fixo distribuído -->
+  <div class="field-inline">
+    <%= label_tag :distributed_fixed_cost, "Custo Fixo Distribuído (R$)" %>
+    <%= number_field_tag nil,
+          product.sales_target&.distributed_fixed_cost || 0,
+          readonly: true,
+          step: 0.01,
+          class: "form-control",
+          data: { pricing_target: "distributedFixedCost" } %>
+  </div>
+
   <!-- preço sugerido varejo -->
   <div class="field-inline">
     <%= f.label :suggested_price_retail, "Preço Sugerido Varejo (R$)", class: "inline-label" %>

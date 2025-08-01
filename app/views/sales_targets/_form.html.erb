@@ -1,51 +1,44 @@
 <!-- app/views/sales_targets/_form.html.erb -->
+<!-- app/views/sales_targets/_form.html.erb -->
 <%= form_with(model: sales_target) do |f| %>
-  <%# Pacote %>
   <div class="field">
-    <%= f.label :package_id, "Pacote" %>
-    <%= f.collection_select :package_id,
-          Package.all,
+    <%= f.label :product_id, "Produto" %>
+    <%= f.collection_select :product_id,
+          Product.all,
           :id,
           :description,
-          { prompt: "Selecione pacote" },
+          { prompt: "Selecione produto" },
           { class: "form-control" } %>
   </div>
 
-  <%# Canal de Venda %>
   <div class="field">
-    <%= f.label :channel_id, "Canal de Venda" %>
-    <%= f.collection_select :channel_id,
-          Channel.all,
-          :id,
-          :description,
-          { prompt: "Selecione canal" },
-          { class: "form-control" } %>
+    <%= f.label :total_fixed_cost, "Custo Fixo Total (R$)" %>
+    <%= f.number_field :total_fixed_cost,
+          class: "form-control",
+          step: "0.01",
+          readonly: true,
+          value: FixedCost.sum(:monthly_cost) %>
   </div>
 
-  <%# Meta mensal (unitária) %>
   <div class="field">
-    <%= f.label :monthly_target, "Meta mensal (unitária)" %>
+    <%= f.label :monthly_target, "Meta mensal (unidades)" %>
     <%= f.number_field :monthly_target,
           class: "form-control",
           step: 1,
-          min: 0 %>
+          min: 1 %>
   </div>
 
-  <%# Data de início %>
   <div class="field">
     <%= f.label :start_date, "Data de início" %>
-    <%= f.date_field :start_date,
-          class: "form-control" %>
+    <%= f.date_field :start_date, class: "form-control" %>
   </div>
 
-  <%# Data final %>
   <div class="field">
     <%= f.label :end_date, "Data final" %>
-    <%= f.date_field :end_date,
-          class: "form-control" %>
+    <%= f.date_field :end_date, class: "form-control" %>
   </div>
 
   <div class="actions">
-    <%= f.submit class: "btn btn-primary" %>
+    <%= f.submit "Salvar", class: "standart-button" %>
   </div>
 <% end %>

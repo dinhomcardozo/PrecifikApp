@@ -1,6 +1,11 @@
 class Product < ApplicationRecord
   belongs_to :brand, optional: false
   belongs_to :tax,   optional: true
+  has_one :sales_target, class_name: "SalesTarget", dependent: :destroy
+
+  delegate :distributed_fixed_cost,
+           to: :sales_target,
+           allow_nil: true
 
   before_validation :calculate_pricing, if: :pricing_attributes_changed?
 

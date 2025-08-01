@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_01_000832) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_01_214919) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -201,15 +201,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_01_000832) do
   end
 
   create_table "sales_targets", force: :cascade do |t|
-    t.bigint "package_id", null: false
     t.integer "monthly_target"
     t.bigint "channel_id", null: false
     t.date "start_date"
     t.date "end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "product_id", null: false
+    t.decimal "total_fixed_cost", precision: 10, scale: 2, default: "0.0"
     t.index ["channel_id"], name: "index_sales_targets_on_channel_id"
-    t.index ["package_id"], name: "index_sales_targets_on_package_id"
+    t.index ["product_id"], name: "index_sales_targets_on_product_id"
   end
 
   create_table "subproduct_compositions", force: :cascade do |t|
@@ -271,7 +272,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_01_000832) do
   add_foreign_key "sales_orders", "sales_quotes"
   add_foreign_key "sales_quotes", "sales_clients", column: "client_id"
   add_foreign_key "sales_targets", "channels"
-  add_foreign_key "sales_targets", "packages"
+  add_foreign_key "sales_targets", "products"
   add_foreign_key "subproduct_compositions", "inputs"
   add_foreign_key "subproduct_compositions", "subproducts"
   add_foreign_key "subproducts", "brands"
