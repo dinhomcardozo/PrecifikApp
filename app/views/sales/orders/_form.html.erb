@@ -1,0 +1,37 @@
+<%= form_with(model: sales_order) do |form| %>
+  <% if sales_order.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(sales_order.errors.count, "error") %> prohibited this sales_order from being saved:</h2>
+
+      <ul>
+        <% sales_order.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :sales_quote_id, style: "display: block" %>
+    <%= form.text_field :sales_quote_id %>
+  </div>
+
+  <div>
+    <%= form.label :status, style: "display: block" %>
+    <%= form.text_field :status %>
+  </div>
+
+  <div>
+    <%= form.label :placed_at, style: "display: block" %>
+    <%= form.datetime_field :placed_at %>
+  </div>
+
+  <div>
+    <%= form.label :total, style: "display: block" %>
+    <%= form.text_field :total %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

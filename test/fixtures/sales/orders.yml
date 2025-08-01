@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  sales_quote: one
+  status: MyString
+  placed_at: 2025-07-31 23:39:10
+  total: 9.99
+
+two:
+  sales_quote: two
+  status: MyString
+  placed_at: 2025-07-31 23:39:10
+  total: 9.99

@@ -1,0 +1,16 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Quotes" %>
+
+<h1>Quotes</h1>
+
+<div id="sales_quotes">
+  <% @sales_quotes.each do |sales_quote| %>
+    <%= render sales_quote %>
+    <p>
+      <%= link_to "Show this quote", sales_quote %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New quote", new_sales_quote_path %>

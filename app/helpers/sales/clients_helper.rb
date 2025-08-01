@@ -1,0 +1,2 @@
+module Sales::ClientsHelper
+end

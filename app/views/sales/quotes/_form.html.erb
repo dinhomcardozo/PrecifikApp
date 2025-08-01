@@ -1,0 +1,47 @@
+<%= form_with(model: sales_quote) do |form| %>
+  <% if sales_quote.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(sales_quote.errors.count, "error") %> prohibited this sales_quote from being saved:</h2>
+
+      <ul>
+        <% sales_quote.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label : client_id, style: "display: block" %>
+    <%= form.text_field : client_id %>
+  </div>
+
+  <div>
+    <%= form.label : channel_cost, style: "display: block" %>
+    <%= form.text_field : channel_cost %>
+  </div>
+
+  <div>
+    <%= form.label : bank_slip_cost, style: "display: block" %>
+    <%= form.text_field : bank_slip_cost %>
+  </div>
+
+  <div>
+    <%= form.label : card_cost, style: "display: block" %>
+    <%= form.text_field : card_cost %>
+  </div>
+
+  <div>
+    <%= form.label : status, style: "display: block" %>
+    <%= form.text_field : status %>
+  </div>
+
+  <div>
+    <%= form.label : total, style: "display: block" %>
+    <%= form.text_field : total %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

@@ -1,4 +1,16 @@
 Rails.application.routes.draw do
+  namespace :sales do
+    resources :clients
+
+    resources :quotes do
+      member do
+        post :calculate_total
+      end
+    end
+
+    resources :orders
+  end
+
   resources :taxes
   root "products#index"
   

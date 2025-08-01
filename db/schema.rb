@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_26_170918) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_01_000832) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -114,6 +114,25 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_26_170918) do
     t.index ["channel_id"], name: "index_packages_on_channel_id"
   end
 
+  create_table "payment_method_installments", force: :cascade do |t|
+    t.bigint "payment_method_id", null: false
+    t.integer "installment_count"
+    t.decimal "percentage_fee"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["payment_method_id"], name: "index_payment_method_installments_on_payment_method_id"
+  end
+
+  create_table "payment_methods", force: :cascade do |t|
+    t.string "name"
+    t.string "code"
+    t.string "fee_type"
+    t.decimal "fee_value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_payment_methods_on_code"
+  end
+
   create_table "product_subproducts", force: :cascade do |t|
     t.bigint "product_id", null: false
     t.bigint "subproduct_id", null: false
@@ -141,6 +160,44 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_26_170918) do
     t.decimal "total_cost_with_taxes"
     t.index ["brand_id"], name: "index_products_on_brand_id"
     t.index ["tax_id"], name: "index_products_on_tax_id"
+  end
+
+  create_table "sales_clients", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.string "company"
+    t.string "cnpj"
+    t.string "phone"
+    t.string "email"
+    t.string "address"
+    t.string "number_address"
+    t.string "city"
+    t.string "state"
+    t.string "country"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "sales_orders", force: :cascade do |t|
+    t.bigint "sales_quote_id", null: false
+    t.string "status"
+    t.datetime "placed_at"
+    t.decimal "total"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sales_quote_id"], name: "index_sales_orders_on_sales_quote_id"
+  end
+
+  create_table "sales_quotes", force: :cascade do |t|
+    t.bigint "client_id", null: false
+    t.decimal "channel_cost"
+    t.decimal "bank_slip_cost"
+    t.decimal "card_cost"
+    t.string "status"
+    t.decimal "total"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_sales_quotes_on_client_id"
   end
 
   create_table "sales_targets", force: :cascade do |t|
@@ -206,10 +263,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_26_170918) do
   add_foreign_key "package_compositions", "products"
   add_foreign_key "packages", "brands"
   add_foreign_key "packages", "channels"
+  add_foreign_key "payment_method_installments", "payment_methods"
   add_foreign_key "product_subproducts", "products"
   add_foreign_key "product_subproducts", "subproducts"
   add_foreign_key "products", "brands"
   add_foreign_key "products", "taxes"
+  add_foreign_key "sales_orders", "sales_quotes"
+  add_foreign_key "sales_quotes", "sales_clients", column: "client_id"
   add_foreign_key "sales_targets", "channels"
   add_foreign_key "sales_targets", "packages"
   add_foreign_key "subproduct_compositions", "inputs"
