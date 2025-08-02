@@ -4,10 +4,20 @@ class SalesTargetsController < ApplicationController
   # GET /sales_targets or /sales_targets.json
   def index
     @sales_targets = SalesTarget.all
+    @sales_target_sum = @sales_targets.sum(:monthly_target)
+
+    today = Date.current
+    @sales_target_active_sum = @sales_targets
+      .where("start_date <= ? AND end_date >= ?", today, today)
+      .sum(:monthly_target)
+
+    @total_fixed_cost = FixedCost.sum(:monthly_cost)
   end
 
   # GET /sales_targets/1 or /sales_targets/1.json
   def show
+    @sales_target = SalesTarget.find(params[:id])
+    @sales_target_sum = SalesTarget.sum(:total_fixed_cost)
   end
 
   # GET /sales_targets/new
@@ -25,27 +35,39 @@ class SalesTargetsController < ApplicationController
 
     respond_to do |format|
       if @sales_target.save
-        format.html { redirect_to @sales_target, notice: "Sales target was successfully created." }
-        format.json { render :show, status: :created, location: @sales_target }
+        format.html do
+          redirect_to sales_targets_path,
+                      notice: "Sales target was successfully created."
+        end
+        format.json do
+          render :index,
+                 status: :created,
+                 location: sales_targets_path
+        end
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @sales_target.errors, status: :unprocessable_entity }
+        format.html do
+          render :new, status: :unprocessable_entity
+        end
+        format.json do
+          render json: @sales_target.errors,
+                 status: :unprocessable_entity
+        end
       end
     end
   end
 
   # PATCH/PUT /sales_targets/1 or /sales_targets/1.json
-  def update
-    respond_to do |format|
-      if @sales_target.update(sales_target_params)
-        format.html { redirect_to @sales_target, notice: "Sales target was successfully updated." }
-        format.json { render :show, status: :ok, location: @sales_target }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @sales_target.errors, status: :unprocessable_entity }
-      end
+def update
+  respond_to do |format|
+    if @sales_target.update(sales_target_params)
+      format.html { redirect_to sales_targets_path, notice: "Sales target foi atualizado com sucesso." }
+      format.json { render :show, status: :ok, location: @sales_target }
+    else
+      format.html { render :edit, status: :unprocessable_entity }
+      format.json { render json: @sales_target.errors, status: :unprocessable_entity }
     end
   end
+end
 
   # DELETE /sales_targets/1 or /sales_targets/1.json
   def destroy
@@ -63,8 +85,15 @@ class SalesTargetsController < ApplicationController
       @sales_target = SalesTarget.find(params.expect(:id))
     end
 
-    # Only allow a list of trusted parameters through.
-    def sales_target_params
-      params.expect(sales_target: [ :package_id, :monthly_target, :channel_id, :start_date, :end_date ])
-    end
+  def sales_target_params
+    params
+      .require(:sales_target)
+      .permit(
+        :product_id,
+        :total_fixed_cost,
+        :monthly_target,
+        :start_date,
+        :end_date
+      )
+  end
 end

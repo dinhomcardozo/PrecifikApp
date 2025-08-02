@@ -3,8 +3,8 @@
 <%= render @sales_target %>
 
 <div>
-  <%= link_to "Edit this sales target", edit_sales_target_path(@sales_target) %> |
-  <%= link_to "Back to sales targets", sales_targets_path %>
+  <%= link_to "Editar", edit_sales_target_path(@sales_target) %> |
+  <%= link_to "Voltar", sales_targets_path %>
 
-  <%= button_to "Destroy this sales target", @sales_target, method: :delete %>
+  <%= button_to "Excluir", @sales_target, method: :delete %>
 </div>

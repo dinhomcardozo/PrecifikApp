@@ -1,7 +1,9 @@
 class Product < ApplicationRecord
   belongs_to :brand, optional: false
   belongs_to :tax,   optional: true
-  has_one :sales_target, class_name: "SalesTarget", dependent: :destroy
+  has_one :sales_target,
+          inverse_of: :product,
+          dependent: :destroy
 
   delegate :distributed_fixed_cost,
            to: :sales_target,
@@ -30,15 +32,6 @@ class Product < ApplicationRecord
 # 1 – Composição
   def total_weight
     product_subproducts.sum { |ps| ps.quantity.to_f }
-  end
-
-  # 2 – Cálculos de margem “sugerida”
-  def suggested_price_retail
-    total_cost.to_f * (1 + profit_margin_retail.to_f / 100)
-  end
-
-  def suggested_price_wholesale
-    total_cost.to_f * (1 + profit_margin_wholesale.to_f / 100)
   end
 
   # 3 – TRIBUTOS

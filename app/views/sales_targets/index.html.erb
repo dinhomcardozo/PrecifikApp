@@ -1,16 +1,44 @@
-<p style="color: green"><%= notice %></p>
+<!-- app/views/sales_targets/index.html.erb -->
+<h1>Metas de Vendas</h1>
+<%= link_to "[+] Criar Meta de Venda",
+            new_sales_target_path,
+            class: "standart-button" %>
 
-<% content_for :title, "Sales targets" %>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Produto</th>
+      <th>Meta Mensal</th>
+      <th>Data Inicial</th>
+      <th>Data Final</th>
+      <th>Custo Fixo Distribuído</th>
+      <th>Ações</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= render partial: "sales_target",
+               collection: @sales_targets,
+               as:         :sales_target %>
 
-<h1>Sales targets</h1>
+    <tr class="table-footer">
+      <td><strong>Total</strong></td>
+      <td><%= @sales_target_sum %></td>
 
-<div id="sales_targets">
-  <% @sales_targets.each do |sales_target| %>
-    <%= render sales_target %>
-    <p>
-      <%= link_to "Show this sales target", sales_target %>
-    </p>
-  <% end %>
-</div>
-
-<%= link_to "New sales target", new_sales_target_path %>
+      <!-- Ajuste de colspan para encaixar a coluna Ações -->
+      <td colspan="5"></td>
+    </tr>
+    <tr>
+      <td><strong>Total Ativas</strong></td>
+      <td><%= @sales_target_active_sum %></td>
+      <!-- “quebra” de colunas pra alinhar -->
+      <td colspan="2"></td>
+      <td><strong>Custo Fixo / Unidade Ativa</strong></td>
+      <td>
+        <%= number_to_currency(
+              @total_fixed_cost.to_f / (@sales_target_active_sum.nonzero? || 1)
+            ) %>
+      </td>
+    </tr>
+  </tbody>
+</table>

@@ -1,32 +1,38 @@
-<div id="<%= dom_id sales_target %>">
-  <p>
-    <strong>Package:</strong>
-    <%= sales_target.package_id %>
-  </p>
+<tr id="<%= dom_id sales_target %>">
+  <td><%= sales_target.product&.description || "-" %></td>
+  <td><%= sales_target.monthly_target %></td>
+  <td><%= l(sales_target.start_date, format: "%d/%m/%Y") %></td>
+  <td><%= l(sales_target.end_date, format: "%d/%m/%Y") %></td>
 
-  <p>
-    <strong>Monthly target:</strong>
-    <%= sales_target.monthly_target %>
-  </p>
+  <!-- Custo Fixo Distribuído -->
+  <td>
+    <%= number_to_currency(
+          sales_target.total_fixed_cost.to_f / @sales_target_sum,
+          unit: "R$ "
+        ) %>
+  </td>
 
-  <p>
-    <strong>Channel:</strong>
-    <%= sales_target.channel_id %>
-  </p>
+  <!-- Ações -->
+  <td>
+    <%= link_to "Editar",
+                edit_sales_target_path(sales_target),
+                class: "btn btn-sm btn-primary" %>
+  </td>
 
-  <p>
-    <strong>Start date:</strong>
-    <%= sales_target.start_date %>
-  </p>
+  <!-- Status -->
+  <td>
+    <% today  = Date.current
+       start  = sales_target.start_date
+       ending = sales_target.end_date %>
 
-  <p>
-    <strong>End date:</strong>
-    <%= sales_target.end_date %>
-  </p>
-
-  <p>
-    <strong>Custo fixo distribuido</strong>
-    <%= @sales_target.total_fixed_cost %>
-  </p>
-
-</div>
+    <% if today < start %>
+      <span role="img" aria-label="não iniciado">⚪️</span>
+    <% elsif today > ending %>
+      <span role="img" aria-label="expirado">🔴</span>
+    <% elsif today == ending %>
+      <span role="img" aria-label="último dia">🟠</span>
+    <% else %>
+      <span role="img" aria-label="ativo">🟢</span>
+    <% end %>
+  </td>
+</tr>

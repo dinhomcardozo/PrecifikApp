@@ -4,7 +4,7 @@ class ProductsController < ApplicationController
   before_action :build_subproducts, only: %i[edit]
 
   def index
-    @products = Product.all
+    @products = Product.includes(:sales_target).all
   end
 
   def new

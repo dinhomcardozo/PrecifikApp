@@ -1,6 +1,16 @@
 <!-- app/views/sales_targets/_form.html.erb -->
-<!-- app/views/sales_targets/_form.html.erb -->
-<%= form_with(model: sales_target) do |f| %>
+<%= form_with(model: sales_target, local: true) do |f| %>
+  <% if sales_target.errors.any? %>
+    <div class="alert alert-danger">
+      <h4><%= pluralize(sales_target.errors.count, "erro") %> proibiu este SalesTarget de ser salvo:</h4>
+      <ul>
+        <% sales_target.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
   <div class="field">
     <%= f.label :product_id, "Produto" %>
     <%= f.collection_select :product_id,
@@ -30,12 +40,18 @@
 
   <div class="field">
     <%= f.label :start_date, "Data de início" %>
-    <%= f.date_field :start_date, class: "form-control" %>
+    <%= f.text_field :start_date,
+          class: "form-control datepicker",
+          placeholder: "DD/MM/AAAA",
+          value: sales_target.start_date&.strftime("%d/%m/%Y") %>
   </div>
 
   <div class="field">
     <%= f.label :end_date, "Data final" %>
-    <%= f.date_field :end_date, class: "form-control" %>
+    <%= f.text_field :end_date,
+          class: "form-control datepicker",
+          placeholder: "DD/MM/AAAA",
+          value: sales_target.end_date&.strftime("%d/%m/%Y") %>
   </div>
 
   <div class="actions">

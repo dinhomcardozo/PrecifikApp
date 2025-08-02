@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_01_214919) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_02_041042) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -202,14 +202,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_01_214919) do
 
   create_table "sales_targets", force: :cascade do |t|
     t.integer "monthly_target"
-    t.bigint "channel_id", null: false
     t.date "start_date"
     t.date "end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "product_id", null: false
     t.decimal "total_fixed_cost", precision: 10, scale: 2, default: "0.0"
-    t.index ["channel_id"], name: "index_sales_targets_on_channel_id"
+    t.integer "total_monthly_target"
     t.index ["product_id"], name: "index_sales_targets_on_product_id"
   end
 
@@ -271,7 +270,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_01_214919) do
   add_foreign_key "products", "taxes"
   add_foreign_key "sales_orders", "sales_quotes"
   add_foreign_key "sales_quotes", "sales_clients", column: "client_id"
-  add_foreign_key "sales_targets", "channels"
   add_foreign_key "sales_targets", "products"
   add_foreign_key "subproduct_compositions", "inputs"
   add_foreign_key "subproduct_compositions", "subproducts"
