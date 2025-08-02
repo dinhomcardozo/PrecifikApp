@@ -4,19 +4,11 @@
   <td><%= l(sales_target.start_date, format: "%d/%m/%Y") %></td>
   <td><%= l(sales_target.end_date, format: "%d/%m/%Y") %></td>
 
-  <!-- Custo Fixo Distribuído -->
-  <td>
-    <%= number_to_currency(
-          sales_target.total_fixed_cost.to_f / @sales_target_sum,
-          unit: "R$ "
-        ) %>
-  </td>
-
   <!-- Ações -->
   <td>
     <%= link_to "Editar",
                 edit_sales_target_path(sales_target),
-                class: "btn btn-sm btn-primary" %>
+                class: "action-button"  %>
   </td>
 
   <!-- Status -->

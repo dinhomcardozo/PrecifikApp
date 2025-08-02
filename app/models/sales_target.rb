@@ -1,7 +1,8 @@
 class SalesTarget < ApplicationRecord
   belongs_to :product, optional: true
+  has_many :fixed_cost_items
 
-  after_commit :recalculate_total_monthly_targets, on: %i[create update destroy]
+  after_commit :update_global_sums, on: %i[create update destroy]
 
   validates :monthly_target, presence: true,
             numericality: { only_integer: true, greater_than: 0 }
@@ -17,10 +18,8 @@ class SalesTarget < ApplicationRecord
     (total_fixed_cost.to_f / monthly_target).round(2)
   end
 
-  def recalculate_total_monthly_targets
-    total = SalesTarget.sum(:monthly_target)
-    # atualiza todas as linhas com o mesmo valor para manter consistência
-    SalesTarget.update_all(total_monthly_target: total)
+  def recalc_total_fixed_cost!
+    update_column(:total_fixed_cost, fixed_cost_items.sum(:amount))
   end
 
   private
@@ -40,5 +39,19 @@ class SalesTarget < ApplicationRecord
       .exists?
 
     errors.add(:base, "Já existe uma meta ativa para este produto nesse período") if overlapping
+  end
+
+  def update_global_sums
+    total  = SalesTarget.sum(:monthly_target)
+    today  = Date.current
+    active = SalesTarget
+               .where("start_date <= ? AND end_date >= ?", today, today)
+               .sum(:monthly_target)
+
+    # Atualiza todas as linhas para manter os dois campos sincronizados
+    SalesTarget.update_all(
+      sales_target_sum: total,
+      sales_target_active_sum: active
+    )
   end
 end

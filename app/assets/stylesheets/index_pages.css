@@ -26,7 +26,28 @@
   text-decoration: none;
 }
 
-.index-button {
+.standart-button {
+  background-color: var(--bg-color);
+  color: var(--text-dark);
+  border: 1px;
+  margin: 20px;
+  border-radius: 0.375rem;
+  padding: 0.35rem 0.7rem;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 0.5rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  text-decoration: none;
+}
+
+.standart-button:hover {
+  background-color: var(--hover-action-btn);
+  color: var(--accent-hover);
+  font-weight: 900;
+  font-size: 0.55rem;
+}
+
+.action-button {
   background-color: var(--accent-color);
   color: var(--text-dark);
   border: none;
@@ -40,7 +61,7 @@
   text-decoration: none;
 }
 
-.index-button:hover {
+.action-button:hover {
   background-color: var(--accent-hover);
   color: var(--text-dark);
   font-weight: 900;

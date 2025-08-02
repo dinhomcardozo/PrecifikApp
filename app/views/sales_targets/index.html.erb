@@ -1,4 +1,5 @@
 <!-- app/views/sales_targets/index.html.erb -->
+
 <h1>Metas de Vendas</h1>
 <%= link_to "[+] Criar Meta de Venda",
             new_sales_target_path,
@@ -11,33 +12,63 @@
       <th>Meta Mensal</th>
       <th>Data Inicial</th>
       <th>Data Final</th>
-      <th>Custo Fixo Distribuído</th>
       <th>Ações</th>
       <th>Status</th>
     </tr>
   </thead>
+
   <tbody>
     <%= render partial: "sales_target",
                collection: @sales_targets,
                as:         :sales_target %>
 
+    <!-- total de todas as metas -->
     <tr class="table-footer">
       <td><strong>Total</strong></td>
       <td><%= @sales_target_sum %></td>
-
-      <!-- Ajuste de colspan para encaixar a coluna Ações -->
-      <td colspan="5"></td>
+      <td colspan="4"></td>
     </tr>
-    <tr>
+
+    <!-- linha única com Total Ativas + Total de Custos Fixos + Custo Fixo / Unidade Ativa + Custo Fixo Distribuído -->
+    <tr class="table-footer">
       <td><strong>Total Ativas</strong></td>
       <td><%= @sales_target_active_sum %></td>
-      <!-- “quebra” de colunas pra alinhar -->
-      <td colspan="2"></td>
-      <td><strong>Custo Fixo / Unidade Ativa</strong></td>
+      <td colspan="1"></td>
+    </tr>
+
+    <tr>
+      <!-- mostra o total fixo -->
       <td>
-        <%= number_to_currency(
-              @total_fixed_cost.to_f / (@sales_target_active_sum.nonzero? || 1)
-            ) %>
+        <strong>Total de Custos Fixos</strong><br>
+        <%= number_to_currency(@total_fixed_cost.to_f, unit: "R$ ") %>
+      </td>
+
+      <hr style="margin:4px 0; border-color:#ddd;">
+
+      <!-- mostra custo por unidade ativa -->
+      <td>
+        <strong>Custo Fixo / Unidade Ativa</strong><br>
+        <% if @sales_target_active_sum.positive? %>
+          <%= number_to_currency(
+                @total_fixed_cost.to_f / @sales_target_active_sum,
+                unit: "R$ "
+              ) %>
+        <% else %>
+          –
+        <% end %>
+
+        <hr style="margin:4px 0; border-color:#ddd;">
+
+        <!-- mostra custo fixo distribuído -->
+        <strong>Custo Fixo Distribuído</strong><br>
+        <% if @sales_target_sum.positive? %>
+          <%= number_to_currency(
+                @total_fixed_cost.to_f / @sales_target_sum,
+                unit: "R$ "
+              ) %>
+        <% else %>
+          –
+        <% end %>
       </td>
     </tr>
   </tbody>

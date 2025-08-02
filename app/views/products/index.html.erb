@@ -28,29 +28,18 @@
         <% @products.each do |p| %>
           <tr id="<%= dom_id(p) %>">
             <td><%= p.description %></td>
-            <td>
-              <%= number_to_currency(p.total_cost,               unit: "R$ ") %>
-            </td>
-            <td>
-              <%= number_to_currency(p.total_cost_with_taxes,    unit: "R$ ") %>
-            </td>
-            <td>
-              <%= number_to_currency(p.suggested_price_retail,   unit: "R$ ") %>
-            </td>
-            <td>
-              <%= number_to_currency(p.suggested_price_wholesale,unit: "R$ ") %>
-            </td>
-            <td>
-              <%= number_to_currency(p.net_profit_retail,        unit: "R$ ") %>
-            </td>
-            <td>
-              <%= number_to_currency(p.net_profit_wholesale,     unit: "R$ ") %>
-            </td>
+            <td><%= p.monthly_target || "–" %></td>
+            <td><%= number_to_currency(p.total_cost, unit: "R$ ") %></td>
+            <td><%= number_to_currency(p.total_cost_with_taxes,    unit: "R$ ") %></td>
+            <td><%= number_to_currency(p.suggested_price_retail,   unit: "R$ ") %></td>
+            <td><%= number_to_currency(p.suggested_price_wholesale,unit: "R$ ") %></td>
+            <td><%= number_to_currency(p.net_profit_retail,        unit: "R$ ") %></td>
+            <td><%= number_to_currency(p.net_profit_wholesale,     unit: "R$ ") %></td>
             <td class="cell-actions">
               <%= link_to "Editar",
                           edit_product_path(p, step: 1),
                           data: { turbo_frame: "product_steps" },
-                          class: "index-button" %>
+                          class: "standart-button" %>
               <%= button_to "Excluir",
                             product_path(p),
                             method: :delete,
@@ -58,7 +47,7 @@
                               turbo_frame: "product_steps",
                               turbo_confirm: "Confirma?"
                             },
-                            class: "index-button" %>
+                            class: "standart-button" %>
             </td>
           </tr>
         <% end %>

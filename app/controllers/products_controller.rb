@@ -1,7 +1,8 @@
 # app/controllers/products_controller.rb
 class ProductsController < ApplicationController
   before_action :set_product, only: %i[edit update show destroy]
-  before_action :build_subproducts, only: %i[edit]
+  before_action :build_subproducts, only: %i[edit update]
+  before_action :set_sales_target_active_sum, only: %i[edit update]
 
   def index
     @products = Product.includes(:sales_target).all
@@ -11,8 +12,6 @@ class ProductsController < ApplicationController
     @product = Product.new
     2.times { @product.product_subproducts.build }
   end
-
-  def edit; end
 
   def create
     @product = Product.new(product_params)
@@ -65,6 +64,8 @@ class ProductsController < ApplicationController
     end
   end
 
+  def edit; end
+
   def show; end
 
   def destroy
@@ -83,6 +84,13 @@ class ProductsController < ApplicationController
     (2 - @product.product_subproducts.size).times do
       @product.product_subproducts.build
     end
+  end
+
+  def set_sales_target_active_sum
+    @sales_target_active_sum =
+      SalesTarget
+        .where("start_date <= ? AND end_date >= ?", Date.current, Date.current)
+        .sum(:monthly_target)
   end
 
   def product_params

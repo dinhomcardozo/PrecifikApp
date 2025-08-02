@@ -9,7 +9,13 @@ class Product < ApplicationRecord
            to: :sales_target,
            allow_nil: true
 
+  delegate :monthly_target,
+           to: :sales_target,
+           prefix: false,
+           allow_nil: true
+
   before_validation :calculate_pricing, if: :pricing_attributes_changed?
+  after_save :store_total_cost_with_fixed_costs
 
   has_many   :product_subproducts, inverse_of: :product, dependent: :destroy
   has_many   :subproducts, through: :product_subproducts
@@ -48,6 +54,15 @@ class Product < ApplicationRecord
     %i[icms ipi pis_cofins difal iss cbs ibs].sum do |field|
       (tax.send(field).to_f / 100.0) * total_cost
     end.round(2)
+  end
+
+
+  # CUSTOS FIXOS - soma total_cost + distributed_fixed_cost (sem tributos)
+  def store_total_cost_with_fixed_costs
+    update_column(
+      :total_cost_with_fixed_costs,
+      total_cost + sales_target&.distributed_fixed_cost.to_f
+    )
   end
 
    # 4. Preços sugeridos

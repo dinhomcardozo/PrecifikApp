@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_02_041042) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_02_162025) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -158,6 +158,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_02_041042) do
     t.decimal "suggested_price_retail", precision: 12, scale: 2, default: "0.0", null: false
     t.decimal "suggested_price_wholesale", precision: 12, scale: 2, default: "0.0", null: false
     t.decimal "total_cost_with_taxes"
+    t.decimal "total_cost_with_fixed_costs", default: "0.0", null: false
     t.index ["brand_id"], name: "index_products_on_brand_id"
     t.index ["tax_id"], name: "index_products_on_tax_id"
   end
@@ -208,7 +209,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_02_041042) do
     t.datetime "updated_at", null: false
     t.bigint "product_id", null: false
     t.decimal "total_fixed_cost", precision: 10, scale: 2, default: "0.0"
-    t.integer "total_monthly_target"
+    t.integer "sales_target_sum", default: 0, null: false
+    t.integer "sales_target_active_sum", default: 0, null: false
     t.index ["product_id"], name: "index_sales_targets_on_product_id"
   end
 
