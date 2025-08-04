@@ -36,8 +36,6 @@
 /* 4) submenu (dropdown) */
 .submenu {
   display: none;
-  position: absolute;
-  top: 100%;
   left: 0;
   background: #fff;
   border: 1px solid #ddd;

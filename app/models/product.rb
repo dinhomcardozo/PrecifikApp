@@ -15,6 +15,8 @@ class Product < ApplicationRecord
            allow_nil: true
 
   before_validation :calculate_pricing, if: :pricing_attributes_changed?
+
+  after_save :store_total_cost, if: :product_subproducts_changed?
   after_save :store_total_cost_with_fixed_costs
 
   has_many   :product_subproducts, inverse_of: :product, dependent: :destroy
@@ -33,6 +35,10 @@ class Product < ApplicationRecord
 
   def total_cost
     product_subproducts.sum(:cost)
+  end
+
+  def store_total_cost
+    update_column(:total_cost, product_subproducts.sum(:cost))
   end
 
 # 1 – Composição
@@ -111,5 +117,9 @@ class Product < ApplicationRecord
   def compute_pricing
     self.suggested_price_retail    = suggested_price_retail
     self.suggested_price_wholesale = suggested_price_wholesale
+  end
+
+  def product_subproducts_changed?
+    product_subproducts.any?(&:saved_change_to_cost?)
   end
 end
