@@ -97,6 +97,7 @@ class ProductsController < ApplicationController
     params.require(:product).permit(
       :description,
       :brand_id,
+      :image,
       :tax_id,
       :profit_margin_wholesale,
       :profit_margin_retail,

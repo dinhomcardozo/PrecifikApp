@@ -1,0 +1,52 @@
+<%= form_with(model: service, url: service.persisted? ?
+      services_service_path(service) :
+      services_services_path) do |form| %>
+
+  <% if service.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(service.errors.count, "erro") %> impediram o salvamento:</h2>
+      <ul>
+        <% service.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :description, style: "display:block" %>
+    <%= form.text_field :description %>
+  </div>
+
+  <div>
+    <%= form.label :role_id, style: "display:block" %>
+    <%= form.collection_select :role_id,
+          Role.all, :id, :description,
+          prompt: "Escolha uma função" %>
+  </div>
+
+  <div>
+    <%= form.label :total_seconds, "Duração (segundos)", style: "display:block" %>
+    <%= form.number_field :total_seconds %>
+  </div>
+
+  <div>
+    <%= form.label :tax_percent, "Imposto (%)", style: "display:block" %>
+    <%= form.number_field :tax_percent, step: 0.1 %>
+  </div>
+
+  <div>
+    <%= form.label :profit_margin_percent, "Margem (%)", style: "display:block" %>
+    <%= form.number_field :profit_margin_percent, step: 0.1 %>
+  </div>
+
+  <div>
+    <%= form.label :final_price, "Preço Final (R$)", style: "display:block" %>
+    <%= form.number_field :final_price, step: 0.01 %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+
+<% end %>

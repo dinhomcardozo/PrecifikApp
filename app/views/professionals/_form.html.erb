@@ -1,0 +1,52 @@
+<%= form_with(model: professional) do |form| %>
+  <% if professional.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(professional.errors.count, "error") %> prohibited this professional from being saved:</h2>
+
+      <ul>
+        <% professional.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label : full_name, style: "display: block" %>
+    <%= form.text_field : full_name %>
+  </div>
+
+  <div>
+    <%= form.label : role_id, style: "display: block" %>
+    <%= form.text_field : role_id %>
+  </div>
+
+  <div>
+    <%= form.label : cpf, style: "display: block" %>
+    <%= form.text_field : cpf %>
+  </div>
+
+  <div>
+    <%= form.label : company_name, style: "display: block" %>
+    <%= form.text_field : company_name %>
+  </div>
+
+  <div>
+    <%= form.label : cnpj, style: "display: block" %>
+    <%= form.text_field : cnpj %>
+  </div>
+
+  <div>
+    <%= form.label : average_hourly_rate, style: "display: block" %>
+    <%= form.text_field : average_hourly_rate %>
+  </div>
+
+  <div>
+    <%= form.label : hourly_rate, style: "display: block" %>
+    <%= form.text_field : hourly_rate %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

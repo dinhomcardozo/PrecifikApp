@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+   description: MyString
+   role: one
+   total_seconds: 1
+   tax_percent: 1.5
+   profit_margin_percent: 1.5
+   final_price: 9.99
+
+two:
+   description: MyString
+   role: two
+   total_seconds: 1
+   tax_percent: 1.5
+   profit_margin_percent: 1.5
+   final_price: 9.99

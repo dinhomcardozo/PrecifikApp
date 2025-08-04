@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+   description: MyString
+   value: 9.99
+   depreciation_percent: 1.5
+   depreciation_value: 9.99
+
+two:
+   description: MyString
+   value: 9.99
+   depreciation_percent: 1.5
+   depreciation_value: 9.99

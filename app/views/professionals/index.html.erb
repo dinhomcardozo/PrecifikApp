@@ -1,0 +1,16 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Professionals" %>
+
+<h1>Professionals</h1>
+
+<div id="professionals">
+  <% @professionals.each do |professional| %>
+    <%= render professional %>
+    <p>
+      <%= link_to "Show this professional", professional %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New professional", new_professional_path %>

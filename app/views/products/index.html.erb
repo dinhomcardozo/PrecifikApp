@@ -13,6 +13,7 @@
       <thead>
         <tr>
           <th>Produto</th>
+          <th>Imagem</th>
           <th>Meta Mensal (un.)</th>
           <th>Total Custo (R$)</th>
           <th>Total c/ Tributos (R$)</th>
@@ -28,6 +29,19 @@
         <% @products.each do |p| %>
           <tr id="<%= dom_id(p) %>">
             <td><%= p.description %></td>
+            <td>
+                    <% if p.image.attached? %>
+                <%= image_tag(
+                      url_for(p.image),
+                      alt: p.description,
+                      class: "index_image",
+                      width: 100,
+                      height: 100
+                    ) %>
+              <% else %>
+                Nenhuma
+              <% end %>
+            </td>
             <td><%= p.monthly_target || "–" %></td>
             <td><%= number_to_currency(p.total_cost, unit: "R$ ") %></td>
             <td><%= number_to_currency(p.total_cost_with_taxes,    unit: "R$ ") %></td>

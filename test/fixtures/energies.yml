@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+   description: MyString
+   consume_per_hour: 9.99
+
+two:
+   description: MyString
+   consume_per_hour: 9.99

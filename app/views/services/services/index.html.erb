@@ -1,0 +1,29 @@
+<h1>Listagem de Serviços</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Descrição</th>
+      <th>Cargo</th>
+      <th colspan="3">Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @services.each do |service| %>
+      <tr>
+        <td><%= service.description %></td>
+        <td><%= service.role.name %></td>
+        <td><%= link_to "Mostrar", services_service_path(service) %></td>
+        <td><%= link_to "Editar", edit_services_service_path(service) %></td>
+        <td>
+          <%= link_to "Apagar",
+                      services_service_path(service),
+                      method: :delete,
+                      data: { confirm: "Confirma exclusão?" } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to "Novo Serviço", new_services_service_path %>

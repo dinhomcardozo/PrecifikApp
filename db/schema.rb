@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_02_162025) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_04_221048) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -56,6 +56,22 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_02_162025) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "energies", force: :cascade do |t|
+    t.string "description"
+    t.decimal "consume_per_hour"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "equipment", force: :cascade do |t|
+    t.string "description"
+    t.decimal "value"
+    t.float "depreciation_percent"
+    t.decimal "depreciation_value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "fixed_costs", force: :cascade do |t|
     t.string "description"
     t.decimal "monthly_cost"
@@ -84,34 +100,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_02_162025) do
     t.index ["brand_id"], name: "index_inputs_on_brand_id"
     t.index ["input_type_id"], name: "index_inputs_on_input_type_id"
     t.index ["supplier_id"], name: "index_inputs_on_supplier_id"
-  end
-
-  create_table "package_compositions", force: :cascade do |t|
-    t.bigint "package_id", null: false
-    t.bigint "product_id", null: false
-    t.float "weight"
-    t.decimal "discount"
-    t.decimal "price"
-    t.decimal "subprice"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["package_id"], name: "index_package_compositions_on_package_id"
-    t.index ["product_id"], name: "index_package_compositions_on_product_id"
-  end
-
-  create_table "packages", force: :cascade do |t|
-    t.string "description"
-    t.bigint "brand_id", null: false
-    t.bigint "channel_id", null: false
-    t.float "total_weight"
-    t.decimal "general_discount", precision: 5, scale: 2
-    t.decimal "subtotal_price", precision: 10, scale: 2
-    t.decimal "total_price", precision: 10, scale: 2
-    t.decimal "final_price", precision: 10, scale: 2
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["brand_id"], name: "index_packages_on_brand_id"
-    t.index ["channel_id"], name: "index_packages_on_channel_id"
   end
 
   create_table "payment_method_installments", force: :cascade do |t|
@@ -159,8 +147,28 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_02_162025) do
     t.decimal "suggested_price_wholesale", precision: 12, scale: 2, default: "0.0", null: false
     t.decimal "total_cost_with_taxes"
     t.decimal "total_cost_with_fixed_costs", default: "0.0", null: false
+    t.string "image"
     t.index ["brand_id"], name: "index_products_on_brand_id"
     t.index ["tax_id"], name: "index_products_on_tax_id"
+  end
+
+  create_table "professionals", force: :cascade do |t|
+    t.string "full_name"
+    t.bigint "role_id", null: false
+    t.string "cpf"
+    t.string "company_name"
+    t.string "cnpj"
+    t.decimal "average_hourly_rate"
+    t.decimal "hourly_rate"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["role_id"], name: "index_professionals_on_role_id"
+  end
+
+  create_table "roles", force: :cascade do |t|
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "sales_clients", force: :cascade do |t|
@@ -214,6 +222,83 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_02_162025) do
     t.index ["product_id"], name: "index_sales_targets_on_product_id"
   end
 
+  create_table "service_energies", force: :cascade do |t|
+    t.bigint "service_id", null: false
+    t.bigint "energy_id", null: false
+    t.decimal "hours_per_service"
+    t.decimal "cost"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["energy_id"], name: "index_service_energies_on_energy_id"
+    t.index ["service_id"], name: "index_service_energies_on_service_id"
+  end
+
+  create_table "service_equipments", force: :cascade do |t|
+    t.bigint "service_id", null: false
+    t.bigint "equipment_id", null: false
+    t.decimal "hours_per_service"
+    t.decimal "cost"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["equipment_id"], name: "index_service_equipments_on_equipment_id"
+    t.index ["service_id"], name: "index_service_equipments_on_service_id"
+  end
+
+  create_table "service_inputs", force: :cascade do |t|
+    t.bigint "service_id", null: false
+    t.bigint "input_id", null: false
+    t.decimal "quantity_for_service"
+    t.decimal "cost"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["input_id"], name: "index_service_inputs_on_input_id"
+    t.index ["service_id"], name: "index_service_inputs_on_service_id"
+  end
+
+  create_table "service_products", force: :cascade do |t|
+    t.bigint "service_id", null: false
+    t.bigint "product_id", null: false
+    t.decimal "quantity_for_service"
+    t.decimal "cost"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_service_products_on_product_id"
+    t.index ["service_id"], name: "index_service_products_on_service_id"
+  end
+
+  create_table "service_professionals", force: :cascade do |t|
+    t.bigint "service_id", null: false
+    t.bigint "professional_id", null: false
+    t.decimal "hourly_rate"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["professional_id"], name: "index_service_professionals_on_professional_id"
+    t.index ["service_id"], name: "index_service_professionals_on_service_id"
+  end
+
+  create_table "service_subproducts", force: :cascade do |t|
+    t.bigint "service_id", null: false
+    t.bigint "subproduct_id", null: false
+    t.decimal "quantity_for_service"
+    t.decimal "cost"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["service_id"], name: "index_service_subproducts_on_service_id"
+    t.index ["subproduct_id"], name: "index_service_subproducts_on_subproduct_id"
+  end
+
+  create_table "services", force: :cascade do |t|
+    t.string "description"
+    t.bigint "role_id", null: false
+    t.integer "total_seconds"
+    t.float "tax_percent"
+    t.float "profit_margin_percent"
+    t.decimal "final_price"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["role_id"], name: "index_services_on_role_id"
+  end
+
   create_table "subproduct_compositions", force: :cascade do |t|
     t.bigint "subproduct_id", null: false
     t.bigint "input_id", null: false
@@ -261,18 +346,28 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_02_162025) do
   add_foreign_key "inputs", "brands"
   add_foreign_key "inputs", "input_types"
   add_foreign_key "inputs", "suppliers"
-  add_foreign_key "package_compositions", "packages"
-  add_foreign_key "package_compositions", "products"
-  add_foreign_key "packages", "brands"
-  add_foreign_key "packages", "channels"
   add_foreign_key "payment_method_installments", "payment_methods"
   add_foreign_key "product_subproducts", "products"
   add_foreign_key "product_subproducts", "subproducts"
   add_foreign_key "products", "brands"
   add_foreign_key "products", "taxes"
+  add_foreign_key "professionals", "roles"
   add_foreign_key "sales_orders", "sales_quotes"
   add_foreign_key "sales_quotes", "sales_clients", column: "client_id"
   add_foreign_key "sales_targets", "products"
+  add_foreign_key "service_energies", "energies"
+  add_foreign_key "service_energies", "services"
+  add_foreign_key "service_equipments", "equipment"
+  add_foreign_key "service_equipments", "services"
+  add_foreign_key "service_inputs", "inputs"
+  add_foreign_key "service_inputs", "services"
+  add_foreign_key "service_products", "products"
+  add_foreign_key "service_products", "services"
+  add_foreign_key "service_professionals", "professionals"
+  add_foreign_key "service_professionals", "services"
+  add_foreign_key "service_subproducts", "services"
+  add_foreign_key "service_subproducts", "subproducts"
+  add_foreign_key "services", "roles"
   add_foreign_key "subproduct_compositions", "inputs"
   add_foreign_key "subproduct_compositions", "subproducts"
   add_foreign_key "subproducts", "brands"

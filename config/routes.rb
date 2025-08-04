@@ -1,4 +1,23 @@
 Rails.application.routes.draw do
+  namespace :services do
+    resources :equipments
+    resources :energies
+    resources :roles
+    resources :professionals
+
+    resources :services,
+              path: "",
+              as:     :services,
+              only:   %i[index show new create edit update destroy] do
+      resources :service_professionals, path: "professionals"
+      resources :service_energies,      path: "energies"
+      resources :service_equipments,    path: "equipments"
+      resources :service_inputs,        path: "inputs"
+      resources :service_subproducts,   path: "subproducts"
+      resources :service_products,      path: "products"
+    end
+  end
+
   namespace :sales do
     resources :clients
 

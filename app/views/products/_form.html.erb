@@ -8,6 +8,7 @@
                       products_path(active_tab: active_tab) :
                       product_path(@product, active_tab: active_tab)),
               method: (@product.new_record? ? :post : :patch),
+              html:  { multipart: true },
               data: { controller: "tabs" } do |f| %>
 
   <% if f.object.errors.any? %>

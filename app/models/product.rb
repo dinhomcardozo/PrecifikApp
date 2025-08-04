@@ -5,6 +5,8 @@ class Product < ApplicationRecord
           inverse_of: :product,
           dependent: :destroy
 
+  has_one_attached :image
+
   delegate :distributed_fixed_cost,
            to: :sales_target,
            allow_nil: true

@@ -1,0 +1,12 @@
+<% content_for :title, "Editing professional" %>
+
+<h1>Editing professional</h1>
+
+<%= render "form", professional: @professional %>
+
+<br>
+
+<div>
+  <%= link_to "Show this professional", @professional %> |
+  <%= link_to "Back to professionals", professionals_path %>
+</div>

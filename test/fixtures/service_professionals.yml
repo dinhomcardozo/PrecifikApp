@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+   service: one
+   professional: one
+   hourly_rate: 9.99
+
+two:
+   service: two
+   professional: two
+   hourly_rate: 9.99

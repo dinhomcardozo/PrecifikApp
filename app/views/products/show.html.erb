@@ -20,6 +20,19 @@
     <section class="show-info mb-4">
       <p><strong>Descrição:</strong> <%= @product.description %></p>
       <p><strong>Marca:</strong> <%= @product.brand&.name %></p>
+        <p><strong>Imagem:</strong>
+          <% if @product.image.attached? %>
+            <%= image_tag(
+                  url_for(@product.image),
+                  alt: @product.description,
+                  class: "index_image",
+                  width: 300,
+                  height: 300
+                ) %>
+          <% else %>
+            Nenhuma
+          <% end %>
+        </p>
       <p><strong>Total Custo (R$):</strong>
         <%= number_to_currency(@product.total_cost, unit: "R$ ") %>
       </p>

@@ -15,6 +15,12 @@
                             class: "form-select",
                             required: true %>
   </div>
+
+  <div class="col-md-6 mb-3">
+    <%= f.label :image, "Imagem", style: "display: block" %>
+    <%= f.file_field :image %>
+  </div>
+  
   <div class="col-md-3 mb-3">
     <%= f.label :profit_margin_wholesale, "Margem Atacado (%)" %>
     <%= f.number_field :profit_margin_wholesale,
