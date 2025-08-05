@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
   namespace :services do
-    resources :equipments
-    resources :energies
-    resources :roles
-    resources :professionals
+    resources :equipments, shallow: true
+    resources :energies, shallow: true
+    resources :roles, shallow: true
+    resources :professionals, shallow: true
 
     resources :services,
               path: "",

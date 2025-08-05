@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @energy %>
+
+<div>
+  <%= link_to "Editar", edit_services_energy_path(@energy), class: "action-button" %> |
+  <%= link_to "Voltar", services_energies_path, class: "action-button" %>
+
+  <%= button_to "Excluir",
+                services_energy_path(@energy),
+                method: :delete,
+                class: "action-button",
+                data: { confirm: "Are you sure?" } %>
+</div>

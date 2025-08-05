@@ -1,0 +1,31 @@
+<!-- app/views/services/energies/_form.html.erb -->
+<%= form_with(model: energy, local: true) do |form| %>
+  <% if energy.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(energy.errors.count, "erro") %> proibiu o salvamento:</h2>
+      <ul>
+        <% energy.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :description, "Descrição",style: "display: block" %>
+    <%= form.text_field :description %>
+  </div>
+
+  <div>
+    <%= form.label :consume_per_hour,
+                  "Consumo por hora (R$)",
+                  style: "display: block" %>
+    <%= form.number_field :consume_per_hour,
+                          step: 0.001,
+                          placeholder: "Ex: 0.005" %>
+  </div>
+
+  <div>
+    <%= form.submit "Salvar Energia", class: "standart-button" %>
+  </div>
+<% end %>

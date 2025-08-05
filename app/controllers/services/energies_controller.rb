@@ -22,16 +22,11 @@ module Services
 
     # POST /energies or /energies.json
     def create
-      @energy = Energy.new(energy_params)
-
-      respond_to do |format|
-        if @energy.save
-          format.html { redirect_to @energy, notice: "Energy was successfully created." }
-          format.json { render :show, status: :created, location: @energy }
-        else
-          format.html { render :new, status: :unprocessable_entity }
-          format.json { render json: @energy.errors, status: :unprocessable_entity }
-        end
+      @energy = Services::Energy.new(energy_params)
+      if @energy.save
+        redirect_to services_energies_path, notice: "Energia criada com sucesso"
+      else
+        render :new, status: :unprocessable_entity
       end
     end
 
@@ -53,7 +48,7 @@ module Services
       @energy.destroy!
 
       respond_to do |format|
-        format.html { redirect_to energies_path, status: :see_other, notice: "Energy was successfully destroyed." }
+        format.html { redirect_to services_energies_path, status: :see_other, notice: "Energia removida com sucesso." }
         format.json { head :no_content }
       end
     end
@@ -64,9 +59,9 @@ module Services
       @energy = Energy.find(params.expect(:id))
     end
 
-    # Only allow a list of trusted parameters through.
     def energy_params
-      params.expect(energy: [ : description, : consume_per_hour ])
+      params.require(:services_energy)
+            .permit(:description, :consume_per_hour)
     end
   end
 end

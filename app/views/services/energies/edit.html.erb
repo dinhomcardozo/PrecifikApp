@@ -1,0 +1,12 @@
+<% content_for :title, "Maxximiza | Serviços | Editar Energia" %>
+
+<h1>Editar Energia</h1>
+
+<%= render "form", energy: @energy %>
+
+<br>
+
+<div>
+  <%= link_to "Show this energy", @energy %> |
+  <%= link_to "Back to energies", services_energies_path %>
+</div>

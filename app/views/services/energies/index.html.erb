@@ -1,0 +1,38 @@
+<% content_for :title, "Maxximiza | Serviços | Energias" %>
+
+<p style="color: green"><%= notice %></p>
+
+<h1>Energias</h1>
+
+<%= link_to "[+] Criar energia",
+            new_services_energy_path,
+            class: "standart-button" %>
+
+<table class="index-table index-table--bordered">
+  <thead>
+    <tr>
+      <th>Descrição</th>
+      <th>Consumo/hora (R$)</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @energies.each do |energy| %>
+      <tr id="<%= dom_id(energy) %>">
+        <td><%= energy.description %></td>
+        <td><%= number_to_currency(energy.consume_per_hour, unit: "R$ ", delimiter: ".", separator: ",") %></td>
+        <td class="cell-actions">
+          <%= link_to "Editar",
+                      edit_services_energy_path(energy),
+                      class: "action-button" %>
+          <%= button_to "Excluir",
+                        services_energy_path(energy),
+                        method: :delete,
+                        data: { turbo_confirm: "Tem certeza?" },
+                        class: "action-button" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

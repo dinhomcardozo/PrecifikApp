@@ -75,19 +75,22 @@
   border: 1px solid #000;
   border-radius: 0.5rem;
   overflow: hidden;
-  font-size: 0.5rem;
+  font-size: 0.7rem;
 }
 
 .index-table--bordered th,
 .index-table--bordered td {
-  border: 1px solid #000;
+  border: 1px solid #8f8f8f;
   padding: 0.5rem 0.75rem;
-  text-align: left;
+  text-align: center;
+  font-weight: 300;
+  font-size: 0.7rem;
 }
 
 .index-table--bordered thead th {
   background-color: #ccc;
   font-weight: 600;
+  font-size: 0.7rem;
 }
 
 .index-table--bordered thead th:first-child {

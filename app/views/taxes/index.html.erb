@@ -1,16 +1,55 @@
-<p style="color: green"><%= notice %></p>
+<%# app/views/taxes/index.html.erb %>
 
 <% content_for :title, "Maxximiza | Cadastro de Tributos" %>
 
+<% if notice %>
+  <p style="color: green"><%= notice %></p>
+<% end %>
+
 <h1>Tributos</h1>
 
-<div id="taxes">
-  <% @taxes.each do |tax| %>
-    <%= render tax %>
-    <p>
-      <%= link_to "Ver", tax %>
-    </p>
-  <% end %>
-</div>
+<%= link_to "[+] Novo Tributo",
+            new_tax_path,
+            class: "standart-button" %>
 
-<%= link_to "Novo Tributo", new_tax_path %>
+<table class="index-table index-table--bordered">
+  <thead>
+    <tr>
+      <th>Descrição</th>
+      <th>ICMS</th>
+      <th>IPI</th>
+      <th>PIS / COFINS</th>
+      <th>DIFAL</th>
+      <th>ISS</th>
+      <th>CBS</th>
+      <th>IBS</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @taxes.each do |tax| %>
+      <tr id="<%= dom_id(tax) %>">
+        <td><%= tax.description %></td>
+        <td><%= tax.icms %></td>
+        <td><%= tax.ipi %></td>
+        <td><%= tax.pis_cofins %></td>
+        <td><%= tax.difal %></td>
+        <td><%= tax.iss %></td>
+        <td><%= tax.cbs %></td>
+        <td><%= tax.ibs %></td>
+        <td class="cell-actions">
+          <%= link_to "Editar",
+                      edit_tax_path(tax),
+                      class: "action-button" %>
+
+          <%= button_to "Excluir",
+                        tax,
+                        method: :delete,
+                        data: { turbo_confirm: "Tem certeza?" },
+                        class: "action-button" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
