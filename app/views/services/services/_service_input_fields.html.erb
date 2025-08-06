@@ -1,0 +1,36 @@
+<div data-service-nested-form-target="item" class="nested-fields" style="margin-bottom: 0.5rem;">
+  <!-- Select de Input -->
+  <div class="field">
+    <%= f.label :input_id, "Input" %>
+    <%= f.select :input_id,
+                 Input.for_company(current_company).map { |i| [i.name, i.id] },
+                 { prompt: "Selecione Input" },
+                 data: { action: "change->service-nested-form#loadCost" },
+                 class: "form-control" %>
+  </div>
+
+  <!-- Quantidade em gramas -->
+  <div class="field">
+    <%= f.label :quantity_for_service, "Quantidade (g)" %>
+    <%= f.number_field :quantity_for_service,
+                       step: 0.01,
+                       class: "form-control",
+                       data: { action: "input->service-nested-form#updateCost" } %>
+  </div>
+
+  <!-- Custo calculado -->
+  <div class="field">
+    <%= f.label :cost, "Cost (R$)" %>
+    <%= f.number_field :cost,
+                       readonly: true,
+                       class: "form-control",
+                       data: { target: "service-nested-form.cost" } %>
+  </div>
+
+  <!-- Flag para remoção pelo Stimulus -->
+  <%= f.hidden_field :_destroy, class: "destroy-flag" %>
+
+  <%= link_to "Remover", "#",
+        class: "btn btn-sm btn-danger",
+        data: { action: "service-nested-form#remove" } %>
+</div>

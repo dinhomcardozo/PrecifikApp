@@ -1,16 +1,38 @@
+<% content_for :title, "Profissionais" %>
+<h1>Profissionais</h1>
+
 <p style="color: green"><%= notice %></p>
 
-<% content_for :title, "Professionals" %>
+<%= link_to "Novo profissional", new_services_professional_path, class: "standart-button" %>
 
-<h1>Professionals</h1>
-
-<div id="professionals">
-  <% @professionals.each do |professional| %>
-    <%= render professional %>
-    <p>
-      <%= link_to "Show this professional", professional %>
-    </p>
-  <% end %>
-</div>
-
-<%= link_to "New professional", new_professional_path %>
+<table>
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Função</th>
+      <th>CPF</th>
+      <th>CNPJ</th>
+      <th>Valor atual (R$/h)</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @professionals.each do |p| %>
+      <tr>
+        <td><%= p.full_name %></td>
+        <td><%= p.role.description %></td>
+        <td><%= p.cpf %></td>
+        <td><%= p.cnpj %></td>
+        <td><%= number_to_currency(p.hourly_rate, unit: "R$") %></td>
+        <td>
+          <%= link_to "Editar", edit_services_professional_path(p), class: "action-button" %> |
+          <%= link_to "Excluir",
+                      services_professional_path(p),
+                      method: :delete,
+                      class: "action-button",
+                      data: { confirm: "Confirma exclusão?" } %>
+        </td><br>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

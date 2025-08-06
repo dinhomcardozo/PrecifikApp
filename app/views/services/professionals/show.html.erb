@@ -1,10 +1,13 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :title, "Detalhes do profissional" %>
+<h1><%= @professional.full_name %></h1>
 
 <%= render @professional %>
 
 <div>
-  <%= link_to "Edit this professional", edit_professional_path(@professional) %> |
-  <%= link_to "Back to professionals", professionals_path %>
-
-  <%= button_to "Destroy this professional", @professional, method: :delete %>
+  <%= link_to "Editar", edit_services_professional_path(@professional) %> |
+  <%= link_to "Voltar", services_professionals_path %> |
+  <%= button_to "Excluir",
+                services_professional_path(@professional),
+                method: :delete,
+                data: { confirm: "Confirma exclusão?" } %>
 </div>

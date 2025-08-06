@@ -1,12 +1,7 @@
-<% content_for :title, "Editing professional" %>
-
-<h1>Editing professional</h1>
+<% content_for :title, action_name == "new" ? "Novo profissional" : "Editar profissional" %>
+<h1><%= yield :title %></h1>
 
 <%= render "form", professional: @professional %>
 
 <br>
-
-<div>
-  <%= link_to "Show this professional", @professional %> |
-  <%= link_to "Back to professionals", professionals_path %>
-</div>
+<%= link_to "Voltar", services_professionals_path %>

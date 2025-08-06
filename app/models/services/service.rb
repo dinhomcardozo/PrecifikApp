@@ -3,13 +3,48 @@ module Services
     self.table_name = "services"
 
     belongs_to :role
-    has_many   :service_professionals, class_name: "Services::ServiceProfessional", dependent: :destroy
-    has_many   :professionals, through: :service_professionals
+    belongs_to :professional
 
-    has_many   :service_energies,    class_name: "Services::ServiceEnergy",    dependent: :destroy
-    has_many   :service_equipments,  class_name: "Services::ServiceEquipment",  dependent: :destroy
-    has_many   :service_inputs,      class_name: "Services::ServiceInput",      dependent: :destroy
-    has_many   :service_subproducts, class_name: "Services::ServiceSubproduct", dependent: :destroy
-    has_many   :service_products,    class_name: "Services::ServiceProduct",    dependent: :destroy
+    has_many   :service_inputs,      inverse_of: :service, dependent: :destroy
+    has_many   :service_subproducts, inverse_of: :service, dependent: :destroy
+    has_many   :service_products,    inverse_of: :service, dependent: :destroy
+    has_many   :service_energies,    inverse_of: :service, dependent: :destroy
+    has_many   :service_equipments,  inverse_of: :service, dependent: :destroy
+
+    accepts_nested_attributes_for :service_inputs,      allow_destroy: true
+    accepts_nested_attributes_for :service_subproducts, allow_destroy: true
+    accepts_nested_attributes_for :service_products,    allow_destroy: true
+    accepts_nested_attributes_for :service_energies,    allow_destroy: true
+    accepts_nested_attributes_for :service_equipments,  allow_destroy: true
+    # Atributo “virtual” para entrada no formato DD:HH:MM:SS
+    attr_accessor :total_hours_raw
+
+    before_validation :parse_total_hours_raw
+    before_save       :compute_items_costs, :compute_final_price
+
+    private
+
+    def parse_total_hours_raw
+      return if total_hours_raw.blank?
+      d, h, m, s = total_hours_raw.split(":").map(&:to_f)
+      self.total_hours = d * 24 + h + (m / 60) + (s / 3600)
+    end
+
+    def compute_items_costs
+      sums = [
+        service_inputs.sum(&:cost),
+        service_subproducts.sum(&:cost),
+        service_products.sum(&:cost),
+        service_energies.sum(&:cost),
+        service_equipments.sum(&:cost)
+      ]
+      self.service_items_cost = sums.sum
+    end
+
+    def compute_final_price
+      base = hourly_rate * total_hours
+      self.service_price      = base + base * (tax / 100.0) + base * (profit_margin / 100.0)
+      self.final_service_price = base + service_items_cost + base * (profit_margin / 100.0)
+    end
   end
 end

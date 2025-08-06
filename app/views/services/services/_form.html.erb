@@ -1,52 +1,138 @@
-<%= form_with(model: service, url: service.persisted? ?
-      services_service_path(service) :
-      services_services_path) do |form| %>
+<%= form_with model: @service, local: true do |f| %>
 
-  <% if service.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(service.errors.count, "erro") %> impediram o salvamento:</h2>
+  <% if @service.errors.any? %>
+    <div class="error_explanation">
+      <h2>
+        <%= pluralize(@service.errors.count, "erro") %> proibiu este serviço de ser salvo:
+      </h2>
       <ul>
-        <% service.errors.full_messages.each do |msg| %>
+        <% @service.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :description, style: "display:block" %>
-    <%= form.text_field :description %>
+  <div class="form-inputs">
+
+    <!-- Descrição -->
+    <div class="field">
+      <%= f.label :description, "Descrição" %>
+      <%= f.text_field :description, class: "form-control" %>
+    </div>
+
+    <!-- Role -->
+    <div class="field">
+      <%= f.select :role_id,
+                  @roles.map { |r| [r.name, r.id] },
+                  { prompt: "Selecione Role" },
+                  data: {
+                    controller: "service-form",
+                    action:     "change->service-form#loadProfessionals"
+                  },
+                  class: "form-control" %>
+    </div>
+
+    <!-- Professional (vazio inicialmente) -->
+    <div class="field">
+      <%= f.label :professional_id, "Profissional" %>
+      <%= f.select :professional_id,
+                   [],  # popula via JS
+                   { prompt: "Selecione Profissional" },
+                   data: {
+                     target: "service-form.professionalSelect",
+                     action: "change->service-form#loadHourlyRate"
+                   },
+                   class: "form-control" %>
+    </div>
+
+    <!-- Hourly rate (readonly) -->
+    <div class="field">
+      <%= f.label :hourly_rate, "Hourly Rate (R$)" %>
+      <%= f.number_field :hourly_rate,
+                         readonly: true,
+                         class: "form-control",
+                         data: { target: "service-form.hourlyRate" } %>
+    </div>
+
+    <!-- Total Hours bruto (DD:HH:MM:SS) -->
+    <div class="field">
+      <%= f.label :total_hours_raw, "Total Hours (DD:HH:MM:SS)" %>
+      <%= f.text_field :total_hours_raw,
+                       placeholder: "00:00:00:00",
+                       class: "form-control",
+                       data: {
+                         target: "service-form.totalRaw",
+                         action: "blur->service-form#parseTotalHours"
+                       } %>
+    </div>
+
+    <!-- Total Hours decimal (hidden) -->
+    <%= f.hidden_field :total_hours,
+                       data: { target: "service-form.totalDecimal" } %>
+
+    <!-- Tax (%) -->
+    <div class="field">
+      <%= f.label :tax, "Tax (%)" %>
+      <%= f.number_field :tax,
+                         step: 0.01,
+                         class: "form-control",
+                         data: {
+                           target: "service-form.tax",
+                           action: "input->service-form#computeBasePrice"
+                         } %>
+    </div>
+
+    <!-- Profit Margin (%) -->
+    <div class="field">
+      <%= f.label :profit_margin, "Profit Margin (%)" %>
+      <%= f.number_field :profit_margin,
+                         step: 0.01,
+                         class: "form-control",
+                         data: {
+                           target: "service-form.profit",
+                           action: "input->service-form#computeBasePrice"
+                         } %>
+    </div>
+
+    <!-- Service Price (readonly) -->
+    <div class="field">
+      <%= f.label :service_price, "Service Price (R$)" %>
+      <%= f.number_field :service_price,
+                         readonly: true,
+                         class: "form-control",
+                         data: { target: "service-form.basePrice" } %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :role_id, style: "display:block" %>
-    <%= form.collection_select :role_id,
-          Role.all, :id, :description,
-          prompt: "Escolha uma função" %>
+  <hr>
+
+  <h3>Itens Utilizados</h3>
+
+  <div
+    data-controller="service-nested-form"
+    data-service-nested-form-association-value="service_inputs"
+  >
+    <!-- Container onde os blocos existentes e novos serão inseridos -->
+    <div data-service-nested-form-target="items">
+      <%= f.fields_for :service_inputs do |input_form| %>
+        <%= render "services/service_input_fields", f: input_form %>
+      <% end %>
+    </div>
+
+    <!-- Template oculto para novos itens -->
+    <template data-service-nested-form-target="template">
+      <%= f.fields_for :service_inputs, ServiceInput.new, child_index: "NEW_SERVICE_INPUT" do |input_form| %>
+        <%= render "services/service_input_fields", f: input_form %>
+      <% end %>
+    </template>
+
+    <%= link_to "Adicionar Item", "#",
+          class: "action-button",
+          data: { action: "service-nested-form#add" } %>
   </div>
 
-  <div>
-    <%= form.label :total_seconds, "Duração (segundos)", style: "display:block" %>
-    <%= form.number_field :total_seconds %>
+  <div class="form-actions" style="margin-top: 1rem;">
+    <%= f.submit "Salvar Service", class: "standart-button" %>
   </div>
-
-  <div>
-    <%= form.label :tax_percent, "Imposto (%)", style: "display:block" %>
-    <%= form.number_field :tax_percent, step: 0.1 %>
-  </div>
-
-  <div>
-    <%= form.label :profit_margin_percent, "Margem (%)", style: "display:block" %>
-    <%= form.number_field :profit_margin_percent, step: 0.1 %>
-  </div>
-
-  <div>
-    <%= form.label :final_price, "Preço Final (R$)", style: "display:block" %>
-    <%= form.number_field :final_price, step: 0.01 %>
-  </div>
-
-  <div>
-    <%= form.submit %>
-  </div>
-
 <% end %>

@@ -11,14 +11,19 @@ module Services
 
     def new
       @service = Service.new
+      %i[
+        service_inputs service_subproducts service_products
+        service_energies service_equipments
+      ].each { |assoc| @service.send(assoc).build }
+      @roles     = Role.all 
     end
 
     def create
       @service = Service.new(service_params)
       if @service.save
-        redirect_to services_services_path, notice: "Serviço criado."
+        redirect_to @service, notice: "Service criado com sucesso!"
       else
-        render :new, status: :unprocessable_entity
+        render :new
       end
     end
 
@@ -56,12 +61,13 @@ module Services
       # Only allow a list of trusted parameters through.
     def service_params
       params.require(:service).permit(
-        :description,
-        :role_id,
-        :total_seconds,
-        :tax_percent,
-        :profit_margin_percent,
-        :final_price
+        :description, :role_id, :professional_id,
+        :total_hours_raw, :tax, :profit_margin,
+        service_inputs_attributes:      %i[id input_id quantity_for_service cost _destroy],
+        service_subproducts_attributes: %i[id subproduct_id quantity_for_service cost _destroy],
+        service_products_attributes:    %i[id product_id quantity_for_service cost _destroy],
+        service_energies_attributes:    %i[id energy_id hours_per_service cost _destroy],
+        service_equipments_attributes:  %i[id equipment_id hours_per_service cost _destroy]
       )
     end
   end

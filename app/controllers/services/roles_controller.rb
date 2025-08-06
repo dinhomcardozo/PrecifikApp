@@ -2,71 +2,76 @@ module Services
   class RolesController < ApplicationController
     before_action :set_role, only: %i[ show edit update destroy ]
 
-    # GET /roles or /roles.json
+    # GET /services/roles
     def index
-      @roles = Role.all
+      @roles = Services::Role.all
     end
 
-    # GET /roles/1 or /roles/1.json
-    def show
-    end
-
-    # GET /roles/new
+    # GET /services/roles/new
     def new
-      @role = Role.new
+      @role = Services::Role.new
     end
 
-    # GET /roles/1/edit
+    # GET /services/roles/:id/edit
     def edit
     end
 
-    # POST /roles or /roles.json
+    # POST /services/roles
     def create
-      @role = Role.new(role_params)
+      @role = Services::Role.new(role_params)
 
       respond_to do |format|
         if @role.save
-          format.html { redirect_to @role, notice: "Role was successfully created." }
-          format.json { render :show, status: :created, location: @role }
+          format.html { redirect_to services_roles_path,
+                        notice: "Função criada com sucesso." }
+          format.json { render :index,
+                        status: :created,
+                        location: services_roles_url }
         else
           format.html { render :new, status: :unprocessable_entity }
-          format.json { render json: @role.errors, status: :unprocessable_entity }
+          format.json { render json: @role.errors,
+                                status: :unprocessable_entity }
         end
       end
     end
 
-    # PATCH/PUT /roles/1 or /roles/1.json
+    # PATCH/PUT /services/roles/:id
     def update
       respond_to do |format|
         if @role.update(role_params)
-          format.html { redirect_to @role, notice: "Role was successfully updated." }
-          format.json { render :show, status: :ok, location: @role }
+          format.html { redirect_to services_roles_path,
+                        notice: "Função atualizada com sucesso." }
+          format.json { render :index,
+                        status: :ok,
+                        location: services_roles_url }
         else
           format.html { render :edit, status: :unprocessable_entity }
-          format.json { render json: @role.errors, status: :unprocessable_entity }
+          format.json { render json: @role.errors,
+                                status: :unprocessable_entity }
         end
       end
     end
 
-    # DELETE /roles/1 or /roles/1.json
+    # DELETE /services/roles/:id
     def destroy
       @role.destroy!
 
       respond_to do |format|
-        format.html { redirect_to roles_path, status: :see_other, notice: "Role was successfully destroyed." }
+        format.html { redirect_to services_roles_path,
+                      status: :see_other,
+                      notice: "Função excluída com sucesso." }
         format.json { head :no_content }
       end
     end
 
     private
-      # Use callbacks to share common setup or constraints between actions.
-      def set_role
-        @role = Role.find(params.expect(:id))
-      end
 
-      # Only allow a list of trusted parameters through.
-      def role_params
-        params.expect(role: [ :description ])
-      end
+    def set_role
+      @role = Services::Role.find(params[:id])
+    end
+
+    def role_params
+      params.require(:role).permit(:description)
+    end
   end
 end
