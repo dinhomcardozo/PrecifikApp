@@ -15,7 +15,8 @@ module Services
         service_inputs service_subproducts service_products
         service_energies service_equipments
       ].each { |assoc| @service.send(assoc).build }
-      @roles     = Role.all 
+      @roles   = Role.all
+      @available_inputs = Input.all
     end
 
     def create

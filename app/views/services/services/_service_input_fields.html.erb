@@ -2,11 +2,14 @@
   <!-- Select de Input -->
   <div class="field">
     <%= f.label :input_id, "Input" %>
-    <%= f.select :input_id,
-                 Input.for_company(current_company).map { |i| [i.name, i.id] },
-                 { prompt: "Selecione Input" },
-                 data: { action: "change->service-nested-form#loadCost" },
-                 class: "form-control" %>
+
+    <%= f.collection_select :input_id,
+                            @available_inputs,
+                            :id,
+                            :name,
+                            { prompt: "Selecione Input" },
+                            class: "form-control",
+                            data: { action: "change->service-nested-form#loadCost" } %>
   </div>
 
   <!-- Quantidade em gramas -->

@@ -1,11 +1,15 @@
 module Services
   class Service < ApplicationRecord
     self.table_name = "services"
-
+    
     belongs_to :role
     belongs_to :professional
 
-    has_many   :service_inputs,      inverse_of: :service, dependent: :destroy
+    has_many :service_inputs,
+             class_name:  "Services::ServiceInput",
+             inverse_of:   :service,
+             dependent:    :destroy
+
     has_many   :service_subproducts, inverse_of: :service, dependent: :destroy
     has_many   :service_products,    inverse_of: :service, dependent: :destroy
     has_many   :service_energies,    inverse_of: :service, dependent: :destroy

@@ -24,13 +24,10 @@
     <!-- Role -->
     <div class="field">
       <%= f.select :role_id,
-                  @roles.map { |r| [r.name, r.id] },
+                  @roles.map { |r| [r.description, r.id] },
                   { prompt: "Selecione Role" },
-                  data: {
-                    controller: "service-form",
-                    action:     "change->service-form#loadProfessionals"
-                  },
-                  class: "form-control" %>
+                  class: "form-control",
+                  data: { controller: "service-form", action: "change->service-form#loadProfessionals" } %>
     </div>
 
     <!-- Professional (vazio inicialmente) -->
@@ -116,14 +113,15 @@
     <!-- Container onde os blocos existentes e novos serão inseridos -->
     <div data-service-nested-form-target="items">
       <%= f.fields_for :service_inputs do |input_form| %>
-        <%= render "services/service_input_fields", f: input_form %>
+        <%= render "services/services/service_input_fields", f: input_form %>
       <% end %>
     </div>
 
-    <!-- Template oculto para novos itens -->
     <template data-service-nested-form-target="template">
-      <%= f.fields_for :service_inputs, ServiceInput.new, child_index: "NEW_SERVICE_INPUT" do |input_form| %>
-        <%= render "services/service_input_fields", f: input_form %>
+      <%= f.fields_for :service_inputs,
+                      Services::ServiceInput.new,
+                      child_index: "NEW_SERVICE_INPUT" do |ff| %>
+        <%= render "services/services/service_input_fields", f: ff %>
       <% end %>
     </template>
 
