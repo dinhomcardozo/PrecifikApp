@@ -1,4 +1,3 @@
-// app/javascript/controllers/index.js
 import { Application } from "@hotwired/stimulus"
 import ProductCompositionController from "./product_composition_controller"
 import AggregatedCostsController      from "./aggregated_costs_controller"
@@ -9,6 +8,7 @@ import CompositionRowController from "./composition_row_controller"
 import DepreciationController from "./depreciation_controller"
 import DropdownController from "./dropdown_controller"
 import ServiceNestedFormController from "./service_nested_form_controller"
+import ServiceFormController from "./service_form_controller"
 
 const application = Application.start()
 application.register("product-composition", ProductCompositionController)
@@ -20,7 +20,4 @@ application.register("composition-row", CompositionRowController)
 application.register("depreciation", DepreciationController)
 application.register("dropdown", DropdownController)
 application.register("service-nested-form", ServiceNestedFormController)
-
-application.load(definitionsFromContext(context))
-
-window.Stimulus = application
+application.register("service-form", ServiceFormController)

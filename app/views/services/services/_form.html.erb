@@ -21,27 +21,33 @@
       <%= f.text_field :description, class: "form-control" %>
     </div>
 
+  <div data-controller="service-form">
     <!-- Role -->
     <div class="field">
+      <%= f.label :role_id, "Role" %>
       <%= f.select :role_id,
-                  @roles.map { |r| [r.description, r.id] },
-                  { prompt: "Selecione Role" },
-                  class: "form-control",
-                  data: { controller: "service-form", action: "change->service-form#loadProfessionals" } %>
+                   @roles.map { |r| [r.description, r.id] },
+                   { prompt: "Selecione Role" },
+                   class: "form-control",
+                   data: {
+                     "service-form-target": "roleSelect",
+                     action:                "change->service-form#loadProfessionals"
+                   } %>
     </div>
 
-    <!-- Professional (vazio inicialmente) -->
+    <!-- Professional -->
     <div class="field">
       <%= f.label :professional_id, "Profissional" %>
       <%= f.select :professional_id,
-                   [],  # popula via JS
+                   [],  # inicia vazio
                    { prompt: "Selecione Profissional" },
+                   class: "form-control",
                    data: {
-                     target: "service-form.professionalSelect",
-                     action: "change->service-form#loadHourlyRate"
-                   },
-                   class: "form-control" %>
+                     "service-form-target": "professionalSelect",
+                     action:                "change->service-form#loadHourlyRate"
+                   } %>
     </div>
+  </div>
 
     <!-- Hourly rate (readonly) -->
     <div class="field">

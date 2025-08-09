@@ -2,6 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = [
+    "roleSelect",
     "professionalSelect",
     "hourlyRate",
     "totalRaw",
@@ -11,19 +12,27 @@ export default class extends Controller {
     "basePrice"
   ]
 
-  loadProfessionals(event) {
-    const roleId = event.currentTarget.value
+  loadProfessionals() {
+    const roleId = this.roleSelectTarget.value
+    if (!roleId) return this.clearProfessionals()
+
     fetch(`/roles/${roleId}/professionals.json`)
       .then(r => r.json())
-      .then(data => {
-        this.professionalSelectTarget.innerHTML = "<option></option>"
-        data.forEach(prof => {
-          const opt = document.createElement("option")
-          opt.value = prof.id
-          opt.textContent = prof.name
-          this.professionalSelectTarget.append(opt)
-        })
-      })
+      .then(data => this.populateProfessionals(data))
+      .catch(() => this.clearProfessionals())
+  }
+  
+  populateProfessionals(data) {
+    let html = `<option value="">Selecione Profissional</option>`
+    data.forEach(prof => {
+      html += `<option value="${prof.id}">${prof.full_name}</option>`
+    })
+    this.professionalSelectTarget.innerHTML = html
+  }
+
+  clearProfessionals() {
+    this.professionalSelectTarget.innerHTML =
+      `<option value="">Selecione Profissional</option>`
   }
 
   loadHourlyRate(event) {
