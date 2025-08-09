@@ -3,7 +3,7 @@ source "https://rubygems.org"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.0.2"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
-gem 'propshaft', '~> 1.1'
+gem 'propshaft', '~> 1.2'
 gem 'jsbundling-rails', '~> 1.0', '>= 1.0.2'
 # gem 'sass-rails', '~> 6.0'
 gem 'mini_magick', '~> 4.9', '>= 4.9.5'
