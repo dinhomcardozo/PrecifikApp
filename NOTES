@@ -1,19 +1,56 @@
-Últimas alterações:
-
-09/07
-'quantity_cost' criado na tabela 'subproduct_composition'; Cost é a soma de todos os quantity_cost; 
-
-
+app/assets
+├── builds/                  # saída dos builds de CSS e JS
+│   ├── application.js
+│   └── application.css
+├── javascripts/
+│   └── application.js       # entrypoint ESBuild
+└── stylesheets/
+    ├── application.css      # entrypoint PostCSS/Tailwind
+    ├── variables.css
+    ├── horizontal_menu.css
+    ├── index_pages.css
+    └── products_tabs.css
 ---------------------------
 
 Stack:
   Hotwire + Stimulus + Propshaft com esbuild (27/06/2025)
 
+  Propshaft — Gerenciador moderno de assets do Rails, substitui o Sprockets, servindo arquivos estáticos (CSS, JS, imagens) com cache-busting via digest/hash.
+  
+  esbuild — Empacotador (bundler) de JavaScript e CSS, responsável por processar, minificar e gerar os arquivos finais para produção. Também faz watch para recompilar automaticamente no desenvolvimento.
+  
+  PostCSS — Ferramenta para processar CSS antes de ir para produção (autoprefixer, otimizações e integração com plugins).
+  
+  Tailwind CSS — Framework CSS utilitário, gera classes sob demanda com base no HTML/ERB/JS, permitindo estilização rápida e consistente.
+  
+  Autoprefixer — Plugin PostCSS que adiciona prefixos para compatibilidade entre navegadores.
+  
+  Hotwire (Turbo + Stimulus) — Ferramenta de interatividade sem JavaScript complexo:  
+    Turbo: atualiza páginas e elementos dinamicamente via WebSocket ou requisições leves.
+    Stimulus: adiciona comportamento interativo com controllers JS simples.
+  
+  bin/dev + Procfile.dev — Configuração para rodar Rails e esbuild em paralelo no desenvolvimento, recompilando automaticamente CSS e JS a cada alteração.
+
 A cada alteração em css ou js, rodar:
 
-'npm run build:css' para atualizar 'app/assets/builds/application.css'
-'npm run build:js' para atualizar 'app/assets/builds/application.js'
 
+EStrutura Tailwind
+PrecifikApp/
+├── app/
+│   └── assets/
+│       ├── stylesheets/
+│       │   ├── application.tailwind.css
+│       │   ├── application.css
+│       │   ├── variables.css
+│       │   ├── index_pages.css
+│       │   ├── horizontal_menu.css
+│       │   └── products_tabs.css
+│       └── builds/
+│           └── application.css     ← CSS final gerado pelo Tailwind
+├── tailwind.config.js
+├── postcss.config.js
+├── package.json
+└── Procfile.dev (opcional)
 
 --------------------------------
 

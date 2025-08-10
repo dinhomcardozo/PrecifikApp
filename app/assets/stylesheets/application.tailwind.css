@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import "./variables.css";
+@import "./index_pages.css";
+@import "./horizontal_menu.css";
+@import "./products_tabs.css";

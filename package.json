@@ -1,15 +1,21 @@
 {
+  "name": "precifikapp",
+  "version": "1.0.0",
   "scripts": {
-    "build:js": "esbuild app/javascript/application.js --bundle --target=es2017 --outfile=app/assets/builds/application.js",
-    "build:css": "esbuild app/assets/stylesheets/application.css --bundle --minify --outfile=app/assets/builds/application.css",
+    "postinstall": "curl -L https://github.com/tailwindlabs/tailwindcss/releases/download/v4.1.11/tailwindcss-linux-x64 -o ./node_modules/.bin/tailwindcss && chmod +x ./node_modules/.bin/tailwindcss",
+    "build:css": "tailwindcss -i app/assets/stylesheets/application.css --output app/assets/builds/application.css --minify",
+    "dev:css":   "tailwindcss -i app/assets/stylesheets/application.css --output app/assets/builds/application.css --watch",
+    "build:js": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds",
     "build": "npm run build:js && npm run build:css",
-    "watch:js": "esbuild app/javascript/application.js --bundle --target=es2017 --outfile=app/assets/builds/application.js --watch",
-    "watch:css": "esbuild app/assets/stylesheets/application.css --bundle --outfile=app/assets/builds/application.css --watch",
-    "watch": "npm run watch:js & npm run watch:css",
-    "dev:js": "esbuild app/javascript/application.js --bundle --target=es2017 --outfile=app/assets/builds/application.js --watch"
+    "dev:js": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds --watch",
+    "dev": "npm-run-all --parallel dev:js dev:css"
   },
   "devDependencies": {
-    "esbuild": "^0.25.5"
+    "autoprefixer": "^10.4.21",
+    "esbuild": "^0.25.5",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.5.6",
+    "postcss-import": "^14.1.0"
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
