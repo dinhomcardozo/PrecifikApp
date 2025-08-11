@@ -2,6 +2,9 @@
   <a href="/" class="logo-link">
     <%= image_tag("logo-maxximiza_negativa_oficial.png", width: 120, alt: "Logo MaxximizaApp") %>
   </a>
+    <div>
+        <%= link_to "Dashboards",  services_energies_path, class: "menu-item" %>
+    </div>
 
   <!-- Dropdown Serviços -->
   <div data-controller="dropdown" class="menu-item dropdown">
@@ -14,24 +17,53 @@
     </button>
     <!-- Menu que será mostrado/ocultado -->
     <div data-dropdown-target="menu" class="dropdown-menu">
-      <%= link_to "Services", services_services_path, class: "dropdown-item" %>
-      <%= link_to "Equipments", services_equipments_path, class: "dropdown-item" %>
-      <%= link_to "Roles", services_roles_path, class: "dropdown-item" %>
-      <%= link_to "Professionals", services_professionals_path, class: "dropdown-item" %>
-      <%= link_to "Energies",  services_energies_path, class: "dropdown-item" %>
+      <%= link_to "Serviços", services_services_path, class: "dropdown-item" %>
+      <%= link_to "Equipamentos", services_equipments_path, class: "dropdown-item" %>
+      <%= link_to "Funções", services_roles_path, class: "dropdown-item" %>
+      <%= link_to "Profissionais", services_professionals_path, class: "dropdown-item" %>
+      <%= link_to "Energias",  services_energies_path, class: "dropdown-item" %>
     </div>
   </div>
 
-  <%= link_to "Produtos", products_path, class: "menu-item" %>
-  <%= link_to "Subprodutos", subproducts_path, class: "menu-item" %>
-  <%= link_to "Insumos", inputs_path, class: "menu-item" %>
-</div>
+    <!-- Dropdown Cadastros -->
+  <div data-controller="dropdown" class="menu-item dropdown">
+    <!-- Botão dispara o toggle -->
+    <button data-action="click->dropdown#toggle"
+            class="dropdown-toggle"
+            aria-expanded="false">
+      Produtos
+      <svg class="chevron" width="10" height="6" …></svg>
+    </button>
+    <!-- Menu que será mostrado/ocultado -->
+    <div data-dropdown-target="menu" class="dropdown-menu">
+  <%= link_to "Produtos", products_path, class: "dropdown-item" %>
+  <%= link_to "Subprodutos", subproducts_path, class: "dropdown-item" %>
+  <%= link_to "Insumos", inputs_path, class: "dropdown-item" %>
+    </div>
+  </div>
 
-<div class="submenu-horizontal">
-  <%= link_to "Metas", sales_targets_path, class: "submenu-item" %>
-  <%= link_to "Tributos", taxes_path, class: "submenu-item" %>
-  <%= link_to "Custos", fixed_costs_path, class: "submenu-item" %>
-  <%= link_to "Marcas", brands_path, class: "submenu-item" %>
-  <%= link_to "Tipos de Insumo", input_types_path, class: "submenu-item" %>
-  <%= link_to "Fornecedores", suppliers_path, class: "submenu-item" %>
+    <!-- Dropdown Cadastros -->
+  <div data-controller="dropdown" class="menu-item dropdown">
+    <!-- Botão dispara o toggle -->
+    <button data-action="click->dropdown#toggle"
+            class="dropdown-toggle"
+            aria-expanded="false">
+      Cadastros
+      <svg class="chevron" width="10" height="6" …></svg>
+    </button>
+    <!-- Menu que será mostrado/ocultado -->
+    <div data-dropdown-target="menu" class="dropdown-menu">
+  <%= link_to "Metas de Vendas", sales_targets_path, class: "dropdown-item" %>
+  <%= link_to "Tributos", taxes_path, class: "dropdown-item" %>
+  <%= link_to "Custos Fixos", fixed_costs_path, class: "dropdown-item" %>
+  <%= link_to "Marcas", brands_path, class: "dropdown-item" %>
+  <%= link_to "Tipos de Insumo", input_types_path, class: "dropdown-item" %>
+  <%= link_to "Fornecedores", suppliers_path, class: "dropdown-item" %>
+    </div>
+  </div>
+
+  <div>
+      <%= link_to "Configurações",  services_energies_path, class: "menu-item" %>
+  </div>
+
 </div>

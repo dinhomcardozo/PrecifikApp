@@ -21,69 +21,55 @@
       <%= f.text_field :description, class: "form-control" %>
     </div>
 
-  <div data-controller="service-form">
-    <!-- Role -->
-    <div class="field">
-      <%= f.label :role_id, "Role" %>
-      <%= f.select :role_id,
-                   @roles.map { |r| [r.description, r.id] },
-                   { prompt: "Selecione Role" },
-                   class: "form-control",
-                   data: {
-                     "service-form-target": "roleSelect",
-                     action:                "change->service-form#loadProfessionals"
-                   } %>
-    </div>
-
     <!-- Professional -->
-    <div class="field">
-      <%= f.label :professional_id, "Profissional" %>
-      <%= f.select :professional_id,
-                   [],  # inicia vazio
-                   { prompt: "Selecione Profissional" },
-                   class: "form-control",
-                   data: {
-                     "service-form-target": "professionalSelect",
-                     action:                "change->service-form#loadHourlyRate"
-                   } %>
-    </div>
+    <div class="field" data-controller="service-form">
+  <div class="field">
+    <%= f.label :professional_id, "Profissional" %>
+    <%= f.select :professional_id,
+                 @professionals.map { |p| [p.full_name, p.id] },
+                 { prompt: "Selecione Profissional" },
+                 class: "form-control",
+                 data: {
+                   action:                "change->service-form#loadHourlyRate",
+                   "service-form-target":  "professionalSelect"
+                 } %>
   </div>
 
     <!-- Hourly rate (readonly) -->
     <div class="field">
       <%= f.label :hourly_rate, "Hourly Rate (R$)" %>
       <%= f.number_field :hourly_rate,
-                         readonly: true,
-                         class: "form-control",
-                         data: { target: "service-form.hourlyRate" } %>
+                        readonly: true,
+                        class: "form-control",
+                        data: { "service-form-target": "hourlyRate" } %>
     </div>
 
     <!-- Total Hours bruto (DD:HH:MM:SS) -->
     <div class="field">
       <%= f.label :total_hours_raw, "Total Hours (DD:HH:MM:SS)" %>
       <%= f.text_field :total_hours_raw,
-                       placeholder: "00:00:00:00",
-                       class: "form-control",
-                       data: {
-                         target: "service-form.totalRaw",
-                         action: "blur->service-form#parseTotalHours"
-                       } %>
+                      placeholder: "00:DD:HH:MM:SS",
+                      class: "form-control",
+                      data: {
+                        "service-form-target": "totalRaw",
+                        action:                 "blur->service-form#parseTotalHours"
+                      } %>
     </div>
 
     <!-- Total Hours decimal (hidden) -->
     <%= f.hidden_field :total_hours,
-                       data: { target: "service-form.totalDecimal" } %>
+                      data: { "service-form-target": "totalDecimal" } %>
 
     <!-- Tax (%) -->
     <div class="field">
       <%= f.label :tax, "Tax (%)" %>
-      <%= f.number_field :tax,
-                         step: 0.01,
-                         class: "form-control",
-                         data: {
-                           target: "service-form.tax",
-                           action: "input->service-form#computeBasePrice"
-                         } %>
+      <%= f.number_field :profit_margin,
+                        step: 0.01,
+                        class: "form-control",
+                        data: {
+                          "service-form-target": "profit",
+                          action:                 "input->service-form#computeBasePrice"
+                        } %>
     </div>
 
     <!-- Profit Margin (%) -->
@@ -102,9 +88,9 @@
     <div class="field">
       <%= f.label :service_price, "Service Price (R$)" %>
       <%= f.number_field :service_price,
-                         readonly: true,
-                         class: "form-control",
-                         data: { target: "service-form.basePrice" } %>
+                        readonly: true,
+                        class: "form-control",
+                        data: { "service-form-target": "basePrice" } %>
     </div>
   </div>
 

@@ -1,8 +1,7 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static targets = [
-    "roleSelect",
     "professionalSelect",
     "hourlyRate",
     "totalRaw",
@@ -10,58 +9,59 @@ export default class extends Controller {
     "tax",
     "profit",
     "basePrice"
-  ]
+  ];
 
-  loadProfessionals() {
-    const roleId = this.roleSelectTarget.value
-    if (!roleId) return this.clearProfessionals()
+  // 1) Ao mudar o select de profissionais
+  loadHourlyRate() {
+    const id = this.professionalSelectTarget.value;
+    if (!id) {
+      this.hourlyRateTarget.value = "";
+      return;
+    }
 
-    fetch(`/roles/${roleId}/professionals.json`)
-      .then(r => r.json())
-      .then(data => this.populateProfessionals(data))
-      .catch(() => this.clearProfessionals())
-  }
-  
-  populateProfessionals(data) {
-    let html = `<option value="">Selecione Profissional</option>`
-    data.forEach(prof => {
-      html += `<option value="${prof.id}">${prof.full_name}</option>`
+    fetch(`/services/professionals/${id}.json`, {
+      headers: { Accept: "application/json" }
     })
-    this.professionalSelectTarget.innerHTML = html
-  }
-
-  clearProfessionals() {
-    this.professionalSelectTarget.innerHTML =
-      `<option value="">Selecione Profissional</option>`
-  }
-
-  loadHourlyRate(event) {
-    const profId = event.currentTarget.value
-    fetch(`/professionals/${profId}.json`)
       .then(r => r.json())
       .then(data => {
-        this.hourlyRateTarget.value = data.hourly_rate
-        this.computeBasePrice()
+        this.hourlyRateTarget.value = data.hourly_rate;
       })
+      .catch(() => {
+        this.hourlyRateTarget.value = "";
+      });
   }
 
+  // 2) Ao perder o foco no campo bruto de horas
   parseTotalHours() {
-    const [d, h, m, s] = this.totalRawTarget.value
-      .split(":").map(Number)
-    if ([d,h,m,s].some(isNaN)) return
-    const decimal = d * 24 + h + m / 60 + s / 3600
-    this.totalDecimalTarget.value = decimal.toFixed(4)
-    this.computeBasePrice()
+    const raw = this.totalRawTarget.value.trim(); 
+    // espera DD:HH:MM:SS  
+    const parts = raw.split(":").map(v => parseInt(v, 10));
+    if (parts.length !== 4 || parts.some(isNaN)) {
+      this.totalDecimalTarget.value = "";
+      this.computeBasePrice();
+      return;
+    }
+
+    const [days, hrs, mins, secs] = parts;
+    let total = days * 24 + hrs + mins / 60 + secs / 3600;
+    total = parseFloat(total.toFixed(2)); // 2 casas decimais
+
+    this.totalDecimalTarget.value = total;
+    this.computeBasePrice();
   }
 
+  // 3) Recalcula o preço base com hourlyRate, hours, tax e profit
   computeBasePrice() {
-    const rate    = parseFloat(this.hourlyRateTarget.value) || 0
-    const hours   = parseFloat(this.totalDecimalTarget.value) || 0
-    const taxPerc = parseFloat(this.taxTarget.value) / 100 || 0
-    const profPerc= parseFloat(this.profitTarget.value) / 100 || 0
+    const hr    = parseFloat(this.hourlyRateTarget.value)   || 0;
+    const hrs   = parseFloat(this.totalDecimalTarget.value) || 0;
+    const tax   = parseFloat(this.taxTarget.value)          || 0;
+    const prof  = parseFloat(this.profitTarget.value)       || 0;
 
-    const base = rate * hours
-    const price = base + base * taxPerc + base * profPerc
-    this.basePriceTarget.value = price.toFixed(2)
+    let price = hr * hrs;
+    price *= 1 + tax   / 100;
+    price *= 1 + prof  / 100;
+    price = price.toFixed(2);
+
+    this.basePriceTarget.value = isNaN(price) ? "" : price;
   }
 }

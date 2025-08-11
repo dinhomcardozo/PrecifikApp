@@ -18,10 +18,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :roles, only: [] do
-    resources :professionals, only: [:index]
-  end
-
   namespace :sales do
     resources :clients
 

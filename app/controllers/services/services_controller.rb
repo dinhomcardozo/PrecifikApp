@@ -1,6 +1,7 @@
 module Services
   class ServicesController < ApplicationController
-    before_action :set_service, only: %i[ show edit update destroy ]
+    before_action :set_service,        only: %i[show edit update destroy]
+    before_action :load_collections,   only: %i[new edit create update]
 
     def index
       @services = Service.all
@@ -10,13 +11,14 @@ module Services
     end
 
     def new
-      @service = Service.new
-      %i[
-        service_inputs service_subproducts service_products
-        service_energies service_equipments
-      ].each { |assoc| @service.send(assoc).build }
-      @roles   = Role.all
-      @available_inputs = Input.all
+      @service = Services::Service.new
+      @service.service_inputs.build
+      @professionals = Professional.order(:full_name)
+    end
+
+    def edit
+      @service = Services::Service.find(params[:id])
+      @professionals = Professional.order(:full_name)
     end
 
     def create
@@ -26,10 +28,6 @@ module Services
       else
         render :new
       end
-    end
-
-
-    def edit
     end
 
     def update
@@ -56,7 +54,16 @@ module Services
     private
       # Use callbacks to share common setup or constraints between actions.
       def set_service
-        @service = Service.find(params.expect(:id))
+        @service = Services::Service.find(params[:id])
+      end
+
+      def load_collections
+        @professionals     = Professional.order(:full_name)
+        @available_inputs  = Input.order(:name)
+        @available_equipments = Equipment.order(:description)
+        @available_energies   = Energy.order(:description)
+        @available_products   = Product.order(:description)
+        @available_subproducts = Subproduct.order(:name)
       end
 
       # Only allow a list of trusted parameters through.

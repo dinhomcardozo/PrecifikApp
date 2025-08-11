@@ -9,8 +9,12 @@ module Services
 
     # GET /services/professionals/:id
     def show
+      prof = Professional.find(params[:id])
+      respond_to do |format|
+        format.json { render json: { hourly_rate: prof.hourly_rate } }
+      end
     end
-
+    
     # GET /services/professionals/new
     def new
       @professional = Services::Professional.new
