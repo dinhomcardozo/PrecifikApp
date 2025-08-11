@@ -68,15 +68,17 @@ module Services
 
       # Only allow a list of trusted parameters through.
     def service_params
-      params.require(:service).permit(
-        :description, :role_id, :professional_id,
-        :total_hours_raw, :tax, :profit_margin,
-        service_inputs_attributes:      %i[id input_id quantity_for_service cost _destroy],
-        service_subproducts_attributes: %i[id subproduct_id quantity_for_service cost _destroy],
-        service_products_attributes:    %i[id product_id quantity_for_service cost _destroy],
-        service_energies_attributes:    %i[id energy_id hours_per_service cost _destroy],
-        service_equipments_attributes:  %i[id equipment_id hours_per_service cost _destroy]
-      )
+      params
+        .require(:services_service)    # <-- mudou de :service
+        .permit(
+          :description, :role_id, :professional_id,
+          :total_hours_raw, :tax, :profit_margin,
+          service_inputs_attributes:      %i[id input_id quantity_for_service cost _destroy],
+          service_subproducts_attributes: %i[id subproduct_id quantity_for_service cost _destroy],
+          service_products_attributes:    %i[id product_id quantity_for_service cost _destroy],
+          service_energies_attributes:    %i[id energy_id hours_per_service cost _destroy],
+          service_equipments_attributes:  %i[id equipment_id hours_per_service cost _destroy]
+        )
     end
   end
 end

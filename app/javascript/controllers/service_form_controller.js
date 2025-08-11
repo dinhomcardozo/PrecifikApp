@@ -33,9 +33,9 @@ export default class extends Controller {
 
   // 2) Ao perder o foco no campo bruto de horas
   parseTotalHours() {
-    const raw = this.totalRawTarget.value.trim(); 
-    // espera DD:HH:MM:SS  
+    const raw = this.totalRawTarget.value.trim();
     const parts = raw.split(":").map(v => parseInt(v, 10));
+
     if (parts.length !== 4 || parts.some(isNaN)) {
       this.totalDecimalTarget.value = "";
       this.computeBasePrice();
@@ -44,7 +44,7 @@ export default class extends Controller {
 
     const [days, hrs, mins, secs] = parts;
     let total = days * 24 + hrs + mins / 60 + secs / 3600;
-    total = parseFloat(total.toFixed(2)); // 2 casas decimais
+    total = parseFloat(total.toFixed(2));
 
     this.totalDecimalTarget.value = total;
     this.computeBasePrice();
@@ -58,10 +58,8 @@ export default class extends Controller {
     const prof  = parseFloat(this.profitTarget.value)       || 0;
 
     let price = hr * hrs;
-    price *= 1 + tax   / 100;
-    price *= 1 + prof  / 100;
-    price = price.toFixed(2);
-
-    this.basePriceTarget.value = isNaN(price) ? "" : price;
+    price *= 1 + tax  / 100;
+    price *= 1 + prof / 100;
+    this.basePriceTarget.value = isNaN(price) ? "" : price.toFixed(2);
   }
 }
