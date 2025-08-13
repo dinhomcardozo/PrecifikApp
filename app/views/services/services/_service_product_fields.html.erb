@@ -1,0 +1,33 @@
+<div data-service-nested-form-target="item" class="nested-fields" style="margin-bottom: 0.5rem;">
+  <div class="field">
+    <%= f.label :product_id, "Product" %>
+    <%= f.collection_select :product_id,
+                            @available_products,
+                            :id,
+                            :description,
+                            { prompt: "Selecione Product" },
+                            class: "form-control",
+                            data: { action: "change->service-nested-form#loadCost" } %>
+  </div>
+
+  <div class="field">
+    <%= f.label :quantity_for_service, "Quantidade (g)" %>
+    <%= f.number_field :quantity_for_service,
+                       step: 0.01,
+                       class: "form-control",
+                       data: { action: "input->service-nested-form#updateCost" } %>
+  </div>
+
+  <div class="field">
+    <%= f.label :cost, "Cost (R$)" %>
+    <%= f.number_field :cost,
+                       readonly: true,
+                       class: "form-control",
+                       data: { target: "service-nested-form.cost" } %>
+  </div>
+
+  <%= f.hidden_field :_destroy, class: "destroy-flag" %>
+  <%= link_to "Remover", "#",
+              class: "btn btn-sm btn-danger",
+              data: { action: "service-nested-form#remove" } %>
+</div>

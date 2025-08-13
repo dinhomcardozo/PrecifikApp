@@ -24,7 +24,7 @@ module Services
     def create
       @service = Service.new(service_params)
       if @service.save
-        redirect_to @service, notice: "Service criado com sucesso!"
+        redirect_to @service, notice: "Serviço criado com sucesso"
       else
         render :new
       end
@@ -69,10 +69,19 @@ module Services
       # Only allow a list of trusted parameters through.
     def service_params
       params
-        .require(:services_service)    # <-- mudou de :service
+        .require(:service)
         .permit(
-          :description, :role_id, :professional_id,
-          :total_hours_raw, :tax, :profit_margin,
+          :description,
+          :role_id,
+          :professional_id,
+          :hourly_rate,
+          :total_hours_raw, 
+          :total_hours,
+          :tax,
+          :profit_margin,
+          :service_price,  
+          :service_items_cost,
+          :final_service_price,
           service_inputs_attributes:      %i[id input_id quantity_for_service cost _destroy],
           service_subproducts_attributes: %i[id subproduct_id quantity_for_service cost _destroy],
           service_products_attributes:    %i[id product_id quantity_for_service cost _destroy],

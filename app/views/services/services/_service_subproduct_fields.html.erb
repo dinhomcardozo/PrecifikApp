@@ -1,0 +1,34 @@
+<!-- app/views/services/services/_service_subproduct_fields.html.erb -->
+<div data-service-nested-form-target="item" class="nested-fields">
+  <div class="field">
+    <%= f.label :subproduct_id, "Subproduct" %>
+    <%= f.collection_select :subproduct_id,
+                            @available_subproducts,
+                            :id,
+                            :name,
+                            { prompt: "Selecione Subproduct" },
+                            class: "form-control",
+                            data: { action: "change->service-nested-form#loadCost" } %>
+  </div>
+
+  <div class="field">
+    <%= f.label :quantity_for_service, "Quantidade (g)" %>
+    <%= f.number_field :quantity_for_service,
+                       step: 0.01,
+                       class: "form-control",
+                       data: { action: "input->service-nested-form#updateCost" } %>
+  </div>
+
+  <div class="field">
+    <%= f.label :cost, "Cost (R$)" %>
+    <%= f.number_field :cost,
+                       readonly: true,
+                       class: "form-control",
+                       data: { target: "service-nested-form.cost" } %>
+  </div>
+
+  <%= f.hidden_field :_destroy, class: "destroy-flag" %>
+  <%= link_to "Remover", "#",
+              class: "btn btn-sm btn-danger",
+              data: { action: "service-nested-form#remove" } %>
+</div>

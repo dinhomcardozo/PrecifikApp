@@ -14,6 +14,14 @@
       </div>
     <% end %>
 
+    <% if @service.errors.any? %>
+      <ul>
+        <% @service.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    <% end %>
+
     <div class="form-inputs">
 
       <!-- Descrição -->
@@ -96,7 +104,9 @@
 
     <hr>
 
-    <h3>Itens Utilizados</h3>
+    <h2>Itens Utilizados</h2>
+
+    <h3>Insumos Utilizados</h3>
 
     <div
       data-controller="service-nested-form"
@@ -121,6 +131,107 @@
             class: "action-button",
             data: { action: "service-nested-form#add" } %>
     </div>
+
+    <hr>
+    <h3>Subprodutos Utilizados</h3>
+
+    <div
+      data-controller="service-nested-form"
+      data-service-nested-form-association-value="service_subproducts"
+    >
+      <div data-service-nested-form-target="items">
+        <%= f.fields_for :service_subproducts do |ff| %>
+          <%= render "services/services/service_subproduct_fields", f: ff %>
+        <% end %>
+      </div>
+      <template data-service-nested-form-target="template">
+        <%= f.fields_for :service_subproducts, Services::ServiceSubproduct.new, child_index: "NEW_SERVICE_SUBPRODUCT" do |ff| %>
+          <%= render "services/services/service_subproduct_fields", f: ff %>
+        <% end %>
+      </template>
+      <%= link_to "Adicionar Subproduto", "#", class: "action-button",
+                  data: { action: "service-nested-form#add" } %>
+    </div>
+
+    <hr>
+
+    <h3>Produtos Utilizados</h3>
+
+    <div
+      data-controller="service-nested-form"
+      data-service-nested-form-association-value="service_products"
+    >
+      <div data-service-nested-form-target="items">
+        <%= f.fields_for :service_products do |ff| %>
+          <%= render "services/services/service_product_fields", f: ff %>
+        <% end %>
+      </div>
+
+      <template data-service-nested-form-target="template">
+        <%= f.fields_for :service_products,
+                        Services::ServiceProduct.new,
+                        child_index: "NEW_SERVICE_PRODUCT" do |ff| %>
+          <%= render "services/services/service_product_fields", f: ff %>
+        <% end %>
+      </template>
+
+      <%= link_to "Adicionar Product", "#",
+            class: "action-button",
+            data: { action: "service-nested-form#add" } %>
+    </div>
+
+    <hr>
+    <h3>Energias Utilizadas</h3>
+
+    <div
+      data-controller="service-nested-form"
+      data-service-nested-form-association-value="service_energies"
+    >
+      <div data-service-nested-form-target="items">
+        <%= f.fields_for :service_energies do |ff| %>
+          <%= render "services/services/service_energy_fields", f: ff %>
+        <% end %>
+      </div>
+
+      <template data-service-nested-form-target="template">
+        <%= f.fields_for :service_energies,
+                        Services::ServiceEnergy.new,
+                        child_index: "NEW_SERVICE_ENERGY" do |ff| %>
+          <%= render "services/services/service_energy_fields", f: ff %>
+        <% end %>
+      </template>
+
+      <%= link_to "Adicionar Energy", "#",
+            class: "action-button",
+            data: { action: "service-nested-form#add" } %>
+    </div>
+
+    <hr>
+    <h3>Equipamentos Utilizados</h3>
+
+    <div
+      data-controller="service-nested-form"
+      data-service-nested-form-association-value="service_equipments"
+    >
+      <div data-service-nested-form-target="items">
+        <%= f.fields_for :service_equipments do |ff| %>
+          <%= render "services/services/service_equipment_fields", f: ff %>
+        <% end %>
+      </div>
+
+      <template data-service-nested-form-target="template">
+        <%= f.fields_for :service_equipments,
+                        Services::ServiceEquipment.new,
+                        child_index: "NEW_SERVICE_EQUIPMENT" do |ff| %>
+          <%= render "services/services/service_equipment_fields", f: ff %>
+        <% end %>
+      </template>
+
+      <%= link_to "Adicionar Equipment", "#",
+            class: "action-button",
+            data: { action: "service-nested-form#add" } %>
+    </div>
+
 
     <div class="form-actions" style="margin-top: 1rem;">
       <%= f.submit "Salvar Service", class: "standart-button" %>

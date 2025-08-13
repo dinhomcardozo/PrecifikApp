@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_05_235322) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_12_214428) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -291,11 +291,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_05_235322) do
     t.string "description"
     t.bigint "role_id", null: false
     t.integer "total_seconds"
-    t.float "tax_percent"
-    t.float "profit_margin_percent"
+    t.float "tax"
+    t.float "profit_margin"
     t.decimal "final_price"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "professional_id", null: false
+    t.float "total_hours", null: false
+    t.decimal "service_items_cost", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "service_price", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "final_service_price", precision: 10, scale: 2, default: "0.0", null: false
+    t.index ["professional_id"], name: "index_services_on_professional_id"
     t.index ["role_id"], name: "index_services_on_role_id"
   end
 
@@ -367,6 +373,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_05_235322) do
   add_foreign_key "service_professionals", "services"
   add_foreign_key "service_subproducts", "services"
   add_foreign_key "service_subproducts", "subproducts"
+  add_foreign_key "services", "professionals"
   add_foreign_key "services", "roles"
   add_foreign_key "subproduct_compositions", "inputs"
   add_foreign_key "subproduct_compositions", "subproducts"

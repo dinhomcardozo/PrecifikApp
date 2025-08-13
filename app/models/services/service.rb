@@ -15,13 +15,14 @@ module Services
     has_many   :service_energies,    inverse_of: :service, dependent: :destroy
     has_many   :service_equipments,  inverse_of: :service, dependent: :destroy
 
-    accepts_nested_attributes_for :service_inputs,      allow_destroy: true
-    accepts_nested_attributes_for :service_subproducts, allow_destroy: true
-    accepts_nested_attributes_for :service_products,    allow_destroy: true
-    accepts_nested_attributes_for :service_energies,    allow_destroy: true
-    accepts_nested_attributes_for :service_equipments,  allow_destroy: true
+    accepts_nested_attributes_for :service_inputs,      allow_destroy: true, reject_if: :all_blank
+    accepts_nested_attributes_for :service_subproducts, allow_destroy: true, reject_if: :all_blank
+    accepts_nested_attributes_for :service_products,    allow_destroy: true, reject_if: :all_blank
+    accepts_nested_attributes_for :service_energies,    allow_destroy: true, reject_if: :all_blank
+    accepts_nested_attributes_for :service_equipments,  allow_destroy: true, reject_if: :all_blank
     # Atributo “virtual” para entrada no formato DD:HH:MM:SS
-    attr_accessor :total_hours_raw
+    attr_accessor :total_hours_raw,
+                  :hourly_rate
 
     before_validation :parse_total_hours_raw
     before_save       :compute_items_costs, :compute_final_price

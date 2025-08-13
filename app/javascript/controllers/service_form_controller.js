@@ -8,10 +8,15 @@ export default class extends Controller {
     "totalDecimal",
     "tax",
     "profit",
-    "basePrice"
+    "basePrice",
+    "itemsCost", 
+    "finalPrice"
   ];
 
-  // 1) Ao mudar o select de profissionais
+  connect() {
+    this.element.addEventListener("nested-costs-changed", () => this.computeBasePrice());
+  }
+
   loadHourlyRate() {
     const id = this.professionalSelectTarget.value;
     if (!id) {
@@ -23,17 +28,12 @@ export default class extends Controller {
       headers: { Accept: "application/json" }
     })
       .then(r => r.json())
-      .then(data => {
-        this.hourlyRateTarget.value = data.hourly_rate;
-      })
-      .catch(() => {
-        this.hourlyRateTarget.value = "";
-      });
+      .then(data => { this.hourlyRateTarget.value = data.hourly_rate; })
+      .catch(() => { this.hourlyRateTarget.value = ""; });
   }
 
-  // 2) Ao perder o foco no campo bruto de horas
   parseTotalHours() {
-    const raw = this.totalRawTarget.value.trim();
+    const raw   = this.totalRawTarget.value.trim();
     const parts = raw.split(":").map(v => parseInt(v, 10));
 
     if (parts.length !== 4 || parts.some(isNaN)) {
@@ -44,22 +44,27 @@ export default class extends Controller {
 
     const [days, hrs, mins, secs] = parts;
     let total = days * 24 + hrs + mins / 60 + secs / 3600;
-    total = parseFloat(total.toFixed(2));
-
-    this.totalDecimalTarget.value = total;
+    this.totalDecimalTarget.value = parseFloat(total.toFixed(2));
     this.computeBasePrice();
   }
 
-  // 3) Recalcula o preço base com hourlyRate, hours, tax e profit
   computeBasePrice() {
     const hr    = parseFloat(this.hourlyRateTarget.value)   || 0;
     const hrs   = parseFloat(this.totalDecimalTarget.value) || 0;
     const tax   = parseFloat(this.taxTarget.value)          || 0;
     const prof  = parseFloat(this.profitTarget.value)       || 0;
 
-    let price = hr * hrs;
-    price *= 1 + tax  / 100;
-    price *= 1 + prof / 100;
-    this.basePriceTarget.value = isNaN(price) ? "" : price.toFixed(2);
+    // Cálculo da mão de obra
+    const labour = hr * hrs * (1 + tax/100) * (1 + prof/100);
+
+    // Soma de todos os costs dos nested forms
+    const itemsCost = Array.from(
+      this.element.querySelectorAll("[data-service-nested-form-target='cost']")
+    ).reduce((sum, el) => sum + (parseFloat(el.value) || 0), 0);
+
+    // Atualiza campos
+    this.basePriceTarget.value  = labour.toFixed(2);
+    this.itemsCostTarget.value  = itemsCost.toFixed(2);
+    this.finalPriceTarget.value = (labour + itemsCost).toFixed(2);
   }
 }
