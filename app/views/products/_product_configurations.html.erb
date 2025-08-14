@@ -16,6 +16,17 @@
                             required: true %>
   </div>
 
+  <div class="col-md-3 mb-3">
+    <%= f.label :category_id, "Categoria" %>
+    <%= f.collection_select :category_id,
+                            Category.all,
+                            :id,
+                            :name,
+                            { prompt: "Selecione Categoria" },
+                            class: "form-select",
+                            required: true %>
+  </div>
+
   <div class="col-md-6 mb-3">
     <%= f.label :image, "Imagem", style: "display: block" %>
     <%= f.file_field :image %>

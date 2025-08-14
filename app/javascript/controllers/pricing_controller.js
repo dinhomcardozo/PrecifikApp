@@ -23,18 +23,23 @@ export default class extends Controller {
 
   // Preenche os campos de alíquotas a partir do dataset JSON do <select>
   fillTaxFields() {
-    const opt = this.taxSelectTarget.selectedOptions[0]
-    if (!opt) return
-    const tax = JSON.parse(opt.dataset.json || "{}")
+  const opt  = this.taxSelectTarget.selectedOptions[0]
+  if (!opt) return
+  const tax  = JSON.parse(opt.dataset.json || "{}")
 
-    this.icmsTarget.value       = (tax.icms || 0).toFixed(2)
-    this.ipiTarget.value        = (tax.ipi || 0).toFixed(2)
-    this.pis_cofinsTarget.value = (tax.pis_cofins || 0).toFixed(2)
-    this.difalTarget.value      = (tax.difal || 0).toFixed(2)
-    this.issTarget.value        = (tax.iss || 0).toFixed(2)
-    this.cbsTarget.value        = (tax.cbs || 0).toFixed(2)
-    this.ibsTarget.value        = (tax.ibs || 0).toFixed(2)
+  const format = val => {
+    const n = parseFloat(val)
+    return isNaN(n) ? "0.00" : n.toFixed(2)
   }
+
+  this.icmsTarget.value       = format(tax.icms)
+  this.ipiTarget.value        = format(tax.ipi)
+  this.pis_cofinsTarget.value = format(tax.pis_cofins)
+  this.difalTarget.value      = format(tax.difal)
+  this.issTarget.value        = format(tax.iss)
+  this.cbsTarget.value        = format(tax.cbs)
+  this.ibsTarget.value        = format(tax.ibs)
+}
 
   // Recalcula todos os valores derivados
   recalculate() {

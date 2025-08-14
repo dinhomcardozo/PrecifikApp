@@ -34,6 +34,9 @@ end
   def recalculate_totals
     self.weight_in_grams = subproduct_compositions.sum(&:quantity_for_a_unit).to_f
     self.cost            = subproduct_compositions.sum(&:quantity_cost).to_f.round(2)
+    # 3) peso final após perda (%)
+    ratio      = (100.0 - (weight_loss.to_f)).clamp(0.0, 100.0) / 100.0
+    self.final_weight = (weight_in_grams * ratio).round(4)
   end
 
   def refresh_product_compositions

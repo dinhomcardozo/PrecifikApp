@@ -37,6 +37,22 @@
         <% end %>
       </template>
     </div>
+
+    <div class="field">
+      <%= f.label :weight_loss, "Perda de Peso (%)" %>
+      <%= f.number_field :weight_loss,
+                        step: 0.01,
+                        value: f.object.weight_loss || 0,
+                        class: "form-control" %>
+    </div>
+
+    <div class="field">
+      <%= f.label :final_weight, "Peso Final (g)" %>
+      <%= f.number_field :final_weight,
+                        readonly: true,
+                        class: "form-control",
+                        value: f.object.final_weight %>
+    </div>
                           
     <a href="#"
        class="action-button"

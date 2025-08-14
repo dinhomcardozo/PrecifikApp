@@ -44,7 +44,7 @@ class SubproductsController < ApplicationController
 
   def subproduct_params
     params.require(:subproduct).permit(
-      :name, :brand_id,
+      :name, :brand_id, :weight_loss,
       subproduct_compositions_attributes: %i[
         id input_id quantity_for_a_unit quantity_cost _destroy
       ]

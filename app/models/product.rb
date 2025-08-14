@@ -1,6 +1,7 @@
 class Product < ApplicationRecord
   belongs_to :brand, optional: false
   belongs_to :tax,   optional: true
+  belongs_to :category, optional: true
   has_one :sales_target,
           inverse_of: :product,
           dependent: :destroy
@@ -16,6 +17,7 @@ class Product < ApplicationRecord
            prefix: false,
            allow_nil: true
 
+  before_save :recalculate_weights, if: :product_subproducts_changed?
   before_validation :calculate_pricing, if: :pricing_attributes_changed?
 
   after_save :store_total_cost, if: :product_subproducts_changed?
@@ -123,5 +125,16 @@ class Product < ApplicationRecord
 
   def product_subproducts_changed?
     product_subproducts.any?(&:saved_change_to_cost?)
+    product_subproducts.any?(&:saved_change_to_quantity?)
+  end
+
+  def recalculate_weights
+    # 1) total bruto em g
+    total = product_subproducts.sum(&:quantity).to_f
+
+    # 2) peso final considerando perda
+    ratio        = (100.0 - weight_loss.to_f).clamp(0.0, 100.0) / 100.0
+    self.total_weight = total.round(4)
+    self.final_weight = (total * ratio).round(4)
   end
 end

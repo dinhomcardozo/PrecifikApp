@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :categories
   namespace :services do
     resources :equipments, shallow: true
     resources :energies, shallow: true

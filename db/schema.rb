@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_12_214428) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_14_025031) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -43,6 +43,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_12_214428) do
   end
 
   create_table "brands", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "categories", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -148,7 +154,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_12_214428) do
     t.decimal "total_cost_with_taxes"
     t.decimal "total_cost_with_fixed_costs", default: "0.0", null: false
     t.string "image"
+    t.bigint "category_id"
+    t.decimal "weight_loss", default: "0.0"
+    t.decimal "final_weight", default: "0.0"
     t.index ["brand_id"], name: "index_products_on_brand_id"
+    t.index ["category_id"], name: "index_products_on_category_id"
     t.index ["tax_id"], name: "index_products_on_tax_id"
   end
 
@@ -324,6 +334,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_12_214428) do
     t.bigint "brand_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "weight_loss", default: "0.0"
+    t.decimal "final_weight", default: "0.0"
     t.index ["brand_id"], name: "index_subproducts_on_brand_id"
   end
 
@@ -356,6 +368,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_12_214428) do
   add_foreign_key "product_subproducts", "products"
   add_foreign_key "product_subproducts", "subproducts"
   add_foreign_key "products", "brands"
+  add_foreign_key "products", "categories"
   add_foreign_key "products", "taxes"
   add_foreign_key "professionals", "roles"
   add_foreign_key "sales_orders", "sales_quotes"

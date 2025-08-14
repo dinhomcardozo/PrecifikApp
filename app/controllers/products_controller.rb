@@ -97,6 +97,7 @@ class ProductsController < ApplicationController
     params.require(:product).permit(
       :description,
       :brand_id,
+      :category_id,
       :image,
       :tax_id,
       :profit_margin_wholesale,
@@ -104,6 +105,7 @@ class ProductsController < ApplicationController
       :total_cost_with_taxes,
       :suggested_price_retail,
       :suggested_price_wholesale,
+      :weight_loss,
       product_subproducts_attributes: %i[
         id
         subproduct_id
