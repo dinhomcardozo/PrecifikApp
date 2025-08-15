@@ -37,8 +37,18 @@
         <% end %>
       </template>
     </div>
+                          
+    <a href="#"
+       class="action-button"
+       data-turbo="false"
+       data-action="click->nested-form#addField"
+       data-template-id="composition-fields-template">
+      Adicionar Insumo
+    </a>
 
-    <div class="field">
+    <hr>
+
+      <div class="field">
       <%= f.label :weight_loss, "Perda de Peso (%)" %>
       <%= f.number_field :weight_loss,
                         step: 0.01,
@@ -53,14 +63,8 @@
                         class: "form-control",
                         value: f.object.final_weight %>
     </div>
-                          
-    <a href="#"
-       class="action-button"
-       data-turbo="false"
-       data-action="click->nested-form#addField"
-       data-template-id="composition-fields-template">
-      Adicionar Insumo
-    </a>
+
+    <hr>
 
 <br>
     <div class="mt-4">

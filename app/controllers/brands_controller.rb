@@ -13,6 +13,7 @@ class BrandsController < ApplicationController
 
   def create
     @brand = Brand.new(brand_params)
+    puts params[:brand].inspect
 
     if @brand.save
       redirect_to brands_path, notice: "Marca criada com sucesso."
@@ -27,6 +28,7 @@ class BrandsController < ApplicationController
 
   def update
     @brand = Brand.find(params[:id])
+    puts params[:brand].inspect
 
     if @brand.update(brand_params)
       redirect_to brands_path, notice: "Marca atualizada com sucesso."
@@ -38,6 +40,6 @@ class BrandsController < ApplicationController
   private
 
   def brand_params
-    params.require(:brand).permit(:name)
+    params.require(:brand).permit(:name, :main_brand)
   end
 end

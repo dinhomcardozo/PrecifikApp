@@ -4,6 +4,7 @@ class ProductsController < ApplicationController
   before_action :set_product, only: %i[show edit update destroy]
   before_action :build_subproducts, only: %i[new edit]
   before_action :set_sales_target_active_sum, only: %i[edit update]
+  before_action :set_main_brands, only: %i[new edit create update]
 
   def index
     @products = Product.includes(:sales_target).all
@@ -11,6 +12,7 @@ class ProductsController < ApplicationController
 
   def new
     @product = Product.new
+    @main_brands = Brand.main_brands.order(:name)
     2.times { @product.product_subproducts.build }
   end
 
@@ -65,7 +67,9 @@ class ProductsController < ApplicationController
     end
   end
 
-  def edit; end
+  def edit
+    @main_brands = Brand.main_brands.order(:name)
+  end
 
   def show; end
 
@@ -93,6 +97,10 @@ class ProductsController < ApplicationController
       SalesTarget
         .where("start_date <= ? AND end_date >= ?", Date.current, Date.current)
         .sum(:monthly_target)
+  end
+
+  def set_main_brands
+    @main_brands = Brand.main_brands.order(:name)
   end
 
   def product_params
