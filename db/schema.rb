@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_14_025031) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_15_025826) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -134,6 +134,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_14_025031) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.decimal "cost", default: "0.0", null: false
+    t.decimal "cost_per_gram_with_loss"
     t.index ["product_id"], name: "index_product_subproducts_on_product_id"
     t.index ["subproduct_id"], name: "index_product_subproducts_on_subproduct_id"
   end
@@ -141,18 +142,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_14_025031) do
   create_table "products", force: :cascade do |t|
     t.text "description"
     t.float "total_weight"
-    t.float "total_cost"
-    t.float "profit_margin_retail"
-    t.float "profit_margin_wholesale"
+    t.decimal "total_cost", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "profit_margin_retail", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "profit_margin_wholesale", precision: 10, scale: 2, default: "0.0", null: false
     t.bigint "brand_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "tax_id"
     t.decimal "total_taxes"
-    t.decimal "suggested_price_retail", precision: 12, scale: 2, default: "0.0", null: false
-    t.decimal "suggested_price_wholesale", precision: 12, scale: 2, default: "0.0", null: false
-    t.decimal "total_cost_with_taxes"
-    t.decimal "total_cost_with_fixed_costs", default: "0.0", null: false
+    t.decimal "suggested_price_retail", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "suggested_price_wholesale", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "total_cost_with_taxes", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "total_cost_with_fixed_costs", precision: 10, scale: 2, default: "0.0", null: false
     t.string "image"
     t.bigint "category_id"
     t.decimal "weight_loss", default: "0.0"

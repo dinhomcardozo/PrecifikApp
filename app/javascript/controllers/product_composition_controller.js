@@ -2,10 +2,18 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static values = { template: String }
-  static targets = ["list", "template", "fieldCost"]
+  static targets = [
+    "list",
+    "template",
+    "fieldCost",
+    "weightLoss",
+    "grossWeight",
+    "finalWeight"
+  ]
 
   connect() {
     this.updateAllCosts()
+    this.refreshAll()
   }
 
   removeField(e) {
@@ -17,21 +25,16 @@ export default class extends Controller {
       row.querySelector("input[name*='_destroy']").value = 1
       row.style.display = "none"
     }
+    this.refreshAll()
   }
-  recalculate(e) {
+
+  recalculateCost(e) {
     const row = e.target.closest("tr")
+    const qty   = parseFloat(row.querySelector("input[name*='[quantity]']").value) || 0
+    const opt   = row.querySelector("select[name*='[subproduct_id]']")
+    const costPerGram = parseFloat(opt.selectedOptions[0].dataset.costPerGram) || 0
+    const cost  = (qty * costPerGram).toFixed(2)
 
-    // 1) pega quantidade
-    const qtyField = row.querySelector("input[name*='[quantity]']")
-    const qty = parseFloat(qtyField.value) || 0
-
-    // 2) pega option selecionada e lê data-cost-per-gram
-    const select = row.querySelector("select[name*='[subproduct_id]']")
-    const selectedOption = select.options[select.selectedIndex]
-    const costPerGram = parseFloat(selectedOption.dataset.costPerGram) || 0
-
-    // 3) calcula e aplica
-    const cost = (qty * costPerGram).toFixed(2)
     row.querySelector("input[name*='[cost]']").value = cost
     row.querySelector("[data-product-composition-target='fieldCost']").textContent = cost
   }
@@ -46,15 +49,26 @@ export default class extends Controller {
     e.preventDefault()
     const html = this.templateTarget.innerHTML.replace(/NEW_RECORD/g, Date.now())
     this.listTarget.insertAdjacentHTML("beforeend", html)
+    this.refreshAll()
   }
 
-  refreshAll(e) {
-    e.preventDefault()
-    this.listTarget
-      .querySelectorAll("input[name*='[quantity]']")
-      .forEach(input => input.dispatchEvent(new Event("input", { bubbles: true })))
-    this.listTarget
-      .querySelectorAll("select[name*='[subproduct_id]']")
-      .forEach(select => select.dispatchEvent(new Event("change", { bubbles: true })))
+  refreshAll() {
+    this.listTarget.querySelectorAll("[data-action*='recalculateCost']").forEach(el => {
+      el.dispatchEvent(new Event("input", { bubbles: true }))
+    })
+
+    this.recalcWeights()
+  }
+
+  recalcWeights() {
+    const qtyEls = this.listTarget.querySelectorAll("input[name*='[quantity]']")
+    const gross = Array.from(qtyEls).reduce((s, el) => s + (parseFloat(el.value) || 0), 0)
+
+    const lossPct = parseFloat(this.weightLossTarget.value) || 0
+    const ratio   = Math.max(0, Math.min(100, 100 - lossPct)) / 100
+    const finalW  = gross * ratio
+
+    this.grossWeightTarget.value = gross.toFixed(4)
+    this.finalWeightTarget.value = finalW.toFixed(4)
   }
 }

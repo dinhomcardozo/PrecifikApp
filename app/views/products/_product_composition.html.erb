@@ -22,19 +22,33 @@
     <% end %>
   </template>
 
-  <div class="col-md-3 mb-3">
-    <%= f.label :weight_loss, "Perda de Peso (%)" %>
-    <%= f.number_field :weight_loss,
-                      step: 0.01,
-                      value: f.object.weight_loss || 0,
-                      class: "form-control" %>
-  </div>
+    <div class="row">
+    <div class="col-md-3 mb-3">
+      <%= f.label :weight_loss, "Perda de Peso (%)" %>
+      <%= f.number_field :weight_loss,
+            step: 0.01,
+            value: f.object.weight_loss || 0,
+            class: "form-control",
+            data: {
+              action: "input->product-composition#recalcWeights",
+              product_composition_target: "weightLoss"
+            } %>
+    </div>
 
-  <div class="col-md-3 mb-3">
-    <%= f.label :final_weight, "Peso Final (g)" %>
-    <%= f.number_field :final_weight,
-                      readonly: true,
-                      class: "form-control",
-                      value: f.object.final_weight %>
+    <div class="col-md-3 mb-3">
+      <%= f.label :total_weight, "Peso Bruto (g)" %>
+      <%= f.number_field :total_weight,
+            disabled: true,
+            class: "form-control",
+            data: { product_composition_target: "grossWeight" } %>
+    </div>
+
+    <div class="col-md-3 mb-3">
+      <%= f.label :final_weight, "Peso Final (g)" %>
+      <%= f.number_field :final_weight,
+            disabled: true,
+            class: "form-control",
+            data: { product_composition_target: "finalWeight" } %>
+    </div>
   </div>
 </div>

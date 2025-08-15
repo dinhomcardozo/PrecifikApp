@@ -2,6 +2,9 @@
     data-composition-row-cost-per-gram-value="<%= f.object.subproduct&.cost_per_gram.to_f %>"
     data-new-record="<%= f.object.new_record? %>">
 
+  <!-- 1) ID para que o Rails reconheça atualização -->
+  <%= f.hidden_field :id %>
+
   <td>
     <%= f.label :subproduct_id, "Subproduto" %>
     <%= f.select :subproduct_id,
@@ -17,7 +20,7 @@
   </td>
 
   <td>
-    <%= f.label :quantity, "Quantidade (g)", class: "form-label visually-hidden" %>  
+    <%= f.label :quantity, "Quantidade (g)", class: "form-label visually-hidden" %>
     <%= f.number_field :quantity,
           step: "any",
           placeholder: "Ex: 100",
@@ -36,10 +39,14 @@
           placeholder: "0.00",
           class: "form-control",
           data: { "composition-row-target": "cost" } %>
+
+    <!-- 2) Hidden para enviar o cost calculado ao servidor -->
+    <%= f.hidden_field :cost, data: { "composition-row-target": "costValue" } %>
   </td>
 
   <td>
-    <%= f.hidden_field :_destroy %>
+    <!-- 3) Flag para remoção -->
+    <%= f.hidden_field :_destroy, class: "destroy-flag" %>
     <button type="button"
             class="action-button"
             data-action="composition-row#removeRow">

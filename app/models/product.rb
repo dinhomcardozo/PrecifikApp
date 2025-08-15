@@ -1,48 +1,51 @@
 class Product < ApplicationRecord
-  belongs_to :brand, optional: false
-  belongs_to :tax,   optional: true
+  belongs_to :brand
+  belongs_to :tax,      optional: true
   belongs_to :category, optional: true
-  has_one :sales_target,
-          inverse_of: :product,
-          dependent: :destroy
+  has_one  :sales_target, inverse_of: :product, dependent: :destroy
+  has_many :product_subproducts, inverse_of: :product, dependent: :destroy
+  has_many :subproducts, through: :product_subproducts
 
   has_one_attached :image
 
-  delegate :distributed_fixed_cost,
-           to: :sales_target,
-           allow_nil: true
+  delegate :distributed_fixed_cost, to: :sales_target, allow_nil: true
 
   delegate :monthly_target,
            to: :sales_target,
            prefix: false,
            allow_nil: true
 
-  before_save :recalculate_weights, if: :product_subproducts_changed?
-  before_validation :calculate_pricing, if: :pricing_attributes_changed?
-
-  after_save :store_total_cost, if: :product_subproducts_changed?
-  after_save :store_total_cost_with_fixed_costs
-
-  has_many   :product_subproducts, inverse_of: :product, dependent: :destroy
-  has_many   :subproducts, through: :product_subproducts
-
-  # Permite que o formulário aninhado crie/edite product_subproducts
-
   accepts_nested_attributes_for :product_subproducts,
                                 allow_destroy: true,
-                                reject_if:     proc { |attrs|
-                                  attrs['subproduct_id'].blank?
-                                }
+                                reject_if: ->(attrs) { attrs['subproduct_id'].blank? && attrs['quantity'].blank? }
+
+  before_validation :compute_all_pricing_and_weights, if: :needs_recalculation?
 
   # torna weight “somente em memória” - peso que o usuário digita
   attr_accessor :weight
 
+
+  #CUSTO TOTAL
+  
   def total_cost
-    product_subproducts.sum(:cost)
+    product_subproducts.sum(&:cost)
   end
 
-  def store_total_cost
-    update_column(:total_cost, product_subproducts.sum(:cost))
+  # soma dos costs já atualizados em recalculate_weights
+  def compute_total_cost
+    self.total_cost = product_subproducts.sum { |ps| ps.cost.to_f }.round(4)
+  end
+
+  # total_cost_with_taxes permanece o mesmo, pois parte de total_cost
+  def compute_total_cost_with_taxes
+    rate_sum = %i[icms ipi pis_cofins difal iss cbs ibs]
+              .sum { |a| tax&.public_send(a).to_f / 100.0 }
+    self.total_cost_with_taxes = (total_cost * (1 + rate_sum)).round(2)
+  end
+
+  # total_cost_with_fixed_costs idem
+  def compute_total_cost_with_fixed_costs
+    self.total_cost_with_fixed_costs = (total_cost + distributed_fixed_cost.to_f).round(2)
   end
 
 # 1 – Composição
@@ -66,15 +69,6 @@ class Product < ApplicationRecord
     end.round(2)
   end
 
-
-  # CUSTOS FIXOS - soma total_cost + distributed_fixed_cost (sem tributos)
-  def store_total_cost_with_fixed_costs
-    update_column(
-      :total_cost_with_fixed_costs,
-      total_cost + sales_target&.distributed_fixed_cost.to_f
-    )
-  end
-
    # 4. Preços sugeridos
   def suggested_price_retail
     (total_cost_with_taxes * (1 + profit_margin_retail.to_f / 100.0)).round(2)
@@ -93,48 +87,65 @@ class Product < ApplicationRecord
     (suggested_price_wholesale - total_cost_with_taxes).round(2)
   end
 
-  private
+  def recalculate_weights
+    total_qty = product_subproducts.sum { |ps| ps.quantity.to_f }
+    pct_loss  = weight_loss.to_f.clamp(0, 100) / 100.0
 
-  def pricing_attributes_changed?
-    total_cost_changed? ||
+    # atribuições em memória, sem tocar o banco agora
+    self.total_weight = total_qty.round(4)
+    self.final_weight = (total_qty * (1 - pct_loss)).round(4)
+
+    product_subproducts.each do |ps|
+      unit_cost       = ps.cost.to_f / ps.quantity.to_f
+      cost_with_loss  = (unit_cost / (1 - pct_loss)).round(6)
+      total_cost_item = (cost_with_loss * ps.quantity.to_f).round(4)
+
+      ps.cost_per_gram_with_loss = cost_with_loss
+      ps.cost                   = total_cost_item
+    end
+  end
+
+    def needs_recalculation?
+    product_subproducts.any?(&:saved_change_to_cost?) ||
+      product_subproducts.any?(&:saved_change_to_quantity?) ||
       tax_id_changed? ||
       profit_margin_retail_changed? ||
       profit_margin_wholesale_changed? ||
-      product_subproducts.any?(&:changed?)
+      weight_loss_changed?
   end
 
-  def calculate_pricing
-    return unless tax && total_cost.present?
-
-    # soma de alíquotas em percentual
-    total_factor = 1 + %i[icms ipi pis_cofins difal iss cbs ibs]
-                       .map { |attr| tax.send(attr).to_f / 100.0 }
-                       .sum
-
-    self.total_cost_with_taxes    = (total_cost * total_factor).round(2)
-    self.suggested_price_retail    = (total_cost_with_taxes * 
-                                      (1 + profit_margin_retail.to_f / 100.0)).round(2)
-    self.suggested_price_wholesale = (total_cost_with_taxes * 
-                                      (1 + profit_margin_wholesale.to_f / 100.0)).round(2)
+  def compute_all_pricing_and_weights
+    recalculate_weights
+    compute_total_cost
+    compute_total_cost_with_taxes
+    compute_total_cost_with_fixed_costs
+    compute_suggested_prices
   end
 
-  def compute_pricing
-    self.suggested_price_retail    = suggested_price_retail
-    self.suggested_price_wholesale = suggested_price_wholesale
+  def compute_total_cost
+    self.total_cost = product_subproducts.sum { |ps| ps.cost_per_gram_with_loss * ps.quantity }
+  end
+
+  def compute_total_cost_with_taxes
+    rate_sum = %i[icms ipi pis_cofins difal iss cbs ibs]
+               .sum { |a| tax&.public_send(a).to_f / 100.0 }
+    self.total_cost_with_taxes = (total_cost * (1 + rate_sum)).round(2)
+  end
+
+  def compute_total_cost_with_fixed_costs
+    self.total_cost_with_fixed_costs = (total_cost + distributed_fixed_cost.to_f).round(2)
+  end
+
+  def compute_suggested_prices
+    r_factor = 1 + profit_margin_retail.to_f / 100.0
+    w_factor = 1 + profit_margin_wholesale.to_f / 100.0
+
+    self.suggested_price_retail    = (total_cost_with_taxes * r_factor).round(2)
+    self.suggested_price_wholesale = (total_cost_with_taxes * w_factor).round(2)
   end
 
   def product_subproducts_changed?
-    product_subproducts.any?(&:saved_change_to_cost?)
-    product_subproducts.any?(&:saved_change_to_quantity?)
-  end
-
-  def recalculate_weights
-    # 1) total bruto em g
-    total = product_subproducts.sum(&:quantity).to_f
-
-    # 2) peso final considerando perda
-    ratio        = (100.0 - weight_loss.to_f).clamp(0.0, 100.0) / 100.0
-    self.total_weight = total.round(4)
-    self.final_weight = (total * ratio).round(4)
+    product_subproducts.any?(&:saved_change_to_cost?) ||
+      product_subproducts.any?(&:saved_change_to_quantity?)
   end
 end

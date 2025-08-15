@@ -1,7 +1,8 @@
 # app/controllers/products_controller.rb
 class ProductsController < ApplicationController
-  before_action :set_product, only: %i[edit update show destroy]
-  before_action :build_subproducts, only: %i[edit update]
+  before_action :init_product, only: %i[new create]
+  before_action :set_product, only: %i[show edit update destroy]
+  before_action :build_subproducts, only: %i[new edit]
   before_action :set_sales_target_active_sum, only: %i[edit update]
 
   def index
@@ -75,15 +76,16 @@ class ProductsController < ApplicationController
 
   private
 
+  def init_product
+    @product = Product.new
+  end
+
   def set_product
     @product = Product.find(params[:id])
   end
 
   def build_subproducts
-    # garante pelo menos 2 linhas no form
-    (2 - @product.product_subproducts.size).times do
-      @product.product_subproducts.build
-    end
+    @product.product_subproducts.build if @product.product_subproducts.empty?
   end
 
   def set_sales_target_active_sum
@@ -111,6 +113,7 @@ class ProductsController < ApplicationController
         subproduct_id
         quantity
         cost
+        cost_per_gram_with_loss
         _destroy
       ],
       product_tax_overrides_attributes: %i[
