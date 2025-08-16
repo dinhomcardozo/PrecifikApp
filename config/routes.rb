@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  root to: "dashboards/overview#index"
+  
+  namespace :dashboards do
+    get "overview", to: "overview#index"
+    root to: "overview#index"
+  end
+  
   namespace :system_admins do
     resources :banners
     resources :user_clients

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_15_234524) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_16_151530) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -354,6 +354,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_15_234524) do
     t.date "end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "interval", default: 5000, null: false
   end
 
   create_table "system_admins_client_plans", force: :cascade do |t|
