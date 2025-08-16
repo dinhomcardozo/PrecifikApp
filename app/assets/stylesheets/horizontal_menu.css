@@ -1,3 +1,17 @@
+.menu-top-bar {
+  background-color: var(--bg-color);
+  color: var(--text-dark);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0.3rem 0.8rem;
+}
+
+.top-bar-item {
+  margin-left: 1.5rem;
+  font-size: 0.7rem;
+}
+
 /* Menu Principal Horizontal */
 .menu-horizontal {
   display: flex;
