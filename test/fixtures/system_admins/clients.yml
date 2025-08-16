@@ -1,0 +1,35 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  razao_social: MyString
+  company_name: MyString
+  cnpj: MyString
+  first_name: MyString
+  last_name: MyString
+  cpf: MyString
+  phone: MyString
+  address: MyString
+  number_address: 1
+  plan: one
+  signup_date: 2025-08-15
+  first_payment: 2025-08-15
+  last_payment: 2025-08-15
+  first_login: 2025-08-15 20:44:40
+  last_login: 2025-08-15 20:44:40
+
+two:
+  razao_social: MyString
+  company_name: MyString
+  cnpj: MyString
+  first_name: MyString
+  last_name: MyString
+  cpf: MyString
+  phone: MyString
+  address: MyString
+  number_address: 1
+  plan: two
+  signup_date: 2025-08-15
+  first_payment: 2025-08-15
+  last_payment: 2025-08-15
+  first_login: 2025-08-15 20:44:40
+  last_login: 2025-08-15 20:44:40

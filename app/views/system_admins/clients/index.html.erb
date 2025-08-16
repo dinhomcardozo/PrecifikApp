@@ -1,0 +1,16 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Clients" %>
+
+<h1>Clients</h1>
+
+<div id="system_admins_clients">
+  <% @system_admins_clients.each do |system_admins_client| %>
+    <%= render system_admins_client %>
+    <p>
+      <%= link_to "Show this client", system_admins_client %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New client", new_system_admins_client_path %>

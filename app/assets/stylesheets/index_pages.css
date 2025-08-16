@@ -12,18 +12,7 @@
 }
 
 .index-actions {
-  background-color: white;
-  color: var(--text-dark);
-  margin: 20px;
-  border: solid 0.8px;
-  border-radius: 0.375rem;
-  border-color: var(--dark-stroke-btn);
-  padding: 0.35rem 0.7rem;
-  font-weight: 600;
-  font-size: 0.5rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  text-decoration: none;
+  margin: 25px;
 }
 
 .standart-button {

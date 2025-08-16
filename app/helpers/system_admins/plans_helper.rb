@@ -1,0 +1,2 @@
+module SystemAdmins::PlansHelper
+end

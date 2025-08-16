@@ -1,0 +1,2 @@
+module SystemAdmins::BannersHelper
+end

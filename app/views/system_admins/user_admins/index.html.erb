@@ -1,0 +1,16 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Maxximiza | SystemAdmin" %>
+
+<h1>Todos os usuários</h1>
+
+<%= link_to "[+] Criar usuário", new_system_admins_user_admin_path, class: "standart-button" %>
+
+<div id="system_admins_user_admins">
+  <% @system_admins_user_admins.each do |system_admins_user_admin| %>
+    <%= render system_admins_user_admin %>
+    <p>
+      <%= link_to "Ver", system_admins_user_admin %>
+    </p>
+  <% end %>
+</div>

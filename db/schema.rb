@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_15_215405) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_15_234524) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -347,6 +347,83 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_15_215405) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "system_admins_banners", force: :cascade do |t|
+    t.string "image"
+    t.string "link"
+    t.date "start_date"
+    t.date "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "system_admins_client_plans", force: :cascade do |t|
+    t.bigint "client_id", null: false
+    t.bigint "plan_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_system_admins_client_plans_on_client_id"
+    t.index ["plan_id"], name: "index_system_admins_client_plans_on_plan_id"
+  end
+
+  create_table "system_admins_clients", force: :cascade do |t|
+    t.string "razao_social"
+    t.string "company_name"
+    t.string "cnpj"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "cpf"
+    t.string "phone"
+    t.string "address"
+    t.integer "number_address"
+    t.bigint "plan_id", null: false
+    t.date "signup_date"
+    t.date "first_payment"
+    t.date "last_payment"
+    t.datetime "first_login"
+    t.datetime "last_login"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["plan_id"], name: "index_system_admins_clients_on_plan_id"
+  end
+
+  create_table "system_admins_plans", force: :cascade do |t|
+    t.string "description"
+    t.decimal "price"
+    t.boolean "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "system_admins_user_admins", force: :cascade do |t|
+    t.string "full_name"
+    t.string "email"
+    t.string "phone"
+    t.boolean "admin"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "system_admins_user_clients", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "client_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_system_admins_user_clients_on_client_id"
+    t.index ["user_id"], name: "index_system_admins_user_clients_on_user_id"
+  end
+
+  create_table "system_admins_users", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.string "email"
+    t.string "phone"
+    t.boolean "admin"
+    t.bigint "client_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_system_admins_users_on_client_id"
+  end
+
   create_table "taxes", force: :cascade do |t|
     t.text "description"
     t.decimal "icms"
@@ -393,4 +470,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_15_215405) do
   add_foreign_key "subproduct_compositions", "inputs"
   add_foreign_key "subproduct_compositions", "subproducts"
   add_foreign_key "subproducts", "brands"
+  add_foreign_key "system_admins_client_plans", "system_admins_clients", column: "client_id"
+  add_foreign_key "system_admins_client_plans", "system_admins_plans", column: "plan_id"
+  add_foreign_key "system_admins_clients", "system_admins_plans", column: "plan_id"
+  add_foreign_key "system_admins_user_clients", "system_admins_clients", column: "client_id"
+  add_foreign_key "system_admins_user_clients", "system_admins_users", column: "user_id"
+  add_foreign_key "system_admins_users", "system_admins_clients", column: "client_id"
 end

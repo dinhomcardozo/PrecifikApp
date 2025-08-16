@@ -1,0 +1,39 @@
+<%= form_with(model: system_admins_user_admin, local: true) do |form| %>
+  <% if system_admins_user_admin.errors.any? %>
+    <div style="color: red">
+      <h2>
+        <%= pluralize(system_admins_user_admin.errors.count, "erro") %> 
+        proibiu este usuário de ser salvo:
+      </h2>
+      <ul>
+        <% system_admins_user_admin.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :full_name,    "Nome completo",                      style: "display: block" %>
+    <%= form.text_field :full_name %>
+  </div>
+
+  <div>
+    <%= form.label :email,        "E-mail corporativo",                style: "display: block" %>
+    <%= form.text_field :email %>
+  </div>
+
+  <div>
+    <%= form.label :phone,        "Telefone corporativo",              style: "display: block" %>
+    <%= form.text_field :phone %>
+  </div>
+
+  <div>
+    <%= form.label :admin,        "É usuário Admin do Sistema Geral?", style: "display: block" %>
+    <%= form.check_box :admin %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

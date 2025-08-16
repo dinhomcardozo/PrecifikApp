@@ -1,0 +1,11 @@
+<% content_for :title, "New user admin" %>
+
+<h1>Novo Usuário</h1>
+
+<%= render "form", system_admins_user_admin: @system_admins_user_admin %>
+
+<br>
+
+<div>
+  <%= link_to "Voltar", system_admins_user_admins_path %>
+</div>

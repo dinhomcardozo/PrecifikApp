@@ -1,0 +1,16 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Users" %>
+
+<h1>Users</h1>
+
+<div id="system_admins_users">
+  <% @system_admins_users.each do |system_admins_user| %>
+    <%= render system_admins_user %>
+    <p>
+      <%= link_to "Show this user", system_admins_user %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New user", new_system_admins_user_path %>

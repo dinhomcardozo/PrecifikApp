@@ -1,0 +1,12 @@
+<% content_for :title, "Editing client plan" %>
+
+<h1>Editing client plan</h1>
+
+<%= render "form", system_admins_client_plan: @system_admins_client_plan %>
+
+<br>
+
+<div>
+  <%= link_to "Show this client plan", @system_admins_client_plan %> |
+  <%= link_to "Back to client plans", system_admins_client_plans_path %>
+</div>

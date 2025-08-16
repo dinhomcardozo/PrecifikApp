@@ -1,5 +1,14 @@
 Rails.application.routes.draw do
-  resources :categories
+  namespace :system_admins do
+    resources :banners
+    resources :user_clients
+    resources :users
+    resources :client_plans
+    resources :plans
+    resources :user_admins
+    resources :clients
+  end
+
   namespace :services do
     resources :equipments, shallow: true
     resources :energies, shallow: true
@@ -32,8 +41,7 @@ Rails.application.routes.draw do
   end
 
   resources :taxes
-  root "products#index"
-  
+  resources :categories
   resources :fixed_costs
   resources :channels
   resources :sales_targets

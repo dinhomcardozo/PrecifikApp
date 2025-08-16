@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @system_admins_client_plan %>
+
+<div>
+  <%= link_to "Edit this client plan", edit_system_admins_client_plan_path(@system_admins_client_plan) %> |
+  <%= link_to "Back to client plans", system_admins_client_plans_path %>
+
+  <%= button_to "Destroy this client plan", @system_admins_client_plan, method: :delete %>
+</div>

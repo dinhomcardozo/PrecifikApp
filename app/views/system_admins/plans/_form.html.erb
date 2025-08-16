@@ -1,0 +1,32 @@
+<%= form_with(model: system_admins_plan) do |form| %>
+  <% if system_admins_plan.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(system_admins_plan.errors.count, "error") %> prohibited this system_admins_plan from being saved:</h2>
+
+      <ul>
+        <% system_admins_plan.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :description, style: "display: block" %>
+    <%= form.text_field :description %>
+  </div>
+
+  <div>
+    <%= form.label :price, style: "display: block" %>
+    <%= form.text_field :price %>
+  </div>
+
+  <div>
+    <%= form.label :status, style: "display: block" %>
+    <%= form.checkbox :status %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

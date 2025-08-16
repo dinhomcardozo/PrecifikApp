@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @system_admins_plan %>
+
+<div>
+  <%= link_to "Edit this plan", edit_system_admins_plan_path(@system_admins_plan) %> |
+  <%= link_to "Back to plans", system_admins_plans_path %>
+
+  <%= button_to "Destroy this plan", @system_admins_plan, method: :delete %>
+</div>

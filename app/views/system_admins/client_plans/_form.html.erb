@@ -1,0 +1,27 @@
+<%= form_with(model: system_admins_client_plan) do |form| %>
+  <% if system_admins_client_plan.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(system_admins_client_plan.errors.count, "error") %> prohibited this system_admins_client_plan from being saved:</h2>
+
+      <ul>
+        <% system_admins_client_plan.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :client_id, style: "display: block" %>
+    <%= form.text_field :client_id %>
+  </div>
+
+  <div>
+    <%= form.label :plan_id, style: "display: block" %>
+    <%= form.text_field :plan_id %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
