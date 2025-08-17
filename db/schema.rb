@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_16_151530) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_17_154334) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -85,6 +85,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_16_151530) do
     t.string "fixed_cost_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "input_cost_histories", force: :cascade do |t|
+    t.bigint "input_id", null: false
+    t.decimal "cost", precision: 10, scale: 2, null: false
+    t.datetime "recorded_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["input_id"], name: "index_input_cost_histories_on_input_id"
+    t.index ["recorded_at"], name: "index_input_cost_histories_on_recorded_at"
   end
 
   create_table "input_types", force: :cascade do |t|
@@ -441,6 +451,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_16_151530) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "input_cost_histories", "inputs"
   add_foreign_key "inputs", "brands"
   add_foreign_key "inputs", "input_types"
   add_foreign_key "inputs", "suppliers"

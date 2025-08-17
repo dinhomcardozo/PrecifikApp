@@ -105,6 +105,21 @@
   background-color: #e9e9e9;
 }
 
+.cell-actions .link-icon-actions {
+  display: inline-block;
+  opacity: 0.85;
+}
+
+.cell-actions .link-icon-actions img {
+  height: 25px;
+  width: auto;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 0.85;
+}
+
+.cell-actions .link-icon-actions:hover img {
+  opacity: 1;
+}
 
 @media (max-width: 768px) {
   .index-table {

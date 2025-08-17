@@ -7,12 +7,20 @@ class InputsController < ApplicationController
   end
 
   def show
+    set_input
+    set_url_options
+
+    # Extrai últimos 12 meses (incluindo mês atual)
+    @cost_history = @input.input_cost_histories
+                          .where("recorded_at >= ?", 11.months.ago.beginning_of_month)
+                          .order(:recorded_at)
+
     respond_to do |format|
-      format.html { render layout: false }
+      format.html
       format.json do
         render json: {
-          cost:             @input.cost.to_f,
-          weight_in_grams:  @input.weight.to_f
+          cost:            @input.cost.to_f,
+          weight_in_grams: @input.weight.to_f
         }
       end
     end

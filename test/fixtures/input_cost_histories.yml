@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+   input: one
+   cost: 9.99
+   recorded_at: 2025-08-17 12:43:34
+
+two:
+   input: two
+   cost: 9.99
+   recorded_at: 2025-08-17 12:43:34

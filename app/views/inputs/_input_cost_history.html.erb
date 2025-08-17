@@ -1,0 +1,53 @@
+<% if cost_history.any? %>
+  <div class="input-cost-history">
+    <h2>Histórico de Preço (Últimos 12 meses)</h2>
+    <canvas id="inputCostChart" width="600" height="300"></canvas>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const ctx  = document.getElementById('inputCostChart').getContext('2d');
+      const data = <%= raw cost_history.map { |h|
+        {
+          x: h.recorded_at.strftime("%Y-%m"),
+          y: h.cost.to_f
+        }
+      }.to_json %>;
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          datasets: [{
+            label: "Custo (R$)",
+            data: data,
+            borderColor: "#16160b",
+            backgroundColor: "rgba(0,123,255,0.2)",
+            tension: 0.3,
+            fill: true,
+            pointRadius: 4
+          }]
+        },
+        options: {
+          parsing: { xAxisKey: 'x', yAxisKey: 'y' },
+          scales: {
+            x: {
+              type: 'time',
+              time: { unit: 'month', displayFormats: { month: 'MMM YYYY' } },
+              title: { display: true, text: "Mês" }
+            },
+            y: {
+              title: { display: true, text: "Custo (R$)" },
+              beginAtZero: false
+            }
+          },
+          plugins: {
+            legend:  { display: false },
+            tooltip: { mode: 'index', intersect: false }
+          }
+        }
+      });
+    });
+  </script>
+<% else %>
+  <p>Nenhum histórico de custo disponível para os últimos 12 meses.</p>
+<% end %>
