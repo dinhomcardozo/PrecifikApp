@@ -1,0 +1,27 @@
+<div class="system-admin-menu-horizontal">
+  <a href="/" class="logo-link">
+    <%= image_tag("logo-maxximiza_negativa_oficial.png", width: 120, alt: "Logo MaxximizaApp") %>
+  </a>
+  <div>
+    <%= link_to "Dashboards", root_path, class: "menu-item" %>
+  </div>
+
+  <!-- Dropdown Serviços -->
+  <div data-controller="dropdown" class="menu-item dropdown">
+    <!-- Botão dispara o toggle -->
+    <button data-action="click->dropdown#toggle"
+            class="dropdown-toggle"
+            aria-expanded="false">
+      Cadastros
+      <svg class="chevron" width="10" height="6" …></svg>
+    </button>
+    <!-- Menu que será mostrado/ocultado -->
+    <div data-dropdown-target="menu" class="dropdown-menu">
+      <%= link_to "Clientes", services_services_path, class: "dropdown-item" %>
+      <%= link_to "Planos", services_equipments_path, class: "dropdown-item" %>
+      <%= link_to "Usuários de Clientes", services_roles_path, class: "dropdown-item" %>
+      <%= link_to "Usuários SystemAdmin", services_professionals_path, class: "dropdown-item" %>
+      <%= link_to "Banners",  services_energies_path, class: "dropdown-item" %>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,5 @@
-.menu-top-bar {
+.menu-top-bar,
+.system-admin-menu-top-bar {
   background-color: var(--bg-color);
   color: var(--text-dark);
   display: flex;
@@ -7,13 +8,15 @@
   padding: 0.3rem 0.8rem;
 }
 
-.top-bar-item {
+.menu-top-bar .top-bar-item,
+.system-admin-menu-top-bar .top-bar-item {
   margin-left: 1.5rem;
   font-size: 0.7rem;
 }
 
 /* Menu Principal Horizontal */
-.menu-horizontal {
+.menu-horizontal,
+.system-admin-menu-horizontal {
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -23,7 +26,8 @@
   margin-bottom: 0; /* sem margem adicional */
 }
 
-.menu-horizontal .logo-link {
+.menu-horizontal .logo-link,
+.system-admin-menu-horizontal .logo-link {
   display: inline-flex;
   align-items: center;
   padding: 0;
@@ -31,18 +35,22 @@
   text-decoration: none;
 }
 
-.menu-horizontal .logo-link img {
+.menu-horizontal .logo-link img,
+.system-admin-menu-horizontal .logo-link img {
   width: 120px;
   height: auto;
   transition: transform 0.3s ease;
 }
 
 .menu-horizontal .logo-link:hover img,
-.menu-horizontal .logo-link:focus img {
+.system-admin-menu-horizontal .logo-link:hover img,
+.menu-horizontal .logo-link:focus img,
+.system-admin-menu-horizontal .logo-link:focus img {
   transform: scale(1.05);
 }
 
-.menu-horizontal .menu-item {
+.menu-horizontal .menu-item,
+.system-admin-menu-horizontal .menu-item {
   display: inline-block;
   padding: 0.5rem 0.75rem;
   font-weight: 500;
@@ -54,19 +62,23 @@
 }
 
 .menu-horizontal .menu-item:hover,
-.menu-horizontal .menu-item:focus {
+.system-admin-menu-horizontal .menu-item:hover,
+.menu-horizontal .menu-item:focus,
+.system-admin-menu-horizontal .menu-item:focus {
   background-color: var(--accent-color);
   color: var(--text-dark);
 }
 
 /* Container do Dropdown */
-.menu-horizontal .dropdown {
+.menu-horizontal .dropdown,
+.system-admin-menu-horizontal .dropdown {
   position: relative;
   display: inline-block;
 }
 
 /* Botão que abre o dropdown */
-.menu-horizontal .dropdown-toggle {
+.menu-horizontal .dropdown-toggle,
+.system-admin-menu-horizontal .dropdown-toggle {
   display: inline-flex;
   align-items: center;
   padding: 0.5rem 0.75rem;
@@ -82,24 +94,30 @@
 }
 
 .menu-horizontal .dropdown-toggle:hover,
-.menu-horizontal .dropdown-toggle:focus {
+.system-admin-menu-horizontal .dropdown-toggle:hover,
+.menu-horizontal .dropdown-toggle:focus,
+.system-admin-menu-horizontal .dropdown-toggle:focus {
   background-color: var(--accent-color);
   color: var(--text-dark);
 }
 
 /* Ícone de setinha */
-.menu-horizontal .chevron {
+.menu-horizontal .chevron,
+.system-admin-menu-horizontal .chevron {
   margin-left: 0.25rem;
   transition: transform 0.3s ease;
 }
 
 .menu-horizontal .dropdown:hover .chevron,
-.menu-horizontal .dropdown-toggle[aria-expanded="true"] .chevron {
+.system-admin-menu-horizontal .dropdown:hover .chevron,
+.menu-horizontal .dropdown-toggle[aria-expanded="true"] .chevron,
+.system-admin-menu-horizontal .dropdown-toggle[aria-expanded="true"] .chevron {
   transform: rotate(180deg);
 }
 
 /* Caixa do Dropdown */
-.menu-horizontal .dropdown-menu {
+.menu-horizontal .dropdown-menu,
+.system-admin-menu-horizontal .dropdown-menu {
   display: none;
   position: absolute;
   top: 100%;
@@ -113,12 +131,14 @@
 }
 
 /* Quando o container .dropdown tem a classe .open */
-.menu-horizontal .dropdown.open .dropdown-menu {
+.menu-horizontal .dropdown.open .dropdown-menu,
+.system-admin-menu-horizontal .dropdown:hover .dropdown-menu {
   display: block;
 }
 
 /* Itens do Dropdown */
-.menu-horizontal .dropdown-item {
+.menu-horizontal .dropdown-item,
+.system-admin-menu-horizontal .dropdown-item {
   display: block;
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
@@ -128,18 +148,22 @@
 }
 
 .menu-horizontal .dropdown-item:hover,
-.menu-horizontal .dropdown-item:focus {
+.system-admin-menu-horizontal .dropdown-item:hover,
+.menu-horizontal .dropdown-item:focus,
+.system-admin-menu-horizontal .dropdown-item:focus {
   background-color: var(--accent-color);
   color: var(--text-dark);
 }
 
 /* dropdown-menu oculto por padrão */
-.menu-horizontal .dropdown-menu {
+.menu-horizontal .dropdown-menu,
+.system-admin-menu-horizontal .dropdown-menu {
   display: none;
 }
 
 /* mostra o menu quando passar o mouse sobre o botão */
-.menu-horizontal .dropdown-toggle:hover + .dropdown-menu {
+.menu-horizontal .dropdown-toggle:hover + .dropdown-menu,
+.system-admin-menu-horizontal .dropdown-toggle:hover + .dropdown-menu {
   display: block;
 }
 
