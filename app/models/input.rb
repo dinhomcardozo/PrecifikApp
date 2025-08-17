@@ -3,6 +3,8 @@ class Input < ApplicationRecord
   belongs_to :input_type
   belongs_to :brand, optional: true
 
+  self.per_page = 20
+  
   has_many :subproduct_compositions, foreign_key: :input_id, inverse_of: :input
   has_many :subproducts, through: :subproduct_inputs
   has_many :input_cost_histories, dependent: :destroy

@@ -4,7 +4,7 @@
   "scripts": {
     "postinstall": "curl -L https://github.com/tailwindlabs/tailwindcss/releases/download/v4.1.11/tailwindcss-linux-x64 -o ./node_modules/.bin/tailwindcss && chmod +x ./node_modules/.bin/tailwindcss",
     "build:css": "tailwindcss -i app/assets/stylesheets/application.css --output app/assets/builds/application.css --minify",
-    "dev:css":   "tailwindcss -i app/assets/stylesheets/application.css --output app/assets/builds/application.css --watch",
+    "dev:css": "tailwindcss -i app/assets/stylesheets/application.css --output app/assets/builds/application.css --watch",
     "build:js": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds",
     "build": "npm run build:js && npm run build:css",
     "dev:js": "esbuild app/javascript/application.js --bundle --sourcemap --outdir=app/assets/builds --watch",
@@ -21,6 +21,8 @@
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.16",
     "@rails/activestorage": "^8.0.200",
-    "flatpickr": "^4.6.13"
+    "flatpickr": "^4.6.13",
+    "jquery": "^3.7.1",
+    "select2": "^4.1.0-rc.0"
   }
 }

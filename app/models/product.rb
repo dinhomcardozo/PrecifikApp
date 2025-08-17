@@ -1,10 +1,14 @@
 class Product < ApplicationRecord
+  self.per_page = 20
+  
+  belongs_to :main_brand, class_name: 'Brand', optional: true
   belongs_to :brand
   belongs_to :tax,      optional: true
   belongs_to :category, optional: true
   has_one  :sales_target, inverse_of: :product, dependent: :destroy
   has_many :product_subproducts, inverse_of: :product, dependent: :destroy
   has_many :subproducts, through: :product_subproducts
+  has_many   :inputs, through: :subproduct_compositions
 
   has_one_attached :image
 
@@ -148,4 +152,12 @@ class Product < ApplicationRecord
     product_subproducts.any?(&:saved_change_to_cost?) ||
       product_subproducts.any?(&:saved_change_to_quantity?)
   end
+
+  #FILTROS E BUSCA
+  scope :with_subproduct_ids, ->(ids)  { joins(:subproducts).where(subproducts: { id: ids }) if ids.present? }
+  scope :with_input_ids,      ->(ids)  { joins(:inputs).where(inputs: { id: ids }) if ids.present? }
+  scope :with_brand_id,       ->(id)   { where(main_brand_id: id) if id.present? }
+  scope :by_name,             ->(dir)  { order(description: dir) if dir.in?(%w[asc desc]) }
+  scope :by_cost,             ->(dir)  { order(total_cost: dir)     if dir.in?(%w[asc desc]) }
+  scope :search_desc,         ->(q)    { where('description ILIKE ?', "%#{q}%") if q.present? }
 end

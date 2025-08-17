@@ -12,7 +12,9 @@ gem 'ruby-vips', '~> 2.0', '>= 2.0.16'
 gem "pg", "~> 1.1"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
-
+gem 'will_paginate', '~> 3.3'
+gem 'bootstrap-will_paginate', '~> 1.0.0'
+gem 'select2-rails', '~> 4.0', '>= 4.0.13'
 gem 'image_processing', '~> 1.12', '>= 1.12.2'
 # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 gem "turbo-rails"

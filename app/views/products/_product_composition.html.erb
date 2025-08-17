@@ -1,4 +1,6 @@
 <!-- app/views/products/_product_composition.html.erb -->
+<h5 class="subtitle">2) Composição do Produto</h5>
+
 <div data-controller="product-composition">
   <button type="button"
           class="action-button"
@@ -24,7 +26,7 @@
 
     <div class="row">
     <div class="col-md-3 mb-3">
-      <%= f.label :weight_loss, "Perda de Peso (%)" %>
+      <%= f.label :weight_loss, "Perda de Peso (%)", class: "custom-label"  %>
       <%= f.number_field :weight_loss,
             step: 0.01,
             value: f.object.weight_loss || 0,
@@ -36,7 +38,7 @@
     </div>
 
     <div class="col-md-3 mb-3">
-      <%= f.label :total_weight, "Peso Bruto (g)" %>
+      <%= f.label :total_weight, "Peso Bruto (g)", class: "custom-label"  %>
       <%= f.number_field :total_weight,
             disabled: true,
             class: "form-control",
@@ -44,7 +46,7 @@
     </div>
 
     <div class="col-md-3 mb-3">
-      <%= f.label :final_weight, "Peso Final (g)" %>
+      <%= f.label :final_weight, "Peso Final (g)", class: "custom-label"  %>
       <%= f.number_field :final_weight,
             disabled: true,
             class: "form-control",

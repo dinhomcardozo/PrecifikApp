@@ -1,10 +1,12 @@
 class Subproduct < ApplicationRecord
+  self.per_page = 20
+  
   belongs_to :brand, optional: true
   has_many :subproduct_compositions, inverse_of: :subproduct, dependent: :destroy
   has_many :inputs, through: :subproduct_compositions
   has_many :product_subproducts, inverse_of: :subproduct, dependent: :destroy
   has_many :products, through: :product_subproducts
-
+  
   validates :name, presence: true
 
   after_update_commit :refresh_product_compositions, if: :saved_change_to_cost?

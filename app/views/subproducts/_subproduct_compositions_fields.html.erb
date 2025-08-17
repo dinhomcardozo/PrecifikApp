@@ -3,16 +3,17 @@
   <td>
     <%= f.collection_select :input_id, Input.all, :id, :name,
                             { include_blank: "Escolha insumo" },
-                            class: "form-select",
+                            class: "custom-field",
                             data: { action: "change->nested-form#updateCost" } %>
   </td>
   <td>
     <%= f.number_field :quantity_for_a_unit,
-                       class: "form-control",
+                       class: "custom-field",
                        step: :any,
                        data: { action: "input->nested-form#updateCost" } %>
     <%= f.hidden_field :quantity_cost,
                        value: f.object.quantity_cost,
+                       class: "custom-field",
                        data: { nested_form_target: "quantityCostField" } %>
   </td>
   <td data-nested-form-target="costDisplay" class="cost-display">

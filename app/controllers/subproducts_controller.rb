@@ -1,4 +1,6 @@
 class SubproductsController < ApplicationController
+  include Filterable
+  
   before_action :set_subproduct, only: %i[edit update destroy]
 
   def index
@@ -34,6 +36,14 @@ class SubproductsController < ApplicationController
   def destroy
     @subproduct.destroy
     redirect_to subproducts_path, notice: "Excluído"
+  end
+
+  def search
+    @subproducts = Subproduct
+      .where("name ILIKE ?", "%#{params[:q]}%")
+      .limit(10)
+
+    render json: @subproducts.map { |s| { id: s.id, text: s.name } }
   end
 
   private

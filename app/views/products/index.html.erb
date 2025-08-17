@@ -8,20 +8,47 @@
                   data: { turbo_frame: "product_steps" },
                   class: "standart-button" %>
     </div>
+  <details class="filters-accordion">
+    <summary>Filtros</summary>
+    <%= render "shared/filters" %>
+  </details>
 
-    <table class="index-table index-table--bordered">
+  <br>
+  <hr>
+
+    <table id="products-table" data-controller="table-filter" data-table-filter-target-selector-value="search-input" class="index-table index-table--bordered">
       <thead>
         <tr>
-          <th>Produto</th>
-          <th>Imagem</th>
-          <th>Meta Mensal (un.)</th>
-          <th>Total Custo (R$)</th>
-          <th>Total c/ Tributos (R$)</th>
-          <th>Preço Sugerido Varejo (R$)</th>
-          <th>Preço Sugerido Atacado (R$)</th>
-          <th>Lucro Líquido Varejo (R$)</th>
-          <th>Lucro Líquido Atacado (R$)</th>
-          <th>Ações</th>
+          <% headers = [
+               ["products.description",            "Descrição"],
+               ["products.image",            "Imagem"],
+               ["sales_targets.monthly_target",    "Meta Mensal (un.)"],
+               ["products.total_cost",             "Custo Total (R$)"],
+               ["products.total_cost_with_taxes",  "CT + Impostos"],
+               ["products.suggested_price_retail", "Preço Varejo"],
+               ["products.suggested_price_wholesale", "Preço Atacado"],
+               ["products.net_profit_retail",      "Lucro Varejo (R$)"],
+               ["products.net_profit_wholesale",   "Lucro Atacado (R$)"]
+             ] %>
+
+          <% headers.each do |column, title| %>
+            <% current = params[:sort] == column %>
+            <% dir     = current && params[:direction] == "asc" ? "asc" : "desc" %>
+            <% th_css  = current ? "sorted #{dir}" : nil %>
+
+            <th class="<%= th_css %>">
+              <%= link_to title,
+                    url_for(
+                      request.query_parameters
+                             .merge(sort: column,
+                                    direction: (current && dir == "asc" ? "desc" : "asc"),
+                                    page: nil)
+                    ) %>
+            </th>
+          <% end %>
+
+          <th> </th>
+          <th> </th>
         </tr>
       </thead>
 
@@ -30,38 +57,42 @@
           <tr id="<%= dom_id(p) %>">
             <td><%= p.description %></td>
             <td>
-                    <% if p.image.attached? %>
-                <%= image_tag(
-                      url_for(p.image),
-                      alt: p.description,
-                      class: "index_image",
-                      width: 100,
-                      height: 100
-                    ) %>
+              <% if p.image.attached? %>
+                <%= image_tag url_for(p.image),
+                              alt: p.description,
+                              class: "index_image",
+                              width: 100,
+                              height: 100 %>
               <% else %>
                 Nenhuma
               <% end %>
             </td>
-            <td><%= p.monthly_target || "–" %></td>
-            <td><%= number_to_currency(p.total_cost, unit: "R$ ") %></td>
-            <td><%= number_to_currency(p.total_cost_with_taxes,    unit: "R$ ") %></td>
-            <td><%= number_to_currency(p.suggested_price_retail,   unit: "R$ ") %></td>
-            <td><%= number_to_currency(p.suggested_price_wholesale,unit: "R$ ") %></td>
-            <td><%= number_to_currency(p.net_profit_retail,        unit: "R$ ") %></td>
-            <td><%= number_to_currency(p.net_profit_wholesale,     unit: "R$ ") %></td>
+            <td><%= p.monthly_target || "0" %></td>
+            <td><%= number_to_currency(p.total_cost,               unit: "R$ ") %></td>
+            <td><%= number_to_currency(p.total_cost_with_taxes,     unit: "R$ ") %></td>
+            <td><%= number_to_currency(p.suggested_price_retail,    unit: "R$ ") %></td>
+            <td><%= number_to_currency(p.suggested_price_wholesale, unit: "R$ ") %></td>
+            <td><%= number_to_currency(p.net_profit_retail,         unit: "R$ ") %></td>
+            <td><%= number_to_currency(p.net_profit_wholesale,      unit: "R$ ") %></td>
             <td class="cell-actions">
-              <%= link_to "Editar",
-                          edit_product_path(p, step: 1),
+              <%= link_to product_path(p),
                           data: { turbo_frame: "product_steps" },
-                          class: "standart-button" %>
-              <%= button_to "Excluir",
-                            product_path(p),
-                            method: :delete,
-                            data: {
-                              turbo_frame: "product_steps",
-                              turbo_confirm: "Confirma?"
-                            },
-                            class: "standart-button" %>
+                          class: "link-icon-actions",
+                          title: "Ver" do %>
+                <%= image_tag "icons/ver.png",
+                              alt: "Ver",
+                              class: "action-icon" %>
+              <% end %>
+            </td>
+            <td class="cell-actions">
+              <%= link_to edit_product_path(p, step: 1),
+                          data: { turbo_frame: "product_steps" },
+                          class: "link-icon-actions",
+                          title: "Editar" do %>
+                <%= image_tag "icons/editar.png",
+                              alt: "Editar",
+                              class: "action-icon" %>
+              <% end %>
             </td>
           </tr>
         <% end %>
@@ -69,3 +100,5 @@
     </table>
   <% end %>
 </main>
+
+<%= will_paginate @products %>

@@ -1,5 +1,5 @@
 <!-- app/views/products/_form.html.erb -->
-<h1><%= @product.new_record? ? "Novo Produto" : "Editar Produto" %></h1>
+<h1 class="title"><%= @product.new_record? ? "Novo Produto" : "Editar Produto" %></h1>
 
 <% active_tab ||= local_assigns[:active_tab] || params[:active_tab] || "config" %>
 

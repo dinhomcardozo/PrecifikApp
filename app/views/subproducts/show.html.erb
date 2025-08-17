@@ -1,4 +1,4 @@
-<h1><%= @subproduct.name %></h1>
+<h1 class="title"><%= @subproduct.name %></h1>
 
 <p><strong>Unidade:</strong> <%= @subproduct.unit_of_measurement %></p>
 <p><strong>Peso Total:</strong> <%= @subproduct.subproduct_compositions.sum(&:quantity_for_a_unit) %> g</p>

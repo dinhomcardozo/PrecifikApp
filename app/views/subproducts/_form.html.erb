@@ -2,24 +2,24 @@
   <%= form_with model: subproduct,
                 data: { controller: "nested-form", turbo_frame: "_top" } do |f| %>
     
-    <h4>Configurações do Subproduto</h4>
+    <h4 class="subtitle">Configurações do Subproduto</h4>
       <div class="mb-3">
-        <%= f.label :name, "Nome do Subproduto" %>
-        <%= f.text_field :name, class: "form-control" %>
+        <%= f.label :name, "Nome do Subproduto", class: "custom-label" %>
+        <%= f.text_field :name %>
       </div>
 
-    <h4>Composição</h4>
-    <div id="subproduct_total_cost">
+    <h4 class="subtitle">Composição</h4>
+    <div class="custom-label" id="subproduct_total_cost">
       Custo Total: R$ <%= number_with_precision(subproduct.total_composition_cost, precision: 2) %>
     </div>
     <div>                           
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th>Insumo</th>
-            <th>Quantidade</th>
-            <th>Custo (R$)</th>
-            <th>Ações</th>
+            <th class="custom-field">Insumo</th>
+            <th class="custom-field">Quantidade</th>
+            <th class="custom-field">Custo (R$)</th>
+            <th class="custom-field">Ações</th>
           </tr>
         </thead>
           <tbody data-nested-form-target="container">
@@ -45,26 +45,6 @@
        data-template-id="composition-fields-template">
       Adicionar Insumo
     </a>
-
-    <hr>
-
-      <div class="field">
-      <%= f.label :weight_loss, "Perda de Peso (%)" %>
-      <%= f.number_field :weight_loss,
-                        step: 0.01,
-                        value: f.object.weight_loss || 0,
-                        class: "form-control" %>
-    </div>
-
-    <div class="field">
-      <%= f.label :final_weight, "Peso Final (g)" %>
-      <%= f.number_field :final_weight,
-                        readonly: true,
-                        class: "form-control",
-                        value: f.object.final_weight %>
-    </div>
-
-    <hr>
 
 <br>
     <div class="mt-4">

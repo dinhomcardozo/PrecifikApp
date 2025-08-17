@@ -1,0 +1,16 @@
+.custom-label {
+  color: var(--text-dark);
+  font-weight: 500;
+}
+
+.subtitle {
+    color: var(--text-dark);
+    font-weight: 800;
+    font-size: 0.800;
+}
+
+.title {
+    color: var(--text-dark);
+    font-weight: 1000;
+    font-size: 1.8rem;
+}

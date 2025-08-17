@@ -84,6 +84,8 @@ GEM
     bindex (0.8.1)
     bootsnap (1.18.6)
       msgpack (~> 1.2)
+    bootstrap-will_paginate (1.0.0)
+      will_paginate
     brakeman (7.0.2)
       racc
     builder (3.3.0)
@@ -299,6 +301,7 @@ GEM
       ffi (~> 1.12)
       logger
     securerandom (0.4.1)
+    select2-rails (4.0.13)
     solid_cable (3.0.8)
       actioncable (>= 7.2)
       activejob (>= 7.2)
@@ -351,6 +354,7 @@ GEM
       base64
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    will_paginate (3.3.1)
     xpath (3.2.0)
       nokogiri (~> 1.8)
     zeitwerk (2.7.3)
@@ -369,6 +373,7 @@ PLATFORMS
 
 DEPENDENCIES
   bootsnap
+  bootstrap-will_paginate (~> 1.0.0)
   brakeman
   capybara
   debug
@@ -383,6 +388,7 @@ DEPENDENCIES
   rails (~> 8.0.2)
   rubocop-rails-omakase
   ruby-vips (~> 2.0, >= 2.0.16)
+  select2-rails (~> 4.0, >= 4.0.13)
   solid_cable
   solid_cache
   solid_queue
@@ -391,6 +397,7 @@ DEPENDENCIES
   turbo-rails
   tzinfo-data
   web-console
+  will_paginate (~> 3.3)
 
 BUNDLED WITH
    2.6.3

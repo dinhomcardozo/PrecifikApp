@@ -58,11 +58,13 @@ Rails.application.routes.draw do
     resources :product_subproducts, only: %i[create update destroy]
     collection do
       get :tab
+      get :search
     end
   end
 
   # Marcas, Fornecedores, Tipos de Input, Inputs
   resources :brands
+    get :search_brands, to: "brands#search", as: :search_brands
   resources :suppliers
   resources :input_types
   resources :inputs do
@@ -75,6 +77,10 @@ Rails.application.routes.draw do
     member do
       get   :composicao, action: :edit_composition,   as: :edit_composition
       patch :composicao, action: :update_composition, as: :update_composition
+    end
+
+    collection do
+        get :search, defaults: { format: :json }
     end
 
     # 2) Itens da composição (nested resource)

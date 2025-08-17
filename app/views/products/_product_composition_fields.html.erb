@@ -6,7 +6,7 @@
   <%= f.hidden_field :id %>
 
   <td>
-    <%= f.label :subproduct_id, "Subproduto" %>
+    <%= f.label :subproduct_id, "Subproduto", class: "custom-label" %>
     <%= f.select :subproduct_id,
       options_for_select(
         Subproduct.all.map { |s|
@@ -20,7 +20,7 @@
   </td>
 
   <td>
-    <%= f.label :quantity, "Quantidade (g)", class: "form-label visually-hidden" %>
+    <%= f.label :quantity, "Quantidade (g)", class: "custom-label visually-hidden" %>
     <%= f.number_field :quantity,
           step: "any",
           placeholder: "Ex: 100",
@@ -32,7 +32,7 @@
   </td>
 
   <td>
-    <%= f.label :cost, "Custo (R$)", class: "form-label visually-hidden" %>
+    <%= f.label :cost, "Custo (R$)", class: "custom-label visually-hidden" %>
     <%= f.number_field :cost,
           step: "any",
           readonly: true,

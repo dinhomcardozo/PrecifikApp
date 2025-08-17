@@ -1,4 +1,7 @@
 @import "./variables.css";
 @import "./index_pages.css";
+@import "./general.css";
 @import "./horizontal_menu.css";
 @import "./products_tabs.css";
+@import "./filters.css";
+@import "select2/dist/css/select2.css";

@@ -1,0 +1,27 @@
+.filters-form { margin-bottom: 1rem; }
+.filters-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  color: var(--text-dark);
+  font-weight: 500;
+  font-size: 0.600rem;
+}
+
+.filters-col label { display: block; margin-top: 0.5rem; font-weight: 600; }
+.filters-actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+  color: var(--text-dark);
+  font-weight: 500;
+  font-size: 0.650rem;
+}
+
+.js-select2 {
+  width: 100%;
+}
+
+.filters-col .select2-container {
+  margin-top: 0.25rem;
+}

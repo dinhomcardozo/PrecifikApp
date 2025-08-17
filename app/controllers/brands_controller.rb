@@ -42,4 +42,13 @@ class BrandsController < ApplicationController
   def brand_params
     params.require(:brand).permit(:name, :main_brand)
   end
+
+  def search
+    brands = Brand
+               .where("name ILIKE ?", "%#{params[:q]}%")
+               .order(:name)
+               .limit(20)
+
+    render json: brands.map { |b| { id: b.name, name: b.name } }
+  end
 end

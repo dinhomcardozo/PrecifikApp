@@ -1,5 +1,7 @@
 # app/controllers/products_controller.rb
 class ProductsController < ApplicationController
+  include Filterable
+
   before_action :init_product, only: %i[new create]
   before_action :set_product, only: %i[show edit update destroy]
   before_action :build_subproducts, only: %i[new edit]
@@ -7,7 +9,31 @@ class ProductsController < ApplicationController
   before_action :set_main_brands, only: %i[new edit create update]
 
   def index
-    @products = Product.includes(:sales_target).all
+      @products = Product.all
+
+      if params[:subproduct_name].present?
+        @products = @products
+          .joins(:subproducts)
+          .where("subproducts.name ILIKE ?", "%#{params[:subproduct_name]}%")
+      end
+
+      if params[:input_name].present?
+        @products = @products
+          .joins(:inputs)
+          .where("inputs.name ILIKE ?", "%#{params[:input_name]}%")
+      end
+
+      if params[:brand_name].present?
+        @products = @products
+          .joins(:brand)
+          .where("brands.main_brand ILIKE ?", "%#{params[:brand_name]}%")
+      end
+    
+    @products = @products
+        .order("#{sort_column} #{sort_direction}")
+        .includes(:sales_target)
+        .yield_self { |rel| apply_filters(rel) }
+        .paginate(page: params[:page])
   end
 
   def new
@@ -78,6 +104,18 @@ class ProductsController < ApplicationController
     redirect_to products_path, notice: "Produto excluído"
   end
 
+  def search
+    term = params[:q].to_s.strip
+    results = Product
+      .where("name ILIKE :t OR description ILIKE :t", t: "%#{term}%")
+      .order(:name)
+      .limit(20)
+      .pluck(:id, :name)
+      .map { |id, name| { id: id, text: name } }
+
+    render json: results
+  end
+
   private
 
   def init_product
@@ -132,5 +170,23 @@ class ProductsController < ApplicationController
         _destroy
       ]
     )
+  end
+
+  def sortable_columns
+  %w[
+    products.description
+    total_cost_with_taxes
+    suggested_price_retail
+    suggested_price_wholesale
+    # adicione outras colunas numéricas ou textuais aqui
+  ]
+end
+
+  def sort_column
+    sortable_columns.include?(params[:sort]) ? params[:sort] : "products.created_at"
+  end
+
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end
 end
