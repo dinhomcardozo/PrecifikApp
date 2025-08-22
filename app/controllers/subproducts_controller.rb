@@ -1,4 +1,7 @@
-class SubproductsController < ApplicationController
+class SubproductsController < Clients::AuthenticatedController
+  include AuthorizationForClients
+  before_action :authenticate_user!
+  
   include Filterable
   
   before_action :set_subproduct, only: %i[edit update destroy]

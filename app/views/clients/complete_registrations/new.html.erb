@@ -1,0 +1,29 @@
+<h1>Complete seu cadastro</h1>
+
+<%= form_for @client, url: clients_profile_path do |f| %>
+  <%= f.label :cnpj %>
+  <%= f.text_field :cnpj %>
+
+  <%= f.label :razao_social %>
+  <%= f.text_field :razao_social %>
+
+  <%= f.label :company_name %>
+  <%= f.text_field :company_name %>
+
+  <%= f.label :first_name %>
+  <%= f.text_field :first_name %>
+
+  <%= f.label :last_name %>
+  <%= f.text_field :last_name %>
+
+  <%= f.label :phone %>
+  <%= f.text_field :phone %>
+
+  <%= f.label :address %>
+  <%= f.text_field :address %>
+
+  <%= f.label :number_address %>
+  <%= f.text_field :number_address %>
+
+  <%= f.submit 'Finalizar Cadastro' %>
+<% end %>

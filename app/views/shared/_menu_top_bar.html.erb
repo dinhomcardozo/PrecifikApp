@@ -1,8 +1,26 @@
 <div class="menu-top-bar">
-  <span class="top-bar-item">
-    Seja bem-vindo ao Maxximiza, <strong>Bernardo!</strong>
-  </span>
-  <span class="top-bar-item">
-    <strong>SAIR</strong>
-  </span>
+  <% if user_client_signed_in? %>
+    <span class="top-bar-item">
+      Seja bem-vindo ao Maxximiza, 
+      <strong><%= current_user_client.first_name %>!</strong>
+    </span>
+    <span class="top-bar-item">
+      <%= link_to 'SAIR',
+                  destroy_user_client_session_path,
+                  method: :delete,
+                  data: { confirm: 'Tem certeza que deseja sair?' },
+                  class: 'logout-link' %>
+    </span>
+  <% else %>
+    <span class="top-bar-item">
+      <%= link_to 'ENTRAR',
+                  new_user_client_session_path,
+                  class: 'login-link' %>
+    </span>
+    <span class="top-bar-item">
+      <%= link_to 'CADASTRAR',
+                  new_user_client_registration_path,
+                  class: 'signup-link' %>
+    </span>
+  <% end %>
 </div>

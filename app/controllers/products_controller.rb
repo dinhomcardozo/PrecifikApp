@@ -1,5 +1,9 @@
 # app/controllers/products_controller.rb
-class ProductsController < ApplicationController
+class ProductsController < Clients::AuthenticatedController
+  include AuthorizationForClients
+  before_action :authenticate_user_client!
+  after_action  :verify_authorized
+  
   include Filterable
 
   before_action :init_product, only: %i[new create]
@@ -8,7 +12,8 @@ class ProductsController < ApplicationController
   before_action :set_sales_target_active_sum, only: %i[edit update]
   before_action :set_main_brands, only: %i[new edit create update]
 
-  def index
+  def index      
+      authorize Product, policy_class: Clients::BasePolicy
       @products = Product.all
 
       if params[:subproduct_name].present?
@@ -62,6 +67,7 @@ class ProductsController < ApplicationController
   end
 
   def update
+    authorize @product
     if @product.update(product_params)
         if params[:finalize]
           respond_to do |format|
@@ -94,12 +100,16 @@ class ProductsController < ApplicationController
   end
 
   def edit
+    authorize @product
     @main_brands = Brand.main_brands.order(:name)
   end
 
-  def show; end
+  def show
+    authorize @product
+  end
 
   def destroy
+    authorize @product
     @product.destroy
     redirect_to products_path, notice: "Produto excluído"
   end

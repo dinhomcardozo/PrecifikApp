@@ -1,4 +1,7 @@
-class CategoriesController < ApplicationController
+class CategoriesController < Clients::AuthenticatedController
+  include AuthorizationForClients
+  before_action :authenticate_user!
+  
   before_action :set_category, only: %i[ show edit update destroy ]
 
   # GET /categories or /categories.json

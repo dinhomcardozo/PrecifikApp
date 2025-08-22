@@ -1,91 +1,108 @@
 Rails.application.routes.draw do
-  root to: "dashboards/overview#index"
-  
-  namespace :dashboards do
-    get "overview", to: "overview#index"
-    root to: "overview#index"
-  end
-  
-  namespace :system_admins do
-    resources :banners
-    resources :user_clients
-    resources :users
-    resources :client_plans
-    resources :plans
-    resources :user_admins
-    resources :clients
-  end
+  devise_for :user_clients,
+    path:       'clients',
+    class_name: 'SystemAdmins::UserClient',
+    path_names: {
+      sign_in:  'entrar',
+      sign_out: 'sair',
+      sign_up:  'cadastrar'
+    },
+    controllers: {
+      sessions:      'clients/sessions',
+      registrations: 'clients/registrations'
+    }
 
-  namespace :services do
-    resources :equipments, shallow: true
-    resources :energies, shallow: true
-    resources :roles, shallow: true
-    resources :professionals, shallow: true
+  devise_for :clients,
+              class_name: 'SystemAdmins::UserClient',
+              path: 'clients',
+              controllers: { sessions: 'clients/sessions' }
 
-    resources :services,
-              path: "",
-              as:     :services,
-              only:   %i[index show new create edit update destroy] do
-      resources :service_professionals, path: "professionals"
-      resources :service_energies,      path: "energies"
-      resources :service_equipments,    path: "equipments"
-      resources :service_inputs,        path: "inputs"
-      resources :service_subproducts,   path: "subproducts"
-      resources :service_products,      path: "products"
+  root to: 'home#index'
+
+  devise_for :user_admins,
+    class_name: 'SystemAdmins::UserAdmin',
+    path:      'system_admins/user_admins'
+
+  authenticate :user_admin do
+    namespace :system_admins do
+      root to: 'user_admins#index', as: :admin_root
+
+      resources :user_admins
+      resources :user_clients
+      resources :plans
+      resources :banners
+      resources :clients, only: %i[new create]
     end
   end
 
-  namespace :sales do
-    resources :clients
+  authenticate :user_client do
+    scope path: 'clients' do
 
-    resources :quotes do
-      member do
-        post :calculate_total
+      scope module: 'clients' do
+        root to: 'dashboards/overview#index', as: :clients_root
+
+        scope path: 'dashboards', as: 'dashboards' do
+          get 'overview', to: 'dashboards/overview#index', as: :overview
+        end
+
+        resource :complete_registration,
+                 only: %i[new create],
+                 path: 'cadastrar/completar',
+                 controller: 'clients/complete_registrations'
+      end
+
+      # 2) CONTROLLERS EM app/controllers/ (no root)
+      resources :products, shallow: true do
+        resources :product_subproducts, only: %i[create update destroy]
+        collection do
+          get :tab
+          get :search
+        end
+      end
+
+      resources :subproducts do
+        collection do
+          get :search
+        end
+        member do
+          get   :composicao, action: :edit_composition
+          patch :composicao, action: :update_composition
+        end
+      end
+
+      resources :subproduct_compositions,
+                path: 'composicao',
+                only: %i[create update destroy show]
+
+      resources :inputs do
+        collection { get :search }
+      end
+
+      resources :input_types
+
+      resources :brands do
+        collection { get :search, to: 'brands#search', as: :search }
+      end
+
+      resources :suppliers
+      resources :channels
+      resources :taxes
+      resources :sales_targets
+      resources :fixed_costs
+
+      # serviços também fora de clients/, mas em module services/
+      scope path: 'clients/services',
+            module: 'services',
+            as: 'services' do
+        root to: 'services#index'
+        resources :equipments, shallow: true
+        resources :roles,      shallow: true
+        resources :services
       end
     end
-
-    resources :orders
   end
 
-  resources :taxes
-  resources :categories
-  resources :fixed_costs
-  resources :channels
-  resources :sales_targets
-
-  # Produtos e subprodutos aninhados
-  resources :products do
-    resources :product_subproducts, only: %i[create update destroy]
-    collection do
-      get :tab
-      get :search
-    end
-  end
-
-  # Marcas, Fornecedores, Tipos de Input, Inputs
-  resources :brands
-    get :search_brands, to: "brands#search", as: :search_brands
-  resources :suppliers
-  resources :input_types
-  resources :inputs do
-    collection { get :search }
-  end
-
-  # Subprodutos
-  resources :subproducts do
-    # 1) Tela de edição da composição
-    member do
-      get   :composicao, action: :edit_composition,   as: :edit_composition
-      patch :composicao, action: :update_composition, as: :update_composition
-    end
-
-    collection do
-        get :search, defaults: { format: :json }
-    end
-
-    # 2) Itens da composição (nested resource)
-    resources :subproduct_compositions,
-              path: "composicao",
-              only: %i[create update destroy show]
+  unauthenticated do
+    root to: redirect('/clients/entrar'), as: :public_root
   end
 end

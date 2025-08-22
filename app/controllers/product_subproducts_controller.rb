@@ -1,4 +1,7 @@
-class ProductSubproductsController < ApplicationController
+class ProductSubproductsController < Clients::AuthenticatedController
+  include AuthorizationForClients
+  before_action :authenticate_user!
+  
   before_action :set_product
 
   def create

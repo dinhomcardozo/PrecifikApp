@@ -1,11 +1,18 @@
-<% content_for :title, "New client" %>
+<h1>Complete seus dados de empresa</h1>
 
-<h1>New client</h1>
+<%= form_with model: @client,
+              url: system_admins_clients_path,
+              scope: :client,
+              local: true do |f| %>
 
-<%= render "form", system_admins_client: @system_admins_client %>
+  <div><%= f.label :cnpj %><%= f.text_field :cnpj %></div>
+  <div><%= f.label :razao_social %><%= f.text_field :razao_social %></div>
+  <div><%= f.label :company_name %><%= f.text_field :company_name %></div>
+  <div><%= f.label :first_name %><%= f.text_field :first_name %></div>
+  <div><%= f.label :last_name %><%= f.text_field :last_name %></div>
+  <div><%= f.label :phone %><%= f.text_field :phone %></div>
+  <div><%= f.label :address %><%= f.text_field :address %></div>
+  <div><%= f.label :number_address %><%= f.text_field :number_address %></div>
 
-<br>
-
-<div>
-  <%= link_to "Back to clients", system_admins_clients_path %>
-</div>
+  <%= f.submit 'Salvar Perfil' %>
+<% end %>

@@ -1,9 +1,10 @@
 class SystemAdmins::ClientsController < ApplicationController
-  before_action :set_system_admins_client, only: %i[ show edit update destroy ]
+  before_action :authenticate_user_client!
+  before_action :set_client, only: %i[ show edit update destroy ]
 
   # GET /system_admins/clients or /system_admins/clients.json
   def index
-    @system_admins_clients = SystemAdmins::Client.all
+    @clients = SystemAdmins::Client.all
   end
 
   # GET /system_admins/clients/1 or /system_admins/clients/1.json
@@ -12,7 +13,7 @@ class SystemAdmins::ClientsController < ApplicationController
 
   # GET /system_admins/clients/new
   def new
-    @system_admins_client = SystemAdmins::Client.new
+    @client = SystemAdmins::Client.new
   end
 
   # GET /system_admins/clients/1/edit
@@ -21,50 +22,47 @@ class SystemAdmins::ClientsController < ApplicationController
 
   # POST /system_admins/clients or /system_admins/clients.json
   def create
-    @system_admins_client = SystemAdmins::Client.new(system_admins_client_params)
+    @client = current_user_client.build_client(client_params)
+    @client.plan_id ||= 4  # plano trial
 
-    respond_to do |format|
-      if @system_admins_client.save
-        format.html { redirect_to @system_admins_client, notice: "Client was successfully created." }
-        format.json { render :show, status: :created, location: @system_admins_client }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @system_admins_client.errors, status: :unprocessable_entity }
-      end
+    if @client.save
+      redirect_to root_path, notice: 'Perfil de cliente criado com sucesso.'
+    else
+      render :new
     end
   end
 
   # PATCH/PUT /system_admins/clients/1 or /system_admins/clients/1.json
   def update
     respond_to do |format|
-      if @system_admins_client.update(system_admins_client_params)
-        format.html { redirect_to @system_admins_client, notice: "Client was successfully updated." }
-        format.json { render :show, status: :ok, location: @system_admins_client }
+      if @client.update(client_params)
+        format.html { redirect_to @client, notice: "Client was successfully updated." }
+        format.json { render :show, status: :ok, location: @client }
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @system_admins_client.errors, status: :unprocessable_entity }
+        format.json { render json: @client.errors, status: :unprocessable_entity }
       end
     end
   end
 
   # DELETE /system_admins/clients/1 or /system_admins/clients/1.json
   def destroy
-    @system_admins_client.destroy!
+    @client.destroy!
 
     respond_to do |format|
-      format.html { redirect_to system_admins_clients_path, status: :see_other, notice: "Client was successfully destroyed." }
+      format.html { redirect_to clients_path, status: :see_other, notice: "Client was successfully destroyed." }
       format.json { head :no_content }
     end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_system_admins_client
-      @system_admins_client = SystemAdmins::Client.find(params.expect(:id))
+    def set_client
+      @client = SystemAdmins::Client.find(params.expect(:id))
     end
 
     # Only allow a list of trusted parameters through.
-    def system_admins_client_params
-      params.expect(system_admins_client: [ :razao_social, :company_name, :cnpj, :first_name, :last_name, :cpf, :phone, :address, :number_address, :plan_id, :signup_date, :first_payment, :last_payment, :first_login, :last_login ])
+    def client_params
+      params.expect(client: [ :razao_social, :company_name, :cnpj, :first_name, :last_name, :cpf, :phone, :address, :number_address, :plan_id, :signup_date, :first_payment, :last_payment, :first_login, :last_login ])
     end
 end

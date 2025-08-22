@@ -1,4 +1,7 @@
-class TaxesController < ApplicationController
+class TaxesController < Clients::AuthenticatedController
+  include AuthorizationForClients
+  before_action :authenticate_user!
+  
   before_action :set_tax, only: %i[ show edit update destroy ]
 
   # GET /taxes or /taxes.json

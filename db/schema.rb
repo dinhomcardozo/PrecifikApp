@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_17_154334) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_20_223649) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+  enable_extension "pgcrypto"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -42,6 +43,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_17_154334) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "banners", force: :cascade do |t|
+    t.string "image"
+    t.string "link"
+    t.date "start_date"
+    t.date "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "interval", default: 5000, null: false
+  end
+
   create_table "brands", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -61,6 +72,38 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_17_154334) do
     t.string "channel_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "client_plans", force: :cascade do |t|
+    t.bigint "client_id", null: false
+    t.bigint "plan_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_client_plans_on_client_id"
+    t.index ["plan_id"], name: "index_client_plans_on_plan_id"
+  end
+
+  create_table "clients", force: :cascade do |t|
+    t.string "razao_social"
+    t.string "company_name"
+    t.string "cnpj"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "cpf"
+    t.string "phone"
+    t.string "address"
+    t.integer "number_address"
+    t.bigint "plan_id", null: false
+    t.date "signup_date"
+    t.date "first_payment"
+    t.date "last_payment"
+    t.datetime "first_login"
+    t.datetime "last_login"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_client_id"
+    t.index ["plan_id"], name: "index_clients_on_plan_id"
+    t.index ["user_client_id"], name: "index_clients_on_user_client_id"
   end
 
   create_table "energies", force: :cascade do |t|
@@ -136,6 +179,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_17_154334) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["code"], name: "index_payment_methods_on_code"
+  end
+
+  create_table "plans", force: :cascade do |t|
+    t.string "description"
+    t.decimal "price"
+    t.boolean "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "product_subproducts", force: :cascade do |t|
@@ -357,84 +408,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_17_154334) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "system_admins_banners", force: :cascade do |t|
-    t.string "image"
-    t.string "link"
-    t.date "start_date"
-    t.date "end_date"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "interval", default: 5000, null: false
-  end
-
-  create_table "system_admins_client_plans", force: :cascade do |t|
-    t.bigint "client_id", null: false
-    t.bigint "plan_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["client_id"], name: "index_system_admins_client_plans_on_client_id"
-    t.index ["plan_id"], name: "index_system_admins_client_plans_on_plan_id"
-  end
-
-  create_table "system_admins_clients", force: :cascade do |t|
-    t.string "razao_social"
-    t.string "company_name"
-    t.string "cnpj"
-    t.string "first_name"
-    t.string "last_name"
-    t.string "cpf"
-    t.string "phone"
-    t.string "address"
-    t.integer "number_address"
-    t.bigint "plan_id", null: false
-    t.date "signup_date"
-    t.date "first_payment"
-    t.date "last_payment"
-    t.datetime "first_login"
-    t.datetime "last_login"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["plan_id"], name: "index_system_admins_clients_on_plan_id"
-  end
-
-  create_table "system_admins_plans", force: :cascade do |t|
-    t.string "description"
-    t.decimal "price"
-    t.boolean "status"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "system_admins_user_admins", force: :cascade do |t|
-    t.string "full_name"
-    t.string "email"
-    t.string "phone"
-    t.boolean "admin"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "system_admins_user_clients", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "client_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["client_id"], name: "index_system_admins_user_clients_on_client_id"
-    t.index ["user_id"], name: "index_system_admins_user_clients_on_user_id"
-  end
-
-  create_table "system_admins_users", force: :cascade do |t|
-    t.string "first_name"
-    t.string "last_name"
-    t.string "email"
-    t.string "phone"
-    t.boolean "admin"
-    t.bigint "client_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["client_id"], name: "index_system_admins_users_on_client_id"
-  end
-
   create_table "taxes", force: :cascade do |t|
     t.text "description"
     t.decimal "icms"
@@ -449,8 +422,64 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_17_154334) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "user_admins", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "full_name"
+    t.string "email"
+    t.string "phone"
+    t.boolean "admin"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "encrypted_password", limit: 128, default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at", precision: nil
+    t.datetime "remember_created_at", precision: nil
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at", precision: nil
+    t.datetime "last_sign_in_at", precision: nil
+    t.inet "current_sign_in_ip"
+    t.inet "last_sign_in_ip"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at", precision: nil
+    t.datetime "confirmation_sent_at", precision: nil
+    t.string "unconfirmed_email"
+    t.integer "failed_attempts", default: 0, null: false
+    t.string "unlock_token"
+    t.datetime "locked_at", precision: nil
+    t.index ["confirmation_token"], name: "index_user_admins_on_confirmation_token", unique: true
+    t.index ["reset_password_token"], name: "index_user_admins_on_reset_password_token", unique: true
+    t.index ["unlock_token"], name: "index_user_admins_on_unlock_token", unique: true
+  end
+
+  create_table "user_clients", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "encrypted_password", limit: 128, default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at", precision: nil
+    t.datetime "remember_created_at", precision: nil
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at", precision: nil
+    t.datetime "last_sign_in_at", precision: nil
+    t.inet "current_sign_in_ip"
+    t.inet "last_sign_in_ip"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at", precision: nil
+    t.datetime "confirmation_sent_at", precision: nil
+    t.string "unconfirmed_email"
+    t.string "email", default: "", null: false
+    t.string "first_name", limit: 100
+    t.string "last_name", limit: 100
+    t.index ["confirmation_token"], name: "index_user_clients_on_confirmation_token", unique: true
+    t.index ["email"], name: "index_user_clients_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_user_clients_on_reset_password_token", unique: true
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "client_plans", "clients"
+  add_foreign_key "client_plans", "plans"
+  add_foreign_key "clients", "plans"
+  add_foreign_key "clients", "user_clients"
   add_foreign_key "input_cost_histories", "inputs"
   add_foreign_key "inputs", "brands"
   add_foreign_key "inputs", "input_types"
@@ -482,10 +511,4 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_17_154334) do
   add_foreign_key "subproduct_compositions", "inputs"
   add_foreign_key "subproduct_compositions", "subproducts"
   add_foreign_key "subproducts", "brands"
-  add_foreign_key "system_admins_client_plans", "system_admins_clients", column: "client_id"
-  add_foreign_key "system_admins_client_plans", "system_admins_plans", column: "plan_id"
-  add_foreign_key "system_admins_clients", "system_admins_plans", column: "plan_id"
-  add_foreign_key "system_admins_user_clients", "system_admins_clients", column: "client_id"
-  add_foreign_key "system_admins_user_clients", "system_admins_users", column: "user_id"
-  add_foreign_key "system_admins_users", "system_admins_clients", column: "client_id"
 end

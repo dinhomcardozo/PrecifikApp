@@ -28,7 +28,6 @@ class Product < ApplicationRecord
   # torna weight “somente em memória” - peso que o usuário digita
   attr_accessor :weight
 
-
   #CUSTO TOTAL
   
   def total_cost

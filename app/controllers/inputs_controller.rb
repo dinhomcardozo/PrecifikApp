@@ -1,4 +1,7 @@
-class InputsController < ApplicationController
+class InputsController < Clients::AuthenticatedController
+  include AuthorizationForClients
+  before_action :authenticate_user!
+  
   before_action :set_url_options, only: %i[index show]
   before_action :set_input,       only: %i[show edit update]
 

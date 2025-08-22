@@ -1,0 +1,36 @@
+<div class="auth-container">
+  <div class="auth-banner">
+    <%= render "devise/registrations/advertising" %>
+  </div>
+
+<%= form_for(
+      resource,
+      as: resource_name,
+      url: registration_path(resource_name),
+      html: { data: { turbo: false } }
+    ) do |f| %>
+    <div class="auth-form-wrapper">
+      <h2 class="auth-title">Cadastro</h2>
+
+      <%= f.email_field :email, placeholder: "E-mail" %>
+      <%= f.password_field :password, placeholder: "Senha" %>
+      <%= f.password_field :password_confirmation, placeholder: "Confirmação da senha" %>
+
+      <%= f.fields_for :client do |c| %>
+        <%= c.collection_select :plan_id, Plan.all, :id, :name, prompt: "Selecione um plano" %>
+        <%= c.text_field :cnpj, placeholder: "CNPJ" %>
+        <%= c.text_field :razao_social, placeholder: "Razão Social" %>
+        <%= c.text_field :company_name, placeholder: "Nome da Empresa" %>
+        <%= c.text_field :first_name, placeholder: "Primeiro Nome" %>
+        <%= c.text_field :last_name, placeholder: "Último Nome" %>
+        <%= c.telephone_field :phone, placeholder: "Telefone" %>
+        <%= c.text_field :address, placeholder: "Endereço" %>
+        <%= c.text_field :number_address, placeholder: "Número" %>
+      <% end %>
+
+      <div class="actions">
+        <%= f.submit "Criar conta" %>
+      </div>
+    </div>
+  <% end %>
+</div>

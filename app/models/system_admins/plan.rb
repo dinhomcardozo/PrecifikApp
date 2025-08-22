@@ -1,2 +1,4 @@
-class SystemAdmins::Plan < ApplicationRecord
+module SystemAdmins
+  class Plan < ApplicationRecord
+  end
 end

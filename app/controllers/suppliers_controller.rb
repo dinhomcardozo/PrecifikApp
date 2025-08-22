@@ -1,4 +1,7 @@
-class SuppliersController < ApplicationController
+class SuppliersController < Clients::AuthenticatedController
+  include AuthorizationForClients
+  before_action :authenticate_user!
+  
   def index
     @suppliers = Supplier.all
   end

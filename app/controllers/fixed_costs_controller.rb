@@ -1,4 +1,7 @@
-class FixedCostsController < ApplicationController
+class FixedCostsController < Clients::AuthenticatedController
+  include AuthorizationForClients
+  before_action :authenticate_user!
+  
   before_action :set_fixed_cost, only: %i[ show edit update destroy ]
 
   # GET /fixed_costs or /fixed_costs.json

@@ -1,4 +1,7 @@
-class InputTypesController < ApplicationController
+class InputTypesController < Clients::AuthenticatedController
+  include AuthorizationForClients
+  before_action :authenticate_user!
+  
   def index
     @input_types = InputType.all
   end

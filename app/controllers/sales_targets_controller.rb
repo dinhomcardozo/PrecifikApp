@@ -1,4 +1,7 @@
-class SalesTargetsController < ApplicationController
+class SalesTargetsController < Clients::AuthenticatedController
+  include AuthorizationForClients
+  before_action :authenticate_user!
+  
   before_action :set_sales_target, only: %i[ show edit update destroy ]
 
   # GET /sales_targets or /sales_targets.json

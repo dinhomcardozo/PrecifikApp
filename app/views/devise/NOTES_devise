@@ -1,0 +1,43 @@
+1. Autenticação (Database Authenticatable)
+encrypted_password Armazena a senha do usuário de forma segura, usando hashing (bcrypt). Nunca guarda a senha em texto puro.
+
+2. Recuperação de senha (Recoverable)
+reset_password_token Token único enviado por e-mail quando o usuário solicita redefinir a senha.
+
+reset_password_sent_at Data e hora em que o token de redefinição foi gerado e enviado. Usado para expirar o token após um período (ex.: 6 horas).
+
+Índice único em reset_password_token Garante busca rápida e que não existam dois tokens iguais na tabela.
+
+3. Lembrar sessão (Rememberable)
+remember_created_at Armazena quando o usuário marcou “lembrar de mim” ao fazer login. Permite manter a sessão ativa sem novo login até expirar.
+
+4. Rastreamento de login (Trackable)
+sign_in_count Contador incremental de quantas vezes o usuário fez login.
+
+current_sign_in_at Data e hora do login mais recente.
+
+last_sign_in_at Data e hora do login anterior ao mais recente.
+
+current_sign_in_ip Endereço IP de onde veio o login mais recente.
+
+last_sign_in_ip Endereço IP do login anterior.
+
+5. Confirmação de e-mail (Confirmable)
+confirmation_token Token único enviado ao usuário para confirmar o e-mail no cadastro.
+
+confirmed_at Timestamp em que o e-mail foi confirmado pelo usuário.
+
+confirmation_sent_at Data e hora de envio do token de confirmação.
+
+unconfirmed_email Guarda um novo e-mail quando o usuário altera o e-mail cadastrado e ainda não confirmou essa mudança.
+
+Índice único em confirmation_token Garante que cada token de confirmação seja único para validação correta.
+
+6. Bloqueio de conta (Lockable) – apenas em UserAdmin
+failed_attempts Quantidade de tentativas de login com senha incorreta. Após atingir o limite configurado, a conta é bloqueada.
+
+unlock_token Token enviado ao usuário para desbloquear a conta (por e-mail) caso ela tenha sido bloqueada por tentativas excessivas.
+
+locked_at Timestamp em que a conta foi bloqueada.
+
+Índice único em unlock_token Garante que o token de desbloqueio seja único e válido para aquele usuário.

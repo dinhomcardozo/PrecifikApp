@@ -1,0 +1,74 @@
+module Clients
+  class RegistrationsController < Devise::RegistrationsController
+    before_action :configure_sign_up_params, only: %i[new create]
+    skip_before_action :ensure_subscription!
+    skip_before_action :require_no_authentication, only: %i[new create]
+    respond_to :html, :turbo_stream
+    layout "application"
+
+    def new
+      super do |resource|
+        resource.build_client(plan_id: 4)
+      end
+    end
+
+    def create
+      build_resource(sign_up_params)
+      resource.save
+      yield resource if block_given?
+
+      if resource.persisted?
+        # login + flash
+        sign_up(resource_name, resource)
+        set_flash_message!(:notice, :signed_up)
+
+        # redirect para completar cadastro
+        redirect_to new_clients_complete_registration_path
+      else
+        clean_up_passwords resource
+        set_minimum_password_length
+        render :new, status: :unprocessable_entity
+      end
+    end
+
+    protected
+
+    def after_sign_up_path_for(resource)
+      new_clients_complete_registration_path
+    end
+
+    def sign_up_params
+      params.require(:user_client).permit(:email, :password, :password_confirmation, :client_id)
+    end
+
+    def respond_with(resource, _opts = {})
+      if resource.errors.empty?
+        redirect_to after_sign_up_path_for(resource)
+      else
+        render :new, status: :unprocessable_entity
+      end
+    end
+
+    def configure_sign_up_params
+      devise_parameter_sanitizer.permit(
+        :sign_up,
+        keys: [
+          :email,
+          :password,
+          :password_confirmation,
+          client_attributes: [
+            :plan_id,
+            :cnpj,
+            :razao_social,
+            :company_name,
+            :first_name,
+            :last_name,
+            :phone,
+            :address,
+            :number_address
+          ]
+        ]
+      )
+    end
+  end
+end
