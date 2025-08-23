@@ -12,51 +12,51 @@
   <% end %>
 
   <div>
-    <%= form.label :description, style: "display: block" %>
+    <%= form.label :description, "Nome do Perfil", style: "display: block" %>
     <%= form.textarea :description %>
   </div>
 
   <div>
-    <%= form.label :icms, style: "display: block" %>
+    <%= form.label :icms, "ICMS", style: "display: block" %>
     <%= form.text_field :icms %>
   </div>
 
   <div>
-    <%= form.label :ipi, style: "display: block" %>
+    <%= form.label :ipi, "IPI", style: "display: block" %>
     <%= form.text_field :ipi %>
   </div>
 
   <div>
-    <%= form.label :pis_cofins, style: "display: block" %>
+    <%= form.label :pis_cofins, "PIS/COFINS", style: "display: block" %>
     <%= form.text_field :pis_cofins %>
   </div>
 
   <div>
-    <%= form.label :difal, style: "display: block" %>
+    <%= form.label :difal, "DIFAL", style: "display: block" %>
     <%= form.text_field :difal %>
   </div>
 
   <div>
-    <%= form.label :iss, style: "display: block" %>
+    <%= form.label :iss, "ISS", style: "display: block" %>
     <%= form.text_field :iss %>
   </div>
 
   <div>
-    <%= form.label :cbs, style: "display: block" %>
+    <%= form.label :cbs, "CBS", style: "display: block" %>
     <%= form.text_field :cbs %>
   </div>
 
   <div>
-    <%= form.label :ibs, style: "display: block" %>
+    <%= form.label :ibs, "IBS", style: "display: block" %>
     <%= form.text_field :ibs %>
   </div>
 
   <div>
-    <%= form.label :note, style: "display: block" %>
+    <%= form.label :note, "Observações", style: "display: block" %>
     <%= form.textarea :note %>
   </div>
 
   <div>
-    <%= form.submit %>
+    <%= form.submit "Salvar", class: "action-button" %>
   </div>
 <% end %>

@@ -1,24 +1,26 @@
-<h1>Marcas</h1>
+<main class="index-container">
+  <h1>Marcas</h1>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Nome da Marca</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @brands.each do |brand| %>
+  <table class="index-table index-table--bordered">
+    <thead>
       <tr>
-        <td><%= brand.id %></td>
-        <td><%= brand.name %></td>
-        <td>
-          <%= link_to "Editar", edit_brand_path(brand), class: "action-button" %>
-        </td>
+        <th>ID</th>
+        <th>Nome da Marca</th>
+        <th>Ações</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @brands.each do |brand| %>
+        <tr>
+          <td><%= brand.id %></td>
+          <td><%= brand.name %></td>
+          <td>
+            <%= link_to "Editar", edit_brand_path(brand), class: "action-button" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 
-<%= link_to "Nova Marca", new_brand_path, class: "standart-button" %>
+  <%= link_to "Nova Marca", new_brand_path, class: "standart-button" %>
+</main>

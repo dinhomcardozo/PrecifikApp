@@ -1,24 +1,26 @@
-<h1>Tipos de Insumos</h1>
+<main class="index-container">
+  <h1>Tipos de Insumos</h1>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Nome</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @input_types.each do |input_type| %>
+  <table class="index-table index-table--bordered">
+    <thead>
       <tr>
-        <td><%= input_type.id %></td>
-        <td><%= input_type.name %></td>
-        <td>
-          <%= link_to "Editar", edit_input_type_path(input_type), class: "action-button" %>
-        </td>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Ações</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @input_types.each do |input_type| %>
+        <tr>
+          <td><%= input_type.id %></td>
+          <td><%= input_type.name %></td>
+          <td>
+            <%= link_to "Editar", edit_input_type_path(input_type), class: "action-button" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 
-<%= link_to "Novo Tipo de Insumo", new_input_type_path, class: "standart-button" %>
+  <%= link_to "Novo Tipo de Insumo", new_input_type_path, class: "standart-button" %>
+</main>

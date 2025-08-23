@@ -1,24 +1,26 @@
-<h1>Fornecedores</h1>
+<main class="index-container">
+  <h1>Fornecedores</h1>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Nome</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% Supplier.all.each do |supplier| %>
+  <table class="index-table index-table--bordered">
+    <thead>
       <tr>
-        <td><%= supplier.id %></td>
-        <td><%= supplier.name %></td>
-        <td>
-          <%= link_to "Editar", edit_supplier_path(supplier), class: "action-button" %>
-        </td>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Ações</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% Supplier.all.each do |supplier| %>
+        <tr>
+          <td><%= supplier.id %></td>
+          <td><%= supplier.name %></td>
+          <td>
+            <%= link_to "Editar", edit_supplier_path(supplier), class: "action-button" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 
-<%= link_to "Novo Fornecedor", new_supplier_path, class: "standart-button" %>
+  <%= link_to "Novo Fornecedor", new_supplier_path, class: "standart-button" %>
+</main>

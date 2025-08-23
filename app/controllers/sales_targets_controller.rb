@@ -1,6 +1,6 @@
 class SalesTargetsController < Clients::AuthenticatedController
   include AuthorizationForClients
-  before_action :authenticate_user!
+  before_action :authenticate_user_client!
   
   before_action :set_sales_target, only: %i[ show edit update destroy ]
 

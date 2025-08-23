@@ -1,75 +1,77 @@
 <!-- app/views/sales_targets/index.html.erb -->
 
-<h1>Metas de Vendas</h1>
-<%= link_to "[+] Criar Meta de Venda",
-            new_sales_target_path,
-            class: "standart-button" %>
+<main class="index-container">
+  <h1>Metas de Vendas</h1>
+  <%= link_to "[+] Criar Meta de Venda",
+              new_sales_target_path,
+              class: "standart-button" %>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Produto</th>
-      <th>Meta Mensal</th>
-      <th>Data Inicial</th>
-      <th>Data Final</th>
-      <th>Ações</th>
-      <th>Status</th>
-    </tr>
-  </thead>
+  <table class="index-table index-table--bordered" >
+    <thead>
+      <tr>
+        <th>Produto</th>
+        <th>Meta Mensal</th>
+        <th>Data Inicial</th>
+        <th>Data Final</th>
+        <th>Ações</th>
+        <th>Status</th>
+      </tr>
+    </thead>
 
-  <tbody>
-    <%= render partial: "sales_target",
-               collection: @sales_targets,
-               as:         :sales_target %>
+    <tbody>
+      <%= render partial: "sales_target",
+                collection: @sales_targets,
+                as:         :sales_target %>
 
-    <!-- total de todas as metas -->
-    <tr class="table-footer">
-      <td><strong>Total</strong></td>
-      <td><%= @sales_target_sum %></td>
-      <td colspan="4"></td>
-    </tr>
+      <!-- total de todas as metas -->
+      <tr class="table-footer">
+        <td><strong>Total</strong></td>
+        <td><%= @sales_target_sum %></td>
+        <td colspan="4"></td>
+      </tr>
 
-    <!-- linha única com Total Ativas + Total de Custos Fixos + Custo Fixo / Unidade Ativa + Custo Fixo Distribuído -->
-    <tr class="table-footer">
-      <td><strong>Total Ativas</strong></td>
-      <td><%= @sales_target_active_sum %></td>
-      <td colspan="1"></td>
-    </tr>
+      <!-- linha única com Total Ativas + Total de Custos Fixos + Custo Fixo / Unidade Ativa + Custo Fixo Distribuído -->
+      <tr class="table-footer">
+        <td><strong>Total Ativas</strong></td>
+        <td><%= @sales_target_active_sum %></td>
+        <td colspan="1"></td>
+      </tr>
 
-    <tr>
-      <!-- mostra o total fixo -->
-      <td>
-        <strong>Total de Custos Fixos</strong><br>
-        <%= number_to_currency(@total_fixed_cost.to_f, unit: "R$ ") %>
-      </td>
-
-      <hr style="margin:4px 0; border-color:#ddd;">
-
-      <!-- mostra custo por unidade ativa -->
-      <td>
-        <strong>Custo Fixo / Unidade Ativa</strong><br>
-        <% if @sales_target_active_sum.positive? %>
-          <%= number_to_currency(
-                @total_fixed_cost.to_f / @sales_target_active_sum,
-                unit: "R$ "
-              ) %>
-        <% else %>
-          –
-        <% end %>
+      <tr>
+        <!-- mostra o total fixo -->
+        <td>
+          <strong>Total de Custos Fixos</strong><br>
+          <%= number_to_currency(@total_fixed_cost.to_f, unit: "R$ ") %>
+        </td>
 
         <hr style="margin:4px 0; border-color:#ddd;">
 
-        <!-- mostra custo fixo distribuído -->
-        <strong>Custo Fixo Distribuído</strong><br>
-        <% if @sales_target_sum.positive? %>
-          <%= number_to_currency(
-                @total_fixed_cost.to_f / @sales_target_sum,
-                unit: "R$ "
-              ) %>
-        <% else %>
-          –
-        <% end %>
-      </td>
-    </tr>
-  </tbody>
-</table>
+        <!-- mostra custo por unidade ativa -->
+        <td>
+          <strong>Custo Fixo / Unidade Ativa</strong><br>
+          <% if @sales_target_active_sum.positive? %>
+            <%= number_to_currency(
+                  @total_fixed_cost.to_f / @sales_target_active_sum,
+                  unit: "R$ "
+                ) %>
+          <% else %>
+            –
+          <% end %>
+
+          <hr style="margin:4px 0; border-color:#ddd;">
+
+          <!-- mostra custo fixo distribuído -->
+          <strong>Custo Fixo Distribuído</strong><br>
+          <% if @sales_target_sum.positive? %>
+            <%= number_to_currency(
+                  @total_fixed_cost.to_f / @sales_target_sum,
+                  unit: "R$ "
+                ) %>
+          <% else %>
+            –
+          <% end %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</main>
