@@ -42,12 +42,14 @@ class ProductsController < Clients::AuthenticatedController
   end
 
   def new
+    authorize Product, policy_class: Clients::BasePolicy
     @product = Product.new
     @main_brands = Brand.main_brands.order(:name)
     2.times { @product.product_subproducts.build }
   end
 
   def create
+    authorize Product, policy_class: Clients::BasePolicy
     @product = Product.new(product_params)
 
     if @product.save
@@ -67,7 +69,7 @@ class ProductsController < Clients::AuthenticatedController
   end
 
   def update
-    authorize @product
+    authorize Product, policy_class: Clients::BasePolicy
     if @product.update(product_params)
         if params[:finalize]
           respond_to do |format|
@@ -100,16 +102,15 @@ class ProductsController < Clients::AuthenticatedController
   end
 
   def edit
-    authorize @product
+    authorize Product, policy_class: Clients::BasePolicy
     @main_brands = Brand.main_brands.order(:name)
   end
 
   def show
-    authorize @product
+    authorize Product, policy_class: Clients::BasePolicy
   end
 
   def destroy
-    authorize @product
     @product.destroy
     redirect_to products_path, notice: "Produto excluído"
   end
