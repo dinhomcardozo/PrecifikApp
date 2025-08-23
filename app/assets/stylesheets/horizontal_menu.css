@@ -1,6 +1,6 @@
 .menu-top-bar,
 .system-admin-menu-top-bar {
-  background-color: var(--bg-color);
+  background-color: var(--medium-gray);
   color: var(--text-dark);
   display: flex;
   justify-content: flex-end;
@@ -10,7 +10,7 @@
 
 .menu-top-bar .top-bar-item,
 .system-admin-menu-top-bar .top-bar-item {
-  margin-left: 1.5rem;
+  margin-left: 0.1rem;
   font-size: 0.7rem;
 }
 

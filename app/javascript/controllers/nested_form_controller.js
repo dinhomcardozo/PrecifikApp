@@ -57,7 +57,7 @@ export default class extends Controller {
     }
 
     // busca o JSON do input
-    fetch(`/inputs/${inputId}.json`, { headers: { Accept: "application/json" } })
+    fetch(`/clients/inputs/${inputId}.json`, { headers: { Accept: "application/json" } })
       .then(r => r.json())
       .then(data => {
         const unitCost     = (data.cost || 0) / (data.weight_in_grams || 1);

@@ -1,6 +1,6 @@
 class InputsController < Clients::AuthenticatedController
   include AuthorizationForClients
-  before_action :authenticate_user!
+  before_action :authenticate_user_client!
   
   before_action :set_url_options, only: %i[index show]
   before_action :set_input,       only: %i[show edit update]
@@ -22,10 +22,12 @@ class InputsController < Clients::AuthenticatedController
       format.html
       format.json do
         render json: {
-          cost:            @input.cost.to_f,
-          weight_in_grams: @input.weight.to_f
+              cost:            @input.cost.to_f,
+              weight_in_grams: (@input.weight.presence || 1).to_f
         }
       end
+
+      
     end
   end
 

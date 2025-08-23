@@ -1,6 +1,6 @@
 class BrandsController < Clients::AuthenticatedController
   include AuthorizationForClients
-  before_action :authenticate_user!
+  before_action :authenticate_user_client!
   
   def index
     @brands = Brand.all

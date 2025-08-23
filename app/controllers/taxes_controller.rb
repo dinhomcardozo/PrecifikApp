@@ -1,6 +1,6 @@
 class TaxesController < Clients::AuthenticatedController
   include AuthorizationForClients
-  before_action :authenticate_user!
+  before_action :authenticate_user_client!
   
   before_action :set_tax, only: %i[ show edit update destroy ]
 

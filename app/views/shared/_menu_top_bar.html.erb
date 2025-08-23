@@ -2,7 +2,7 @@
   <% if user_client_signed_in? %>
     <span class="top-bar-item">
       Seja bem-vindo ao Maxximiza, 
-      <strong><%= current_user_client.first_name %>!</strong>
+      <strong><%= current_user_client.first_name %>!    |     </strong>
     </span>
     <span class="top-bar-item">
       <%= link_to 'SAIR',

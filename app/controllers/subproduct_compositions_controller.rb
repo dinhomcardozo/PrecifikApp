@@ -1,6 +1,6 @@
 class SubproductCompositionsController < Clients::AuthenticatedController
   include AuthorizationForClients
-  before_action :authenticate_user!
+  before_action :authenticate_user_client!
   
   before_action :set_subproduct
   before_action :set_composition, only: [:update, :destroy]
