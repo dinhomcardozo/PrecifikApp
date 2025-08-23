@@ -1,0 +1,10 @@
+.notice:empty,
+.alert:empty {
+  display: none;
+}
+
+.notice,
+.alert {
+  margin: 0;
+  padding: 0;
+}

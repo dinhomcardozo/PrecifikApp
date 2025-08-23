@@ -1,18 +1,18 @@
 <main class="index-container">
   <p style="color: green"><%= notice %></p>
 
-  <% content_for :title, "Categories" %>
+  <% content_for :title, "Categorias | Maxximiza" %>
 
-  <h1>Categories</h1>
+  <h1>Categorias</h1>
 
   <div id="categories">
     <% @categories.each do |category| %>
       <%= render category %>
       <p>
-        <%= link_to "Show this category", category %>
+        <%= link_to "Ver", category, class: "action-button" %>
       </p>
     <% end %>
   </div>
 
-  <%= link_to "New category", new_category_path %>
+  <%= link_to "[+] Criar Categoria", new_category_path, class: "action-button" %>
 </main>

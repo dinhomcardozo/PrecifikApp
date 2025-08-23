@@ -89,6 +89,7 @@ Rails.application.routes.draw do
       resources :taxes
       resources :sales_targets
       resources :fixed_costs
+      resources :categories
 
       # serviços também fora de clients/, mas em module services/
       scope path: 'clients/services',

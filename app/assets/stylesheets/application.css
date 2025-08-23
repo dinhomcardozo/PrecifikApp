@@ -1,3 +1,4 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
 @import "./variables.css";
 @import "./index_pages.css";
 @import "./general.css";
@@ -6,3 +7,4 @@
 @import "./filters.css";
 @import "./devise_auth.css";
 @import "select2/dist/css/select2.css";
+@import "./notice.css";
