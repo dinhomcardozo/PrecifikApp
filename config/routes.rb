@@ -35,12 +35,18 @@ Rails.application.routes.draw do
     end
   end
 
+  scope path: 'clients', module: 'clients' do
+    resource :settings, only: [:show]
+  end
+
   authenticate :user_client do
     scope path: 'clients' do
 
       scope module: 'clients' do
         root to: 'dashboards/overview#index', as: :clients_root
 
+        resources :user_clients
+        
         scope path: 'dashboards', as: 'dashboards' do
           get 'overview', to: 'dashboards/overview#index', as: :overview
         end

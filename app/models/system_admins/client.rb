@@ -9,18 +9,10 @@ module SystemAdmins
       trial:  4
     }
 
-    belongs_to :plan
-
-    belongs_to :user_client,
-               class_name: 'SystemAdmins::UserClient',
-               inverse_of: :client
-
-    has_many :user_clients,
-             class_name: 'SystemAdmins::UserClient',
-             foreign_key: 'client_id',
-             inverse_of: :client,
-             dependent: :destroy
-
+    has_many :user_clients, class_name: 'SystemAdmins::UserClient', foreign_key: :client_id
+    belongs_to :plan, class_name: 'SystemAdmins::Plan', foreign_key: :plan_id
+    validates :plan_id, presence: true
+    
     validates :cnpj, :razao_social, :company_name,
               :first_name, :last_name, :phone,
               :address, :number_address,

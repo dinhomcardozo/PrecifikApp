@@ -5,11 +5,7 @@
       <strong><%= current_user_client.first_name %>!    |     </strong>
     </span>
     <span class="top-bar-item">
-      <%= link_to 'SAIR',
-                  destroy_user_client_session_path,
-                  method: :delete,
-                  data: { confirm: 'Tem certeza que deseja sair?' },
-                  class: 'logout-link' %>
+      <%= button_to 'SAIR', destroy_user_client_session_path, method: :delete %>
     </span>
   <% else %>
     <span class="top-bar-item">

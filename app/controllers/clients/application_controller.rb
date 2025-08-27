@@ -8,8 +8,12 @@ module Clients
 
     # Free (id=1) nunca expira; outros planos podem ter data de expiração
     def check_subscription
+      return unless current_user_client.client # segurança para evitar nil
+      
       return if current_user_client.client.plan_id == 1
-      if current_user_client.client.last_payment && current_user.client.last_payment < 30.days.ago
+
+      if current_user_client.client.last_payment &&
+        current_user_client.client.last_payment < 30.days.ago
         redirect_to clients_dashboard_path, alert: "Sua assinatura expirou."
       end
     end

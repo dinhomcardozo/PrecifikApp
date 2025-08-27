@@ -1,4 +1,5 @@
 // app/javascript/application.js
+import "@rails/ujs"
 import "@hotwired/turbo-rails"
 import * as ActiveStorage from "@rails/activestorage"
 import "./controllers"
@@ -8,6 +9,8 @@ import { Portuguese } from "flatpickr/dist/l10n/pt.js"
 import "bootstrap/dist/css/bootstrap.min.css"
 import * as bootstrap from "bootstrap"
 window.bootstrap = bootstrap
+
+Rails.start()
 
 ActiveStorage.start()
 

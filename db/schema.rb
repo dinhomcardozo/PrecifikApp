@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_20_223649) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_27_013528) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -101,9 +101,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_20_223649) do
     t.datetime "last_login"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_client_id"
     t.index ["plan_id"], name: "index_clients_on_plan_id"
-    t.index ["user_client_id"], name: "index_clients_on_user_client_id"
   end
 
   create_table "energies", force: :cascade do |t|
@@ -469,6 +467,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_20_223649) do
     t.string "email", default: "", null: false
     t.string "first_name", limit: 100
     t.string "last_name", limit: 100
+    t.boolean "admin"
+    t.bigint "client_id"
+    t.index ["client_id"], name: "index_user_clients_on_client_id"
     t.index ["confirmation_token"], name: "index_user_clients_on_confirmation_token", unique: true
     t.index ["email"], name: "index_user_clients_on_email", unique: true
     t.index ["reset_password_token"], name: "index_user_clients_on_reset_password_token", unique: true
@@ -479,7 +480,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_20_223649) do
   add_foreign_key "client_plans", "clients"
   add_foreign_key "client_plans", "plans"
   add_foreign_key "clients", "plans"
-  add_foreign_key "clients", "user_clients"
   add_foreign_key "input_cost_histories", "inputs"
   add_foreign_key "inputs", "brands"
   add_foreign_key "inputs", "input_types"
@@ -511,4 +511,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_20_223649) do
   add_foreign_key "subproduct_compositions", "inputs"
   add_foreign_key "subproduct_compositions", "subproducts"
   add_foreign_key "subproducts", "brands"
+  add_foreign_key "user_clients", "clients"
 end

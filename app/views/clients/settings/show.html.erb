@@ -1,0 +1,61 @@
+<main class="index-container">
+  <h2 class="index-title">📦 Sua Empresa</h2>
+  <ul>
+    <li><strong>Razão Social:</strong> <%= @client.razao_social %></li>
+    <li><strong>Nome Fantasia:</strong> <%= @client.company_name %></li>
+    <li><strong>CNPJ:</strong> <%= @client.cnpj %></li>
+    <li><strong>Endereço:</strong> <%= @client.address %>, <%= @client.number_address %></li>
+    <li><strong>Plano:</strong>
+      <% if @plan %>
+        <%= @plan.id %> - <%= @plan.description %>
+      <% else %>
+        Não definido
+      <% end %>
+    </li>
+    <li><strong>Administrador:</strong> <%= @client.first_name %> <%= @client.last_name %></li>
+  </ul>
+
+  <hr>
+
+  <h2 class="index-title">👤 Seu Usuário</h2>
+  <ul>
+    <li><strong>ID:</strong> <%= @user_client.id %></li>
+    <li><strong>Email:</strong> <%= @user_client.email %></li>
+    <li><strong>Nome:</strong> <%= @user_client.first_name %> <%= @user_client.last_name %></li>
+  </ul>
+
+  <%= link_to 'Alterar Senha', edit_user_client_registration_path, class: 'action-button' %>
+
+  <% if @user_client.admin? %>
+    <hr>
+    <h2>🛠️ Usuários do Sistema</h2>
+
+      <%= link_to 'Criar Novo Usuário', new_user_client_path, class: 'action-button' %>
+
+    <table class="index-table--bordered">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>Admin?</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @user_clients.each do |uc| %>
+          <tr>
+            <td><%= uc.id %></td>
+            <td><%= uc.first_name %> <%= uc.last_name %></td>
+            <td><%= uc.email %></td>
+            <td><%= uc.admin? ? 'Sim' : 'Não' %></td>
+            <td>
+              <%= link_to 'Editar', edit_user_client_path(uc), class: 'action-button' %>
+              <%= link_to 'Excluir', user_client_path(uc), method: :delete, data: { confirm: 'Tem certeza?' }, class: 'action-button' %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</main>

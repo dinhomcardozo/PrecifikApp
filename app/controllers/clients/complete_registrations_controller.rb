@@ -9,22 +9,14 @@ module Clients
     end
 
     def create
-      @client = current_user_client.build_client(client_params)
-      @client.plan_id = Plan.find(4).id  # plano trial
+      @client = SystemAdmins::Client.new(client_params)
+      @client.plan_id = 4 # plano trial padrão
 
       if @client.save
-        # registra entrada em client_plans
-        ClientPlan.create!(
-          client:     @client,
-          plan:       @client.plan,
-          started_at: Time.current,
-          expires_at: 30.days.from_now
-        )
-
-        redirect_to clients_root_path,
-                    notice: 'Cadastro completo com sucesso!'
+        current_user_client.update!(client_id: @client.id)
+        redirect_to clients_root_path, notice: "Cadastro completo com sucesso!"
       else
-        render :new
+        render :new, status: :unprocessable_entity
       end
     end
 
@@ -32,14 +24,9 @@ module Clients
 
     def client_params
       params.require(:client).permit(
-        :cnpj,
-        :razao_social,
-        :company_name,
-        :first_name,
-        :last_name,
-        :phone,
-        :address,
-        :number_address
+        :cnpj, :razao_social, :company_name,
+        :first_name, :last_name, :phone,
+        :address, :number_address
       )
     end
   end

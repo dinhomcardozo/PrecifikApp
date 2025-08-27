@@ -3,6 +3,8 @@ module SystemAdmins
   class UserClient < ApplicationRecord
     self.table_name = 'user_clients'
     
+    belongs_to :client, class_name: 'SystemAdmins::Client', foreign_key: :client_id
+    
     devise :database_authenticatable,
            :registerable,
            :recoverable,
@@ -10,11 +12,6 @@ module SystemAdmins
            :validatable
 
     belongs_to :user_admin, optional: true
-    has_one :client,
-            class_name:  'SystemAdmins::Client',
-            foreign_key: 'user_client_id',
-            inverse_of:  :user_client,
-            dependent:   :destroy
 
     accepts_nested_attributes_for :client
 
