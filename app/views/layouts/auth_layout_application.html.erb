@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>PrecifikApp</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <%= favicon_link_tag 'favicon.png', rel: 'icon', type: 'image/png' %>
+    
+    <%= javascript_include_tag "application", type: "module", "data-turbo-track": "reload" %>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1"></script>
+  
+    </head>
+
+    <body class="auth-layout">
+        <!-- Coluna esquerda -->
+        <div class="auth-layout__banner">
+            <%= image_tag 'banner.jpg', alt: 'Publicidade da marca' %>
+        </div>
+
+        <!-- Coluna direita -->
+        <div class="auth-layout__content">
+            <%= yield %>
+        </div>
+    </body>
+</html>

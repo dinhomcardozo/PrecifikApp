@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600&display=swap');
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import "./variables.css";
 @import "./index_pages.css";
@@ -5,6 +6,6 @@
 @import "./horizontal_menu.css";
 @import "./products_tabs.css";
 @import "./filters.css";
-@import "./devise_auth.css";
+@import "./auth.css";
 @import "select2/dist/css/select2.css";
 @import "./notice.css";

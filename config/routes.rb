@@ -37,6 +37,9 @@ Rails.application.routes.draw do
 
   scope path: 'clients', module: 'clients' do
     resource :settings, only: [:show]
+
+    get  'cadastrar/completar/new', to: 'complete_registrations#new',   as: :new_complete_registration
+    post 'cadastrar/completar',     to: 'complete_registrations#create', as: :complete_registration
   end
 
   authenticate :user_client do
@@ -50,11 +53,6 @@ Rails.application.routes.draw do
         scope path: 'dashboards', as: 'dashboards' do
           get 'overview', to: 'dashboards/overview#index', as: :overview
         end
-
-        resource :complete_registration,
-                 only: %i[new create],
-                 path: 'cadastrar/completar',
-                 controller: 'clients/complete_registrations'
       end
 
       # 2) CONTROLLERS EM app/controllers/ (no root)

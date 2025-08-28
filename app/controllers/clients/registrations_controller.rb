@@ -1,15 +1,17 @@
 module Clients
   class RegistrationsController < Devise::RegistrationsController
+    skip_before_action :ensure_subscription!, only: %i[new create]
+    skip_before_action :ensure_client_profile!, only: %i[new create]
+
     before_action :configure_sign_up_params, only: %i[new create]
     skip_before_action :ensure_subscription!
     skip_before_action :require_no_authentication, only: %i[new create]
     respond_to :html, :turbo_stream
-    layout "application"
+    layout "auth_layout_application"
 
     def new
-      super do |resource|
-        resource.build_client(plan_id: 4)
-      end
+      build_resource
+      render :new
     end
 
     def create
@@ -18,15 +20,8 @@ module Clients
       yield resource if block_given?
 
       if resource.persisted?
-        # login + flash
-        sign_up(resource_name, resource)
-        set_flash_message!(:notice, :signed_up)
-
-        # redirect para completar cadastro
-        redirect_to new_clients_complete_registration_path
+        redirect_to new_complete_registration_path(user_client_id: resource.id)
       else
-        clean_up_passwords resource
-        set_minimum_password_length
         render :new, status: :unprocessable_entity
       end
     end
@@ -34,11 +29,11 @@ module Clients
     protected
 
     def after_sign_up_path_for(resource)
-      new_clients_complete_registration_path
+      new_complete_registration_path
     end
 
     def sign_up_params
-      params.require(:user_client).permit(:email, :password, :password_confirmation, :client_id)
+      params.require(:user_client).permit(:email, :password, :password_confirmation)
     end
 
     def respond_with(resource, _opts = {})

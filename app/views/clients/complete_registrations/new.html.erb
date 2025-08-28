@@ -1,6 +1,7 @@
-<h1>Complete seu cadastro</h1>
+<%= form_for @client, url: complete_registration_path, html: { class: "auth-form" } do |f| %>
+  <%= hidden_field_tag :user_client_id, @user_client.id %>
+  <h2>Complete seu cadastro</h2>
 
-<%= form_for @client, url: clients_profile_path do |f| %>
   <%= f.label :cnpj %>
   <%= f.text_field :cnpj %>
 

@@ -1,0 +1,9 @@
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "auth-form" }) do |f| %>
+  <h2>Cadastro</h2>
+  <%= f.email_field :email, placeholder: "E-mail" %>
+  <%= f.password_field :password, placeholder: "Senha" %>
+  <%= f.password_field :password_confirmation, placeholder: "Confirmação da senha" %>
+  <div class="actions">
+    <%= f.submit "Criar conta" %>
+  </div>
+<% end %>
