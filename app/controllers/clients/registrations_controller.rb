@@ -44,26 +44,8 @@ module Clients
       end
     end
 
-    def configure_sign_up_params
-      devise_parameter_sanitizer.permit(
-        :sign_up,
-        keys: [
-          :email,
-          :password,
-          :password_confirmation,
-          client_attributes: [
-            :plan_id,
-            :cnpj,
-            :razao_social,
-            :company_name,
-            :first_name,
-            :last_name,
-            :phone,
-            :address,
-            :number_address
-          ]
-        ]
-      )
+    def sign_up_params
+      params.require(:user_client).permit(:email, :password, :password_confirmation)
     end
   end
 end

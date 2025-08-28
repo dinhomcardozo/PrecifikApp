@@ -18,14 +18,11 @@ module Clients
 
     private
 
-    def public_client_params
+    def client_params
       params.require(:client).permit(
-        :first_name,
-        :last_name,
-        :phone,
-        :address,
-        :number_address
+        :cnpj, :razao_social, :company_name,
+        :first_name, :last_name, :cpf, :phone,
+        :address, :number_address
       )
     end
-  end
 end

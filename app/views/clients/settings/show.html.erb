@@ -18,15 +18,21 @@
   <hr>
 
   <h2 class="index-title">👤 Seu Usuário</h2>
-  <ul>
-    <li><strong>ID:</strong> <%= @user_client.id %></li>
-    <li><strong>Email:</strong> <%= @user_client.email %></li>
-    <li><strong>Nome:</strong> <%= @user_client.first_name %> <%= @user_client.last_name %></li>
-  </ul>
+    <ul>
+      <li><strong>ID:</strong> <%= @user_client.id %></li>
+      <li><strong>Email:</strong> <%= @user_client.email %></li>
+      <li><strong>Nome:</strong> <%= @user_client.first_name %> <%= @user_client.last_name %></li>
+    </ul>
 
-  <%= link_to 'Alterar Senha', edit_user_client_registration_path, class: 'action-button' %>
+    <% if @user_client.admin? %>
+      <%= link_to 'Alterar Dados do Usuário',
+                  edit_user_client_path(@user_client),
+                  class: 'action-button' %>
+    <% end %>
 
-  <% if @user_client.admin? %>
+    <%= link_to 'Alterar Senha', edit_user_client_registration_path, class: 'action-button' %>
+
+  <% if @user_client.admin? && @client.plan_id != 4 %>
     <hr>
     <h2>🛠️ Usuários do Sistema</h2>
 

@@ -2,6 +2,8 @@ class SystemAdmins::ClientsController < ApplicationController
   before_action :authenticate_user_client!
   before_action :set_client, only: %i[ show edit update destroy ]
 
+  validates :cpf, presence: true, format: { with: /\A\d{11}\z/, message: "deve conter 11 números" }
+
   # GET /system_admins/clients or /system_admins/clients.json
   def index
     @clients = SystemAdmins::Client.all

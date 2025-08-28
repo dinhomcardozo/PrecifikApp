@@ -24,8 +24,14 @@ module Clients
       @client.plan_id = 4 # Plano Trial
 
       if @client.save
+        @client.update!(signup_date: Time.current)
+
         user_client = SystemAdmins::UserClient.find(params[:user_client_id])
-        user_client.update!(client_id: @client.id)
+        user_client.update!(
+          client_id: @client.id,
+          signup_date: Time.current,
+          admin: true
+        )
 
         redirect_to clients_root_path, notice: 'Cadastro completo com sucesso!'
       else
@@ -38,7 +44,7 @@ module Clients
     def client_params
       params.require(:client).permit(
         :cnpj, :razao_social, :company_name,
-        :first_name, :last_name, :phone,
+        :first_name, :last_name, :cpf, :phone,
         :address, :number_address
       )
     end

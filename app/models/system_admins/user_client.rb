@@ -3,7 +3,7 @@ module SystemAdmins
   class UserClient < ApplicationRecord
     self.table_name = 'user_clients'
     
-    belongs_to :client, class_name: 'SystemAdmins::Client', foreign_key: :client_id
+    belongs_to :client, class_name: 'SystemAdmins::Client', foreign_key: :client_id, optional: true
     
     devise :database_authenticatable,
            :registerable,

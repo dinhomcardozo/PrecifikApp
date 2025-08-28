@@ -3,7 +3,7 @@ module Clients
     include Pundit::Authorization
     before_action :authenticate_user_client!
     before_action :ensure_subscription!
-    layout "auth_layout_application"
+    layout "application"
 
     private
 
