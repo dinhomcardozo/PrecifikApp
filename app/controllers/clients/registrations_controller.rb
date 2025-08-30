@@ -3,7 +3,6 @@ module Clients
     skip_before_action :ensure_subscription!, only: %i[new create]
     skip_before_action :ensure_client_profile!, only: %i[new create]
 
-    before_action :configure_sign_up_params, only: %i[new create]
     skip_before_action :ensure_subscription!
     skip_before_action :require_no_authentication, only: %i[new create]
     respond_to :html, :turbo_stream
@@ -30,6 +29,10 @@ module Clients
 
     def after_sign_up_path_for(resource)
       new_complete_registration_path
+    end
+
+    def after_update_path_for(resource)
+      settings_path
     end
 
     def sign_up_params

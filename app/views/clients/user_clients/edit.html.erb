@@ -1,0 +1,22 @@
+<h1>Editar Dados do Usuário</h1>
+
+<%= form_for @user_client, as: :user_client, url: user_client_path(@user_client), method: :patch do |f| %>
+  <div class="field">
+    <%= f.label :first_name, "Primeiro Nome" %>
+    <%= f.text_field :first_name, placeholder: "Digite o primeiro nome" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :last_name, "Último Nome" %>
+    <%= f.text_field :last_name, placeholder: "Digite o sobrenome" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :email, "E-mail" %>
+    <%= f.email_field :email, placeholder: "Digite o e-mail" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Salvar Alterações", class: "action-button" %>
+  </div>
+<% end %>

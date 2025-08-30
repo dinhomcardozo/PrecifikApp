@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_27_013528) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_29_230116) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -469,6 +469,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_27_013528) do
     t.string "last_name", limit: 100
     t.boolean "admin"
     t.bigint "client_id"
+    t.date "signup_date"
     t.index ["client_id"], name: "index_user_clients_on_client_id"
     t.index ["confirmation_token"], name: "index_user_clients_on_confirmation_token", unique: true
     t.index ["email"], name: "index_user_clients_on_email", unique: true

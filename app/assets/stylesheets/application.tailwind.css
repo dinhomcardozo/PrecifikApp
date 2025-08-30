@@ -1,7 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600&display=swap');
 @import "./variables.css";
+@import "bootstrap/dist/css/bootstrap.min.css";
 @import "./index_pages.css";
 @import "./general.css";
 @import "./horizontal_menu.css";
@@ -9,3 +11,4 @@
 @import "./filters.css";
 @import "./devise_auth.css";
 @import "select2/dist/css/select2.css";
+@import "./notice.css";

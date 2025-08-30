@@ -20,7 +20,7 @@
   </td>
 
   <td>
-    <%= f.label :quantity, "Quantidade (g)", class: "custom-label visually-hidden" %>
+    <%= f.label :quantity, "Quantidade (g)", class: "custom-label" %>
     <%= f.number_field :quantity,
           step: "any",
           placeholder: "Ex: 100",
@@ -32,7 +32,7 @@
   </td>
 
   <td>
-    <%= f.label :cost, "Custo (R$)", class: "custom-label visually-hidden" %>
+    <%= f.label :cost, "Custo da Quantidade (R$)", class: "custom-label" %>
     <%= f.number_field :cost,
           step: "any",
           readonly: true,

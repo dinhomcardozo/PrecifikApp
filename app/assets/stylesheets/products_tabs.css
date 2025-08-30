@@ -2,7 +2,7 @@ body {
   font-family: 'Raleway', sans-serif;
   background-color: var(--bg-color);
   color: var(--text-dark);
-  font-size: 1rem;
+  font-size: 0.900rem;
 }
 
 .nav-tabs {
@@ -27,6 +27,7 @@ body {
   background: transparent;
   border: none;
   cursor: pointer;
+  font-size: 0.750rem;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
@@ -72,12 +73,15 @@ body {
   border: 1px solid #3a3a32;
   border-radius: 0.2rem;
   color: var(--text-dark);
+  font-size: 0.750rem;
+  margin: 0px 15px;
 }
 
 .form-control:focus,
 .form-select:focus {
   border-color: var(--accent-color);
   box-shadow: 0 0 0 0.2rem rgba(211, 219, 35, 0.25);
+  font-size: 0.750rem;
 }
 
 .table-sm th {

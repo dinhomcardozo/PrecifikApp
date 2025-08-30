@@ -30,6 +30,7 @@ module Clients
         user_client.update!(
           client_id: @client.id,
           signup_date: Time.current,
+          
           admin: true
         )
 

@@ -76,4 +76,16 @@ export default class extends Controller {
     this.suggestedRetailTarget.value    = (totalWithTaxes * retailFactor).toFixed(2)
     this.suggestedWholesaleTarget.value = (totalWithTaxes * wholesaleFactor).toFixed(2)
   }
+    updateRealMargins() {
+    const retail = parseFloat(this.suggestedRetailTarget.value) || 0
+    const wholesale = parseFloat(this.suggestedWholesaleTarget.value) || 0
+    const cost = parseFloat(this.totalCostWithTaxesTarget.value) || 0
+
+    if (retail > 0) {
+      this.realProfitRetailMarginTarget.value = (((retail - cost) / retail) * 100).toFixed(2)
+    }
+    if (wholesale > 0) {
+      this.realProfitWholesaleMarginTarget.value = (((wholesale - cost) / wholesale) * 100).toFixed(2)
+    }
+  }
 }

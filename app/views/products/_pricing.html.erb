@@ -106,4 +106,28 @@
           step: 0.01,
           data: { pricing_target: "suggestedWholesale" } %>
   </div>
+
+  <!-- margem real de lucro varejo -->
+  <div class="field-inline">
+    <%= label_tag :real_profit_retail_margin, "Margem Real Lucro Varejo (%)", class: "custom-label" %>
+    <%= number_field_tag nil,
+          product.suggested_price_retail.present? && product.total_cost_with_taxes.present? ?
+            (((product.suggested_price_retail - product.total_cost_with_taxes) / product.suggested_price_retail) * 100).round(2) : nil,
+          readonly: true,
+          step: 0.01,
+          class: "form-control",
+          data: { pricing_target: "realProfitRetailMargin" } %>
+  </div>
+
+  <!-- margem real de lucro atacado -->
+  <div class="field-inline">
+    <%= label_tag :real_profit_wholesale_margin, "Margem Real Lucro Atacado (%)", class: "custom-label" %>
+    <%= number_field_tag nil,
+          product.suggested_price_wholesale.present? && product.total_cost_with_taxes.present? ?
+            (((product.suggested_price_wholesale - product.total_cost_with_taxes) / product.suggested_price_wholesale) * 100).round(2) : nil,
+          readonly: true,
+          step: 0.01,
+          class: "form-control",
+          data: { pricing_target: "realProfitWholesaleMargin" } %>
+  </div>
 </section>

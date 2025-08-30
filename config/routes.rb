@@ -48,7 +48,7 @@ Rails.application.routes.draw do
       scope module: 'clients' do
         root to: 'dashboards/overview#index', as: :clients_root
 
-        resources :user_clients
+        resources :user_clients, only: [:edit, :update, :new, :destroy]
         
         scope path: 'dashboards', as: 'dashboards' do
           get 'overview', to: 'dashboards/overview#index', as: :overview

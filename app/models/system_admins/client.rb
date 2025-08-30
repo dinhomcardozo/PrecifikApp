@@ -20,6 +20,10 @@ module SystemAdmins
               :address, :number_address,
               presence: true
 
+    validates :cnpj,
+            presence: true,
+            uniqueness: { case_sensitive: false, message: "já existe na base de dados. Crie outra conta ou entre em contato com nossa equipe para alteração." }
+
     def valid_until
       if free?
         Float::INFINITY
