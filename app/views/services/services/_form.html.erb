@@ -1,6 +1,8 @@
-<%= form_with model: @service, local: true, scope: :service do |f| %>
-  <div data-controller="service-form">
+<%= form_with model: @service,
+              url: @service.new_record? ? clients_services_services_path : clients_services_service_path(@service),
+              local: true do |f| %>
 
+  <div data-controller="service-form">
     <% if @service.errors.any? %>
       <div class="error_explanation">
         <h2>
@@ -53,7 +55,7 @@
                           data: { "service-form-target": "hourlyRate" } %>
       </div>
 
-    <div class="field">
+      <div class="field">
         <%= f.label :total_hours_raw, "Total Hours (DD:HH:MM:SS)" %>
         <%= f.text_field :total_hours_raw,
                         placeholder: "00:00:00:00",

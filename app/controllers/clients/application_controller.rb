@@ -1,6 +1,7 @@
 # app/controllers/clients/application_controller.rb
 module Clients
   class ApplicationController < ActionController::Base
+    layout 'application'
     before_action :check_subscription
     before_action :authorize_module
 

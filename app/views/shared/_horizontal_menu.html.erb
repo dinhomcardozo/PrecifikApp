@@ -15,7 +15,13 @@
       Serviços
       <svg class="chevron" width="10" height="6" …></svg>
     </button>
-    <!-- Menu que será mostrado/ocultado -->
+      <div data-dropdown-target="menu" class="dropdown-menu">
+        <%= link_to "Todos os Serviços", clients_services_services_path, class: "dropdown-item" %>
+        <%= link_to "Energias",          clients_services_energies_path, class: "dropdown-item" %>
+        <%= link_to "Equipamentos",      clients_services_equipments_path, class: "dropdown-item" %>
+        <%= link_to "Profissionais",     clients_services_professionals_path, class: "dropdown-item" %>
+        <%= link_to "Funções",           clients_services_roles_path, class: "dropdown-item" %>
+      </div>
   </div>
 
     <!-- Dropdown Cadastros -->

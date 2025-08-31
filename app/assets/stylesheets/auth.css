@@ -104,6 +104,20 @@ html, body {
   background-color: #2a2a1f;
 }
 
+.notes-title {
+  font-size: 0.650rem;
+  font-weight: 800;
+  font-family: Raleway;
+  color: var(--notes-gray);
+}
+
+.notes {
+  font-size: 0.550rem;
+  font-weight: 300;
+  font-family: Raleway;
+  color: var(--notes-gray);
+} 
+
 /* Responsividade */
 @media (max-width: 768px) {
   .auth-layout {

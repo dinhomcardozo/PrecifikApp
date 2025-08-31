@@ -95,14 +95,12 @@ Rails.application.routes.draw do
       resources :fixed_costs
       resources :categories
 
-      # serviços também fora de clients/, mas em module services/
-      scope path: 'clients/services',
-            module: 'services',
-            as: 'services' do
-        root to: 'services#index'
-        resources :equipments, shallow: true
-        resources :roles,      shallow: true
+      scope path: 'services', module: 'services', as: 'clients_services' do
         resources :services
+        resources :energies
+        resources :equipments
+        resources :professionals
+        resources :roles
       end
     end
   end

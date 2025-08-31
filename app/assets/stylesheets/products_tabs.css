@@ -74,7 +74,6 @@ body {
   border-radius: 0.2rem;
   color: var(--text-dark);
   font-size: 0.750rem;
-  margin: 0px 15px;
 }
 
 .form-control:focus,
@@ -91,4 +90,9 @@ body {
 
 .table-sm td {
   vertical-align: middle;
+}
+
+.select-field td {
+  margin: 10px;
+  padding: 10px;
 }

@@ -1,5 +1,9 @@
 <h1>Listagem de Serviços</h1>
 
+<div>
+  <%= link_to "[+] Criar Serviço", new_clients_services_service_path, class: "action-button" %>
+</div>
+
 <table>
   <thead>
     <tr>
@@ -25,5 +29,3 @@
     <% end %>
   </tbody>
 </table>
-
-<%= link_to "Novo Serviço", new_services_service_path %>
