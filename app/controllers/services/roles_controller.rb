@@ -1,7 +1,7 @@
 module Services
   class RolesController < ApplicationController
     include AuthorizationForClients
-    before_action :authenticate_user!
+    before_action :authenticate_user_client!
     
     before_action :set_role, only: %i[ show edit update destroy ]
 

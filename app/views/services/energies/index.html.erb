@@ -1,38 +1,41 @@
-<% content_for :title, "Maxximiza | Serviços | Energias" %>
+<main class="index-container">
+  <% content_for :title, "Maxximiza | Serviços | Energias" %>
+  <p style="color: green"><%= notice %></p>
 
-<p style="color: green"><%= notice %></p>
+  <h1 class="title" >Energias</h1>
 
-<h1>Energias</h1>
+  <%= link_to "[+] Criar energia",
+              new_clients_services_energy_path,
+              class: "standart-button" %>
 
-<%= link_to "[+] Criar energia",
-            new_services_energy_path,
-            class: "standart-button" %>
-
-<table class="index-table index-table--bordered">
-  <thead>
-    <tr>
-      <th>Descrição</th>
-      <th>Consumo/hora (R$)</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @energies.each do |energy| %>
-      <tr id="<%= dom_id(energy) %>">
-        <td><%= energy.description %></td>
-        <td><%= number_to_currency(energy.consume_per_hour, unit: "R$ ", delimiter: ".", separator: ",") %></td>
-        <td class="cell-actions">
-          <%= link_to "Editar",
-                      edit_services_energy_path(energy),
-                      class: "action-button" %>
-          <%= button_to "Excluir",
-                        services_energy_path(energy),
-                        method: :delete,
-                        data: { turbo_confirm: "Tem certeza?" },
-                        class: "action-button" %>
-        </td>
+  <table class="index-table index-table--bordered">
+    <thead>
+      <tr>
+        <th>Descrição</th>
+        <th>Consumo/hora (R$)</th>
+        <th colspan="2">Ações</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+
+    <tbody>
+      <% @energies.each do |energy| %>
+        <tr id="<%= dom_id(energy) %>">
+          <td><%= energy.description %></td>
+          <td><%= number_to_currency(energy.consume_per_hour, unit: "R$ ", delimiter: ".", separator: ",") %></td>
+          <td class="cell-actions">
+            <%= link_to "Editar",
+                        edit_clients_services_energy_path(energy),
+                        class: "action-button" %>
+          </td>
+          <td class="cell-actions">
+            <%= button_to "Excluir",
+                          clients_services_energy_path(energy),
+                          method: :delete,
+                          data: { turbo_confirm: "Tem certeza?" },
+                          class: "action-button" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</main>

@@ -1,6 +1,7 @@
 module Services
   class ApplicationController < Clients::ApplicationController
     before_action :check_services_feature!
+    before_action :authenticate_user_client!
 
     private
 

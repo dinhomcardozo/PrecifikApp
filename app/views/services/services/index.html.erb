@@ -1,31 +1,34 @@
-<h1>Listagem de Serviços</h1>
+<main class="index-container">
 
-<div>
-  <%= link_to "[+] Criar Serviço", new_clients_services_service_path, class: "action-button" %>
-</div>
+  <h1 class="title" >Listagem de Serviços</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Descrição</th>
-      <th>Cargo</th>
-      <th colspan="3">Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @services.each do |service| %>
+  <div>
+    <%= link_to "[+] Criar Serviço", new_clients_services_service_path, class: "action-button" %>
+  </div>
+
+  <table class="index-table--bordered" >
+    <thead>
       <tr>
-        <td><%= service.description %></td>
-        <td><%= service.role.name %></td>
-        <td><%= link_to "Mostrar", services_service_path(service) %></td>
-        <td><%= link_to "Editar", edit_services_service_path(service) %></td>
-        <td>
-          <%= link_to "Apagar",
-                      services_service_path(service),
-                      method: :delete,
-                      data: { confirm: "Confirma exclusão?" } %>
-        </td>
+        <th>Descrição</th>
+        <th>Cargo</th>
+        <th colspan="3">Ações</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @services.each do |service| %>
+        <tr>
+          <td><%= service.description %></td>
+          <td><%= service.role.name %></td>
+          <td><%= link_to "Mostrar", services_service_path(service) %></td>
+          <td><%= link_to "Editar", edit_services_service_path(service) %></td>
+          <td>
+            <%= link_to "Apagar",
+                        services_service_path(service),
+                        method: :delete,
+                        data: { confirm: "Confirma exclusão?" } %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</main>

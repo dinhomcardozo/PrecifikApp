@@ -1,7 +1,7 @@
 module Services
   class EquipmentsController < ApplicationController
     include AuthorizationForClients
-    before_action :authenticate_user!
+    before_action :authenticate_user_client!
     
     before_action :set_equipment, only: %i[show edit update destroy]
 

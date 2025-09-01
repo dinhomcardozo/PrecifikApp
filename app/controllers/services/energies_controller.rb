@@ -1,7 +1,7 @@
 module Services
   class EnergiesController < ApplicationController
     include AuthorizationForClients
-    before_action :authenticate_user!
+    before_action :authenticate_user_client!
     
     before_action :set_energy, only: %i[ show edit update destroy ]
 

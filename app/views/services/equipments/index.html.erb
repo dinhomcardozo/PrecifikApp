@@ -1,38 +1,42 @@
 <% content_for :title, "Equipamentos" %>
-<h1>Equipamentos</h1>
-<p style="color: green"><%= notice %></p>
-<%= link_to "Novo equipamento",
-            new_services_equipment_path,
-            class: "standart-button" %>
+<main class="index-container">
+  <h1 class="title" >Equipamentos</h1>
+  <p style="color: green"><%= notice %></p>
+  <%= link_to "Novo equipamento",
+              new_clients_services_equipment_path,
+              class: "standart-button" %>
 
-<table class="index-table index-table--bordered">
-  <thead>
-    <tr>
-      <th>Descrição</th>
-      <th>Valor (R$)</th>
-      <th>Depreciação (%)</th>
-      <th>Depreciação (R$)</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @equipments.each do |eq| %>
-      <tr id="<%= dom_id(eq) %>">
-        <td><%= eq.description %></td>
-        <td><%= number_to_currency(eq.value, unit: "R$ ") %></td>
-        <td><%= number_with_precision(eq.depreciation_percent, precision: 2) %></td>
-        <td><%= number_to_currency(eq.depreciation_value, unit: "R$ ") %></td>
-        <td class="cell-actions">
-          <%= link_to "Editar",
-                      edit_services_equipment_path(eq),
-                      class: "action-button" %> |
-          <%= link_to "Excluir",
-                      services_equipment_path(eq),
-                      method: :delete,
-                      data: { confirm: "Confirma exclusão?" },
-                      class: "action-button" %>
-        </td>
+  <table class="index-table index-table--bordered">
+    <thead>
+      <tr>
+        <th>Descrição</th>
+        <th>Valor (R$)</th>
+        <th>Depreciação (%)</th>
+        <th>Depreciação (R$)</th>
+        <th colspan="2">Ações</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @equipments.each do |eq| %>
+        <tr id="<%= dom_id(eq) %>">
+          <td><%= eq.description %></td>
+          <td><%= number_to_currency(eq.value, unit: "R$ ") %></td>
+          <td><%= number_with_precision(eq.depreciation_percent, precision: 2) %></td>
+          <td><%= number_to_currency(eq.depreciation_value, unit: "R$ ") %></td>
+          <td class="cell-actions">
+            <%= link_to "Editar",
+                        edit_clients_services_equipment_path(eq),
+                        class: "action-button" %>
+          </td>
+          <td class="cell-actions">
+            <%= link_to "Excluir",
+                        clients_services_equipment_path(eq),
+                        method: :delete,
+                        data: { confirm: "Confirma exclusão?" },
+                        class: "action-button" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</main>
