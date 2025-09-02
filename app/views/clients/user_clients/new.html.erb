@@ -1,0 +1,64 @@
+<main class="index-container">
+
+  <h1>Criar Novo Usuário</h1>
+
+  <%= form_for @user_client,
+              as: :user_client,
+              url: user_clients_path,
+              method: :post do |f| %>
+
+    <div>
+      <% if @user_client.errors.any? %>
+        <div class="error_explanation">
+          <h2><%= pluralize(@user_client.errors.count, "erro") %> impediram o salvamento:</h2>
+          <ul>
+            <% @user_client.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="field">
+      <%= f.label :first_name, "Primeiro Nome" %>
+      <%= f.text_field :first_name, placeholder: "Digite o primeiro nome" %>
+    </div>
+
+    <div class="field">
+      <%= f.label :last_name, "Último Nome" %>
+      <%= f.text_field :last_name, placeholder: "Digite o sobrenome" %>
+    </div>
+
+    <div class="field">
+      <%= f.label :email, "E-mail" %>
+      <%= f.email_field :email, placeholder: "Digite o e-mail" %>
+    </div>
+
+    <!-- Campo admin true/false -->
+    <div class="field">
+      <%= f.label :admin, "Administrador?" %>
+      <%= f.check_box :admin %>
+    </div>
+
+    <!-- Campo de senha -->
+    <div class="field">
+      <%= f.label :password, "Senha" %>
+      <%= f.password_field :password, placeholder: "Digite a senha" %>
+    </div>
+
+    <div class="notes">
+      <p>Mínimo de 6 caracteres</p>
+    </div>
+
+    <!-- Confirmação de senha (opcional, mas recomendado) -->
+    <div class="field">
+      <%= f.label :password_confirmation, "Confirme a senha" %>
+      <%= f.password_field :password_confirmation, placeholder: "Confirme a senha" %>
+    </div>
+
+    <div class="actions">
+      <%= f.submit "Salvar Alterações", class: "action-button" %>
+    </div>
+  <% end %>
+</main>

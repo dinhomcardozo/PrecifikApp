@@ -57,7 +57,15 @@
             <td><%= uc.admin? ? 'Sim' : 'Não' %></td>
             <td>
               <%= link_to 'Editar', edit_user_client_path(uc), class: 'action-button' %>
-              <%= link_to 'Excluir', user_client_path(uc), method: :delete, data: { confirm: 'Tem certeza?' }, class: 'action-button' %>
+                <% if current_user_client.admin? && uc != current_user_client %>
+                  <%= link_to 'Excluir',
+                              user_client_path(uc),
+                              data: { 
+                                turbo_method: :delete, 
+                                turbo_confirm: "Tem certeza que deseja excluir o usuário ##{uc.id} | #{uc.first_name} #{uc.last_name}?"
+                              },
+                              class: 'action-button' %>
+                <% end %>
             </td>
           </tr>
         <% end %>

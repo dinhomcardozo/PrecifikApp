@@ -1,12 +1,14 @@
-<% content_for :title, "Editing service" %>
+<main class="index-container">
+  <% content_for :title, "Editing service" %>
 
-<h1>Editing service</h1>
+  <h1>Editar serviço</h1>
 
-<%= render "form", service: @service %>
+  <%= render "form", service: @service %>
 
-<br>
+  <br>
 
-<div>
-  <%= link_to "Voltar", clients_services_services_path %> |
-  <%= link_to "Ver", clients_services_service_path(@service) %>
-</div>
+  <div>
+    <%= link_to "Voltar", clients_services_services_path %> |
+    <%= link_to "Ver", clients_services_service_path(@service) %>
+  </div>
+</main>

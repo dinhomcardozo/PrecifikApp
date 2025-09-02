@@ -1,22 +1,41 @@
-<h1>Editar Dados do Usuário</h1>
+<main class="index-container">
 
-<%= form_for @user_client, as: :user_client, url: user_client_path(@user_client), method: :patch do |f| %>
-  <div class="field">
-    <%= f.label :first_name, "Primeiro Nome" %>
-    <%= f.text_field :first_name, placeholder: "Digite o primeiro nome" %>
-  </div>
+  <h1>Editar Dados do Usuário</h1>
 
-  <div class="field">
-    <%= f.label :last_name, "Último Nome" %>
-    <%= f.text_field :last_name, placeholder: "Digite o sobrenome" %>
-  </div>
+  <%= form_for @user_client, as: :user_client, url: user_client_path(@user_client), method: :patch do |f| %>
+    <div class="field">
+      <%= f.label :first_name, "Primeiro Nome" %>
+      <%= f.text_field :first_name, placeholder: "Digite o primeiro nome" %>
+    </div>
 
-  <div class="field">
-    <%= f.label :email, "E-mail" %>
-    <%= f.email_field :email, placeholder: "Digite o e-mail" %>
-  </div>
+    <div class="field">
+      <%= f.label :last_name, "Último Nome" %>
+      <%= f.text_field :last_name, placeholder: "Digite o sobrenome" %>
+    </div>
 
-  <div class="actions">
-    <%= f.submit "Salvar Alterações", class: "action-button" %>
-  </div>
-<% end %>
+    <div class="field">
+      <%= f.label :email, "E-mail" %>
+      <%= f.email_field :email, placeholder: "Digite o e-mail" %>
+    </div>
+
+        <!-- Campo de senha -->
+    <div class="field">
+      <%= f.label :password, "Senha (deixe em branco para não alterar)" %>
+      <%= f.password_field :password, placeholder: "Digite a nova senha" %>
+    </div>
+
+    <div class="notes">
+      <p>Mínimo de 6 caracteres</p>
+    </div>
+
+    <!-- Confirmação de senha (opcional, mas recomendado) -->
+    <div class="field">
+      <%= f.label :password_confirmation, "Confirme a senha (deixe em branco para não alterar)" %>
+      <%= f.password_field :password_confirmation, placeholder: "Confirme a senha" %>
+    </div>
+
+    <div class="actions">
+      <%= f.submit "Salvar Alterações", class: "action-button" %>
+    </div>
+  <% end %>
+</main>

@@ -27,7 +27,7 @@ module Services
     def create
       @service = Service.new(service_params)
       if @service.save
-        redirect_to @service, notice: "Serviço criado com sucesso"
+        redirect_to clients_services_services_path, notice: "Serviço criado com sucesso"
       else
         render :new
       end

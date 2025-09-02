@@ -21,15 +21,42 @@ export default class extends Controller {
     const id = this.professionalSelectTarget.value;
     if (!id) {
       this.hourlyRateTarget.value = "";
+      this.computeBasePrice();
       return;
     }
 
-    fetch(`/services/professionals/${id}.json`, {
-      headers: { Accept: "application/json" }
-    })
-      .then(r => r.json())
-      .then(data => { this.hourlyRateTarget.value = data.hourly_rate; })
-      .catch(() => { this.hourlyRateTarget.value = ""; });
+    fetch(`/clients/services/professionals/${id}.json`, {
+        headers: { Accept: "application/json" }
+      })
+        .then(r => {
+          if (!r.ok) throw new Error(`HTTP ${r.status}`);
+          return r.json();
+        })
+        .then(data => {
+          if (data && typeof data.hourly_rate !== "undefined") {
+            this.hourlyRateTarget.value = data.hourly_rate;
+            this.computeBasePrice();
+          } else {
+            this.hourlyRateTarget.value = "";
+            console.warn("JSON sem hourly_rate:", data);
+          }
+        })
+        .catch(err => {
+          this.hourlyRateTarget.value = "";
+          console.error("Falha no fetch de hourly_rate:", err);
+        });
+  }
+
+  maskTotalHours(event) {
+    let v = event.target.value.replace(/\D/g, ""); // só números
+    let parts = [];
+
+    if (v.length > 0) parts.push(v.substring(0, 2)); // DD
+    if (v.length > 2) parts.push(v.substring(2, 4)); // HH
+    if (v.length > 4) parts.push(v.substring(4, 6)); // MM
+    if (v.length > 6) parts.push(v.substring(6, 8)); // SS
+
+    event.target.value = parts.join(":");
   }
 
   parseTotalHours() {
@@ -63,8 +90,14 @@ export default class extends Controller {
     ).reduce((sum, el) => sum + (parseFloat(el.value) || 0), 0);
 
     // Atualiza campos
-    this.basePriceTarget.value  = labour.toFixed(2);
-    this.itemsCostTarget.value  = itemsCost.toFixed(2);
-    this.finalPriceTarget.value = (labour + itemsCost).toFixed(2);
+    this.basePriceTarget.value = labour.toFixed(2);
+
+    if (this.hasItemsCostTarget) {
+      this.itemsCostTarget.value = itemsCost.toFixed(2);
+    }
+
+    if (this.hasFinalPriceTarget) {
+      this.finalPriceTarget.value = (labour + itemsCost).toFixed(2);
+    }
   }
 }
