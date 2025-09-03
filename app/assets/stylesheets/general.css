@@ -4,6 +4,12 @@
   font-size: 0.750rem;
 }
 
+.description {
+  color: var(--text-dark);
+  font-weight: 200;
+  font-size: 0.750rem;
+}
+
 .subtitle {
     color: var(--text-dark);
     font-weight: 800;

@@ -17,43 +17,52 @@
       </div>
     </div>
 
-    <section class="show-info mb-4">
-      <p class="custom-label">Descrição:
-        <%= @product.description %></p>
-      <p class="custom-label"><strong>Marca:
-        <%= @product.brand&.name %></p>
-      <p class="custom-label"><strong>Imagem:
+    <table class="vertical-table--bordered">
+      <tr>
+        <th>Descrição:</th>
+        <td><%= @product.description %></td>
+      </tr>
+      <tr>
+        <th>Marca:</th>
+        <td><%= @product.brand&.name %></td>
+      </tr>
+      <tr>
+        <th>Imagem:</th>
+        <td>
           <% if @product.image.attached? %>
-            <%= image_tag(
-                  url_for(@product.image),
-                  alt: @product.description,
-                  class: "index_image",
-                  width: 300,
-                  height: 300
-                ) %>
+            <%= image_tag url_for(@product.image), alt: @product.description, class: "index_image", width: 300, height: 300 %>
           <% else %>
             Nenhuma
           <% end %>
-        </p>
-      <p class="custom-label">Total Custo (R$):
-        <%= number_to_currency(@product.total_cost, unit: "R$ ") %>
-      </p>
-      <p class="custom-label">Total c/ Tributos (R$):
-        <%= number_to_currency(@product.total_cost_with_taxes, unit: "R$ ") %>
-      </p>
-      <p class="custom-label">Preço Sugerido Varejo (R$):
-        <%= number_to_currency(@product.suggested_price_retail, unit: "R$ ") %>
-      </p>
-      <p class="custom-label">Preço Sugerido Atacado (R$):
-        <%= number_to_currency(@product.suggested_price_wholesale, unit: "R$ ") %>
-      </p>
-      <p class="custom-label">Lucro Líquido Varejo (R$):
-        <%= number_to_currency(@product.net_profit_retail, unit: "R$ ") %>
-      </p>
-      <p class="custom-label">Lucro Líquido Atacado (R$):
-        <%= number_to_currency(@product.net_profit_wholesale, unit: "R$ ") %>
-      </p>
-    </section>
+        </td>
+      </tr>
+      <tr>
+        <th>Total Custo (R$):</th>
+        <td><%= number_to_currency(@product.total_cost, unit: "R$ ") %></td>
+      </tr>
+      <tr>
+        <th>Total c/ Tributos (R$):</th>
+        <td><%= number_to_currency(@product.total_cost_with_taxes, unit: "R$ ") %></td>
+      </tr>
+      <tr>
+        <th>Preço Sugerido Varejo (R$):</th>
+        <td><%= number_to_currency(@product.suggested_price_retail, unit: "R$ ") %></td>
+      </tr>
+      <tr>
+        <th>Preço Sugerido Atacado (R$):</th>
+        <td><%= number_to_currency(@product.suggested_price_wholesale, unit: "R$ ") %></td>
+      </tr>
+      <tr>
+        <th>Lucro Líquido Varejo (R$):</th>
+        <td><%= number_to_currency(@product.net_profit_retail, unit: "R$ ") %></td>
+      </tr>
+      <tr>
+        <th>Lucro Líquido Atacado (R$):</th>
+        <td><%= number_to_currency(@product.net_profit_wholesale, unit: "R$ ") %></td>
+      </tr>
+    </table>
+
+    <hr>
 
     <section class="show-composition mb-4">
       <h2 class="subtitle">Composição</h2>

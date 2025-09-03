@@ -1,62 +1,70 @@
-<h1>Detalhes do Insumo "<%= @input.name %>"</h1>
+<main class="index-container">
+  <h1>Detalhes do Insumo "<%= @input.name %>"</h1>
 
-<table class="index-table index-table--bordered">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Tipo de Insumo</th>
-      <th>Custo (R$)</th>
-      <th>Fornecedor</th>
-      <th>Unidade</th>
-      <th>Peso</th>
-      <th>Marca</th>
-      <th>Imagem</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><%= @input.id %></td>
-      <td><%= @input.input_type&.name || "-" %></td>
-      <td>
-        <%= number_to_currency(
-              @input.cost,
-              unit:   "R$ ",
-              delimiter: ".",
-              separator: ","
-            ) %>
-      </td>
-      <td><%= @input.supplier&.name || "-" %></td>
-      <td><%= @input.unit_of_measurement %></td>
-      <td><%= @input.weight %></td>
-      <td><%= @input.brand&.name || "-" %></td>
-      <td>
-        <% if @input.image.attached? %>
-          <%= image_tag(
-                url_for(@input.image),
-                alt:   @input.name,
-                style: "max-height:100px; width:auto;",
-                class: "index-images"
+  <div>
+    <%= link_to "Editar Insumo",
+            edit_input_path(@input),
+            class: "action-button" %>
+  </div>
+
+  <table class="index-table index-table--bordered">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Tipo de Insumo</th>
+        <th>Custo (R$)</th>
+        <th>Fornecedor</th>
+        <th>Unidade</th>
+        <th>Peso</th>
+        <th>Marca</th>
+        <th>Imagem</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><%= @input.id %></td>
+        <td><%= @input.input_type&.name || "-" %></td>
+        <td>
+          <%= number_to_currency(
+                @input.cost,
+                unit:   "R$ ",
+                delimiter: ".",
+                separator: ","
               ) %>
-        <% else %>
-          -
-        <% end %>
-      </td>
-    </tr>
-    <tr>
-      <th scope="row">Criado em</th>
-      <td colspan="7">
-        <%= l(@input.created_at, format: :short) %>
-      </td>
-    </tr>
-    <tr>
-      <th scope="row">Última atualização</th>
-      <td colspan="7">
-        <%= l(@input.updated_at,  format: :short) %>
-      </td>
-    </tr>
-  </tbody>
-</table>
+        </td>
+        <td><%= @input.supplier&.name || "-" %></td>
+        <td><%= @input.unit_of_measurement %></td>
+        <td><%= @input.weight %></td>
+        <td><%= @input.brand&.name || "-" %></td>
+        <td>
+          <% if @input.image.attached? %>
+            <%= image_tag(
+                  url_for(@input.image),
+                  alt:   @input.name,
+                  style: "max-height:100px; width:auto;",
+                  class: "index-images"
+                ) %>
+          <% else %>
+            -
+          <% end %>
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">Criado em</th>
+        <td colspan="7">
+          <%= l(@input.created_at, format: :short) %>
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">Última atualização</th>
+        <td colspan="7">
+          <%= l(@input.updated_at,  format: :short) %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-<%= render "input_cost_history", cost_history: @cost_history %>
+  <%= render "input_cost_history", cost_history: @cost_history %>
 
-<%= link_to "Voltar", inputs_path, class: "standart-button" %>
+  <%= link_to "Voltar", inputs_path, class: "standart-button" %>
+</main>

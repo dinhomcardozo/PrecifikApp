@@ -1,27 +1,29 @@
-<h1 class="title"><%= @subproduct.name %></h1>
+<main class="index-container">
+  <h1 class="title"><%= @subproduct.name %></h1>
 
-<p><strong>Unidade:</strong> <%= @subproduct.unit_of_measurement %></p>
-<p><strong>Peso Total:</strong> <%= @subproduct.subproduct_compositions.sum(&:quantity_for_a_unit) %> g</p>
-<p><strong>Custo Total:</strong> R$ <%= number_with_precision(@subproduct.subproduct_compositions.sum(&:quantity_cost), precision: 2) %></p>
+  <p><strong>Unidade:</strong> <%= @subproduct.unit_of_measurement %></p>
+  <p><strong>Peso Total:</strong> <%= @subproduct.subproduct_compositions.sum(&:quantity_for_a_unit) %> g</p>
+  <p><strong>Custo Total:</strong> R$ <%= number_with_precision(@subproduct.subproduct_compositions.sum(&:quantity_cost), precision: 2) %></p>
 
-<h4>Insumos Compostos</h4>
-<table class="table table-sm">
-  <thead>
-    <tr>
-      <th>Insumo</th>
-      <th>Quantidade (g)</th>
-      <th>Custo (R$)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @compositions.each do |comp| %>
+  <h4>Insumos Compostos</h4>
+  <table class="table table-sm">
+    <thead>
       <tr>
-        <td><%= comp.input.name %></td>
-        <td><%= comp.quantity_for_a_unit %> g</td>
-        <td>R$ <%= number_with_precision(comp.quantity_cost, precision: 2) %></td>
+        <th>Insumo</th>
+        <th>Quantidade (g)</th>
+        <th>Custo (R$)</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @compositions.each do |comp| %>
+        <tr>
+          <td><%= comp.input.name %></td>
+          <td><%= comp.quantity_for_a_unit %> g</td>
+          <td>R$ <%= number_with_precision(comp.quantity_cost, precision: 2) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 
-<%= link_to "Voltar", subproducts_path, class: "action-button" %>
+  <%= link_to "Voltar", subproducts_path, class: "action-button" %>
+</main>
