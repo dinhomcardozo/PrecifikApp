@@ -1,4 +1,5 @@
 class ProductSubproduct < ApplicationRecord
+  default_scope { where(client_id: Current.user_client.client_id) if Current.user_client }
   belongs_to :product,  inverse_of: :product_subproducts, touch: true
   belongs_to :subproduct, optional: true
 

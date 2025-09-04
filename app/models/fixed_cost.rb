@@ -1,5 +1,7 @@
 class FixedCost < ApplicationRecord
-      FIXED_COST_TYPES = [
+  default_scope { where(client_id: Current.user_client.client_id) if Current.user_client }
+
+  FIXED_COST_TYPES = [
     "Aluguel",
     "Softwares",
     "Serviços",

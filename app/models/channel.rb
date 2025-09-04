@@ -1,4 +1,6 @@
 class Channel < ApplicationRecord
+  default_scope { where(client_id: Current.user_client.client_id) if Current.user_client }
+  
   has_many :sales_targets, dependent: :nullify
 
   CHANNEL_TYPES = %w[

@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   before_action :ensure_subscription!, if: :devise_controller?
-
+  before_action :set_current_user_client
   before_action :ensure_client_profile!
 
   private
@@ -48,5 +48,9 @@ class ApplicationController < ActionController::Base
 
   def render_not_found
     render file: Rails.root.join("public/404.html"), status: :not_found
+  end
+
+  def set_current_user_client
+    Current.user_client = current_user_client
   end
 end

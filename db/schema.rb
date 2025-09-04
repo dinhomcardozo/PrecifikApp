@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_29_230116) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_04_025151) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -58,12 +58,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_230116) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "main_brand", default: false, null: false
+    t.bigint "client_id"
   end
 
   create_table "categories", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "client_id"
   end
 
   create_table "channels", force: :cascade do |t|
@@ -72,6 +74,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_230116) do
     t.string "channel_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "client_id"
   end
 
   create_table "client_plans", force: :cascade do |t|
@@ -101,6 +104,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_230116) do
     t.datetime "last_login"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["cnpj"], name: "index_clients_on_cnpj", unique: true
     t.index ["plan_id"], name: "index_clients_on_plan_id"
   end
 
@@ -109,6 +113,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_230116) do
     t.decimal "consume_per_hour"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "client_id"
   end
 
   create_table "equipments", force: :cascade do |t|
@@ -118,6 +123,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_230116) do
     t.decimal "depreciation_value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "client_id"
   end
 
   create_table "fixed_costs", force: :cascade do |t|
@@ -126,6 +132,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_230116) do
     t.string "fixed_cost_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "client_id"
   end
 
   create_table "input_cost_histories", force: :cascade do |t|
@@ -134,6 +141,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_230116) do
     t.datetime "recorded_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "client_id"
     t.index ["input_id"], name: "index_input_cost_histories_on_input_id"
     t.index ["recorded_at"], name: "index_input_cost_histories_on_recorded_at"
   end
@@ -155,6 +163,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_230116) do
     t.bigint "brand_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "client_id"
     t.index ["brand_id"], name: "index_inputs_on_brand_id"
     t.index ["input_type_id"], name: "index_inputs_on_input_type_id"
     t.index ["supplier_id"], name: "index_inputs_on_supplier_id"
@@ -195,6 +204,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_230116) do
     t.datetime "updated_at", null: false
     t.decimal "cost", default: "0.0", null: false
     t.decimal "cost_per_gram_with_loss"
+    t.bigint "client_id"
     t.index ["product_id"], name: "index_product_subproducts_on_product_id"
     t.index ["subproduct_id"], name: "index_product_subproducts_on_subproduct_id"
   end
@@ -218,6 +228,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_230116) do
     t.bigint "category_id"
     t.decimal "weight_loss", default: "0.0"
     t.decimal "final_weight", default: "0.0"
+    t.bigint "client_id"
     t.index ["brand_id"], name: "index_products_on_brand_id"
     t.index ["category_id"], name: "index_products_on_category_id"
     t.index ["tax_id"], name: "index_products_on_tax_id"
@@ -233,6 +244,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_230116) do
     t.decimal "hourly_rate"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "client_id"
     t.index ["role_id"], name: "index_professionals_on_role_id"
   end
 
@@ -240,6 +252,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_230116) do
     t.string "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "client_id"
   end
 
   create_table "sales_clients", force: :cascade do |t|
@@ -290,6 +303,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_230116) do
     t.decimal "total_fixed_cost", precision: 10, scale: 2, default: "0.0"
     t.integer "sales_target_sum", default: 0, null: false
     t.integer "sales_target_active_sum", default: 0, null: false
+    t.bigint "client_id"
     t.index ["product_id"], name: "index_sales_targets_on_product_id"
   end
 
@@ -300,6 +314,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_230116) do
     t.decimal "cost"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "client_id"
     t.index ["energy_id"], name: "index_service_energies_on_energy_id"
     t.index ["service_id"], name: "index_service_energies_on_service_id"
   end
@@ -311,6 +326,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_230116) do
     t.decimal "cost"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "client_id"
     t.index ["equipment_id"], name: "index_service_equipments_on_equipment_id"
     t.index ["service_id"], name: "index_service_equipments_on_service_id"
   end
@@ -322,6 +338,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_230116) do
     t.decimal "cost"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "client_id"
     t.index ["input_id"], name: "index_service_inputs_on_input_id"
     t.index ["service_id"], name: "index_service_inputs_on_service_id"
   end
@@ -343,6 +360,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_230116) do
     t.decimal "hourly_rate"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "client_id"
     t.index ["professional_id"], name: "index_service_professionals_on_professional_id"
     t.index ["service_id"], name: "index_service_professionals_on_service_id"
   end
@@ -354,6 +372,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_230116) do
     t.decimal "cost"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "client_id"
     t.index ["service_id"], name: "index_service_subproducts_on_service_id"
     t.index ["subproduct_id"], name: "index_service_subproducts_on_subproduct_id"
   end
@@ -372,6 +391,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_230116) do
     t.decimal "service_items_cost", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "service_price", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "final_service_price", precision: 10, scale: 2, default: "0.0", null: false
+    t.bigint "client_id"
     t.index ["professional_id"], name: "index_services_on_professional_id"
     t.index ["role_id"], name: "index_services_on_role_id"
   end
@@ -383,6 +403,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_230116) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.decimal "quantity_cost", precision: 10, scale: 2, default: "0.0", null: false
+    t.bigint "client_id"
     t.index ["input_id"], name: "index_subproduct_compositions_on_input_id"
     t.index ["subproduct_id"], name: "index_subproduct_compositions_on_subproduct_id"
   end
@@ -397,6 +418,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_230116) do
     t.datetime "updated_at", null: false
     t.decimal "weight_loss", default: "0.0"
     t.decimal "final_weight", default: "0.0"
+    t.bigint "client_id"
     t.index ["brand_id"], name: "index_subproducts_on_brand_id"
   end
 
@@ -404,6 +426,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_230116) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "client_id"
   end
 
   create_table "taxes", force: :cascade do |t|
@@ -418,6 +441,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_230116) do
     t.text "note"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "client_id"
   end
 
   create_table "user_admins", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -478,39 +502,61 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_29_230116) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "brands", "clients", name: "fk_brands_client"
+  add_foreign_key "categories", "clients", name: "fk_categories_client"
+  add_foreign_key "channels", "clients", name: "fk_channels_client"
   add_foreign_key "client_plans", "clients"
   add_foreign_key "client_plans", "plans"
   add_foreign_key "clients", "plans"
+  add_foreign_key "energies", "clients", name: "fk_energies_client"
+  add_foreign_key "equipments", "clients", name: "fk_equipments_client"
+  add_foreign_key "fixed_costs", "clients", name: "fk_fixed_costs_client"
+  add_foreign_key "input_cost_histories", "clients", name: "fk_input_cost_histories_client"
   add_foreign_key "input_cost_histories", "inputs"
   add_foreign_key "inputs", "brands"
+  add_foreign_key "inputs", "clients", name: "fk_inputs_client"
   add_foreign_key "inputs", "input_types"
   add_foreign_key "inputs", "suppliers"
   add_foreign_key "payment_method_installments", "payment_methods"
+  add_foreign_key "product_subproducts", "clients", name: "fk_product_subproducts_client"
   add_foreign_key "product_subproducts", "products"
   add_foreign_key "product_subproducts", "subproducts"
   add_foreign_key "products", "brands"
   add_foreign_key "products", "categories"
+  add_foreign_key "products", "clients", name: "fk_products_client"
   add_foreign_key "products", "taxes"
+  add_foreign_key "professionals", "clients", name: "fk_professionals_client"
   add_foreign_key "professionals", "roles"
+  add_foreign_key "roles", "clients", name: "fk_roles_client"
   add_foreign_key "sales_orders", "sales_quotes"
   add_foreign_key "sales_quotes", "sales_clients", column: "client_id"
   add_foreign_key "sales_targets", "products"
+  add_foreign_key "service_energies", "clients", name: "fk_service_energies_client"
   add_foreign_key "service_energies", "energies"
   add_foreign_key "service_energies", "services"
+  add_foreign_key "service_equipments", "clients", name: "fk_service_equipments_client"
   add_foreign_key "service_equipments", "equipments"
   add_foreign_key "service_equipments", "services"
+  add_foreign_key "service_inputs", "clients", name: "fk_service_inputs_client"
   add_foreign_key "service_inputs", "inputs"
   add_foreign_key "service_inputs", "services"
   add_foreign_key "service_products", "products"
   add_foreign_key "service_products", "services"
+  add_foreign_key "service_professionals", "clients", name: "fk_service_professionals_client"
   add_foreign_key "service_professionals", "professionals"
   add_foreign_key "service_professionals", "services"
+  add_foreign_key "service_subproducts", "clients", name: "fk_service_subproducts_client"
   add_foreign_key "service_subproducts", "services"
   add_foreign_key "service_subproducts", "subproducts"
+  add_foreign_key "services", "clients", name: "fk_services_client"
   add_foreign_key "services", "professionals"
   add_foreign_key "services", "roles"
+  add_foreign_key "subproduct_compositions", "clients", name: "fk_subproduct_compositions_client"
   add_foreign_key "subproduct_compositions", "inputs"
   add_foreign_key "subproduct_compositions", "subproducts"
   add_foreign_key "subproducts", "brands"
+  add_foreign_key "subproducts", "clients", name: "fk_subproducts_client"
+  add_foreign_key "suppliers", "clients", name: "fk_suppliers_client"
+  add_foreign_key "taxes", "clients", name: "fk_taxes_client"
   add_foreign_key "user_clients", "clients"
 end

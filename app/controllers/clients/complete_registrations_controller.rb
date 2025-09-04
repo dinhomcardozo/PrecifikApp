@@ -23,6 +23,8 @@ module Clients
       @client = SystemAdmins::Client.new(client_params)
       @client.plan_id = 4 # Plano Trial
 
+      @user_client = SystemAdmins::UserClient.find_by(id: params[:user_client_id])
+
       if @client.save
         @client.update!(signup_date: Time.current)
 
@@ -48,6 +50,12 @@ module Clients
         :first_name, :last_name, :cpf, :phone,
         :address, :number_address
       )
+    end
+
+    def check_cnpj
+      cnpj = params[:cnpj].to_s.gsub(/\D/, '')
+      exists = SystemAdmins::Client.exists?(cnpj: cnpj)
+      render json: { exists: exists }
     end
   end
 end

@@ -1,4 +1,5 @@
 class Product < ApplicationRecord
+  default_scope { where(client_id: Current.user_client.client_id) if Current.user_client }
   self.per_page = 20
   
   belongs_to :main_brand, class_name: 'Brand', optional: true
@@ -108,7 +109,7 @@ class Product < ApplicationRecord
     end
   end
 
-    def needs_recalculation?
+  def needs_recalculation?
     product_subproducts.any?(&:saved_change_to_cost?) ||
       product_subproducts.any?(&:saved_change_to_quantity?) ||
       tax_id_changed? ||

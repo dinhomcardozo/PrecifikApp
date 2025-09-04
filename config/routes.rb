@@ -40,6 +40,7 @@ Rails.application.routes.draw do
 
     get  'cadastrar/completar/new', to: 'complete_registrations#new',   as: :new_complete_registration
     post 'cadastrar/completar',     to: 'complete_registrations#create', as: :complete_registration
+    get 'check_cnpj', to: 'complete_registrations#check_cnpj'
   end
 
   authenticate :user_client do

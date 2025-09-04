@@ -11,6 +11,7 @@ import ServiceNestedFormController from "./service_nested_form_controller"
 import ServiceFormController from "./service_form_controller"
 import Select2Controller from "./select2_controller"
 import TableFilterController from "./table_filter_controller"
+import CnpjVerificationController from "./cnpj_verification_controller"
 
 const application = Application.start()
 application.register("product-composition", ProductCompositionController)
@@ -25,3 +26,4 @@ application.register("service-nested-form", ServiceNestedFormController)
 application.register("service-form", ServiceFormController)
 application.register("select2", Select2Controller)
 application.register("table-filter", TableFilterController)
+application.register("cnpj-verification", CnpjVerificationController)

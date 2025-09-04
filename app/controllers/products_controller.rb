@@ -51,6 +51,7 @@ class ProductsController < Clients::AuthenticatedController
   def create
     authorize Product, policy_class: Clients::BasePolicy
     @product = Product.new(product_params)
+    @product.client_id = current_user_client.client_id
 
     if @product.save
       @next_tab = "composition"      # após config, vai direto pra composition

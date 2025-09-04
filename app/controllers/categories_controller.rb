@@ -2,7 +2,7 @@ class CategoriesController < Clients::AuthenticatedController
   include AuthorizationForClients
   before_action :authenticate_user_client!
   
-  before_action :set_category, only: %i[ show edit update destroy ]
+  before_action :set_category, only: %i[show edit update destroy]
 
   # GET /categories or /categories.json
   def index
@@ -25,6 +25,7 @@ class CategoriesController < Clients::AuthenticatedController
   # POST /categories or /categories.json
   def create
     @category = Category.new(category_params)
+    @category.client_id = current_user_client.client_id
 
     respond_to do |format|
       if @category.save

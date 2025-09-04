@@ -1,4 +1,5 @@
 class PaymentMethod < ApplicationRecord
+  default_scope { where(client_id: Current.user_client.client_id) if Current.user_client }
   has_many :payment_method_installments, dependent: :destroy
 
   enum fee_type: { flat: "flat", percentage: "percentage" }

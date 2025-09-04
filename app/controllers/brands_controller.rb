@@ -1,7 +1,8 @@
 class BrandsController < Clients::AuthenticatedController
   include AuthorizationForClients
   before_action :authenticate_user_client!
-  
+  before_action :set_brand, only: [:show, :edit, :update, :destroy]
+
   def index
     @brands = Brand.all
   end
@@ -16,6 +17,8 @@ class BrandsController < Clients::AuthenticatedController
 
   def create
     @brand = Brand.new(brand_params)
+    @brand.client_id = current_user_client.client_id
+
     puts params[:brand].inspect
 
     if @brand.save
@@ -40,6 +43,11 @@ class BrandsController < Clients::AuthenticatedController
     end
   end
 
+  def destroy
+    @brand.destroy
+    redirect_to brands_path, notice: "Marca excluída com sucesso."
+  end
+
   private
 
   def brand_params
@@ -53,5 +61,9 @@ class BrandsController < Clients::AuthenticatedController
                .limit(20)
 
     render json: brands.map { |b| { id: b.name, name: b.name } }
+  end
+
+  def set_brand
+    @brand = Brand.find(params[:id])
   end
 end

@@ -7,6 +7,7 @@ class ChannelsController < Clients::AuthenticatedController
   # GET /channels or /channels.json
   def index
     @channels = Channel.all
+    
   end
 
   # GET /channels/1 or /channels/1.json
@@ -25,6 +26,7 @@ class ChannelsController < Clients::AuthenticatedController
   # POST /channels or /channels.json
   def create
     @channel = Channel.new(channel_params)
+    @channel.client_id = current_user_client.client_id
     if @channel.save
       redirect_to channels_path, notice: "Canal criado com sucesso"
     else

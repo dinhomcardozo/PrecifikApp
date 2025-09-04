@@ -1,4 +1,5 @@
 class Input < ApplicationRecord
+  default_scope { where(client_id: Current.user_client.client_id) if Current.user_client }
   belongs_to :supplier
   belongs_to :input_type
   belongs_to :brand, optional: true

@@ -4,12 +4,14 @@ module Clients
     layout 'application'
     before_action :check_subscription
     before_action :authorize_module
+    before_action :set_current_user_client
 
     private
 
     # Free (id=1) nunca expira; outros planos podem ter data de expiração
     def check_subscription
-      return unless current_user_client.client # segurança para evitar nil
+      return unless user_client_signed_in? # só continua se houver login
+      return unless current_user_client&.client # segurança extra
       
       return if current_user_client.client.plan_id == 1
 
@@ -31,6 +33,10 @@ module Clients
         redirect_to clients_dashboard_path,
                     alert: "Você não tem permissão para acessar #{controller_name.humanize}."
       end
+    end
+
+    def set_current_user_client
+      Current.user_client = current_user_client
     end
   end
 end

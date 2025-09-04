@@ -1,31 +1,38 @@
-<%= form_for @client, as: :client, url: complete_registration_path, html: { class: "auth-form" } do |f| %>  <%= hidden_field_tag :user_client_id, @user_client.id %>
+<%= form_for @client, as: :client, url: complete_registration_path, html: { class: "auth-form" } do |f| %>
+  <%= hidden_field_tag :user_client_id, @user_client.id %>
+
   <h2>Complete seu cadastro</h2>
 
-  <%= f.label :cnpj %>
-  <%= f.text_field :cnpj %>
+  <%= f.label :cnpj, "CNPJ" %>
+  <%= f.text_field :cnpj,
+        id: "cnpj_field",
+        data: { controller: "cnpj-verification",
+                "cnpj-verification-target": "input",
+                action: "input->cnpj-verification#maskAndCheck" } %>
+  <div data-cnpj-verification-target="message" style="margin-top: 5px; font-weight: bold;"></div>
 
-  <%= f.label :razao_social %>
+  <%= f.label :razao_social, "Razão Social" %>
   <%= f.text_field :razao_social %>
 
-  <%= f.label :company_name %>
+  <%= f.label :company_name, "Nome Fantasia" %>
   <%= f.text_field :company_name %>
 
-  <%= f.label :first_name %>
+  <%= f.label :first_name, "Primeiro Nome" %>
   <%= f.text_field :first_name %>
 
-  <%= f.label :last_name %>
+  <%= f.label :last_name, "Sobrenome" %>
   <%= f.text_field :last_name %>
 
-  <%= f.label :cpf %>
+  <%= f.label :cpf, "CPF" %>
   <%= f.text_field :cpf %>
 
-  <%= f.label :phone %>
+  <%= f.label :phone, "Telefone" %>
   <%= f.text_field :phone %>
 
-  <%= f.label :address %>
+  <%= f.label :address, "Endereço" %>
   <%= f.text_field :address %>
 
-  <%= f.label :number_address %>
+  <%= f.label :number_address, "Número" %>
   <%= f.text_field :number_address %>
 
   <%= f.submit 'Finalizar Cadastro' %>

@@ -27,8 +27,16 @@ module Clients
 
     protected
 
-    def after_sign_up_path_for(resource)
-      new_complete_registration_path
+    # def after_sign_up_path_for(resource)
+    #   new_complete_registration_path
+    # end
+
+    def after_update_path_for(resource)
+      if resource.client_id.present?
+        settings_path
+      else
+        complete_registration_path(user_client_id: resource.id)
+      end
     end
 
     def after_update_path_for(resource)
