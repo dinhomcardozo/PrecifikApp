@@ -1,13 +1,16 @@
-<% content_for :title, "Detalhes do profissional" %>
-<h1><%= @professional.full_name %></h1>
+<main class="index-container">
+  <% content_for :title, "Detalhes do profissional" %>
+  <h1><%= @professional.full_name %></h1>
 
-<%= render @professional %>
+  <%= render @professional %>
 
-<div>
-  <%= link_to "Editar", edit_services_professional_path(@professional) %> |
-  <%= link_to "Voltar", services_professionals_path %> |
-  <%= button_to "Excluir",
-                services_professional_path(@professional),
-                method: :delete,
-                data: { confirm: "Confirma exclusão?" } %>
-</div>
+  <div>
+    <%= link_to "Editar", edit_services_professional_path(@professional), class: "action-button" %> |
+    <%= link_to "Voltar", clients_services_professionals_path, class: "action-button" %> |
+    <%= button_to "Excluir",
+                  services_professional_path(@professional),
+                  method: :delete,
+                  class: "action-button",
+                  data: { confirm: "Confirma exclusão?" } %>
+  </div>
+</main>

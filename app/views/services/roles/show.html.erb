@@ -1,18 +1,20 @@
-<p style="color: green"><%= notice %></p>
+<main class="index-container">
+  <p style="color: green"><%= notice %></p>
 
-<% content_for :title, "Maxximiza | Função: #{@role.description}" %>
+  <% content_for :title, "Maxximiza | Função: #{@role.description}" %>
 
-<h1>Função <i><%= @role.description %></i></h1>
+  <h1>Função <i><%= @role.description %></i></h1>
 
-<div>
-  <%= link_to "Editar esta função", edit_services_role_path(@role), class: "standart-button" %> |
-  <%= link_to "Voltar para funções", services_roles_path, class: "standart-button" %>
-</div>
+  <div>
+    <%= link_to "Editar esta função", edit_services_role_path(@role), class: "standart-button" %> |
+    <%= link_to "<- Voltar", clients_services_roles_path, class: "standart-button" %>
+  </div>
 
-<div style="margin-top: 1em">
-  <%= button_to "Excluir esta função",
-                services_role_path(@role),
-                method: :delete,
-                data: { confirm: "Tem certeza que quer excluir #{@role.description}?" },
-                class: "action-button" %>
-</div>
+  <div style="margin-top: 1em">
+    <%= button_to "Excluir esta função",
+                  services_role_path(@role),
+                  method: :delete,
+                  data: { confirm: "Tem certeza que quer excluir #{@role.description}?" },
+                  class: "action-button" %>
+  </div>
+</main>

@@ -1,14 +1,8 @@
-<%# app/views/services/professionals/_form.html.erb %>
-<% 
-  form_url    = professional.persisted? ? services_professional_path(professional)
-                                        : services_professionals_path
-  form_method = professional.persisted? ? :patch : :post
-%>
-
-<%= form_with url: form_url,
-              method: form_method,
+<%= form_with model: professional,
               scope: :professional,
+              url: professional.persisted? ? clients_services_professional_path(professional) : clients_services_professionals_path,
               local: true do |form| %>
+
   <% if professional.errors.any? %>
     <div style="color: red">
       <h2>
@@ -24,39 +18,40 @@
   <% end %>
 
   <div>
-    <%= form.label :full_name, "Nome completo", style: "display: block" %>
-    <%= form.text_field :full_name %>
+    <%= form.label :full_name, "Nome completo", style: "display: block", class: "custom-label" %>
+    <%= form.text_field :full_name, class: "form-control" %>
   </div>
 
   <div>
-    <%= form.label :role_id, "Função", style: "display: block" %>
+    <%= form.label :role_id, "Função", style: "display: block", class: "custom-label" %>
     <%= form.collection_select(
-          :role_id,
-          Services::Role.all,
-          :id,
-          :description,
-          prompt: "Selecione"
-        ) %>
+      :role_id,
+      Services::Role.all,
+      :id,
+      :description,
+      { prompt: "Selecione" },
+      { class: "form-select" }
+    ) %>
   </div>
 
   <div>
-    <%= form.label :cpf, style: "display: block" %>
-    <%= form.text_field :cpf %>
+    <%= form.label :cpf, "CPF", style: "display: block", class: "custom-label" %>
+    <%= form.text_field :cpf, class: "form-control" %>
   </div>
 
   <div>
-    <%= form.label :company_name, "Empresa", style: "display: block" %>
-    <%= form.text_field :company_name %>
+    <%= form.label :company_name, "Empresa", style: "display: block", class: "custom-label" %>
+    <%= form.text_field :company_name, class: "form-control" %>
   </div>
 
   <div>
-    <%= form.label :cnpj, style: "display: block" %>
-    <%= form.text_field :cnpj %>
+    <%= form.label :cnpj, "CNPJ", style: "display: block", class: "custom-label" %>
+    <%= form.text_field :cnpj, class: "form-control" %>
   </div>
 
   <div>
-    <%= form.label :hourly_rate, "Valor atual (R$/h)", style: "display: block" %>
-    <%= form.number_field :hourly_rate, step: 0.01 %>
+    <%= form.label :hourly_rate, "Valor atual (R$/h)", style: "display: block", class: "custom-label" %>
+    <%= form.number_field :hourly_rate, step: 0.01, class: "form-control" %>
   </div>
 
   <div>

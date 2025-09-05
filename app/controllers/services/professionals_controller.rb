@@ -32,15 +32,17 @@ module Services
     # POST /services/professionals
     def create
       @professional = Services::Professional.new(professional_params)
+      @professional.client_id = current_user_client.client_id
 
       respond_to do |format|
         if @professional.save
           format.html do
-            redirect_to services_professionals_path,
+            redirect_to clients_services_professionals_path,
                         notice: "Profissional criado com sucesso."
           end
-          format.json { head :created, location: services_professionals_url }
+          format.json { head :created, location: clients_services_professionals_url }
         else
+          Rails.logger.info "Erros ao salvar Professional: #{@professional.errors.full_messages.join(', ')}"
           format.html { render :new, status: :unprocessable_entity }
           format.json do
             render json: @professional.errors,
@@ -49,6 +51,7 @@ module Services
         end
       end
     end
+
 
     # PATCH/PUT /services/professionals/:id
     def update

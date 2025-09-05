@@ -1,11 +1,13 @@
-<% content_for :title, "Editing role" %>
+<main class="index-container">
+  <% content_for :title, "Editing role" %>
 
-<h1>Editar Função <i><%= @role.description %></i></h1>
+  <h1>Editar Função <i><%= @role.description %></i></h1>
 
-<%= render "form", role: @role %>
+  <%= render "form", role: @role %>
 
-<br>
+  <br>
 
-<div>
-  <%= link_to "<- Voltar", services_roles_path %>
-</div>
+  <div>
+    <%= link_to "<- Voltar", clients_services_roles_path, class: "standart-button" %>
+  </div>
+</main>

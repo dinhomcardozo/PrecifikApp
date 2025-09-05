@@ -17,11 +17,12 @@
       <% @roles.each do |role| %>
         <tr>
           <td><%= role.description %></td>
-          <td><%= link_to "Ver", clients_services_role_path(role) %></td>
-          <td><%= link_to "Editar", edit_clients_services_role_path(role) %></td>
+          <td><%= link_to "Ver", clients_services_role_path(role), class: "action-button" %></td>
+          <td><%= link_to "Editar", edit_clients_services_role_path(role), class: "action-button" %></td>
           <td>
             <%= link_to "Excluir",
                         clients_services_role_path(role),
+                        class: "action-button",
                         method: :delete,
                         data: { confirm: "Tem certeza?" } %>
           </td>

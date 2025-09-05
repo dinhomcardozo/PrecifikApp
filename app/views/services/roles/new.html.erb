@@ -1,11 +1,14 @@
-<% content_for :title, "Maxximiza | Nova função" %>
+<main class="index-container">
 
-<h1>Nova Função</h1>
+  <% content_for :title, "Maxximiza | Nova função" %>
 
-<%= render "form", role: @role %>
+  <h1>Nova Função</h1>
 
-<br>
+  <%= render "form", role: @role %>
 
-<div>
-  <%= link_to "<- Voltar", services_roles_path, class: "standart-button" %>
-</div>
+  <br>
+
+  <div>
+    <%= link_to "<- Voltar", clients_services_roles_path, class: "standart-button" %>
+  </div>
+</main>

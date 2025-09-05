@@ -1,25 +1,26 @@
-<%# app/views/services/roles/_form.html.erb %>
-<%= form_with url: role.persisted? ? services_role_path(role) : services_roles_path,
+<main class="index-container">
+  <%= form_with url: role.persisted? ? clients_services_role_path(role) : clients_services_roles_path,
                 scope: :role,
                 local: true do |form| %>
-    <% if role.errors.any? %>
-      <div style="color: red">
-        <h2><%= pluralize(role.errors.count, "error") %> prohibited this role from being saved:</h2>
+      <% if role.errors.any? %>
+        <div style="color: red">
+          <h2><%= pluralize(role.errors.count, "error") %> prohibited this role from being saved:</h2>
 
-        <ul>
-          <% role.errors.each do |error| %>
-            <li><%= error.full_message %></li>
-          <% end %>
-        </ul>
+          <ul>
+            <% role.errors.each do |error| %>
+              <li><%= error.full_message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div>
+        <%= form.label :description, "Descrição", style: "display: block" %>
+        <%= form.text_field :description %>
       </div>
-    <% end %>
 
-    <div>
-      <%= form.label :description, "Descrição", style: "display: block" %>
-      <%= form.text_field :description %>
-    </div>
-
-    <div>
-      <%= form.submit "Salvar função", class: "standart-button" %>
-    </div>
-<% end %>
+      <div>
+        <%= form.submit "Salvar função", class: "standart-button" %>
+      </div>
+  <% end %>
+</main>

@@ -25,11 +25,11 @@ module Services
 
       respond_to do |format|
         if @role.save
-          format.html { redirect_to services_roles_path,
+          format.html { redirect_to clients_services_roles_path,
                         notice: "Função criada com sucesso." }
           format.json { render :index,
                         status: :created,
-                        location: services_roles_url }
+                        location: clients_services_roles_url }
         else
           format.html { render :new, status: :unprocessable_entity }
           format.json { render json: @role.errors,
@@ -42,11 +42,11 @@ module Services
     def update
       respond_to do |format|
         if @role.update(role_params)
-          format.html { redirect_to services_roles_path,
+          format.html { redirect_to clients_services_roles_path,
                         notice: "Função atualizada com sucesso." }
           format.json { render :index,
                         status: :ok,
-                        location: services_roles_url }
+                        location: clients_services_roles_url }
         else
           format.html { render :edit, status: :unprocessable_entity }
           format.json { render json: @role.errors,
@@ -60,7 +60,7 @@ module Services
       @role.destroy!
 
       respond_to do |format|
-        format.html { redirect_to services_roles_path,
+        format.html { redirect_to clients_services_roles_path,
                       status: :see_other,
                       notice: "Função excluída com sucesso." }
         format.json { head :no_content }
