@@ -36,6 +36,15 @@ class SubproductsController < Clients::AuthenticatedController
     end
   end
 
+  def show
+    @subproduct = Subproduct.find(params[:id])
+
+    respond_to do |format|
+      format.html
+      format.json { render json: { cost_per_unit: @subproduct.unit_price.to_f } }
+    end
+  end
+
   def destroy
     @subproduct.destroy
     redirect_to subproducts_path, notice: "Excluído"

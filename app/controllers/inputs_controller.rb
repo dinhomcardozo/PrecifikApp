@@ -23,7 +23,8 @@ class InputsController < Clients::AuthenticatedController
       format.json do
         render json: {
               cost:            @input.cost.to_f,
-              weight_in_grams: (@input.weight.presence || 1).to_f
+              weight_in_grams: (@input.weight.presence || 1).to_f,
+              cost_per_unit:   @input.cost_per_gram.to_f
         }
       end
     end

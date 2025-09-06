@@ -105,10 +105,9 @@
 
         <h3 class="subtitle">Insumos Utilizados</h3>
 
-        <div
-          data-controller="service-nested-form"
-          data-service-nested-form-association-value="service_inputs"
-        >
+      <div data-controller="service-nested-form"
+        data-service-nested-form-association-value="inputs">
+
           <!-- Container onde os blocos existentes e novos serão inseridos -->
           <div data-service-nested-form-target="items">
             <%= f.fields_for :service_inputs do |input_form| %>
@@ -132,10 +131,9 @@
         <hr>
         <h3 class="subtitle">Subprodutos Utilizados</h3>
 
-        <div
-          data-controller="service-nested-form"
-          data-service-nested-form-association-value="service_subproducts"
-        >
+      <div data-controller="service-nested-form"
+        data-service-nested-form-association-value="subproducts">
+
           <div data-service-nested-form-target="items">
             <%= f.fields_for :service_subproducts do |ff| %>
               <%= render "services/services/service_subproduct_fields", f: ff %>
@@ -154,10 +152,9 @@
 
         <h3 class="subtitle">Produtos Utilizados</h3>
 
-        <div
-          data-controller="service-nested-form"
-          data-service-nested-form-association-value="service_products"
-        >
+      <div data-controller="service-nested-form"
+          data-service-nested-form-association-value="products">
+
           <div data-service-nested-form-target="items">
             <%= f.fields_for :service_products do |ff| %>
               <%= render "services/services/service_product_fields", f: ff %>
@@ -180,10 +177,9 @@
         <hr>
         <h3 class="subtitle">Energias Utilizadas</h3>
 
-        <div
-          data-controller="service-nested-form"
-          data-service-nested-form-association-value="service_energies"
-        >
+      <div data-controller="service-nested-form"
+          data-service-nested-form-association-value="energies">
+
           <div data-service-nested-form-target="items">
             <%= f.fields_for :service_energies do |ff| %>
               <%= render "services/services/service_energy_fields", f: ff %>
@@ -206,10 +202,9 @@
         <hr>
         <h3 class="subtitle">Equipamentos Utilizados</h3>
 
-        <div
-          data-controller="service-nested-form"
-          data-service-nested-form-association-value="service_equipments"
-        >
+      <div data-controller="service-nested-form"
+          data-service-nested-form-association-value="equipments">
+          
           <div data-service-nested-form-target="items">
             <%= f.fields_for :service_equipments do |ff| %>
               <%= render "services/services/service_equipment_fields", f: ff %>

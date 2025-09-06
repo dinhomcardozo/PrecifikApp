@@ -104,6 +104,9 @@ Rails.application.routes.draw do
         resources :equipments
         resources :professionals
         resources :roles
+        resources :inputs, only: [:show]
+        resources :products, only: [:show]
+        resources :subproducts, only: [:show]
       end
     end
   end

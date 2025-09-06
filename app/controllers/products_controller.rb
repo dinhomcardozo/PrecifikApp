@@ -109,6 +109,12 @@ class ProductsController < Clients::AuthenticatedController
 
   def show
     authorize Product, policy_class: Clients::BasePolicy
+    @product = Product.find(params[:id])
+
+    respond_to do |format|
+      format.html # mantém o comportamento atual
+      format.json { render json: { cost_per_unit: @product.unit_price.to_f } }
+    end
   end
 
   def destroy

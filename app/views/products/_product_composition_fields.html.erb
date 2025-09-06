@@ -5,52 +5,53 @@
   <!-- 1) ID para que o Rails reconheça atualização -->
   <%= f.hidden_field :id %>
 
-  <td>
-    <%= f.label :subproduct_id, "Subproduto", class: "custom-label" %>
-    <%= f.select :subproduct_id,
-      options_for_select(
-        Subproduct.all.map { |s|
-          [ s.name, s.id, { "data-cost-per-gram": s.cost_per_gram } ]
-        },
-        f.object.subproduct_id
-      ),
-      { prompt: "Selecione" },
-      class: "form-select",
-      data: { action: "change->composition-row#updateCostPerGram" } %>
-  </td>
+  <div class="nested-fields">
+    <div class="field">
+      <%= f.label :subproduct_id, "Subproduto", class: "custom-label" %>
+      <%= f.select :subproduct_id,
+        options_for_select(
+          Subproduct.all.map { |s|
+            [ s.name, s.id, { "data-cost-per-gram": s.cost_per_gram } ]
+          },
+          f.object.subproduct_id
+        ),
+        { prompt: "Selecione" },
+        class: "form-select",
+        data: { action: "change->composition-row#updateCostPerGram" } %>
+    </div>
 
-  <td class="select-field">
-    <%= f.label :quantity, "Quantidade (g)", class: "custom-label" %>
-    <%= f.number_field :quantity,
-          step: "any",
-          placeholder: "Ex: 100",
-          class: "form-control",
-          data: {
-            action:    "input->composition-row#calculate",
-            "composition-row-target": "quantity"
-          } %>
-  </td>
+    <div class="field">
+      <%= f.label :quantity, "Quantidade (g)", class: "custom-label" %>
+      <%= f.number_field :quantity,
+            step: "any",
+            placeholder: "Ex: 100",
+            class: "form-control",
+            data: {
+              action:    "input->composition-row#calculate",
+              "composition-row-target": "quantity"
+            } %>
+    </div>
 
-  <td>
-    <%= f.label :cost, "Custo da Quantidade (R$)", class: "custom-label" %>
-    <%= f.number_field :cost,
-          step: "any",
-          readonly: true,
-          placeholder: "0.00",
-          class: "form-control",
-          data: { "composition-row-target": "cost" } %>
+    <div class="field">
+      <%= f.label :cost, "Custo da Quantidade (R$)", class: "custom-label" %>
+      <%= f.number_field :cost,
+            step: "any",
+            readonly: true,
+            placeholder: "0.00",
+            class: "form-control",
+            data: { "composition-row-target": "cost" } %>
 
-    <!-- 2) Hidden para enviar o cost calculado ao servidor -->
-    <%= f.hidden_field :cost, data: { "composition-row-target": "costValue" } %>
-  </td>
+      <!-- 2) Hidden para enviar o cost calculado ao servidor -->
+      <%= f.hidden_field :cost, data: { "composition-row-target": "costValue" } %>
+    </div>
 
-  <td>
-    <!-- 3) Flag para remoção -->
-    <%= f.hidden_field :_destroy, class: "destroy-flag" %>
-    <button type="button"
-            class="action-button"
-            data-action="composition-row#removeRow">
-      Remover
-    </button>
-  </td>
+    <div class="remove-btn">
+      <!-- 3) Flag para remoção -->
+      <%= f.hidden_field :_destroy, class: "destroy-flag" %>
+      <button type="button", class= "mini-button",
+              data-action="composition-row#removeRow">
+        Remover
+      </button>
+    </div>
+  </div>
 </tr>

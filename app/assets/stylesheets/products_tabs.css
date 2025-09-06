@@ -2,7 +2,7 @@ body {
   font-family: 'Raleway', sans-serif;
   background-color: var(--bg-color);
   color: var(--text-dark);
-  font-size: 0.900rem;
+  font-size: 0.750rem;
 }
 
 .nav-tabs {
@@ -22,12 +22,12 @@ body {
 .nav-tabs .nav-link {
   display: block;
   text-align: center;
-  padding: 0.75rem 0;
+  padding: 0.65rem 0;
   color: var(--accent-color);
   background: transparent;
   border: none;
   cursor: pointer;
-  font-size: 0.750rem;
+  font-size: 0.650rem;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
@@ -46,14 +46,14 @@ body {
   bottom: 0;
   left: 0;
   width: calc(100% / 4);
-  height: 3px;
+  height: 2.5px;
   background-color: var(--accent-hover);
   transition: transform 0.3s ease;
 }
 
 .tab-content {
   background-color: var(--bg-color);
-  padding: 1.5rem;
+  padding: 1.0rem;
   border-radius: 0 0.375rem 0.375rem 0.375rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
@@ -73,14 +73,14 @@ body {
   border: 1px solid #3a3a32;
   border-radius: 0.2rem;
   color: var(--text-dark);
-  font-size: 0.750rem;
+  font-size: 0.650rem;
 }
 
 .form-control:focus,
 .form-select:focus {
   border-color: var(--accent-color);
   box-shadow: 0 0 0 0.2rem rgba(211, 219, 35, 0.25);
-  font-size: 0.750rem;
+  font-size: 0.650rem;
 }
 
 .table-sm th {
@@ -94,5 +94,5 @@ body {
 
 .select-field td {
   margin: 10px;
-  padding: 10px;
+  padding: 8px;
 }
