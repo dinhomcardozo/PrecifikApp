@@ -23,7 +23,7 @@
     <%= f.number_field :cost,
                        readonly: true,
                        class: "form-control",
-                       data: { target: "service-nested-form.cost" } %>
+                       data: { "service-nested-form-target": "cost" } %>
   </div>
 
   <%= f.hidden_field :_destroy, class: "destroy-flag" %>

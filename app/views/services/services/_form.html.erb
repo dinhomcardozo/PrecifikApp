@@ -105,8 +105,8 @@
 
         <h3 class="subtitle">Insumos Utilizados</h3>
 
-      <div data-controller="service-nested-form"
-        data-service-nested-form-association-value="inputs">
+    <div data-controller="service-nested-form"
+        data-service-nested-form-association-value="clients/inputs">
 
           <!-- Container onde os blocos existentes e novos serão inseridos -->
           <div data-service-nested-form-target="items">
@@ -131,8 +131,8 @@
         <hr>
         <h3 class="subtitle">Subprodutos Utilizados</h3>
 
-      <div data-controller="service-nested-form"
-        data-service-nested-form-association-value="subproducts">
+    <div data-controller="service-nested-form"
+        data-service-nested-form-association-value="clients/subproducts">
 
           <div data-service-nested-form-target="items">
             <%= f.fields_for :service_subproducts do |ff| %>
@@ -153,7 +153,7 @@
         <h3 class="subtitle">Produtos Utilizados</h3>
 
       <div data-controller="service-nested-form"
-          data-service-nested-form-association-value="products">
+          data-service-nested-form-association-value="clients/products">
 
           <div data-service-nested-form-target="items">
             <%= f.fields_for :service_products do |ff| %>
@@ -178,7 +178,7 @@
         <h3 class="subtitle">Energias Utilizadas</h3>
 
       <div data-controller="service-nested-form"
-          data-service-nested-form-association-value="energies">
+          data-service-nested-form-association-value="clients/services/energies">
 
           <div data-service-nested-form-target="items">
             <%= f.fields_for :service_energies do |ff| %>
@@ -203,7 +203,7 @@
         <h3 class="subtitle">Equipamentos Utilizados</h3>
 
       <div data-controller="service-nested-form"
-          data-service-nested-form-association-value="equipments">
+          data-service-nested-form-association-value="clients/services/equipments">
           
           <div data-service-nested-form-target="items">
             <%= f.fields_for :service_equipments do |ff| %>

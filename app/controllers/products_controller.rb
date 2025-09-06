@@ -113,7 +113,7 @@ class ProductsController < Clients::AuthenticatedController
 
     respond_to do |format|
       format.html # mantém o comportamento atual
-      format.json { render json: { cost_per_unit: @product.unit_price.to_f } }
+    format.json { render json: { cost_per_unit: @product.cost_per_gram.to_f } }
     end
   end
 

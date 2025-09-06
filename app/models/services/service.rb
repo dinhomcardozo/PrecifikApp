@@ -2,7 +2,6 @@ module Services
   class Service < ApplicationRecord
     self.table_name = "services"
     
-    belongs_to :role
     belongs_to :professional
 
     has_many :service_inputs,

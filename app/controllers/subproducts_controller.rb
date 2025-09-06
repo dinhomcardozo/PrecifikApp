@@ -41,7 +41,7 @@ class SubproductsController < Clients::AuthenticatedController
 
     respond_to do |format|
       format.html
-      format.json { render json: { cost_per_unit: @subproduct.unit_price.to_f } }
+      format.json { render json: { cost_per_unit: @subproduct.cost_per_gram.to_f } }
     end
   end
 

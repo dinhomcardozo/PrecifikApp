@@ -22,11 +22,11 @@ class Subproduct < ApplicationRecord
     subproduct_compositions.sum(&:quantity_cost).to_f.round(2)
   end
   
-def cost_per_gram
-  weight = weight_in_grams.to_f 
-  return 0.0 if weight.zero?     
-  (cost.to_f / weight).round(4)
-end
+  def cost_per_gram
+    weight = weight_in_grams.to_f 
+    return 0.0 if weight.zero?     
+    (cost.to_f / weight).round(4)
+  end
 
   private
 

@@ -57,6 +57,12 @@ class Product < ApplicationRecord
     product_subproducts.sum { |ps| ps.quantity.to_f }
   end
 
+  def cost_per_gram
+    weight = final_weight.to_f.nonzero? || total_weight.to_f
+    return 0.0 if weight.zero?
+    (total_cost.to_f / weight).round(4)
+  end
+
   # 3 – TRIBUTOS
 
       # Custo total com tributos

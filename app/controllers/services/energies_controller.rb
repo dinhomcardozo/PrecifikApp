@@ -10,6 +10,10 @@ module Services
     end
 
     def show
+      respond_to do |format|
+        format.html
+        format.json { render json: { cost_per_unit: @energy.consume_per_hour.to_f } }
+      end
     end
 
     def new
@@ -50,7 +54,7 @@ module Services
     private
 
     def set_energy
-      @energy = Energy.find(params.expect(:id))
+      @energy = Energy.find(params[:id])
     end
 
     def energy_params

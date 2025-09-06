@@ -12,6 +12,10 @@ module Services
 
     # GET /services/equipments/:id
     def show
+      respond_to do |format|
+        format.html
+        format.json { render json: { cost_per_unit: @equipment.depreciation_value.to_f } }
+      end
     end
 
     # GET /services/equipments/new
