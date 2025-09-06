@@ -21,8 +21,10 @@ module Services
 
     def create
       @energy = Services::Energy.new(energy_params)
+      @energy.client_id = current_user_client.client_id
+
       if @energy.save
-        redirect_to services_energies_path, notice: "Energia criada com sucesso"
+        redirect_to clients_services_energies_path, notice: "Energia criada com sucesso"
       else
         render :new, status: :unprocessable_entity
       end
@@ -42,11 +44,7 @@ module Services
 
     def destroy
       @energy.destroy!
-
-      respond_to do |format|
-        format.html { redirect_to services_energies_path, status: :see_other, notice: "Energia removida com sucesso." }
-        format.json { head :no_content }
-      end
+      redirect_to clients_services_energies_path, status: :see_other, notice: "Energia removida com sucesso."
     end
 
     private

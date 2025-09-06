@@ -25,8 +25,10 @@ module Services
 
     def create
       @equipment = Services::Equipment.new(equipment_params)
+      @equipment.client_id = current_user_client.client_id
+
       if @equipment.save
-        redirect_to services_equipments_path, notice: "Equipamento criado!"
+        redirect_to clients_services_equipments_path, notice: "Equipamento criado!"
       else
         render :new, status: :unprocessable_entity
       end
@@ -37,10 +39,10 @@ module Services
       respond_to do |format|
         if @equipment.update(equipment_params)
           format.html do
-            redirect_to services_equipments_path,
+            redirect_to clients_services_equipments_path,
                         notice: "Equipamento atualizado com sucesso."
           end
-          format.json { head :ok, location: services_equipments_url }
+          format.json { head :ok, location: sclients_services_equipments_url }
         else
           format.html { render :edit, status: :unprocessable_entity }
           format.json do
@@ -57,7 +59,7 @@ module Services
 
       respond_to do |format|
         format.html do
-          redirect_to services_equipments_path,
+          redirect_to clients_services_equipments_path,
                       status: :see_other,
                       notice: "Equipamento excluído com sucesso."
         end

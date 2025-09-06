@@ -1,4 +1,4 @@
-<div data-service-nested-form-target="item" class="nested-fields" style="margin-bottom: 0.5rem;">
+<div data-service-nested-form-target="item" class="nested-fields">
   <div class="field">
     <%= f.label :equipment_id, "Equipment" %>
     <%= f.collection_select :equipment_id,
@@ -27,7 +27,10 @@
   </div>
 
   <%= f.hidden_field :_destroy, class: "destroy-flag" %>
-  <%= link_to "[X] Remover", "#",
-              class: "action-button",
-              data: { action: "service-nested-form#remove" } %>
+
+  <div class="field remove-btn">
+    <%= link_to "Excluir", "#",
+                class: "mini-button",
+                data: { action: "service-nested-form#remove" } %>
+  </div>
 </div>

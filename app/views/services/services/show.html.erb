@@ -1,12 +1,9 @@
-<main class="index-container">
-  <p style="color: green"><%= notice %></p>
+<p style="color: green"><%= notice %></p>
 
-  <%= render @service %>
+<%= render @service %>
 
-  <div>
-    <%= link_to "Edit this service", edit_service_path(@service) %> |
-    <%= link_to "Back to services", services_path %>
-
-    <%= button_to "Destroy this service", @service, method: :delete %>
-  </div>
-</main>
+<div class="index-container">
+  <%= link_to "Editar", edit_service_path(@service), class: "action-button"  %> |
+  <%= link_to "Voltar", services_path, class: "action-button" %>
+  <%= button_to "Excluir", @service, method: :delete, class: "action-button"  %>
+</div>

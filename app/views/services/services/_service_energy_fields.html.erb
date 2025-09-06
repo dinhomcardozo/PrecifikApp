@@ -1,11 +1,11 @@
-<div data-service-nested-form-target="item" class="nested-fields" style="margin-bottom: 0.5rem;">
+<div data-service-nested-form-target="item" class="nested-fields">
   <div class="field">
     <%= f.label :energy_id, "Energy" %>
     <%= f.collection_select :energy_id,
                             @available_energies,
                             :id,
                             :description,
-                            { prompt: "Selecione Energy" },
+                            { prompt: "Selecione Energia" },
                             class: "form-control",
                             data: { action: "change->service-nested-form#loadCost" } %>
   </div>
@@ -27,7 +27,10 @@
   </div>
 
   <%= f.hidden_field :_destroy, class: "destroy-flag" %>
-  <%= link_to "[X] Remover", "#",
-              class: "action-button",
-              data: { action: "service-nested-form#remove" } %>
+
+  <div class="field remove-btn">
+    <%= link_to "Excluir", "#",
+                class: "mini-button",
+                data: { action: "service-nested-form#remove" } %>
+  </div>
 </div>

@@ -1,5 +1,7 @@
 <main class="index-container">
-    <h1>Novo Serviço</h1>
-    <%= render "form", service: @service %>
-    <%= link_to "Voltar", clients_services_services_path, class: "action-button" %>
+    <h1 class="title">Novo Serviço</h1>
 </main>
+<%= render "form", service: @service %>
+<div class="index-container">
+    <%= link_to "Voltar", clients_services_services_path, class: "action-button" %>
+</div>

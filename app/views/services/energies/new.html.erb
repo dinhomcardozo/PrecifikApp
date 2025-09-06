@@ -1,8 +1,9 @@
-<!-- app/views/services/energies/new.html.erb -->
-<% content_for :title, "Maxximiza | Serviços | Nova Energia" %>
+<main class="index-container">
+    <% content_for :title, "Maxximiza | Serviços | Nova Energia" %>
 
-<h1>Nova Energia</h1>
+    <h1>Nova Energia</h1>
 
-<%= render "form", energy: @energy %>
+    <%= render "form", energy: @energy %>
 
-<%= link_to "Voltar para Energias", services_energies_path, class: "standart-button" %>
+    <%= link_to "Voltar para Energias", clients_services_energies_path, class: "action-button" %>
+</main>

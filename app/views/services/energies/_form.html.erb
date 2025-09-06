@@ -1,5 +1,7 @@
 <!-- app/views/services/energies/_form.html.erb -->
-<%= form_with(model: energy, local: true) do |form| %>
+<%= form_with model: energy,
+              url: energy.persisted? ? clients_services_energy_path(energy) : clients_services_energies_path,
+              local: true do |form| %>
   <% if energy.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(energy.errors.count, "erro") %> proibiu o salvamento:</h2>

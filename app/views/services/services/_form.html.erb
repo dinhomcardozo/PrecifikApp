@@ -1,15 +1,13 @@
 <main class="index-container">
-<%= form_with model: @service,
-              url: @service.new_record? ? clients_services_services_path : clients_services_service_path(@service),
-              method: @service.new_record? ? :post : :patch,
-              local: true do |f| %>
+  <%= form_with model: @service,
+                url: @service.new_record? ? clients_services_services_path : clients_services_service_path(@service),
+                method: @service.new_record? ? :post : :patch,
+                local: true do |f| %>
 
-    <div data-controller="service-form">
+        <div data-controller="service-form">
       <% if @service.errors.any? %>
         <div class="error_explanation">
-          <h2>
-            <%= pluralize(@service.errors.count, "erro") %> proibiu este serviço de ser salvo:
-          </h2>
+          <h2><%= pluralize(@service.errors.count, "erro") %> proibiu este serviço de ser salvo:</h2>
           <ul>
             <% @service.errors.full_messages.each do |msg| %>
               <li><%= msg %></li>
@@ -18,228 +16,222 @@
         </div>
       <% end %>
 
-      <% if @service.errors.any? %>
-        <ul>
-          <% @service.errors.full_messages.each do |msg| %>
-            <li><%= msg %></li>
-          <% end %>
-        </ul>
-      <% end %>
-
       <div class="form-inputs">
 
-        <!-- Descrição -->
-        <div class="field">
-          <%= f.label :description, "Descrição" %>
-          <%= f.text_field :description, class: "form-control" %>
+        <!-- Linha 1: Descrição + Profissional -->
+        <div class="form-row">
+          <div class="field">
+            <%= f.label :description, "Descrição" %>
+            <%= f.text_field :description, class: "form-control" %>
+          </div>
+
+          <div class="field">
+            <%= f.label :professional_id, "Profissional" %>
+            <%= f.select :professional_id,
+                        @professionals.map { |p| [p.full_name, p.id] },
+                        { prompt: "Selecione Profissional" },
+                        class: "form-control",
+                        data: {
+                          action: "change->service-form#loadHourlyRate",
+                          "service-form-target": "professionalSelect"
+                        } %>
+          </div>
         </div>
 
-        <!-- Professional -->
-        <div class="field">
-          <%= f.label :professional_id, "Profissional" %>
-          <%= f.select :professional_id,
-                      @professionals.map { |p| [p.full_name, p.id] },
-                      { prompt: "Selecione Profissional" },
-                      class: "form-control",
-                      data: {
-                        action: "change->service-form#loadHourlyRate",
-                        "service-form-target": "professionalSelect"
-                      } %>
-        </div>
+        <!-- Linha 2: Hora técnica + Horas totais (raw) + Horas totais (hidden) -->
+        <div class="form-row">
+          <div class="field">
+            <%= f.label :hourly_rate, "Hora Técnica (R$)" %>
+            <%= f.number_field :hourly_rate,
+                              readonly: true,
+                              class: "form-control",
+                              data: { "service-form-target": "hourlyRate" } %>
+          </div>
 
-        <!-- Hourly rate (readonly) -->
-        <div class="field">
-          <%= f.label :hourly_rate, "Hora Técnica (R$)" %>
-          <%= f.number_field :hourly_rate,
-                            readonly: true,
-                            class: "form-control",
-                            data: { "service-form-target": "hourlyRate" } %>
-        </div>
-
-        <div class="field">
-          <%= f.label :total_hours_raw, "Horas totais (DD:HH:MM:SS)" %>
-          <%= f.text_field :total_hours_raw,
-                          placeholder: "00:00:00:00",
-                          class: "form-control",
-                          data: {
-                            "service-form-target": "totalRaw",
-                            action: "input->service-form#maskTotalHours blur->service-form#parseTotalHours"
-                          } %>
-        </div>
-        <!-- Total Hours decimal (hidden) -->
-        <%= f.hidden_field :total_hours,
-                          data: { "service-form-target": "totalDecimal" } %>
-
-        <!-- Tax (%) -->
-        <div class="field">
-          <%= f.label :tax, "Tributos (%)" %>
-          <%= f.number_field :tax,
-                            step: 0.01,
+          <div class="field">
+            <%= f.label :total_hours_raw, "Horas totais (DD:HH:MM:SS)" %>
+            <%= f.text_field :total_hours_raw,
+                            placeholder: "00:00:00:00",
                             class: "form-control",
                             data: {
-                              "service-form-target": "tax",
-                              action:                "input->service-form#computeBasePrice"
+                              "service-form-target": "totalRaw",
+                              action: "input->service-form#maskTotalHours blur->service-form#parseTotalHours"
                             } %>
+          </div>
+
+          <%= f.hidden_field :total_hours,
+                            data: { "service-form-target": "totalDecimal" } %>
         </div>
 
-        <!-- Profit Margin (%) -->
-        <div class="field">
-          <%= f.label :profit_margin, "Markup (%)" %>
-          <%= f.number_field :profit_margin,
-                            step: 0.01,
-                            class: "form-control",
-                            data: {
-                              "service-form-target": "profit",
-                              action:                "input->service-form#computeBasePrice"
-                            } %>
+        <!-- Linha 3: Tributos + Markup + Preço total -->
+        <div class="form-row">
+          <div class="field">
+            <%= f.label :tax, "Tributos (%)" %>
+            <%= f.number_field :tax,
+                              step: 0.01,
+                              class: "form-control",
+                              data: {
+                                "service-form-target": "tax",
+                                action: "input->service-form#computeBasePrice"
+                              } %>
+          </div>
+
+          <div class="field">
+            <%= f.label :profit_margin, "Markup (%)" %>
+            <%= f.number_field :profit_margin,
+                              step: 0.01,
+                              class: "form-control",
+                              data: {
+                                "service-form-target": "profit",
+                                action: "input->service-form#computeBasePrice"
+                              } %>
+          </div>
+
+          <div class="field"> <%= f.label :service_price, "Preço total do serviço (R$)" %>
+            <%= f.number_field :service_price,
+                              readonly: true,
+                              class: "form-control",
+                              data: { "service-form-target": "basePrice" } %>
+          </div>
         </div>
 
-        <!-- Service Price (readonly) -->
-        <div class="field">
-          <%= f.label :service_price, "Preço total do serviço (R$)" %>
-          <%= f.number_field :service_price,
-                            readonly: true,
-                            class: "form-control",
-                            data: { "service-form-target": "basePrice" } %>
-        </div>
-
-        <%= f.hidden_field :service_items_cost,
-              data: { "service-form-target": "itemsCost" } %>
-    </div>
-
-      <hr>
-
-      <h2>Itens Utilizados</h2>
-
-      <h3>Insumos Utilizados</h3>
-
-      <div
-        data-controller="service-nested-form"
-        data-service-nested-form-association-value="service_inputs"
-      >
-        <!-- Container onde os blocos existentes e novos serão inseridos -->
-        <div data-service-nested-form-target="items">
-          <%= f.fields_for :service_inputs do |input_form| %>
-            <%= render "services/services/service_input_fields", f: input_form %>
-          <% end %>
-        </div>
-
-        <template data-service-nested-form-target="template">
-          <%= f.fields_for :service_inputs,
-                          Services::ServiceInput.new,
-                          child_index: "NEW_SERVICE_INPUT" do |ff| %>
-            <%= render "services/services/service_input_fields", f: ff %>
-          <% end %>
-        </template>
-
-        <%= link_to "Adicionar Item", "#",
-              class: "action-button",
-              data: { action: "service-nested-form#add" } %>
+          <%= f.hidden_field :service_items_cost,
+                data: { "service-form-target": "itemsCost" } %>
       </div>
 
-      <hr>
-      <h3>Subprodutos Utilizados</h3>
+        <hr>
 
-      <div
-        data-controller="service-nested-form"
-        data-service-nested-form-association-value="service_subproducts"
-      >
-        <div data-service-nested-form-target="items">
-          <%= f.fields_for :service_subproducts do |ff| %>
-            <%= render "services/services/service_subproduct_fields", f: ff %>
-          <% end %>
-        </div>
-        <template data-service-nested-form-target="template">
-          <%= f.fields_for :service_subproducts, Services::ServiceSubproduct.new, child_index: "NEW_SERVICE_SUBPRODUCT" do |ff| %>
-            <%= render "services/services/service_subproduct_fields", f: ff %>
-          <% end %>
-        </template>
-        <%= link_to "Adicionar Subproduto", "#", class: "action-button",
-                    data: { action: "service-nested-form#add" } %>
-      </div>
+        <h2 class="title">Itens Utilizados</h2>
 
-      <hr>
+        <h3 class="subtitle">Insumos Utilizados</h3>
 
-      <h3>Produtos Utilizados</h3>
+        <div
+          data-controller="service-nested-form"
+          data-service-nested-form-association-value="service_inputs"
+        >
+          <!-- Container onde os blocos existentes e novos serão inseridos -->
+          <div data-service-nested-form-target="items">
+            <%= f.fields_for :service_inputs do |input_form| %>
+              <%= render "services/services/service_input_fields", f: input_form %>
+            <% end %>
+          </div>
 
-      <div
-        data-controller="service-nested-form"
-        data-service-nested-form-association-value="service_products"
-      >
-        <div data-service-nested-form-target="items">
-          <%= f.fields_for :service_products do |ff| %>
-            <%= render "services/services/service_product_fields", f: ff %>
-          <% end %>
+          <template data-service-nested-form-target="template">
+            <%= f.fields_for :service_inputs,
+                            Services::ServiceInput.new,
+                            child_index: "NEW_SERVICE_INPUT" do |ff| %>
+              <%= render "services/services/service_input_fields", f: ff %>
+            <% end %>
+          </template>
+
+          <%= link_to "Adicionar Item", "#",
+                class: "action-button",
+                data: { action: "service-nested-form#add" } %>
         </div>
 
-        <template data-service-nested-form-target="template">
-          <%= f.fields_for :service_products,
-                          Services::ServiceProduct.new,
-                          child_index: "NEW_SERVICE_PRODUCT" do |ff| %>
-            <%= render "services/services/service_product_fields", f: ff %>
-          <% end %>
-        </template>
+        <hr>
+        <h3 class="subtitle">Subprodutos Utilizados</h3>
 
-        <%= link_to "Adicionar Product", "#",
-              class: "action-button",
-              data: { action: "service-nested-form#add" } %>
-      </div>
-
-      <hr>
-      <h3>Energias Utilizadas</h3>
-
-      <div
-        data-controller="service-nested-form"
-        data-service-nested-form-association-value="service_energies"
-      >
-        <div data-service-nested-form-target="items">
-          <%= f.fields_for :service_energies do |ff| %>
-            <%= render "services/services/service_energy_fields", f: ff %>
-          <% end %>
+        <div
+          data-controller="service-nested-form"
+          data-service-nested-form-association-value="service_subproducts"
+        >
+          <div data-service-nested-form-target="items">
+            <%= f.fields_for :service_subproducts do |ff| %>
+              <%= render "services/services/service_subproduct_fields", f: ff %>
+            <% end %>
+          </div>
+          <template data-service-nested-form-target="template">
+            <%= f.fields_for :service_subproducts, Services::ServiceSubproduct.new, child_index: "NEW_SERVICE_SUBPRODUCT" do |ff| %>
+              <%= render "services/services/service_subproduct_fields", f: ff %>
+            <% end %>
+          </template>
+          <%= link_to "Adicionar Subproduto", "#", class: "action-button",
+                      data: { action: "service-nested-form#add" } %>
         </div>
 
-        <template data-service-nested-form-target="template">
-          <%= f.fields_for :service_energies,
-                          Services::ServiceEnergy.new,
-                          child_index: "NEW_SERVICE_ENERGY" do |ff| %>
-            <%= render "services/services/service_energy_fields", f: ff %>
-          <% end %>
-        </template>
+        <hr>
 
-        <%= link_to "Adicionar Energy", "#",
-              class: "action-button",
-              data: { action: "service-nested-form#add" } %>
-      </div>
+        <h3 class="subtitle">Produtos Utilizados</h3>
 
-      <hr>
-      <h3>Equipamentos Utilizados</h3>
+        <div
+          data-controller="service-nested-form"
+          data-service-nested-form-association-value="service_products"
+        >
+          <div data-service-nested-form-target="items">
+            <%= f.fields_for :service_products do |ff| %>
+              <%= render "services/services/service_product_fields", f: ff %>
+            <% end %>
+          </div>
 
-      <div
-        data-controller="service-nested-form"
-        data-service-nested-form-association-value="service_equipments"
-      >
-        <div data-service-nested-form-target="items">
-          <%= f.fields_for :service_equipments do |ff| %>
-            <%= render "services/services/service_equipment_fields", f: ff %>
-          <% end %>
+          <template data-service-nested-form-target="template">
+            <%= f.fields_for :service_products,
+                            Services::ServiceProduct.new,
+                            child_index: "NEW_SERVICE_PRODUCT" do |ff| %>
+              <%= render "services/services/service_product_fields", f: ff %>
+            <% end %>
+          </template>
+
+          <%= link_to "Adicionar Product", "#",
+                class: "action-button",
+                data: { action: "service-nested-form#add" } %>
         </div>
 
-        <template data-service-nested-form-target="template">
-          <%= f.fields_for :service_equipments,
-                          Services::ServiceEquipment.new,
-                          child_index: "NEW_SERVICE_EQUIPMENT" do |ff| %>
-            <%= render "services/services/service_equipment_fields", f: ff %>
-          <% end %>
-        </template>
+        <hr>
+        <h3 class="subtitle">Energias Utilizadas</h3>
 
-        <%= link_to "Adicionar Equipment", "#",
-              class: "action-button",
-              data: { action: "service-nested-form#add" } %>
-      </div>
+        <div
+          data-controller="service-nested-form"
+          data-service-nested-form-association-value="service_energies"
+        >
+          <div data-service-nested-form-target="items">
+            <%= f.fields_for :service_energies do |ff| %>
+              <%= render "services/services/service_energy_fields", f: ff %>
+            <% end %>
+          </div>
 
+          <template data-service-nested-form-target="template">
+            <%= f.fields_for :service_energies,
+                            Services::ServiceEnergy.new,
+                            child_index: "NEW_SERVICE_ENERGY" do |ff| %>
+              <%= render "services/services/service_energy_fields", f: ff %>
+            <% end %>
+          </template>
 
-      <div class="form-actions" style="margin-top: 1rem;">
-        <%= f.submit "Salvar Service", class: "standart-button" %>
-      </div>
-  <% end %>
+          <%= link_to "Adicionar Energy", "#",
+                class: "action-button",
+                data: { action: "service-nested-form#add" } %>
+        </div>
+
+        <hr>
+        <h3 class="subtitle">Equipamentos Utilizados</h3>
+
+        <div
+          data-controller="service-nested-form"
+          data-service-nested-form-association-value="service_equipments"
+        >
+          <div data-service-nested-form-target="items">
+            <%= f.fields_for :service_equipments do |ff| %>
+              <%= render "services/services/service_equipment_fields", f: ff %>
+            <% end %>
+          </div>
+
+          <template data-service-nested-form-target="template">
+            <%= f.fields_for :service_equipments,
+                            Services::ServiceEquipment.new,
+                            child_index: "NEW_SERVICE_EQUIPMENT" do |ff| %>
+              <%= render "services/services/service_equipment_fields", f: ff %>
+            <% end %>
+          </template>
+
+          <%= link_to "Adicionar Equipment", "#",
+                class: "action-button",
+                data: { action: "service-nested-form#add" } %>
+        </div>
+
+        <hr>
+        <div class="form-actions">
+          <%= f.submit "Salvar Serviço", class: "standart-button" %>
+        </div>
+    <% end %>
 </main>

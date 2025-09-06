@@ -35,21 +35,26 @@ module Services
       self.total_hours = d * 24 + h + (m / 60) + (s / 3600)
     end
 
+    def compute_final_price
+      base = hourly_rate * total_hours
+      self.service_price      = base + base * (tax / 100.0) + base * (profit_margin / 100.0)
+      self.final_service_price = base + service_items_cost + base * (profit_margin / 100.0)
+    end
+
     def compute_items_costs
-      sums = [
+      service_inputs.each      { |si| si.cost = si.quantity_for_service.to_f * si.input.unit_price.to_f }
+      service_subproducts.each { |ss| ss.cost = ss.quantity_for_service.to_f * ss.subproduct.unit_price.to_f }
+      service_products.each    { |sp| sp.cost = sp.quantity_for_service.to_f * sp.product.unit_price.to_f }
+      service_energies.each    { |se| se.cost = se.hours_per_service.to_f * se.energy.consume_per_hour.to_f }
+      service_equipments.each  { |se| se.cost = se.hours_per_service.to_f * se.equipment.depreciation_value.to_f }
+
+      self.service_items_cost = [
         service_inputs.sum(&:cost),
         service_subproducts.sum(&:cost),
         service_products.sum(&:cost),
         service_energies.sum(&:cost),
         service_equipments.sum(&:cost)
-      ]
-      self.service_items_cost = sums.sum
-    end
-
-    def compute_final_price
-      base = hourly_rate * total_hours
-      self.service_price      = base + base * (tax / 100.0) + base * (profit_margin / 100.0)
-      self.final_service_price = base + service_items_cost + base * (profit_margin / 100.0)
+      ].sum
     end
   end
 end

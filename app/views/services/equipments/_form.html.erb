@@ -1,47 +1,52 @@
-<main class="index-container">
-  <%= form_with model: equipment,
-                local: true,
-                data: { controller: "depreciation" } do |form| %>
+<%= form_with model: equipment,
+              url: equipment.persisted? ? clients_services_equipment_path(equipment) : clients_services_equipments_path,
+              local: true,
+              data: { controller: "depreciation" } do |form| %>
 
-    <div>
-      <%= form.label :description, "Descrição" %>
-      <%= form.text_field :description, placeholder: "Descreva o equipamento" %>
-    </div>
+  <div>
+    <%= form.label :description, "Descrição", class: "custom-label" %>
+    <%= form.text_field :description, placeholder: "Descreva o equipamento", class: "form-control" %>
+  </div>
 
+  <div>
+    <%= form.label :value, "Valor (R$)", class: "custom-label" %>
+    <%= form.number_field :value,
+                          step: 0.01,
+                          class: "form-control",
+                          data: {
+                            depreciation_target: "value",
+                            action: "input->depreciation#update"
+                          } %>
+  </div>
+
+  <div>
     <div>
-      <%= form.label :value, "Valor (R$)" %>
-      <%= form.number_field :value,
+      <%= form.label :depreciation_percent, "Depreciação (%/h)", class: "custom-label" %>
+      <%= form.number_field :depreciation_percent,
                             step: 0.01,
+                            class: "form-control",
                             data: {
-                              depreciation_target: "value",
+                              depreciation_target: "percent",
                               action: "input->depreciation#update"
                             } %>
     </div>
+      <small style="color: green; font-size: 0.8em;">
+        Padrão recomendado para veículos e máquinas: 0.01
+      </small>
+  </div
 
-    <div>
-      <div>
-        <%= form.label :depreciation_percent, "Depreciação (%/h)" %>
-        <%= form.number_field :depreciation_percent,
-                              step: 0.01,
-                              data: {
-                                depreciation_target: "percent",
-                                action: "input->depreciation#update"
-                              } %>
-      </div>
-        <small style="color: green; font-size: 0.8em;">
-          Padrão recomendado para veículos e máquinas: 0.01
-        </small>
-    </div
+  <div>
+    <%= form.label :depreciation_value, "Depreciação (R$/h)", class: "custom-label" %>
+    <%= form.number_field :depreciation_value,
+                          disabled: true,
+                          class: "form-control",
+                          data: { depreciation_target: "result" } %>
+  </div>
 
-    <div>
-      <%= form.label :depreciation_value, "Depreciação (R$/h)" %>
-      <%= form.number_field :depreciation_value,
-                            disabled: true,
-                            data: { depreciation_target: "result" } %>
+  <div>
+    <div class="index-container">
+      <%= form.submit equipment.persisted? ? "Atualizar" : "Criar", class: "action-button" %>
+      <%= link_to "Voltar", clients_services_equipments_path, class: "standart-button" %>
     </div>
-
-    <div>
-      <%= form.submit equipment.persisted? ? "Atualizar" : "Criar" %>
-    </div>
-  <% end %>
-</main>
+  </div>                        
+<% end %>

@@ -1,14 +1,16 @@
-<p style="color: green"><%= notice %></p>
+<main class="index-container">
+  <p style="color: green"><%= notice %></p>
 
-<%= render @energy %>
+  <%= render @energy %>
 
-<div>
-  <%= link_to "Editar", edit_services_energy_path(@energy), class: "action-button" %> |
-  <%= link_to "Voltar", services_energies_path, class: "action-button" %>
+  <div>
+    <%= link_to "Editar", edit_services_energy_path(@energy), class: "action-button" %> |
+    <%= link_to "Voltar para Energias", clients_services_energies_path, class: "standart-button" %>
 
-  <%= button_to "Excluir",
-                services_energy_path(@energy),
-                method: :delete,
-                class: "action-button",
-                data: { confirm: "Are you sure?" } %>
-</div>
+    <%= button_to "Excluir",
+                  services_energy_path(@energy),
+                  method: :delete,
+                  class: "action-button",
+                  data: { confirm: "Are you sure?" } %>
+  </div>
+</main>

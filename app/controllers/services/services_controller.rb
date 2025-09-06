@@ -25,15 +25,19 @@ module Services
     end
 
     def create
-      @service = Service.new(service_params)
+      @service = Services::Service.new(service_params)
+      @service.client_id = current_user_client.client_id
+
       if @service.save
         redirect_to clients_services_services_path, notice: "Serviço criado com sucesso"
       else
-        render :new
+        Rails.logger.info "Erros ao salvar Service: #{@service.errors.full_messages.join(', ')}"
+        render :new, status: :unprocessable_entity
       end
     end
 
     def update
+      @service.client_id = current_user_client.client_id
       respond_to do |format|
         if @service.update(service_params)
           format.html { redirect_to @service, notice: "Service was successfully updated." }
@@ -72,7 +76,7 @@ module Services
       # Only allow a list of trusted parameters through.
     def service_params
       params
-        .require(:service)
+        .require(:services_service)
         .permit(
           :description,
           :role_id,

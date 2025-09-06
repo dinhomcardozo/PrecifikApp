@@ -1,18 +1,17 @@
-<div data-service-nested-form-target="item" class="nested-fields" style="margin-bottom: 0.5rem;">
+<div data-service-nested-form-target="item" class="nested-fields">
   <!-- Select de Input -->
   <div class="field">
     <%= f.label :input_id, "Input" %>
-
     <%= f.collection_select :input_id,
                             @available_inputs,
                             :id,
                             :name,
-                            { prompt: "Selecione Input" },
+                            { prompt: "Selecione Insumo" },
                             class: "form-control",
                             data: { action: "change->service-nested-form#loadCost" } %>
   </div>
 
-  <!-- Quantidade em gramas -->
+  <!-- Quantidade -->
   <div class="field">
     <%= f.label :quantity_for_service, "Quantidade (g)" %>
     <%= f.number_field :quantity_for_service,
@@ -21,19 +20,22 @@
                        data: { action: "input->service-nested-form#updateCost" } %>
   </div>
 
-  <!-- Custo calculado -->
+  <!-- Custo -->
   <div class="field">
-    <%= f.label :cost, "Cost (R$)" %>
+    <%= f.label :cost, "Custo (R$)" %>
     <%= f.number_field :cost,
                        readonly: true,
                        class: "form-control",
                        data: { target: "service-nested-form.cost" } %>
   </div>
 
-  <!-- Flag para remoção pelo Stimulus -->
+  <!-- Flag para remoção -->
   <%= f.hidden_field :_destroy, class: "destroy-flag" %>
 
-  <%= link_to "[X] Remover", "#",
-        class: "action-button",
-        data: { action: "service-nested-form#remove" } %>
+  <!-- Botão remover -->
+  <div class="field remove-btn">
+    <%= link_to "Excluir", "#",
+          class: "mini-button",
+          data: { action: "service-nested-form#remove" } %>
+  </div>
 </div>

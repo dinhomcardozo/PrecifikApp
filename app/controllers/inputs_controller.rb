@@ -26,8 +26,6 @@ class InputsController < Clients::AuthenticatedController
               weight_in_grams: (@input.weight.presence || 1).to_f
         }
       end
-
-      
     end
   end
 
