@@ -51,6 +51,7 @@
           <div class="field">
             <%= f.label :total_hours_raw, "Horas totais (DD:HH:MM:SS)" %>
             <%= f.text_field :total_hours_raw,
+                            value: @service.total_hours_raw,
                             placeholder: "00:00:00:00",
                             class: "form-control",
                             data: {
@@ -169,7 +170,7 @@
             <% end %>
           </template>
 
-          <%= link_to "Adicionar Product", "#",
+          <%= link_to "Adicionar Produto", "#",
                 class: "action-button",
                 data: { action: "service-nested-form#add" } %>
         </div>
@@ -194,7 +195,7 @@
             <% end %>
           </template>
 
-          <%= link_to "Adicionar Energy", "#",
+          <%= link_to "Adicionar Energia", "#",
                 class: "action-button",
                 data: { action: "service-nested-form#add" } %>
         </div>
@@ -219,12 +220,39 @@
             <% end %>
           </template>
 
-          <%= link_to "Adicionar Equipment", "#",
+          <%= link_to "Adicionar Equipamento", "#",
                 class: "action-button",
                 data: { action: "service-nested-form#add" } %>
         </div>
 
         <hr>
+        
+        <div class="form-row">
+          <div class="field">
+            <%= f.label :service_items_cost, "Custo total dos itens (R$)" %>
+            <%= f.number_field :service_items_cost,
+                  id: nil,
+                  readonly: true,
+                  step: 0.01,
+                  class: "form-control",
+                  data: { "service-form-target": "itemsCostDisplay" } %>
+            <%= f.hidden_field :service_items_cost,
+                  id: "services_service_service_items_cost",
+                  data: { "service-form-target": "itemsCost" } %>
+          </div>
+
+          <div class="field">
+            <%= f.label :final_service_price, "Preço final do serviço (R$)" %>
+            <%= f.number_field :final_service_price,
+                  readonly: true,
+                  step: 0.01,
+                  class: "form-control",
+                  data: { "service-form-target": "finalPrice" } %>
+            <%= f.hidden_field :final_service_price,
+                  data: { "service-form-target": "finalPriceHidden" } %>
+          </div>
+        </div>
+
         <div class="form-actions">
           <%= f.submit "Salvar Serviço", class: "standart-button" %>
         </div>

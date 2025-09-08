@@ -10,11 +10,13 @@ export default class extends Controller {
     "profit",
     "basePrice",
     "itemsCost", 
+    "itemsCostDisplay",
     "finalPrice"
   ];
 
   connect() {
     this.element.addEventListener("nested-costs-changed", () => this.computeBasePrice());
+    this.computeBasePrice(); // calcula já na carga inicial
   }
 
   loadHourlyRate() {
@@ -81,10 +83,10 @@ export default class extends Controller {
     const tax   = parseFloat(this.taxTarget.value)          || 0;
     const prof  = parseFloat(this.profitTarget.value)       || 0;
 
-    // Cálculo da mão de obra
-    const labour = hr * hrs * (1 + tax/100) * (1 + prof/100);
+    // Mão de obra
+    const labour = hr * hrs * (1 + tax / 100) * (1 + prof / 100);
 
-    // Soma de todos os costs dos nested forms
+    // Soma dos custos dos nested
     const itemsCost = Array.from(
       this.element.querySelectorAll("[data-service-nested-form-target='cost']")
     ).reduce((sum, el) => sum + (parseFloat(el.value) || 0), 0);
@@ -95,9 +97,41 @@ export default class extends Controller {
     if (this.hasItemsCostTarget) {
       this.itemsCostTarget.value = itemsCost.toFixed(2);
     }
-
+    if (this.hasItemsCostDisplayTarget) {
+      this.itemsCostDisplayTarget.value = itemsCost.toFixed(2);
+    }
     if (this.hasFinalPriceTarget) {
       this.finalPriceTarget.value = (labour + itemsCost).toFixed(2);
+    }
+  }
+
+  updateTotals() {
+    // Soma todos os campos de custo dos nested
+    let totalItemsCost = 0;
+    document.querySelectorAll('[data-service-nested-form-target="cost"]').forEach(input => {
+      totalItemsCost += parseFloat(input.value) || 0;
+    });
+
+    // Atualiza campo visível e hidden
+    this.itemsCostTarget.value = totalItemsCost.toFixed(2);
+    if (this.hasItemsCostDisplayTarget) {
+      this.itemsCostDisplayTarget.value = totalItemsCost.toFixed(2);
+    }
+
+    // Calcula preço final
+    const hourlyRate = parseFloat(this.hourlyRateTarget.value) || 0;
+    const totalHours = parseFloat(this.totalDecimalTarget.value) || 0;
+    const profitMargin = parseFloat(this.profitTarget.value) || 0;
+
+    const base = hourlyRate * totalHours;
+    const finalPrice = base + totalItemsCost + (base * (profitMargin / 100));
+
+    // Atualiza campo visível e hidden
+    if (this.hasFinalPriceTarget) {
+      this.finalPriceTarget.value = finalPrice.toFixed(2);
+    }
+    if (this.hasFinalPriceHiddenTarget) {
+      this.finalPriceHiddenTarget.value = finalPrice.toFixed(2);
     }
   }
 }

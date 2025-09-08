@@ -17,14 +17,15 @@
       <% @services.each do |service| %>
         <tr>
           <td><%= service.description %></td>
-          <td><%= service.role.name %></td>
-          <td><%= link_to "Mostrar", services_service_path(service) %></td>
-          <td><%= link_to "Editar", edit_services_service_path(service) %></td>
+          <td><%= service.role.description %></td>
+          <td><%= link_to "Mostrar", clients_services_service_path(service), class: "action-button" %></td>
+          <td><%= link_to "Editar", edit_clients_services_service_path(service), class: "action-button" %></td>
+
           <td>
             <%= link_to "Apagar",
-                        services_service_path(service),
-                        method: :delete,
-                        data: { confirm: "Confirma exclusão?" } %>
+                        clients_services_service_path(service),
+                        data: { turbo_method: :delete, turbo_confirm: "Tem certeza?" },
+                        class: "action-button" %>
           </td>
         </tr>
       <% end %>

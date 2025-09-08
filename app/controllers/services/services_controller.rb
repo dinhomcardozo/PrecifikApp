@@ -22,14 +22,17 @@ module Services
     def edit
       @service = Services::Service.find(params[:id])
       @professionals = Professional.order(:full_name)
+      @service.hourly_rate ||= @service.professional&.hourly_rate
     end
 
     def create
       @service = Services::Service.new(service_params)
+      set_role_from_professional
       @service.client_id = current_user_client.client_id
 
       if @service.save
-        redirect_to clients_services_services_path, notice: "Serviço criado com sucesso"
+        redirect_to clients_services_service_path(@service),
+                    notice: "Serviço criado com sucesso"
       else
         Rails.logger.info "Erros ao salvar Service: #{@service.errors.full_messages.join(', ')}"
         render :new, status: :unprocessable_entity
@@ -37,15 +40,18 @@ module Services
     end
 
     def update
+      Rails.logger.debug ">>> RAW NESTED: #{params[:services_service][:service_subproducts_attributes].inspect}"
+      Rails.logger.debug ">>> PERMIT ALL: #{service_params[:service_subproducts_attributes].inspect}"
+
+      @service = Services::Service.find(params[:id])
+      set_role_from_professional
       @service.client_id = current_user_client.client_id
-      respond_to do |format|
-        if @service.update(service_params)
-          format.html { redirect_to @service, notice: "Service was successfully updated." }
-          format.json { render :show, status: :ok, location: @service }
-        else
-          format.html { render :edit, status: :unprocessable_entity }
-          format.json { render json: @service.errors, status: :unprocessable_entity }
-        end
+
+      if @service.update(service_params)
+        redirect_to clients_services_service_path(@service),
+                    notice: "Serviço atualizado com sucesso"
+      else
+        render :edit, status: :unprocessable_entity
       end
     end
 
@@ -53,7 +59,9 @@ module Services
       @service.destroy!
 
       respond_to do |format|
-        format.html { redirect_to services_path, status: :see_other, notice: "Service was successfully destroyed." }
+        format.html { redirect_to clients_services_services_path,
+              status: :see_other,
+              notice: "Serviço excluído com sucesso." }
         format.json { head :no_content }
       end
     end
@@ -62,6 +70,12 @@ module Services
       # Use callbacks to share common setup or constraints between actions.
       def set_service
         @service = Services::Service.find(params[:id])
+      end
+
+      def set_role_from_professional
+        if @service.professional_id.present?
+          @service.role_id = Professional.find(@service.professional_id).role_id
+        end
       end
 
       def load_collections
@@ -74,27 +88,38 @@ module Services
       end
 
       # Only allow a list of trusted parameters through.
-    def service_params
-      params
-        .require(:services_service)
-        .permit(
-          :description,
-          :role_id,
-          :professional_id,
-          :hourly_rate,
-          :total_hours_raw, 
-          :total_hours,
-          :tax,
-          :profit_margin,
-          :service_price,  
-          :service_items_cost,
-          :final_service_price,
-          service_inputs_attributes:      %i[id input_id quantity_for_service cost _destroy],
-          service_subproducts_attributes: %i[id subproduct_id quantity_for_service cost _destroy],
-          service_products_attributes:    %i[id product_id quantity_for_service cost _destroy],
-          service_energies_attributes:    %i[id energy_id hours_per_service cost _destroy],
-          service_equipments_attributes:  %i[id equipment_id hours_per_service cost _destroy]
-        )
-    end
+      def service_params
+        params.require(:services_service).permit!  # <–– aceita tudo
+      end
+
+      # def service_params
+      #   params.require(:services_service).permit(
+      #     :description,
+      #     :professional_id,
+      #     :hourly_rate,
+      #     :total_hours_raw,
+      #     :total_hours,
+      #     :tax,
+      #     :profit_margin,
+      #     :service_price,
+      #     :service_items_cost,
+      #     :final_service_price,
+      #     service_inputs_attributes: [
+      #       :id, :input_id, :quantity_for_service, :cost, :_destroy
+      #     ],
+      #     service_subproducts_attributes: [
+      #       :id, :subproduct_id, :quantity_for_service, :cost, :_destroy
+      #     ],
+      #     service_products_attributes: [
+      #       :id, :product_id, :quantity_for_service, :cost, :_destroy
+      #     ],
+      #     service_energies_attributes: [
+      #       :id, :energy_id, :hours_per_service, :cost, :_destroy
+      #     ],
+      #     service_equipments_attributes: [
+      #       :id, :equipment_id, :hours_per_service, :cost, :_destroy
+      #     ]
+      #   )
+      # end
   end
 end

@@ -1,13 +1,17 @@
 <main class="index-container">
-  <% content_for :title, "Editing role" %>
+  <h1 class="title">Editar Função</h1>
 
-  <h1>Editar Função <i><%= @role.description %></i></h1>
+  <%= form_with model: @role,
+                url:   clients_services_role_path(@role),
+                method: :patch,
+                local:  true do |form| %>
 
-  <%= render "form", role: @role %>
+    <%= render "form", form: form, role: @role %>
 
-  <br>
+    <div class="actions">
+      <%= form.submit "Atualizar Função", class: "standart-button" %>
+      <%= link_to "Voltar", clients_services_roles_path, class: "standart-button" %>
+    </div>
 
-  <div>
-    <%= link_to "<- Voltar", clients_services_roles_path, class: "standart-button" %>
-  </div>
+  <% end %>
 </main>

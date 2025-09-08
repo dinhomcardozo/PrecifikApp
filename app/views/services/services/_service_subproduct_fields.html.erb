@@ -1,4 +1,5 @@
 <div data-service-nested-form-target="item" class="nested-fields">
+  <%= f.hidden_field :id %>
   <div class="field">
     <%= f.label :subproduct_id, "Subproduct" %>
     <%= f.collection_select :subproduct_id,

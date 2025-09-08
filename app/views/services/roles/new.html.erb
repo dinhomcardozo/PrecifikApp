@@ -1,14 +1,19 @@
 <main class="index-container">
-
-  <% content_for :title, "Maxximiza | Nova função" %>
-
   <h1>Nova Função</h1>
 
-  <%= render "form", role: @role %>
+  <%= form_with(
+        model:   @role,
+        url:     clients_services_roles_path,
+        method:  :post,
+        local:   true
+      ) do |form| %>
 
-  <br>
+    <%= render "form", form: form, role: @role %>
 
-  <div>
-    <%= link_to "<- Voltar", clients_services_roles_path, class: "standart-button" %>
-  </div>
+    <div class="actions">
+      <%= form.submit "Criar Função", class: "standart-button" %>
+      <%= link_to "Voltar", clients_services_roles_path, class: "standart-button" %>
+    </div>
+
+  <% end %>
 </main>

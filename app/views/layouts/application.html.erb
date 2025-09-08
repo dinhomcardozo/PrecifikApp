@@ -6,7 +6,13 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
 
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <link rel="preload"
+          href="<%= asset_path 'application.css' %>"
+          as="style"
+          onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+      <%= stylesheet_link_tag 'application', media: 'all' %>
+    </noscript>
 
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600&display=swap" rel="stylesheet">
     

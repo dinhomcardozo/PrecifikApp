@@ -28,6 +28,7 @@ export default class extends Controller {
   updateCost(event) {
     // executa quando muda quantity_for_service ou hours_per_service
     this._calcLineCost(event.currentTarget)
+    this.element.closest("form").dispatchEvent(new Event("nested-costs-changed"));
   }
 
   _loadUnitCost(selectEl) {

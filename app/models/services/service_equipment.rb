@@ -3,8 +3,11 @@ module Services
     self.table_name = "service_equipments"
     before_validation :calculate_cost
 
-    belongs_to :service, class_name: "Services::Service"
-    belongs_to :equipment
+    belongs_to :service,
+               class_name:  "Services::Service",
+               inverse_of:   :service_equipments,
+               autosave:     true
+    belongs_to :equipment, optional: true
 
     private
 

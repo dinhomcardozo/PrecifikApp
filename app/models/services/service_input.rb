@@ -5,8 +5,9 @@ module Services
 
     belongs_to :service,
                class_name: 'Services::Service',
-               inverse_of:  :service_inputs
-    belongs_to :input
+               inverse_of:  :service_inputs,
+               autosave:    true
+    belongs_to :input, optional: true
 
     private
     

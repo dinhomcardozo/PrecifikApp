@@ -3,8 +3,11 @@ module Services
     self.table_name = "service_energies"
     before_validation :calculate_cost
 
-    belongs_to :service, class_name: "Services::Service"
-    belongs_to :energy
+    belongs_to :service,
+               class_name:  "Services::Service",
+               inverse_of:   :service_energies,
+               autosave:     true
+    belongs_to :energy, optional: true
 
     private
 

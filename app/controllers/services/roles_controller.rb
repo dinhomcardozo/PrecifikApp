@@ -74,7 +74,7 @@ module Services
     end
 
     def role_params
-      params.require(:role).permit(:description)
+      params.require(:services_role).permit(:description)
     end
   end
 end

@@ -1,26 +1,26 @@
-<main class="index-container">
-  <%= form_with url: role.persisted? ? clients_services_role_path(role) : clients_services_roles_path,
-                scope: :role,
-                local: true do |form| %>
-      <% if role.errors.any? %>
-        <div style="color: red">
-          <h2><%= pluralize(role.errors.count, "error") %> prohibited this role from being saved:</h2>
-
-          <ul>
-            <% role.errors.each do |error| %>
-              <li><%= error.full_message %></li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
-
-      <div>
-        <%= form.label :description, "Descrição", style: "display: block" %>
-        <%= form.text_field :description %>
-      </div>
-
-      <div>
-        <%= form.submit "Salvar função", class: "standart-button" %>
-      </div>
+<%= form_with model: @role,
+              url: @role.persisted? ?
+                     clients_services_role_path(@role) :
+                     clients_services_roles_path,
+              method: @role.persisted? ? :patch : :post,
+              local: true do |f| %>
+  <% if role.errors.any? %> 
+    <div class="error_explanation">
+      <h2><%= pluralize(role.errors.count, "error") %> proibiu esta função de ser salva:</h2>
+      <ul>
+        <% role.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
   <% end %>
-</main>
+
+    <div class="field">
+      <%= form.label :description, "Descrição" %>
+      <%= form.text_field :description, class: "form-control" %>
+    </div>
+
+    <div>
+      <%= form.submit "Salvar função", class: "standart-button" %>
+    </div>
+<% end %>

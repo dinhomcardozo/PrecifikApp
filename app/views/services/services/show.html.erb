@@ -1,9 +1,101 @@
-<p style="color: green"><%= notice %></p>
+<main class="index-container" >
+  <main class="show-container">
+    <h1 class="title">Detalhes do Serviço</h1>
 
-<%= render @service %>
+    <div>
+      <div class="custom-label">
+        <%= link_to "<- Voltar",
+                    clients_services_services_path,
+                    class: "standart-button" %>
+        <%= link_to "Editar",
+                    edit_clients_services_service_path(@service),
+                    class: "action-button" %>
+      </div>
+    </div>
 
-<div class="index-container">
-  <%= link_to "Editar", edit_service_path(@service), class: "action-button"  %> |
-  <%= link_to "Voltar", services_path, class: "action-button" %>
-  <%= button_to "Excluir", @service, method: :delete, class: "action-button"  %>
-</div>
+    <table class="vertical-table--bordered">
+      <tr>
+        <th>Descrição:</th>
+        <td><%= @service.description %></td>
+      </tr>
+      <tr>
+        <th>Profissional:</th>
+        <td><%= @service.professional&.full_name %></td>
+      </tr>
+      <tr>
+        <th>Função:</th>
+        <td><%= @service.role&.description %></td>
+      </tr>
+      <tr>
+        <th>Custo total dos itens:</th>
+        <td><%= number_to_currency(@service.service_items_cost, unit: "R$ ") %></td>
+      </tr>
+      <tr>
+        <th>Preço final:</th>
+        <td><%= number_to_currency(@service.final_service_price, unit: "R$ ") %></td>
+      </tr>
+    </table>
+
+    <hr>
+
+    <section class="show-composition mb-4">
+      <h2 class="subtitle">Itens Utilizados</h2>
+      <table class="index-table index-table--bordered">
+        <thead>
+          <tr>
+            <th>Tipo</th>
+            <th>Descrição</th>
+            <th>Quantidade/Horas</th>
+            <th>Custo (R$)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @service.service_inputs.each do |item| %>
+            <tr>
+              <td>Insumo</td>
+              <td><%= item.input&.name %></td>
+              <td><%= item.quantity_for_service %></td>
+              <td><%= number_to_currency(item.cost, unit: "R$ ") %></td>
+            </tr>
+          <% end %>
+
+          <% @service.service_subproducts.each do |item| %>
+            <tr>
+              <td>Subproduto</td>
+              <td><%= item.subproduct&.name %></td>
+              <td><%= item.quantity_for_service %></td>
+              <td><%= number_to_currency(item.cost, unit: "R$ ") %></td>
+            </tr>
+          <% end %>
+
+          <% @service.service_products.each do |item| %>
+            <tr>
+              <td>Produto</td>
+              <td><%= item.product&.description %></td>
+              <td><%= item.quantity_for_service %></td>
+              <td><%= number_to_currency(item.cost, unit: "R$ ") %></td>
+            </tr>
+          <% end %>
+
+          <% @service.service_energies.each do |item| %>
+            <tr>
+              <td>Energia</td>
+              <td><%= item.energy&.description %></td>
+              <td><%= item.hours_per_service %></td>
+              <td><%= number_to_currency(item.cost, unit: "R$ ") %></td>
+            </tr>
+          <% end %>
+
+          <% @service.service_equipments.each do |item| %>
+            <tr>
+              <td>Equipamento</td>
+              <td><%= item.equipment&.description %></td>
+              <td><%= item.hours_per_service %></td>
+              <td><%= number_to_currency(item.cost, unit: "R$ ") %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</main>
