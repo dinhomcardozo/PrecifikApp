@@ -4,10 +4,17 @@ class Input < ApplicationRecord
   belongs_to :input_type
   belongs_to :brand, optional: true
 
+  # Serviços diretos (via service_inputs)
+  has_many :service_inputs, class_name: 'Services::ServiceInput', inverse_of: :input
+  has_many :services, through: :service_inputs, class_name: 'Services::Service'
+
+  has_many :service_subproducts, through: :services, class_name: 'Services::ServiceSubproduct'
+  has_many :subproducts_via_services, through: :service_subproducts, source: :subproduct
+
   self.per_page = 20
   
   has_many :subproduct_compositions, foreign_key: :input_id, inverse_of: :input
-  has_many :subproducts, through: :subproduct_inputs
+  has_many :subproducts, through: :subproduct_compositions
   has_many :input_cost_histories, dependent: :destroy
 
   has_one_attached :image

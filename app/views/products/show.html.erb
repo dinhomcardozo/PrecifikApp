@@ -86,4 +86,14 @@
       </table>
     </section>
   <% end %>
+
+  <p class="dependent-item-count">
+    <%= "#{pluralize(@services.size, 'Subproduto')} %>.
+    <a href="#" data-bs-toggle="modal" data-bs-target="#assocModal">
+      Clique aqui e veja a lista.
+    </a>
+  </p>
+
+  <%= render "product_dependent_items_modal",
+           services: @services %>
 </main>

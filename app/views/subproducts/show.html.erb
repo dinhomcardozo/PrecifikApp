@@ -26,4 +26,16 @@
   </table>
 
   <%= link_to "Voltar", subproducts_path, class: "action-button" %>
+
+  <p class="dependent-item-count">
+    <%= "#{pluralize(@products.size, 'Produto')} | " \
+        "#{pluralize(@services.size,   'Serviço')}" %>.
+    <a href="#" data-bs-toggle="modal" data-bs-target="#assocModal">
+      Clique aqui e veja a lista.
+    </a>
+  </p>
+
+  <%= render "subproduct_dependent_items_modal",
+           products: @products,
+           services: @services %>
 </main>

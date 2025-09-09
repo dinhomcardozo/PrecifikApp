@@ -11,6 +11,10 @@ class Product < ApplicationRecord
   has_many :subproducts, through: :product_subproducts
   has_many   :inputs, through: :subproduct_compositions
 
+  # Serviços diretos
+  has_many :service_products, class_name: 'Services::ServiceProduct', inverse_of: :product
+  has_many :services, through: :service_products, class_name: 'Services::Service'
+
   has_one_attached :image
 
   delegate :distributed_fixed_cost, to: :sales_target, allow_nil: true

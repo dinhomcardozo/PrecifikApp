@@ -64,7 +64,28 @@
     </tbody>
   </table>
 
-  <%= render "input_cost_history", cost_history: @cost_history %>
+  <div class="detailed-box">
+    <div>
+      <p class="detailed-text">
+        <strong>ATENÇÃO!</strong> Edite isso com cuidado. Outros itens podem depender deste Insumo.
+      </p>                 
+      <p class="dependent-item-count">
+        <%= "Você tem " + "#{pluralize(@subproducts_count, 'Subproduto')} | " \
+            "#{pluralize(@services_count, 'Serviço')}" + " utilizando este item" %>.
+        <a href="#" data-bs-toggle="modal" data-bs-target="#assocModal">
+          Clique aqui e veja a lista.
+        </a>
+      </p>
+      <div>
+        <%= render "input_dependent_items_modal",
+                   subproducts: @subproducts,
+                   services: @services %>
+      </div>
+    </div>
+  </div>
 
+    <div>                 
+      <%= render "input_cost_history", cost_history: @cost_history %>
+    </div>
   <%= link_to "Voltar", inputs_path, class: "standart-button" %>
 </main>

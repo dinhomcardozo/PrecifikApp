@@ -39,6 +39,24 @@ class SubproductsController < Clients::AuthenticatedController
   def show
     @subproduct = Subproduct.find(params[:id])
 
+    @products_count = Product
+      .joins(:product_subproducts)
+      .where(product_subproducts: { subproduct_id: @subproduct.id })
+      .distinct
+      .count(:id)
+
+    @services_count = Services::Service
+      .joins(:service_subproducts)
+      .where(service_subproducts: { subproduct_id: @subproduct.id })
+      .distinct
+      .count(:id)
+
+    # Para o modal (linhas Produto–Serviço que usam este subproduto)
+    @product_services = Services::Service
+      .joins(:service_subproducts)
+      .where(service_subproducts: { subproduct_id: @subproduct.id })
+      .includes(:products)
+
     respond_to do |format|
       format.html
       format.json { render json: { cost_per_unit: @subproduct.cost_per_gram.to_f } }

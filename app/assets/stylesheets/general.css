@@ -35,3 +35,27 @@
   font-size: 0.6rem;
   font-weight: 600;
 }
+
+.detailed-box {
+  background-color: var(--accent-color);
+  border: solid 1px;
+  font-size: 0.600ren;
+  border-radius: 4px;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.detailed-text {
+  font-size: 0.600rem;
+  font-weight: 800;
+  font-family: Raleway;
+  color: var(--text-dark);
+}
+
+.dependent-item-count {
+  font-size: 0.600rem;
+  font-weight: 700;
+  font-family: Raleway, sans-serif;
+  color: var(--text-dark);
+  margin: 0.25rem 0 0; /* opcional: ajusta espaçamento */
+}

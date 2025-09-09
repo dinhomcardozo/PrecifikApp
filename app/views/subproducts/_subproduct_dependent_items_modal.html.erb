@@ -1,0 +1,28 @@
+<div class="modal fade" id="assocModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Produtos e Serviços que usam este subproduto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Serviço</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% product_services.each do |ps| %>
+              <tr>
+                <td><%= ps[:product].description %></td>
+                <td><%= ps[:service].description %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

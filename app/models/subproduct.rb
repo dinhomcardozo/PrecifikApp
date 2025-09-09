@@ -7,6 +7,14 @@ class Subproduct < ApplicationRecord
   has_many :inputs, through: :subproduct_compositions
   has_many :product_subproducts, inverse_of: :subproduct, dependent: :destroy
   has_many :products, through: :product_subproducts
+
+  # Serviços diretos
+  has_many :service_subproducts, class_name: 'Services::ServiceSubproduct', inverse_of: :subproduct
+  has_many :services, through: :service_subproducts, class_name: 'Services::Service'
+
+  has_many :products_via_services, through: :services,
+            source: :products,
+            class_name: 'Product'
   
   validates :name, presence: true
 

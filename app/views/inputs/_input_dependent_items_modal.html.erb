@@ -1,0 +1,29 @@
+<div class="modal fade" id="assocModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Subprodutos e Serviços que usam este insumo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Subproduto</th>
+              <th>Serviço</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% max_rows = [subproducts.size, services.size].max %>
+            <% max_rows.times do |i| %>
+              <tr>
+                <td><%= subproducts[i]&.name || "—" %></td>
+                <td><%= services[i]&.description || "—" %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

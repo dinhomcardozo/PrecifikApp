@@ -111,6 +111,17 @@ class ProductsController < Clients::AuthenticatedController
     authorize Product, policy_class: Clients::BasePolicy
     @product = Product.find(params[:id])
 
+    @services_count = Services::Service
+      .joins(:service_products)
+      .where(service_products: { product_id: @product.id })
+      .distinct
+      .count(:id)
+
+    # Para o modal (linhas Serviço que usam este produto)
+    @services = Services::Service
+      .joins(:service_products)
+      .where(service_products: { product_id: @product.id })
+
     respond_to do |format|
       format.html # mantém o comportamento atual
     format.json { render json: { cost_per_unit: @product.cost_per_gram.to_f } }

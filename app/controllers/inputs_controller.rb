@@ -13,6 +13,22 @@ class InputsController < Clients::AuthenticatedController
     set_input
     set_url_options
 
+    # Subprodutos diretos que usam este input
+    @subproducts = Subproduct
+                    .joins(:subproduct_compositions)
+                    .where(subproduct_compositions: { input_id: @input.id })
+                    .distinct
+
+    # Serviços diretos que usam este input
+    @services = Services::Service
+                  .joins(:service_inputs)
+                  .where(service_inputs: { input_id: @input.id })
+                  .distinct
+
+    # Contagens
+    @subproducts_count = @subproducts.count
+    @services_count    = @services.count
+
     # Extrai últimos 12 meses (incluindo mês atual)
     @cost_history = @input.input_cost_histories
                           .where("recorded_at >= ?", 11.months.ago.beginning_of_month)
@@ -38,7 +54,7 @@ class InputsController < Clients::AuthenticatedController
     @input = Input.new(input_params)
 
     if @input.save
-      redirect_to inputs_path, notice: "Insumo criado com sucesso."
+      redirect_to @input, notice: "Insumo criado com sucesso."
     else
       puts "❌ Erro ao criar insumo"
       puts "→ Erros: #{@input.errors.full_messages}"
@@ -57,7 +73,7 @@ class InputsController < Clients::AuthenticatedController
     @input = Input.find(params[:id])
 
     if @input.update(input_params)
-      redirect_to inputs_path, notice: "Insumo atualizado com sucesso."
+      redirect_to @input, notice: "Insumo atualizado com sucesso."
     else
       puts "❌ Erro ao atualizar insumo"
       puts "→ Erros: #{@input.errors.full_messages}"
