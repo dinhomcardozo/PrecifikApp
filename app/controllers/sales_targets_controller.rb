@@ -54,20 +54,32 @@ class SalesTargetsController < Clients::AuthenticatedController
   end
 
   # PATCH/PUT /sales_targets/1 or /sales_targets/1.json
-def update
-  if @sales_target.update(sales_target_params)
-    redirect_to sales_targets_path,
-                notice: "Meta de venda atualizada com sucesso."
-  else
-    render :edit, status: :unprocessable_entity
+  def update
+    if @sales_target.update(sales_target_params)
+      redirect_to sales_targets_path,
+                  notice: "Meta de venda atualizada com sucesso."
+    else
+      render :edit, status: :unprocessable_entity
+    end
   end
-end
 
   # DELETE /sales_targets/1 or /sales_targets/1.json
   def destroy
     @sales_target.destroy
     redirect_to sales_targets_path,
                 notice: "Meta de venda excluída com sucesso."
+  end
+
+  def alert_data
+    today = Date.current
+
+    vencidas = SalesTarget.vencidas.includes(:product)
+    vencendo = SalesTarget.vence_hoje.includes(:product)
+
+    render json: {
+      vencidas: vencidas.map { |st| { product: st.product&.description, dias: (today - st.end_date).to_i.abs } },
+      vencendo: vencendo.map { |st| { product: st.product&.description, dias: (st.end_date - today).to_i } }
+    }
   end
 
   private

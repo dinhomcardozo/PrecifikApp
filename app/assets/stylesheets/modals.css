@@ -88,3 +88,54 @@
     color: var(--text-dark, #333);
   }
 }
+
+/* SalesTargetAlert */
+
+#salesTargetAlertModal .modal-dialog {
+  font-family: Raleway, sans-serif;
+  max-width: 500px;
+}
+
+#salesTargetAlertModal .modal-content {
+  border-radius: 8px;
+  font-family: Raleway, sans-serif;
+  border: 2px solid var(--accent-color);
+  box-shadow: 0 4px 20px var(--text-dark);
+}
+
+#salesTargetAlertModal .modal-header {
+  background-color: var(--accent-color);
+  font-family: Raleway, sans-serif;
+  color: var(--text-dark);
+  border-bottom: none;
+}
+
+#salesTargetAlertModal .modal-title {
+  font-weight: 700;
+  font-family: Raleway, sans-serif;
+  font-size: 1.25rem;
+}
+
+#salesTargetAlertModal .modal-body {
+  font-size: 1rem;
+  font-family: Raleway, sans-serif;
+  line-height: 1.5;
+  color: var(--text-dark);
+}
+
+#salesTargetAlertModal .modal-footer {
+  border-top: none;
+  font-family: Raleway, sans-serif;
+}
+
+#salesTargetAlertModal .btn-primary {
+  background-color: var(--text-light);
+  border-color: var(--accent-color);
+  font-family: Raleway, sans-serif;
+}
+
+#salesTargetAlertModal .btn-primary:hover {
+  background-color: var(--accent-hover);
+  border-color: var(--accent-color);
+  font-family: Raleway, sans-serif;
+}

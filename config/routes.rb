@@ -17,7 +17,7 @@ Rails.application.routes.draw do
               path: 'clients',
               controllers: { sessions: 'clients/sessions' }
 
-  root to: 'home#index'
+  root to: redirect('/clients')
 
   devise_for :user_admins,
     class_name: 'SystemAdmins::UserAdmin',

@@ -13,6 +13,9 @@ class SalesTarget < ApplicationRecord
   validates :product_id,
           uniqueness: { message: "já possui uma meta" }
 
+  scope :vencidas, -> { where("end_date < ?", Date.current) }
+  scope :vence_hoje, -> { where(end_date: Date.current) }
+
   # custo fixo distribuído por unidade
   def distributed_fixed_cost
     return 0 if monthly_target.to_i.zero?

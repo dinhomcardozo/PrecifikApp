@@ -13,6 +13,7 @@ import Select2Controller from "./select2_controller"
 import TableFilterController from "./table_filter_controller"
 import CnpjVerificationController from "./cnpj_verification_controller"
 import CalendarController from "./calendar_controller"
+import SalesTargetAlertController from "./sales_target_alert_controller"
 
 const application = Application.start()
 application.register("product-composition", ProductCompositionController)
@@ -29,3 +30,4 @@ application.register("select2", Select2Controller)
 application.register("table-filter", TableFilterController)
 application.register("cnpj-verification", CnpjVerificationController)
 application.register("calendar", CalendarController)
+application.register("sales-target-alert", SalesTargetAlertController)
