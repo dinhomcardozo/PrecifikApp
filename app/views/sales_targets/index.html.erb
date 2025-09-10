@@ -19,57 +19,29 @@
     </thead>
 
     <tbody>
-      <%= render partial: "sales_target",
-                collection: @sales_targets,
-                as:         :sales_target %>
-
-      <!-- total de todas as metas -->
-      <tr class="table-footer">
-        <td><strong>Total</strong></td>
-        <td><%= @sales_target_sum %></td>
-      </tr>
-
-      <!-- linha única com Total Ativas + Total de Custos Fixos + Custo Fixo / Unidade Ativa + Custo Fixo Distribuído -->
-      <tr class="table-footer">
-        <td><strong>Total Ativas</strong></td>
-        <td><%= @sales_target_active_sum %></td>
-      </tr>
-
-      <tr>
-        <!-- mostra o total fixo -->
-        <td>
-          <strong>Total de Custos Fixos</strong><br>
-          <%= number_to_currency(@total_fixed_cost.to_f, unit: "R$ ") %>
-        </td>
-
-        <hr style="margin:4px 0; border-color:#ddd;">
-
-        <!-- mostra custo por unidade ativa -->
-        <td>
-          <strong>Custo Fixo / Unidade Ativa</strong><br>
-          <% if @sales_target_active_sum.positive? %>
-            <%= number_to_currency(
-                  @total_fixed_cost.to_f / @sales_target_active_sum,
-                  unit: "R$ "
-                ) %>
-          <% else %>
-            –
-          <% end %>
-
-          <hr style="margin:4px 0; border-color:#ddd;">
-
-          <!-- mostra custo fixo distribuído -->
-          <strong>Custo Fixo Distribuído</strong><br>
-          <% if @sales_target_sum.positive? %>
-            <%= number_to_currency(
-                  @total_fixed_cost.to_f / @sales_target_sum,
-                  unit: "R$ "
-                ) %>
-          <% else %>
-            –
-          <% end %>
-        </td>
-      </tr>
+      <% @sales_targets.each do |sales_target| %>
+        <tr id="<%= dom_id sales_target %>">
+          <td><%= sales_target.product&.description || "-" %></td>
+          <td><%= sales_target.monthly_target %></td>
+          <td><%= l(sales_target.start_date, format: "%d/%m/%Y") %></td>
+          <td><%= l(sales_target.end_date, format: "%d/%m/%Y") %></td>
+          <td><%= link_to "Editar", edit_sales_target_path(sales_target), class: "action-button" %></td>
+          <td>
+            <% today  = Date.current
+              start  = sales_target.start_date
+              ending = sales_target.end_date %>
+            <% if today < start %>
+              ⚪️
+            <% elsif today > ending %>
+              🔴
+            <% elsif today == ending %>
+              🟠
+            <% else %>
+              🟢
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
     </tbody>
   </table>
 </main>

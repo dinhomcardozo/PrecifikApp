@@ -1,6 +1,6 @@
 <!-- app/views/products/show.html.erb -->
 
-<main class="show-container">
+<main class="index-container">
   <%= turbo_frame_tag "product_steps" do %>
     <h1 class="title">Detalhes do Produto</h1>
 
@@ -8,12 +8,13 @@
       <div class="custom-label">
         <%= link_to "<- Voltar",
                     products_path,
-                    data: { turbo_frame: "product_steps" },
+                    data: { turbo_frame: "product_steps", turbo_action: "advance" },
                     class: "standart-button" %>
         <%= link_to "Editar",
-                    edit_product_path(@product, active_tab: "config"),
+                    edit_product_path(@product, step: 1),
                     data: { turbo_frame: "product_steps" },
-                    class: "action-button" %>
+                    class: "action-button",
+                    title: "Editar" %>
       </div>
     </div>
 
@@ -85,15 +86,25 @@
         </tbody>
       </table>
     </section>
+    <hr>
   <% end %>
 
-  <p class="dependent-item-count">
-    <%= "#{pluralize(@services.size, 'Subproduto')} %>.
-    <a href="#" data-bs-toggle="modal" data-bs-target="#assocModal">
-      Clique aqui e veja a lista.
-    </a>
-  </p>
+  <div class="detailed-box">
+    <div>
+      <p class="detailed-text">
+        <strong>ATENÇÃO!</strong> Edite isso com cuidado. Outros itens podem depender deste Produto.
+      </p>                 
+      <p class="dependent-item-count">
+        <%= "Você tem " + "#{pluralize(@services_count, 'Serviço')}" + " utilizando este item" %>.
+        <a href="#" data-bs-toggle="modal" data-bs-target="#assocModal">
+          Clique aqui e veja a lista.
+        </a>
+      </p>
+      <div>
+        <%= render "product_dependent_items_modal",
+                  services: @services %>
+      </div>
+    </div>
+  </div>
 
-  <%= render "product_dependent_items_modal",
-           services: @services %>
 </main>

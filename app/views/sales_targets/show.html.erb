@@ -1,10 +1,12 @@
-<p style="color: green"><%= notice %></p>
+<main class="index-container">
+  <p style="color: green"><%= notice %></p>
 
-<%= render @sales_target %>
+  <%= render "form", sales_target: @sales_target %>
 
-<div>
-  <%= link_to "Editar", edit_sales_target_path(@sales_target), class: "standart-button"  %> |
-  <%= link_to "Voltar", sales_targets_path, class: "standart-button"  %>
+  <div>
+    <%= link_to "Editar", edit_sales_target_path(@sales_target), class: "standart-button" %> |
+    <%= link_to "Voltar", sales_targets_path, class: "standart-button" %>
 
-  <%= button_to "Excluir", @sales_target, method: :delete, class: "action-button"  %>
-</div>
+    <%= button_to "Excluir", @sales_target, method: :delete, class: "action-button" %>
+  </div>
+</main>

@@ -111,16 +111,14 @@ class ProductsController < Clients::AuthenticatedController
     authorize Product, policy_class: Clients::BasePolicy
     @product = Product.find(params[:id])
 
-    @services_count = Services::Service
-      .joins(:service_products)
-      .where(service_products: { product_id: @product.id })
-      .distinct
-      .count(:id)
-
-    # Para o modal (linhas Serviço que usam este produto)
+    # Serviços diretos que usam este produto
     @services = Services::Service
-      .joins(:service_products)
-      .where(service_products: { product_id: @product.id })
+                  .joins(:service_products)
+                  .where(service_products: { product_id: @product.id })
+                  .distinct
+
+    # Contagem
+    @services_count = @services.count
 
     respond_to do |format|
       format.html # mantém o comportamento atual

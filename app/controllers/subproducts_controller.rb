@@ -39,23 +39,23 @@ class SubproductsController < Clients::AuthenticatedController
   def show
     @subproduct = Subproduct.find(params[:id])
 
-    @products_count = Product
-      .joins(:product_subproducts)
-      .where(product_subproducts: { subproduct_id: @subproduct.id })
-      .distinct
-      .count(:id)
+    @compositions = @subproduct.subproduct_compositions.includes(:input)
 
-    @services_count = Services::Service
-      .joins(:service_subproducts)
-      .where(service_subproducts: { subproduct_id: @subproduct.id })
-      .distinct
-      .count(:id)
+    # Products diretos que usam este subproduto
+    @products = Product
+                  .joins(:product_subproducts)
+                  .where(product_subproducts: { subproduct_id: @subproduct.id })
+                  .distinct
 
-    # Para o modal (linhas Produto–Serviço que usam este subproduto)
-    @product_services = Services::Service
-      .joins(:service_subproducts)
-      .where(service_subproducts: { subproduct_id: @subproduct.id })
-      .includes(:products)
+    # Services diretos que usam este subproduto
+    @services = Services::Service
+                  .joins(:service_subproducts)
+                  .where(service_subproducts: { subproduct_id: @subproduct.id })
+                  .distinct
+
+    # Contagens
+    @products_count = @products.count
+    @services_count = @services.count
 
     respond_to do |format|
       format.html

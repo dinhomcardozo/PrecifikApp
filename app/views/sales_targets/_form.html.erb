@@ -1,4 +1,3 @@
-<!-- app/views/sales_targets/_form.html.erb -->
 <%= form_with(model: sales_target, local: true) do |f| %>
   <% if sales_target.errors.any? %>
     <div class="alert alert-danger">
@@ -12,7 +11,7 @@
   <% end %>
   
   <div class="field">
-    <%= f.label :product_id, "Produto" %>
+    <%= f.label :product_id, "Produto", class: "custom-label" %>
     <%= f.collection_select :product_id,
           Product.all,
           :id,
@@ -22,7 +21,7 @@
   </div>
 
   <div class="field">
-    <%= f.label :total_fixed_cost, "Custo Fixo Total (R$)" %>
+    <%= f.label :total_fixed_cost, "Custo Fixo Total (R$)", class: "custom-label" %>
     <%= f.number_field :total_fixed_cost,
           class: "form-control",
           step: "0.01",
@@ -31,30 +30,72 @@
   </div>
 
   <div class="field">
-    <%= f.label :monthly_target, "Meta mensal (unidades)" %>
+    <%= f.label :monthly_target, "Meta mensal (unidades)", class: "custom-label" %>
     <%= f.number_field :monthly_target,
           class: "form-control",
           step: 1,
           min: 1 %>
   </div>
 
-  <div class="field">
-    <%= f.label :start_date, "Data de início" %>
-    <%= f.text_field :start_date,
-          class: "form-control datepicker",
-          placeholder: "DD/MM/AAAA",
-          value: sales_target.start_date&.strftime("%d/%m/%Y") %>
-  </div>
+  <div data-controller="calendar">
+    <div class="field">
+      <%= f.label :start_date, "Data de início", class: "custom-label" %>
+      <%= f.text_field :start_date,
+            class: "form-control",
+            placeholder: "DD/MM/AAAA",
+            value: sales_target.start_date&.strftime("%d/%m/%Y"),
+            data: { calendar_target: "start" } %>
+    </div>
 
-  <div class="field">
-    <%= f.label :end_date, "Data final" %>
-    <%= f.text_field :end_date,
-          class: "form-control datepicker",
-          placeholder: "DD/MM/AAAA",
-          value: sales_target.end_date&.strftime("%d/%m/%Y") %>
+    <div class="field">
+      <%= f.label :end_date, "Data final", class: "custom-label" %>
+      <%= f.text_field :end_date,
+            class: "form-control",
+            placeholder: "DD/MM/AAAA",
+            value: sales_target.end_date&.strftime("%d/%m/%Y"),
+            data: { calendar_target: "end" } %>
+    </div>
   </div>
 
   <div class="actions">
     <%= f.submit "Salvar", class: "action-button" %>
   </div>
+<% end %>
+
+<%# --- Parte da listagem (antes estava no _sales_target.html.erb) --- %>
+<% if controller.action_name == "show" %>
+  <table class="index-table index-table-bordered">
+    <tbody>
+      <tr id="<%= dom_id sales_target %>">
+        <td><%= sales_target.product&.description || "-" %></td>
+        <td><%= sales_target.monthly_target %></td>
+        <td><%= l(sales_target.start_date, format: "%d/%m/%Y") %></td>
+        <td><%= l(sales_target.end_date, format: "%d/%m/%Y") %></td>
+
+        <!-- Ações -->
+        <td>
+          <%= link_to "Editar",
+                      edit_sales_target_path(sales_target),
+                      class: "action-button"  %>
+        </td>
+
+        <!-- Status -->
+        <td>
+          <% today  = Date.current
+             start  = sales_target.start_date
+             ending = sales_target.end_date %>
+
+          <% if today < start %>
+            <span role="img" aria-label="não iniciado">⚪️</span>
+          <% elsif today > ending %>
+            <span role="img" aria-label="expirado">🔴</span>
+          <% elsif today == ending %>
+            <span role="img" aria-label="último dia">🟠</span>
+          <% else %>
+            <span role="img" aria-label="ativo">🟢</span>
+          <% end %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 <% end %>

@@ -1,12 +1,11 @@
 <main class="index-container">
   <h1 class="title"><%= @subproduct.name %></h1>
 
-  <p><strong>Unidade:</strong> <%= @subproduct.unit_of_measurement %></p>
   <p><strong>Peso Total:</strong> <%= @subproduct.subproduct_compositions.sum(&:quantity_for_a_unit) %> g</p>
   <p><strong>Custo Total:</strong> R$ <%= number_with_precision(@subproduct.subproduct_compositions.sum(&:quantity_cost), precision: 2) %></p>
 
   <h4>Insumos Compostos</h4>
-  <table class="table table-sm">
+  <table class="index-table index-table--bordered">
     <thead>
       <tr>
         <th>Insumo</th>
@@ -27,15 +26,29 @@
 
   <%= link_to "Voltar", subproducts_path, class: "action-button" %>
 
-  <p class="dependent-item-count">
-    <%= "#{pluralize(@products.size, 'Produto')} | " \
-        "#{pluralize(@services.size,   'Serviço')}" %>.
-    <a href="#" data-bs-toggle="modal" data-bs-target="#assocModal">
-      Clique aqui e veja a lista.
-    </a>
-  </p>
+  <hr>
+
+  <div class="detailed-box">
+    <div>
+      <p class="detailed-text">
+        <strong>ATENÇÃO!</strong> Edite isso com cuidado. Outros itens podem depender deste Subproduto.
+      </p>                 
+      <p class="dependent-item-count">
+        <%= "Você tem " + "#{pluralize(@products_count, 'Produto')} | " \
+            "#{pluralize(@services_count, 'Serviço')}" + " utilizando este item" %>.
+        <a href="#" data-bs-toggle="modal" data-bs-target="#assocModal">
+          Clique aqui e veja a lista.
+        </a>
+      </p>
+      <div>
+        <%= render "subproduct_dependent_items_modal",
+                  products: @products,
+                  services: @services %>
+      </div>
+    </div>
+  </div>
 
   <%= render "subproduct_dependent_items_modal",
-           products: @products,
-           services: @services %>
+            products: @products,
+            services: @services %>
 </main>

@@ -1,12 +1,14 @@
-<% content_for :title, "Maxximiza | Editar Meta de Venda" %>
+<main class="index-container">
+  <% content_for :title, "Maxximiza | Editar Meta de Venda" %>
 
-<h1>Editar Meta de Venda</h1>
+  <h1 class="title">Editar Meta de Venda</h1>
 
-<%= render "form", sales_target: @sales_target %>
+  <%= render "form", sales_target: @sales_target %>
 
-<br>
+  <br>
 
-<div>
-  <%= link_to "Mostrar", @sales_target %> |
-  <%= link_to "Voltar", sales_targets_path %>
-</div>
+  <div>
+    <%= link_to "Mostrar", @sales_target, class: "action-button" %> |
+    <%= link_to "Voltar", sales_targets_path, class: "action-button" %>
+  </div>
+</main>

@@ -1,20 +1,20 @@
 <!-- app/views/products/index.html.erb -->
 <main class="index-container">
   <%= turbo_frame_tag "product_steps" do %>
-    <h1 class="index-title">Produtos</h1>
+    <h1 class="title">Produtos</h1>
     <div class="index-actions">
       <%= link_to "[+] Novo Produto",
                   new_product_path,
                   data: { turbo_frame: "product_steps" },
                   class: "standart-button" %>
     </div>
-  <details class="filters-accordion">
-    <summary>Filtros</summary>
-    <%= render "shared/filters" %>
-  </details>
+    <details class="filters-accordion">
+      <summary>Filtros</summary>
+      <%= render "shared/filters" %>
+    </details>
 
-  <br>
-  <hr>
+    <br>
+    <hr>
 
     <table id="products-table" data-controller="table-filter" data-table-filter-target-selector-value="search-input" class="index-table index-table--bordered">
       <thead>
@@ -76,7 +76,7 @@
             <td><%= number_to_currency(p.net_profit_wholesale,      unit: "R$ ") %></td>
             <td class="cell-actions">
               <%= link_to product_path(p),
-                          data: { turbo_frame: "product_steps" },
+                          data: { turbo_frame: "_top" },
                           class: "link-icon-actions",
                           title: "Ver" do %>
                 <%= image_tag "icons/ver.png",
@@ -98,9 +98,11 @@
         <% end %>
       </tbody>
     </table>
+
+    <% if action_name == "index" %>
+      <%= will_paginate @products,
+            previous_label: '<i class="bi bi-arrow-left"></i> Anterior'.html_safe,
+            next_label: 'Próximo <i class="bi bi-arrow-right"></i>'.html_safe %>
+    <% end %>
   <% end %>
 </main>
-
-<%= will_paginate @products,
-      previous_label: '<i class="bi bi-arrow-left"></i> Anterior'.html_safe,
-      next_label: 'Próximo <i class="bi bi-arrow-right"></i>'.html_safe %>

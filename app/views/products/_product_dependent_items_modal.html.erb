@@ -13,9 +13,14 @@
             </tr>
           </thead>
           <tbody>
-            <% services.each do |service| %>
+            <% services.each do |srv| %>
               <tr>
-                <td><%= service.description %></td>
+                <td><%= srv.description %></td>
+              </tr>
+            <% end %>
+            <% if services.empty? %>
+              <tr>
+                <td>— Nenhum serviço vinculado —</td>
               </tr>
             <% end %>
           </tbody>

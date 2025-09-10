@@ -14,10 +14,11 @@
             </tr>
           </thead>
           <tbody>
-            <% product_services.each do |ps| %>
+            <% max_rows = [products.size, services.size].max %>
+            <% max_rows.times do |i| %>
               <tr>
-                <td><%= ps[:product].description %></td>
-                <td><%= ps[:service].description %></td>
+                <td><%= products[i]&.description || "—" %></td>
+                <td><%= services[i]&.description || "—" %></td>
               </tr>
             <% end %>
           </tbody>
