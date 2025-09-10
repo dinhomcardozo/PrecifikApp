@@ -12,6 +12,7 @@ export default class extends Controller {
   ]
 
   connect() {
+    this.element.addEventListener("row:updated", () => this.recalcWeights())
     this.updateAllCosts()
     this.refreshAll()
   }
@@ -37,6 +38,8 @@ export default class extends Controller {
 
     row.querySelector("input[name*='[cost]']").value = cost
     row.querySelector("[data-product-composition-target='fieldCost']").textContent = cost
+
+    this.recalcWeights()
   }
 
   updateAllCosts() {

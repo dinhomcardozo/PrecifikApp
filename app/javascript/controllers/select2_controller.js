@@ -13,11 +13,13 @@ export default class extends Controller {
   }
 
   connect() {
-    this.initializeSelect2()
+    $(this.element).select2({ width: "100%" })
   }
 
   disconnect() {
-    this.destroySelect2()
+    if ($(this.element).data("select2")) {
+      $(this.element).select2("destroy")
+    }
   }
 
   initializeSelect2() {
@@ -38,6 +40,8 @@ export default class extends Controller {
   }
 
   destroySelect2() {
-    $(this.element).select2("destroy")
+    if (this.element && $(this.element).data('select2')) {
+      $(this.element).select2('destroy')
+    }
   }
 }

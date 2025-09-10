@@ -29,7 +29,6 @@
       <%= f.label :weight_loss, "Perda de Peso (%)", class: "custom-label"  %>
       <%= f.number_field :weight_loss,
             step: 0.01,
-            value: f.object.weight_loss || 0,
             class: "form-control",
             data: {
               action: "input->product-composition#recalcWeights",
@@ -40,7 +39,7 @@
     <div class="col-md-3 mb-3">
       <%= f.label :total_weight, "Peso Bruto (g)", class: "custom-label"  %>
       <%= f.number_field :total_weight,
-            disabled: true,
+            readonly: true,
             class: "form-control",
             data: { product_composition_target: "grossWeight" } %>
     </div>
@@ -48,7 +47,7 @@
     <div class="col-md-3 mb-3">
       <%= f.label :final_weight, "Peso Final (g)", class: "custom-label"  %>
       <%= f.number_field :final_weight,
-            disabled: true,
+            readonly: true,
             class: "form-control",
             data: { product_composition_target: "finalWeight" } %>
     </div>

@@ -7,26 +7,24 @@
     <meta name="mobile-web-app-capable" content="yes">
 
     <link rel="stylesheet"
-          href="<%= asset_path 'application.css' %>"
-          as="style"
-          onload="this.onload=null;this.rel='stylesheet'">
+        href="<%= asset_path 'application.css' %>"
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
       <%= stylesheet_link_tag 'application', media: 'all' %>
     </noscript>
 
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600&display=swap" rel="stylesheet">
-    
     <%= stylesheet_link_tag "https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" %>
 
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= yield :head %>
-
     <%= favicon_link_tag 'favicon.png', rel: 'icon', type: 'image/png' %>
     
     <%= javascript_include_tag "application", type: "module", "data-turbo-track": "reload" %>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/luxon@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1"></script>
@@ -45,7 +43,5 @@
       <div class="main-content-application">
         <%= yield %>
       </div>
-    <%= javascript_include_tag "application", type: "module", "data-turbo-track": "reload" %>
-    <%= javascript_include_tag "https://cdn.jsdelivr.net/npm/flatpickr", defer: true %>
   </body>
 </html>

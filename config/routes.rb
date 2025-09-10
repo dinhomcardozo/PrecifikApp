@@ -94,9 +94,14 @@ Rails.application.routes.draw do
       resources :suppliers
       resources :channels
       resources :taxes
-      resources :sales_targets
       resources :fixed_costs
       resources :categories
+      resources :sales_targets do
+        collection do
+          get :alert_data
+        end
+      end
+
 
       scope path: 'services', module: 'services', as: 'clients_services' do
         resources :services

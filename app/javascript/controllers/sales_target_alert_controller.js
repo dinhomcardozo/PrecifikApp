@@ -9,7 +9,7 @@ document.addEventListener("turbo:load", () => {
   }
 
   if (shouldShowAlert()) {
-    fetch("/sales_targets/alert_data.json")
+    fetch("/clients/sales_targets/alert_data.json")
       .then(res => res.json())
       .then(data => {
         let messages = [];

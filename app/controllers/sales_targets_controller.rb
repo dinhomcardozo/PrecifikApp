@@ -72,9 +72,8 @@ class SalesTargetsController < Clients::AuthenticatedController
 
   def alert_data
     today = Date.current
-
-    vencidas = SalesTarget.vencidas.includes(:product)
-    vencendo = SalesTarget.vence_hoje.includes(:product)
+    vencidas = SalesTarget.where("end_date < ?", today)
+    vencendo = SalesTarget.where(end_date: today)
 
     render json: {
       vencidas: vencidas.map { |st| { product: st.product&.description, dias: (today - st.end_date).to_i.abs } },

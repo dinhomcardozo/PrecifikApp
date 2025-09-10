@@ -73,6 +73,7 @@
   background-color: var(--accent-color);
   color: var(--text-dark);
   border: none;
+  text-align: center;
   margin: 20px;
   border-radius: 0.375rem;
   padding: 0.35rem 0.7rem;
