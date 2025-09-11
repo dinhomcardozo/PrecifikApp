@@ -52,15 +52,20 @@ class Subproduct < ApplicationRecord
 
   def refresh_product_compositions
     product_subproducts.find_each do |psp|
-      # Força recalcular o custo unitário do join
-      new_cost = (cost_per_gram * psp.quantity).round(2)
-      psp.update_columns(cost: new_cost)
+      # recalcula custo por grama com perda
+      pct_loss = weight_loss.to_f.clamp(0, 100) / 100.0
+      base     = cost_per_gram
+      adjusted = (base / (1 - pct_loss)).round(6)
+
+      psp.update!(
+        cost_per_gram_with_loss: adjusted,
+        cost: (psp.quantity.to_f * adjusted).round(4)
+      )
     end
 
-    # Se você grava total_cost em Product, recalcula-os também
     products.distinct.find_each do |prod|
-      total = prod.product_subproducts.sum(&:cost)
-      prod.update_columns(total_cost: total)
+      prod.compute_all_pricing_and_weights
+      prod.save!(validate: false, touch: true)
     end
   end
 end

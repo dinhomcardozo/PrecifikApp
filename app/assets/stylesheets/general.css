@@ -16,14 +16,14 @@
     color: var(--text-dark);
     font-weight: 800;
     font-size: 1rem;
-    font-family: Raleway, sans-serif;
+    font-family: 'Raleway', sans-serif;
 }
 
 .title {
     color: var(--text-dark);
     font-weight: 1000;
     font-size: 1.8rem;
-    font-family: Raleway, sans-serif;
+    font-family: 'Raleway', sans-serif;
 }
 
 .form-row {

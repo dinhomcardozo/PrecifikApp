@@ -23,7 +23,10 @@
   padding: 0.75rem 1rem;
   background-color: var(--bg-menu-color);
   font-family: 'Raleway', sans-serif;
-  margin-bottom: 0; /* sem margem adicional */
+  margin-bottom: 0;
+  box-shadow: 0 13px 16px var(--text-dark-20);
+  position: relative;
+  z-index: 10;
 }
 
 .menu-horizontal .logo-link,

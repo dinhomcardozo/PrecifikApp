@@ -44,10 +44,14 @@ class Input < ApplicationRecord
   end
 
   def refresh_compositions
-    subproduct_compositions.find_each do |comp|
-      # Recalcula e força gravação sem validação extra
+    subproduct_compositions.includes(subproduct: :products).find_each do |comp|
       comp.send(:compute_quantity_cost)
       comp.save!(validate: false)
+
+      comp.subproduct.products.distinct.find_each do |prod|
+        prod.compute_all_pricing_and_weights
+        prod.save!(validate: false)
+      end
     end
   end
 

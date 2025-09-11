@@ -74,6 +74,8 @@ body {
   border-radius: 0.2rem;
   color: var(--text-dark);
   font-size: 0.650rem;
+  font-family: Raleway, sans-serif;
+  font-style: italic;
 }
 
 .form-control:focus,
@@ -81,6 +83,7 @@ body {
   border-color: var(--accent-color);
   box-shadow: 0 0 0 0.2rem rgba(211, 219, 35, 0.25);
   font-size: 0.650rem;
+  font-family: Raleway, sans-serif;
 }
 
 .table-sm th {
