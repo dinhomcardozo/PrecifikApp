@@ -5,7 +5,8 @@ export default class extends Controller {
     "taxSelect",
     "icms","ipi","pis_cofins","difal","iss","cbs","ibs",
     "totalCostWithTaxes","suggestedRetail","suggestedWholesale",
-    "distributedFixedCostActive","totalCostWithFixedCosts"
+    "distributedFixedCostActive","totalCostWithFixedCosts",
+    "realProfitRetailMargin","realProfitWholesaleMargin"
   ]
 
   static values = {
@@ -23,13 +24,13 @@ export default class extends Controller {
 
   // Preenche os campos de alíquotas a partir do dataset JSON do <select>
   fillTaxFields() {
-  const opt  = this.taxSelectTarget.selectedOptions[0]
-  if (!opt) return
-  const tax  = JSON.parse(opt.dataset.json || "{}")
+    const opt  = this.taxSelectTarget.selectedOptions[0]
+    if (!opt) return
+    const tax  = JSON.parse(opt.dataset.json || "{}")
 
-  const format = val => {
-    const n = parseFloat(val)
-    return isNaN(n) ? "0.00" : n.toFixed(2)
+    const format = val => {
+      const n = parseFloat(val)
+      return isNaN(n) ? "0.00" : n.toFixed(2)
   }
 
   this.icmsTarget.value       = format(tax.icms)
@@ -87,5 +88,7 @@ export default class extends Controller {
     if (wholesale > 0) {
       this.realProfitWholesaleMarginTarget.value = (((wholesale - cost) / wholesale) * 100).toFixed(2)
     }
+    
+    this.updateRealMargins()
   }
 }

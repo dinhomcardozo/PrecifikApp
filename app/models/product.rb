@@ -158,6 +158,16 @@ class Product < ApplicationRecord
     self.suggested_price_wholesale = (total_cost_with_taxes * w_factor).round(2)
   end
 
+  def real_profit_retail_margin
+    return 0 if suggested_price_retail.to_f.zero?
+    ((net_profit_retail.to_f / suggested_price_retail.to_f) * 100).round(2)
+  end
+
+  def real_profit_wholesale_margin
+    return 0 if suggested_price_wholesale.to_f.zero?
+    ((net_profit_wholesale.to_f / suggested_price_wholesale.to_f) * 100).round(2)
+  end
+
   def product_subproducts_changed?
     product_subproducts.any?(&:saved_change_to_cost?) ||
       product_subproducts.any?(&:saved_change_to_quantity?)

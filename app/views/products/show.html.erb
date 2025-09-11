@@ -61,6 +61,13 @@
         <th>Lucro Líquido Atacado (R$):</th>
         <td><%= number_to_currency(@product.net_profit_wholesale, unit: "R$ ") %></td>
       </tr>
+      <tr>
+        <th>Margem Real Varejo (%) (R$):</th>
+        <td><%= number_to_percentage(@product.real_profit_retail_margin, precision: 2) %></td>      </tr>
+      <tr>
+        <th>Margem Real Atacado (%):</th>
+        <td><%= number_to_percentage(@product.real_profit_wholesale_margin, precision: 2) %></td>
+      </tr>
     </table>
 
     <hr>
@@ -71,7 +78,7 @@
         <thead>
           <tr>
             <th>Insumo</th>
-            <th>Quantidade</th>
+            <th>Quantidade (g)</th>
             <th>Custo Unitário (R$)</th>
           </tr>
         </thead>
@@ -79,11 +86,19 @@
           <% @product.product_subproducts.each do |ps| %>
             <tr>
               <td><%= ps.subproduct.name %></td>
-              <td><%= ps.product.final_weight %></td>
+              <td><%= ps.quantity %></td>
               <td><%= number_to_currency(ps.cost, unit: "R$ ") %></td>
             </tr>
           <% end %>
         </tbody>
+      </table>
+    </section>
+    <section>
+      <table class="vertical-table--bordered" >
+          <tr>
+            <th>Peso total (g)</th>
+            <td><%= number_with_precision(@product.final_weight, precision: 2) %></td>
+          </tr>
       </table>
     </section>
     <hr>
