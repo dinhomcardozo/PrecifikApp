@@ -1,11 +1,11 @@
-<% content_for :title, "New channel" %>
+<main class="index-container">
+  <% content_for :title, "Novo Canal" %>
 
-<h1>Novo canal</h1>
+  <h1>Novo Canal</h1>
 
-<%= render "form", channel: @channel %>
+  <%= render "form", channel: @channel %>
 
-<br>
-
-<div>
-  <%= link_to "Voltar", channels_path, class: "standart-button" %>
-</div>
+  <div class="mt-3">
+    <%= link_to "Voltar", channels_path, class: "standart-button" %>
+  </div>
+</main>

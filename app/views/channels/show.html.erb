@@ -1,9 +1,23 @@
-<p style="color: green"><%= notice %></p>
+<main class="index-container">
+  <h1>Detalhes do Canal</h1>
 
-<%= render @channel %>
+  <table class="vertical-table--bordered">
+    <tr>
+      <th>Nome:</th>
+      <td><%= @channel.description %></td>
+    </tr>
+    <tr>
+      <th>Tipo de Canal:</th>
+      <td><%= @channel.channel_type %></td>
+    </tr>
+    <tr>
+      <th>Percentagem do Canal:</th>
+      <td><%= number_to_percentage(@channel.channel_cost, precision: 2) %></td>
+    </tr>
+  </table>
 
-<div>
-  <%= link_to "Editar", edit_channel_path(@channel), class: "action-button" %> |
-  <%= link_to "Voltar", channels_path, class: "action-button" %> |
-  <%= button_to "Excluir", @channel, method: :delete, class: "standart-button" %>
-</div>
+  <div class="mt-3">
+    <%= link_to "Editar", edit_channel_path(@channel), class: "standart-button" %>
+    <%= link_to "Voltar", channels_path, class: "standart-button" %>
+  </div>
+</main>

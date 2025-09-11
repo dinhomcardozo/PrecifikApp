@@ -1,7 +1,7 @@
 <%= form_with(model: channel) do |f| %>
   <div class="mb-3">
     <%= f.label :description, "Nome do Canal:" %>
-    <%= f.text_field :description, class: "form-control" %>
+    <%= f.text_field :description, class: "form-control", required: true %>
   </div>
 
   <div class="mb-3">
@@ -9,7 +9,16 @@
     <%= f.select :channel_type,
          Channel::CHANNEL_TYPES.map { |t| [ t.humanize, t ] },
          { prompt: "Selecione tipo de canal" },
-         { class: "form-select" } %>
+         { class: "form-select", required: true } %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :channel_cost, "Percentagem do Canal (%)" %>
+    <%= f.number_field :channel_cost,
+          step: 0.01,
+          min: 0,
+          class: "form-control",
+          required: true %>
   </div>
 
   <div class="mt-3">

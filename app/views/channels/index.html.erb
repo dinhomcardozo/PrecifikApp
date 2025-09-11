@@ -1,16 +1,36 @@
-<p style="color: green"><%= notice %></p>
+<main class="index-container">
+  <% content_for :title, "Canais" %>
 
-<% content_for :title, "Canais" %>
+  <h1>Lista de Canais</h1>
 
-<h1>Channels</h1>
+  <div class="mb-3">
+    <%= link_to "Novo Canal", new_channel_path, class: "standart-button" %>
+  </div>
 
-<%= link_to "Novo Canal", new_channel_path, class: 'standart-button' %>
-
-<div id="channels">
-  <% @channels.each do |channel| %>
-    <%= render channel %>
-    <p>
-      <%= link_to "Mostrar", channel %>
-    </p>
-  <% end %>
-</div>
+  <table class="index-table index-table--bordered">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Tipo de Canal</th>
+        <th>Percentagem do Canal (%)</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @channels.each do |channel| %>
+        <tr id="<%= dom_id(channel) %>">
+          <td><%= channel.description %></td>
+          <td><%= channel.channel_type %></td>
+          <td><%= number_to_percentage(channel.channel_cost, precision: 2) %></td>
+          <td>
+            <%= link_to "Mostrar", channel, class: "mini-button" %> |
+            <%= link_to "Editar", edit_channel_path(channel), class: "mini-button" %> |
+            <%= link_to "Excluir", channel,
+                        data: { turbo_method: :delete, turbo_confirm: "Tem certeza?" },
+                        class: "mini-button" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</main>

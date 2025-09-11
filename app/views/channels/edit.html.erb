@@ -1,12 +1,11 @@
-<% content_for :title, "Editing channel" %>
+<main class="index-container">
+  <% content_for :title, "Editar Canal" %>
 
-<h1>Editing channel</h1>
+  <h1>Editar Canal</h1>
 
-<%= render "form", channel: @channel %>
+  <%= render "form", channel: @channel %>
 
-<br>
-
-<div>
-  <%= link_to "Show this channel", @channel %> |
-  <%= link_to "Back to channels", channels_path %>
-</div>
+  <div class="mt-3">
+    <%= link_to "Voltar", channels_path, class: "standart-button" %>
+  </div>
+</main>

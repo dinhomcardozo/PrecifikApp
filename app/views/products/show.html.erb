@@ -1,6 +1,24 @@
 <!-- app/views/products/show.html.erb -->
-
 <main class="index-container">
+  <div class="detailed-box">
+    <div>
+      <p class="detailed-text">
+        <strong>ATENÇÃO!</strong> Edite isso com cuidado. Outros itens podem depender deste Produto.
+      </p>                 
+      <p class="dependent-item-count">
+        <%= "Você tem " + "#{pluralize(@services_count, 'Serviço')}" + " utilizando este item" %>.
+        <a href="#" data-bs-toggle="modal" data-bs-target="#assocModal">
+          Clique aqui e veja a lista.
+        </a>
+      </p>
+      <div>
+        <%= render "product_dependent_items_modal",
+                  services: @services %>
+      </div>
+    </div>
+  </div>
+
+
   <%= turbo_frame_tag "product_steps" do %>
     <h1 class="title">Detalhes do Produto</h1>
 
@@ -12,11 +30,13 @@
                     class: "standart-button" %>
         <%= link_to "Editar",
                     edit_product_path(@product, step: 1),
-                    data: { turbo_frame: "product_steps" },
+                    data: { turbo_frame: "_top" },
                     class: "action-button",
                     title: "Editar" %>
       </div>
     </div>
+
+    <hr>
 
     <table class="vertical-table--bordered">
       <tr>
@@ -104,22 +124,28 @@
     <hr>
   <% end %>
 
-  <div class="detailed-box">
-    <div>
-      <p class="detailed-text">
-        <strong>ATENÇÃO!</strong> Edite isso com cuidado. Outros itens podem depender deste Produto.
-      </p>                 
-      <p class="dependent-item-count">
-        <%= "Você tem " + "#{pluralize(@services_count, 'Serviço')}" + " utilizando este item" %>.
-        <a href="#" data-bs-toggle="modal" data-bs-target="#assocModal">
-          Clique aqui e veja a lista.
-        </a>
-      </p>
-      <div>
-        <%= render "product_dependent_items_modal",
-                  services: @services %>
-      </div>
-    </div>
-  </div>
+  <section class="show-channels-pricing">
+    <h2 class="subtitle">Preço Final por Canal</h2>
+    <table class="index-table index-table--bordered">
+      <thead>
+        <tr>
+          <th>Canal</th>
+          <th>Percentagem do Canal (%)</th>
+          <th>Preço Final com Comissão (R$)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% Channel.all.each do |channel| %>
+          <% base_price = @product.suggested_price_retail.to_f %>
+          <% final_price = base_price * (1 + channel.channel_cost.to_f / 100) %>
+          <tr>
+            <td><%= channel.description %></td>
+            <td><%= number_to_percentage(channel.channel_cost, precision: 2) %></td>
+            <td><%= number_to_currency(final_price, unit: "R$ ") %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </section>
 
 </main>

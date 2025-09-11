@@ -73,10 +73,7 @@ class ProductsController < Clients::AuthenticatedController
     authorize Product, policy_class: Clients::BasePolicy
     if @product.update(product_params)
         if params[:finalize]
-          respond_to do |format|
-            format.turbo_stream { redirect_to product_path(@product) }
-            format.html        { redirect_to @product, notice: "Produto finalizado com sucesso" }
-          end
+          redirect_to product_path(@product), notice: "Produto finalizado com sucesso"
         else
         # fluxo original de Avançar entre abas
         @next_tab =

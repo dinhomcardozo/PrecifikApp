@@ -64,9 +64,10 @@
 
     <% if active_tab == "pricing" %>
       <!-- Botão Finalizar -->
-      <%= f.submit "Finalizar", 
-                  name: "finalize", 
-                  class: "standart-button" %>
+      <%= f.submit "Finalizar",
+                  name: "finalize",
+                  class: "standart-button",
+                  data: { turbo_frame: "_top" } %>
     <% end %>
   </div>
 
