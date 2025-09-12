@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_04_025151) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_12_201853) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -164,6 +164,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_04_025151) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "client_id"
+    t.float "total_fat"
+    t.float "protein"
+    t.float "carbs"
+    t.float "dietary_fiber"
+    t.float "sugars"
+    t.float "sodium"
+    t.float "calories"
     t.index ["brand_id"], name: "index_inputs_on_brand_id"
     t.index ["input_type_id"], name: "index_inputs_on_input_type_id"
     t.index ["supplier_id"], name: "index_inputs_on_supplier_id"

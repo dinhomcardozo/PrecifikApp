@@ -1,0 +1,41 @@
+<h4>Tabela Nutricional</h4>
+<div class="form-row-inline">
+    <div class="field-inline">
+    <%= f.label :total_fat, "Gorduras totais (g)" %>
+    <%= f.number_field :total_fat, step: 0.01, class: "form-control", value: f.object.total_fat || 0  %>
+    </div>
+
+    <div class="field-inline">
+    <%= f.label :protein, "Proteínas (g)" %>
+    <%= f.number_field :protein, step: 0.01, class: "form-control", value: f.object.protein || 0  %>
+    </div>
+
+    <div class="field-inline">
+    <%= f.label :carbs, "Carboidratos (g)" %>
+    <%= f.number_field :carbs, step: 0.01, class: "form-control", value: f.object.carbs || 0  %>
+    </div>
+</div>
+
+<div class="form-row-inline">
+    <div class="field-inline">
+    <%= f.label :dietary_fiber, "Fibras (g)" %>
+    <%= f.number_field :dietary_fiber, step: 0.01, class: "form-control", value: f.object.dietary_fiber || 0  %>
+    </div>
+
+    <div class="field-inline">
+    <%= f.label :sugars, "Açúcares (g)" %>
+    <%= f.number_field :sugars, step: 0.01, class: "form-control", value: f.object.sugars || 0  %>
+    </div>
+
+    <div class="field-inline">
+    <%= f.label :sodium, "Sódio (mg)" %>
+    <%= f.number_field :sodium, step: 0.01, class: "form-control", value: f.object.sodium || 0  %>
+    </div>
+</div>
+
+<div class="form-row-inline">
+    <div class="field-inline">
+        <%= f.label :calories, "Calorias (kcal)" %>
+        <%= f.number_field :calories, step: 0.01, class: "form-control", value: f.object.calories || 0 %>
+    </div>
+</div>

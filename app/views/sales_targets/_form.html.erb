@@ -13,7 +13,7 @@
   <div class="field">
     <%= f.label :product_id, "Produto", class: "custom-label" %>
     <%= f.collection_select :product_id,
-          Product.all,
+          Product.left_outer_joins(:sales_target).where(sales_targets: { id: nil }),
           :id,
           :description,
           { prompt: "Selecione produto" },

@@ -95,7 +95,14 @@ class InputsController < Clients::AuthenticatedController
       :unit_of_measurement,
       :input_type_id,
       :weight,
-      :image
+      :image,
+      :total_fat,
+      :protein,
+      :carbs,
+      :dietary_fiber,
+      :sugars,
+      :sodium,
+      :calories
     ).tap do |whitelisted|
       if %w[kg L].include?(whitelisted[:unit_of_measurement])
         whitelisted[:weight] = whitelisted[:weight].to_f * 1000

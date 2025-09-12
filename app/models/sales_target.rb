@@ -5,7 +5,8 @@ class SalesTarget < ApplicationRecord
 
   after_commit :update_global_sums, on: %i[create update destroy]
 
-  validates :monthly_target, presence: true,
+  validates :monthly_target,
+            presence: true,
             numericality: { only_integer: true, greater_than: 0 }
   validates :start_date, :end_date, presence: true
   validate  :end_after_start
@@ -42,7 +43,9 @@ class SalesTarget < ApplicationRecord
       .where("start_date <= ? AND end_date >= ?", end_date, start_date)
       .exists?
 
-    errors.add(:base, "Já existe uma meta ativa para este produto nesse período") if overlapping
+    if overlapping
+      errors.add(:base, "Já existe uma meta ativa para este produto nesse período")
+    end
   end
 
   def update_global_sums
@@ -57,5 +60,54 @@ class SalesTarget < ApplicationRecord
       sales_target_sum: total,
       sales_target_active_sum: active
     )
+  end
+
+  def update_global_sums_and_products
+    # 1) somatórios globais
+    total  = SalesTarget.sum(:monthly_target)
+    today  = Date.current
+    active = SalesTarget
+               .where("start_date <= ? AND end_date >= ?", today, today)
+               .sum(:monthly_target)
+
+    SalesTarget.update_all(
+      sales_target_sum: total,
+      sales_target_active_sum: active
+    )
+
+    # 2) aplica custo fixo distribuído global nos produtos
+    total_fixed_costs     = FixedCost.sum(:monthly_cost)
+    total_monthly_targets = SalesTarget.sum(:monthly_target).to_f
+
+    # se não há metas, zera o efeito nos products que têm meta
+    if total_monthly_targets.zero?
+      SalesTarget.includes(:product).find_each do |st|
+        next unless (prod = st.product)
+
+        # recomputa só o total_cost_with_fixed_costs removendo distribuição
+        new_total_with_fixed = (prod.total_cost.to_f + 0.0).round(2)
+
+        prod.update_columns(
+          total_cost_with_fixed_costs: new_total_with_fixed,
+          updated_at: Time.current
+        )
+      end
+      return
+    end
+
+    # custo fixo global por unidade (igual para todos)
+    distributed_cost = (total_fixed_costs / total_monthly_targets).round(2)
+
+    SalesTarget.includes(:product).find_each do |st|
+      next unless (prod = st.product)
+
+      # aplica a distribuição global ao product
+      new_total_with_fixed = (prod.total_cost.to_f + distributed_cost).round(2)
+
+      prod.update_columns(
+        total_cost_with_fixed_costs: new_total_with_fixed,
+        updated_at: Time.current
+      )
+    end
   end
 end

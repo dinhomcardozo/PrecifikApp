@@ -1,5 +1,6 @@
 class Input < ApplicationRecord
   default_scope { where(client_id: Current.user_client.client_id) if Current.user_client }
+  before_save :set_nutritional_defaults
   belongs_to :supplier
   belongs_to :input_type
   belongs_to :brand, optional: true
@@ -23,6 +24,8 @@ class Input < ApplicationRecord
   validates_inclusion_of :unit_of_measurement, in: %w[g mL kg L], message: "não é válido"
   validates :cost, numericality: { greater_than_or_equal_to: 0.0 }, allow_nil: true
   validates :weight, numericality: { greater_than_or_equal_to: 0.0 }, allow_nil: true
+  validates :total_fat, :protein, :carbs, :dietary_fiber, :sugars, :sodium,
+          numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
 
   after_update_commit :refresh_compositions, if: :saved_change_to_cost?
   after_update_commit :log_cost_change, if: :saved_change_to_cost?
@@ -62,5 +65,15 @@ class Input < ApplicationRecord
       cost:        cost.to_d,
       recorded_at: Time.current
     )
+  end
+
+  def set_nutritional_defaults
+    self.total_fat      ||= 0
+    self.protein        ||= 0
+    self.carbs          ||= 0
+    self.dietary_fiber  ||= 0
+    self.sugars         ||= 0
+    self.sodium         ||= 0
+    self.calories       ||= 0
   end
 end

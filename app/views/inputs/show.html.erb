@@ -76,6 +76,7 @@
           Clique aqui e veja a lista.
         </a>
       </p>
+
       <div>
         <%= render "input_dependent_items_modal",
                    subproducts: @subproducts,
@@ -84,8 +85,13 @@
     </div>
   </div>
 
-    <div>                 
-      <%= render "input_cost_history", cost_history: @cost_history %>
-    </div>
+  <div>
+    <%= render 'nutritional_table_show' %>
+  </div>
+
+  <div>                 
+    <%= render "input_cost_history", cost_history: @cost_history %>
+  </div>
+
   <%= link_to "Voltar", inputs_path, class: "standart-button" %>
 </main>

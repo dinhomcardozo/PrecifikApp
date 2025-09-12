@@ -43,10 +43,18 @@
     <%= f.file_field :image %>
   </div>
 
+  <hr>
+
   <div>
-    <%= f.submit "Salvar Insumo", class: "standart-button" %>
+    <%= render 'nutritional_table_fields', f: f %>
   </div>
+
   <div>
-    <%= link_to "Voltar", inputs_path, class: "action-button" %>
+    <div>
+     <%= f.submit "Salvar Insumo", class: "standart-button" %>
+    </div>
+    <div>
+      <%= link_to "Voltar", inputs_path, class: "action-button" %>
+    </div>
   </div>
 <% end %>
