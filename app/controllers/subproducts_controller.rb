@@ -38,8 +38,8 @@ class SubproductsController < Clients::AuthenticatedController
 
   def show
     @subproduct = Subproduct.find(params[:id])
-
     @compositions = @subproduct.subproduct_compositions.includes(:input)
+    @nutritional_summary = @subproduct.nutritional_summary
 
     # Products diretos que usam este subproduto
     @products = Product

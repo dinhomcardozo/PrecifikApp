@@ -212,6 +212,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_12_201853) do
     t.decimal "cost", default: "0.0", null: false
     t.decimal "cost_per_gram_with_loss"
     t.bigint "client_id"
+    t.decimal "calories", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "total_fat", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "protein", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "carbs", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "dietary_fiber", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "sugars", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "sodium", precision: 10, scale: 2, default: "0.0", null: false
     t.index ["product_id"], name: "index_product_subproducts_on_product_id"
     t.index ["subproduct_id"], name: "index_product_subproducts_on_subproduct_id"
   end
@@ -236,6 +243,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_12_201853) do
     t.decimal "weight_loss", default: "0.0"
     t.decimal "final_weight", default: "0.0"
     t.bigint "client_id"
+    t.decimal "calories", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "total_fat", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "protein", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "carbs", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "dietary_fiber", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "sugars", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "sodium", precision: 10, scale: 2, default: "0.0", null: false
     t.index ["brand_id"], name: "index_products_on_brand_id"
     t.index ["category_id"], name: "index_products_on_category_id"
     t.index ["tax_id"], name: "index_products_on_tax_id"
@@ -411,6 +425,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_12_201853) do
     t.datetime "updated_at", null: false
     t.decimal "quantity_cost", precision: 10, scale: 2, default: "0.0", null: false
     t.bigint "client_id"
+    t.decimal "calories", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "total_fat", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "protein", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "carbs", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "dietary_fiber", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "sugars", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "sodium", precision: 10, scale: 2, default: "0.0", null: false
     t.index ["input_id"], name: "index_subproduct_compositions_on_input_id"
     t.index ["subproduct_id"], name: "index_subproduct_compositions_on_subproduct_id"
   end
@@ -426,6 +447,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_12_201853) do
     t.decimal "weight_loss", default: "0.0"
     t.decimal "final_weight", default: "0.0"
     t.bigint "client_id"
+    t.decimal "calories", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "total_fat", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "protein", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "carbs", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "dietary_fiber", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "sugars", precision: 10, scale: 2, default: "0.0", null: false
+    t.decimal "sodium", precision: 10, scale: 2, default: "0.0", null: false
     t.index ["brand_id"], name: "index_subproducts_on_brand_id"
   end
 

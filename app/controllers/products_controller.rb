@@ -107,6 +107,7 @@ class ProductsController < Clients::AuthenticatedController
   def show
     authorize Product, policy_class: Clients::BasePolicy
     @product = Product.find(params[:id])
+    @nutritional_summary = @product.nutritional_summary
 
     # Serviços diretos que usam este produto
     @services = Services::Service

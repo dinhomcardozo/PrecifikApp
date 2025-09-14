@@ -170,7 +170,42 @@ class Product < ApplicationRecord
 
   def product_subproducts_changed?
     product_subproducts.any?(&:saved_change_to_cost?) ||
-      product_subproducts.any?(&:saved_change_to_quantity?)
+    product_subproducts.any?(&:saved_change_to_quantity?)
+  end
+
+  def nutritional_summary
+    totals = {
+      calories: 0.0,
+      total_fat: 0.0,
+      protein: 0.0,
+      carbs: 0.0,
+      dietary_fiber: 0.0,
+      sugars: 0.0,
+      sodium: 0.0
+    }
+
+    product_subproducts.includes(subproduct: :subproduct_compositions).each do |ps|
+      sub_sum = ps.subproduct.nutritional_summary
+      factor = ps.quantity.to_f / ps.subproduct.weight_in_grams.to_f
+
+      totals.each_key do |key|
+        totals[key] += sub_sum[key].to_f * factor
+      end
+    end
+
+    totals.transform_values { |v| v.round(2) }
+  end
+
+  # Nutrientes por grama antes da perda
+  def calories_per_gram_before_loss
+    return 0 if total_weight.to_f.zero?
+    nutritional_summary[:calories] / total_weight
+  end
+
+  # Nutrientes por grama depois da perda
+  def calories_per_gram_after_loss
+    return 0 if final_weight.to_f.zero?
+    nutritional_summary[:calories] / final_weight
   end
 
   #FILTROS E BUSCA

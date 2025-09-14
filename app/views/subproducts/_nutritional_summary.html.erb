@@ -1,0 +1,25 @@
+<h4>Tabela Nutricional (total do subproduto)</h4>
+<table class="index-table index-table--bordered">
+  <thead>
+    <tr>
+      <th>Calorias (kcal)</th>
+      <th>Gorduras totais (g)</th>
+      <th>Proteínas (g)</th>
+      <th>Carboidratos (g)</th>
+      <th>Fibras (g)</th>
+      <th>Açúcares (g)</th>
+      <th>Sódio (mg)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><%= @nutritional_summary[:calories] %></td>
+      <td><%= @nutritional_summary[:total_fat] %></td>
+      <td><%= @nutritional_summary[:protein] %></td>
+      <td><%= @nutritional_summary[:carbs] %></td>
+      <td><%= @nutritional_summary[:dietary_fiber] %></td>
+      <td><%= @nutritional_summary[:sugars] %></td>
+      <td><%= @nutritional_summary[:sodium] %></td>
+    </tr>
+  </tbody>
+</table>

@@ -6,6 +6,7 @@ class ProductSubproduct < ApplicationRecord
   before_validation :set_cost, if: -> { subproduct && quantity.present? }
   before_validation :calculate_costs,
                     if: -> { subproduct.present? && quantity.present? }
+  before_save :compute_nutrients
 
   # Validar que a quantidade (em g) seja maior que zero (opcional)
   validates :quantity,
@@ -13,9 +14,37 @@ class ProductSubproduct < ApplicationRecord
             numericality: { greater_than: 0 }
 
   after_commit :sync_product_pricing, on: %i[create update]
+  after_save :update_product_totals
+  after_destroy :update_product_totals
 
   after_destroy_commit do
     sync_product_pricing unless product.destroyed?
+  end
+
+  def compute_nutrients
+    return unless subproduct&.weight_in_grams.to_f > 0
+
+    factor = quantity.to_f / subproduct.weight_in_grams.to_f
+
+    self.calories       = subproduct.calories.to_f       * factor
+    self.total_fat      = subproduct.total_fat.to_f      * factor
+    self.protein        = subproduct.protein.to_f        * factor
+    self.carbs          = subproduct.carbs.to_f          * factor
+    self.dietary_fiber  = subproduct.dietary_fiber.to_f  * factor
+    self.sugars         = subproduct.sugars.to_f         * factor
+    self.sodium         = subproduct.sodium.to_f         * factor
+  end
+
+  def update_product_totals
+    product.update(
+      calories:       product.product_subproducts.sum(:calories),
+      total_fat:      product.product_subproducts.sum(:total_fat),
+      protein:        product.product_subproducts.sum(:protein),
+      carbs:          product.product_subproducts.sum(:carbs),
+      dietary_fiber:  product.product_subproducts.sum(:dietary_fiber),
+      sugars:         product.product_subproducts.sum(:sugars),
+      sodium:         product.product_subproducts.sum(:sodium)
+    )
   end
 
   private
