@@ -106,6 +106,9 @@ Rails.application.routes.draw do
         member do
           get :production_sheet, defaults: { format: :pdf }
         end
+        collection do
+          get :calculate
+        end
       end
 
       scope path: 'services', module: 'services', as: 'clients_services' do

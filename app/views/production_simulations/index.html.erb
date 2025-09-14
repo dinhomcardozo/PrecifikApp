@@ -1,34 +1,36 @@
-<h1>Simulações de Produção</h1>
+<main class="index-container">
+  <h1>Simulações de Produção</h1>
 
-<table class="index-table index-table--bordered">
-  <thead>
-    <tr>
-      <th>Produto</th>
-      <th>Quantidade (g)</th>
-      <th>Custo Total</th>
-      <th>Preço Mínimo</th>
-      <th>Lucro Varejo</th>
-      <th>Lucro Atacado</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @production_simulations.each do |sim| %>
+  <table class="index-table index-table--bordered">
+    <thead>
       <tr>
-        <td><%= sim.product.description %></td>
-        <td><%= number_with_precision(sim.quantity_in_grams, precision: 2) %></td>
-        <td><%= number_to_currency(sim.total_cost) %></td>
-        <td><%= number_to_currency(sim.minimum_selling_price) %></td>
-        <td><%= number_to_currency(sim.total_retail_profit) %></td>
-        <td><%= number_to_currency(sim.total_wholesale_profit) %></td>
-        <td>
-          <%= link_to "Ver", sim, class: "action-button" %> |
-          <%= link_to "Editar", edit_production_simulation_path(sim), class: "action-button" %> |
-          <%= link_to "Excluir", sim, method: :delete, data: { confirm: "Tem certeza?" }, class: "action-button" %>
-        </td>
+        <th>Produto</th>
+        <th>Quantidade (g)</th>
+        <th>Custo Total</th>
+        <th>Preço Mínimo</th>
+        <th>Lucro Varejo</th>
+        <th>Lucro Atacado</th>
+        <th></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @production_simulations.each do |sim| %>
+        <tr>
+          <td><%= sim.product.description %></td>
+          <td><%= number_with_precision(sim.quantity_in_grams, precision: 2) %></td>
+          <td><%= number_to_currency(sim.total_cost) %></td>
+          <td><%= number_to_currency(sim.minimum_selling_price) %></td>
+          <td><%= number_to_currency(sim.total_retail_profit) %></td>
+          <td><%= number_to_currency(sim.total_wholesale_profit) %></td>
+          <td>
+            <%= link_to "Ver", sim, class: "action-button" %> |
+            <%= link_to "Editar", edit_production_simulation_path(sim), class: "action-button" %> |
+            <%= link_to "Excluir", sim, method: :delete, data: { confirm: "Tem certeza?" }, class: "action-button" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 
-<%= link_to "Nova Simulação", new_production_simulation_path, class: "action-button" %>
+  <%= link_to "Nova Simulação", new_production_simulation_path, class: "action-button" %>
+</main>

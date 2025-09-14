@@ -41,6 +41,20 @@
     </div>
   </div>
 
+  <!-- Dropdown Simulador de Produção -->
+  <div data-controller="dropdown" class="menu-item dropdown">
+    <button data-action="click->dropdown#toggle"
+            class="dropdown-toggle"
+            aria-expanded="false">
+      Simulador de Produção
+      <svg class="chevron" width="10" height="6"></svg>
+    </button>
+    <div data-dropdown-target="menu" class="dropdown-menu">
+      <%= link_to "Simulações", production_simulations_path, class: "dropdown-item" %>
+      <%= link_to "Nova Simulação", new_production_simulation_path, class: "dropdown-item" %>
+    </div>
+  </div>
+
     <!-- Dropdown Cadastros -->
   <div data-controller="dropdown" class="menu-item dropdown">
     <!-- Botão dispara o toggle -->

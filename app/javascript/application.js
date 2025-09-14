@@ -25,12 +25,6 @@ document.addEventListener("turbo:load", () => {
 })
 
 document.addEventListener("turbo:load", () => {
-  $(".select2").select2({
-    width: "100%"
-  })
-})
-
-document.addEventListener("turbo:load", () => {
   const el = document.querySelector("#dashboardCarousel")
   if (el) {
     new bootstrap.Carousel(el)

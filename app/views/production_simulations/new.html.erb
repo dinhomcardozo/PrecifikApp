@@ -1,3 +1,5 @@
-<h1><%= @production_simulation.new_record? ? "Nova Simulação" : "Editar Simulação" %></h1>
-<%= render "form", production_simulation: @production_simulation %>
-<%= link_to "Voltar", production_simulations_path %>
+<main class="index-container">
+    <h1><%= @production_simulation.new_record? ? "Nova Simulação" : "Editar Simulação" %></h1>
+    <%= render "form", production_simulation: @production_simulation %>
+    <%= link_to "Voltar", production_simulations_path, class: "standart-button" %>
+</main>

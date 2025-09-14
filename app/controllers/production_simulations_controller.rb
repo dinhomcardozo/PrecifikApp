@@ -50,6 +50,52 @@ class ProductionSimulationsController < ApplicationController
     end
   end
 
+  def calculate
+    product = Product.includes(:inputs, :subproducts).find(params[:product_id])
+    quantity = params[:quantity].to_f
+
+    # Insumos
+    inputs = product.inputs.map do |input|
+      total_quantity = input.quantity_per_unit * quantity
+      total_cost = total_quantity * input.unit_cost
+      required_units = (total_quantity / input.unit_size).ceil
+
+      {
+        name: input.name,
+        total_quantity: total_quantity.round(2),
+        total_cost: view_context.number_to_currency(total_cost),
+        required_units: required_units
+      }
+    end
+
+    # Subprodutos
+    subproducts = product.subproducts.map do |sp|
+      total_quantity = sp.quantity_per_unit * quantity
+      total_cost = total_quantity * sp.unit_cost
+
+      {
+        name: sp.name,
+        total_quantity: total_quantity.round(2),
+        total_cost: view_context.number_to_currency(total_cost)
+      }
+    end
+
+    # Produto final
+    total_cost_sum = inputs.sum { |i| i[:total_cost].gsub(/[^\d,\.]/, '').to_f } +
+                    subproducts.sum { |s| s[:total_cost].gsub(/[^\d,\.]/, '').to_f }
+
+    product_data = {
+      total_quantity: quantity,
+      total_cost: view_context.number_to_currency(total_cost_sum),
+      minimum_selling_price: view_context.number_to_currency(total_cost_sum * 1.2), # exemplo
+      total_selling_price: view_context.number_to_currency(total_cost_sum * 1.5),   # exemplo
+      total_retail_profit: view_context.number_to_currency(total_cost_sum * 0.3),   # exemplo
+      total_wholesale_profit: view_context.number_to_currency(total_cost_sum * 0.2) # exemplo
+    }
+
+    render json: { inputs: inputs, subproducts: subproducts, product: product_data }
+  end
+
   private
 
   def set_production_simulation

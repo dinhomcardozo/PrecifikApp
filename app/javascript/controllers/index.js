@@ -15,6 +15,7 @@ import CnpjVerificationController from "./cnpj_verification_controller"
 import CalendarController from "./calendar_controller"
 import SalesTargetAlertController from "./sales_target_alert_controller"
 import NoticeController from "./notice_controller"
+import SimulationController from "./simulation_controller"
 
 const application = Application.start()
 application.register("product-composition", ProductCompositionController)
@@ -33,3 +34,4 @@ application.register("cnpj-verification", CnpjVerificationController)
 application.register("calendar", CalendarController)
 application.register("sales-target-alert", SalesTargetAlertController)
 application.register("notice", NoticeController)
+application.register("simulation", SimulationController)

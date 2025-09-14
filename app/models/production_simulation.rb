@@ -1,7 +1,7 @@
 class ProductionSimulation < ApplicationRecord
-  belongs_to :client
-  belongs_to :created_by, class_name: "UserClient"
-  belongs_to :updated_by, class_name: "UserClient", optional: true
+  belongs_to :client, class_name: "SystemAdmins::Client"
+  belongs_to :created_by, class_name: "SystemAdmins::UserClient"
+  belongs_to :updated_by, class_name: "SystemAdmins::UserClient", optional: true
   belongs_to :product
 
   has_many :simulation_inputs, dependent: :destroy
