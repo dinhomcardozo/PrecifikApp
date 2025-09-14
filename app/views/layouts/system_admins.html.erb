@@ -15,5 +15,17 @@
     <%= render "shared/system_admin_horizontal_menu" %>
 
     <%= yield %>
+
+    <% if notice %>
+      <div class="notice-bar" data-controller="notice">
+        <%= notice %>
+      </div>
+    <% end %>
+
+    <% if alert %>
+      <div class="alert-bar" data-controller="notice">
+        <%= alert %>
+      </div>
+    <% end %>
   </body>
 </html>

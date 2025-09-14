@@ -28,5 +28,11 @@
         <div class="auth-layout__content">
             <%= yield %>
         </div>
+
+        <% if notice %>
+            <div class="notice-bar" data-controller="notice">
+                <%= notice %>
+            </div>
+        <% end %>
     </body>
 </html>
