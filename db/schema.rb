@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_12_201853) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_14_215607) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -223,6 +223,26 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_12_201853) do
     t.index ["subproduct_id"], name: "index_product_subproducts_on_subproduct_id"
   end
 
+  create_table "production_simulations", force: :cascade do |t|
+    t.bigint "client_id", null: false
+    t.bigint "created_by_id", null: false
+    t.bigint "updated_by_id"
+    t.bigint "product_id", null: false
+    t.decimal "quantity_in_grams", precision: 10, scale: 2, null: false
+    t.decimal "total_quantity", precision: 10, scale: 2
+    t.decimal "total_cost", precision: 12, scale: 2
+    t.decimal "minimum_selling_price", precision: 12, scale: 2
+    t.decimal "total_selling_price", precision: 12, scale: 2
+    t.decimal "total_retail_profit", precision: 12, scale: 2
+    t.decimal "total_wholesale_profit", precision: 12, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_production_simulations_on_client_id"
+    t.index ["created_by_id"], name: "index_production_simulations_on_created_by_id"
+    t.index ["product_id"], name: "index_production_simulations_on_product_id"
+    t.index ["updated_by_id"], name: "index_production_simulations_on_updated_by_id"
+  end
+
   create_table "products", force: :cascade do |t|
     t.text "description"
     t.float "total_weight"
@@ -417,6 +437,44 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_12_201853) do
     t.index ["role_id"], name: "index_services_on_role_id"
   end
 
+  create_table "simulation_inputs", force: :cascade do |t|
+    t.bigint "production_simulation_id", null: false
+    t.bigint "input_id", null: false
+    t.decimal "total_quantity", precision: 10, scale: 2
+    t.decimal "total_cost", precision: 12, scale: 2
+    t.decimal "required_units", precision: 10, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["input_id"], name: "index_simulation_inputs_on_input_id"
+    t.index ["production_simulation_id"], name: "index_simulation_inputs_on_production_simulation_id"
+  end
+
+  create_table "simulation_products", force: :cascade do |t|
+    t.bigint "production_simulation_id", null: false
+    t.bigint "product_id", null: false
+    t.decimal "total_quantity", precision: 10, scale: 2
+    t.decimal "total_cost", precision: 12, scale: 2
+    t.decimal "minimum_selling_price", precision: 12, scale: 2
+    t.decimal "total_selling_price", precision: 12, scale: 2
+    t.decimal "total_retail_profit", precision: 12, scale: 2
+    t.decimal "total_wholesale_profit", precision: 12, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_simulation_products_on_product_id"
+    t.index ["production_simulation_id"], name: "index_simulation_products_on_production_simulation_id"
+  end
+
+  create_table "simulation_subproducts", force: :cascade do |t|
+    t.bigint "production_simulation_id", null: false
+    t.bigint "subproduct_id", null: false
+    t.decimal "total_quantity", precision: 10, scale: 2
+    t.decimal "total_cost", precision: 12, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["production_simulation_id"], name: "index_simulation_subproducts_on_production_simulation_id"
+    t.index ["subproduct_id"], name: "index_simulation_subproducts_on_subproduct_id"
+  end
+
   create_table "subproduct_compositions", force: :cascade do |t|
     t.bigint "subproduct_id", null: false
     t.bigint "input_id", null: false
@@ -556,6 +614,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_12_201853) do
   add_foreign_key "product_subproducts", "clients", name: "fk_product_subproducts_client"
   add_foreign_key "product_subproducts", "products"
   add_foreign_key "product_subproducts", "subproducts"
+  add_foreign_key "production_simulations", "clients"
+  add_foreign_key "production_simulations", "products"
+  add_foreign_key "production_simulations", "user_clients", column: "created_by_id"
+  add_foreign_key "production_simulations", "user_clients", column: "updated_by_id"
   add_foreign_key "products", "brands"
   add_foreign_key "products", "categories"
   add_foreign_key "products", "clients", name: "fk_products_client"
@@ -586,6 +648,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_12_201853) do
   add_foreign_key "services", "clients", name: "fk_services_client"
   add_foreign_key "services", "professionals"
   add_foreign_key "services", "roles"
+  add_foreign_key "simulation_inputs", "inputs"
+  add_foreign_key "simulation_inputs", "production_simulations"
+  add_foreign_key "simulation_products", "production_simulations"
+  add_foreign_key "simulation_products", "products"
+  add_foreign_key "simulation_subproducts", "production_simulations"
+  add_foreign_key "simulation_subproducts", "subproducts"
   add_foreign_key "subproduct_compositions", "clients", name: "fk_subproduct_compositions_client"
   add_foreign_key "subproduct_compositions", "inputs"
   add_foreign_key "subproduct_compositions", "subproducts"

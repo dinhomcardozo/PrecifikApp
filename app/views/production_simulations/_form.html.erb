@@ -1,0 +1,140 @@
+<%= form_with(model: @production_simulation) do |f| %>
+  <% if @production_simulation.errors.any? %>
+    <div class="alert alert-danger">
+      <h5><%= pluralize(@production_simulation.errors.count, "erro") %> impediram o salvamento:</h5>
+      <ul>
+        <% @production_simulation.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= f.label :product_id, "Produto" %>
+    <%= f.collection_select :product_id, Product.all, :id, :description, prompt: "Selecione um produto", data: { action: "change->simulation#updateTables" } %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :quantity_in_grams, "Quantidade (g)" %>
+    <%= f.number_field :quantity_in_grams, step: 0.01, data: { action: "input->simulation#updateTables" } %>
+  </div>
+
+  <h4>Insumos Necessários</h4>
+  <table class="index-table index-table--bordered" id="inputs-table">
+    <thead>
+      <tr>
+        <th>Insumo</th>
+        <th>Total (g)</th>
+        <th>Custo Total</th>
+        <th>Unidades Necessárias</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- preenchido via JS -->
+    </tbody>
+  </table>
+
+  <h4>Subprodutos</h4>
+  <table class="index-table index-table--bordered" id="subproducts-table">
+    <thead>
+      <tr>
+        <th>Subproduto</th>
+        <th>Total (g)</th>
+        <th>Custo Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- preenchido via JS -->
+    </tbody>
+  </table>
+
+  <h4>Produto Final</h4>
+  <table class="index-table index-table--bordered" id="product-table">
+    <thead>
+      <tr>
+        <th>Total (g)</th>
+        <th>Custo Total</th>
+        <th>Preço Mínimo</th>
+        <th>Preço Total</th>
+        <th>Lucro Varejo</th>
+        <th>Lucro Atacado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- preenchido via JS -->
+    </tbody>
+  </table>
+
+  <%= f.submit "Salvar Simulação", class: "action-button" %>
+<% end %>
+<%= form_with(model: @production_simulation) do |f| %>
+  <% if @production_simulation.errors.any? %>
+    <div class="alert alert-danger">
+      <h5><%= pluralize(@production_simulation.errors.count, "erro") %> impediram o salvamento:</h5>
+      <ul>
+        <% @production_simulation.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= f.label :product_id, "Produto" %>
+    <%= f.collection_select :product_id, Product.all, :id, :description, prompt: "Selecione um produto", data: { action: "change->simulation#updateTables" } %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :quantity_in_grams, "Quantidade (g)" %>
+    <%= f.number_field :quantity_in_grams, step: 0.01, data: { action: "input->simulation#updateTables" } %>
+  </div>
+
+  <h4>Insumos Necessários</h4>
+  <table class="index-table index-table--bordered" id="inputs-table">
+    <thead>
+      <tr>
+        <th>Insumo</th>
+        <th>Total (g)</th>
+        <th>Custo Total</th>
+        <th>Unidades Necessárias</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- preenchido via JS -->
+    </tbody>
+  </table>
+
+  <h4>Subprodutos</h4>
+  <table class="index-table index-table--bordered" id="subproducts-table">
+    <thead>
+      <tr>
+        <th>Subproduto</th>
+        <th>Total (g)</th>
+        <th>Custo Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- preenchido via JS -->
+    </tbody>
+  </table>
+
+  <h4>Produto Final</h4>
+  <table class="index-table index-table--bordered" id="product-table">
+    <thead>
+      <tr>
+        <th>Total (g)</th>
+        <th>Custo Total</th>
+        <th>Preço Mínimo</th>
+        <th>Preço Total</th>
+        <th>Lucro Varejo</th>
+        <th>Lucro Atacado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- preenchido via JS -->
+    </tbody>
+  </table>
+
+  <%= f.submit "Salvar Simulação", class: "action-button" %>
+<% end %>

@@ -1,0 +1,79 @@
+<h1>Simulação de Produção</h1>
+
+<p><strong>Produto:</strong> <%= @production_simulation.product.description %></p>
+<p><strong>Quantidade:</strong> <%= number_with_precision(@production_simulation.quantity_in_grams, precision: 2) %> g</p>
+
+<h4>Insumos Necessários</h4>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Insumo</th>
+      <th>Total (g)</th>
+      <th>Custo Total</th>
+      <th>Unidades Necessárias</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @production_simulation.simulation_inputs.each do |si| %>
+      <tr>
+        <td><%= si.input.name %></td>
+        <td><%= number_with_precision(si.total_quantity, precision: 2) %></td>
+        <td><%= number_to_currency(si.total_cost) %></td>
+        <td><%= si.required_units %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h4>Subprodutos</h4>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Subproduto</th>
+      <th>Total (g)</th>
+      <th>Custo Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @production_simulation.simulation_subproducts.each do |ss| %>
+      <tr>
+        <td><%= ss.subproduct.name %></td>
+        <td><%= number_with_precision(ss.total_quantity, precision: 2) %></td>
+        <td><%= number_to_currency(ss.total_cost) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h4>Produto Final</h4>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Total (g)</th>
+      <th>Custo Total</th>
+      <th>Preço Mínimo</th>
+      <th>Preço Total</th>
+      <th>Lucro Varejo</th>
+      <th>Lucro Atacado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @production_simulation.simulation_products.each do |sp| %>
+      <tr>
+        <td><%= number_with_precision(sp.total_quantity, precision: 2) %></td>
+        <td><%= number_to_currency(sp.total_cost) %></td>
+        <td><%= number_to_currency(sp.minimum_selling_price) %></td>
+        <td><%= number_to_currency(sp.total_selling_price) %></td>
+        <td><%= number_to_currency(sp.total_retail_profit) %></td>
+        <td><%= number_to_currency(sp.total_wholesale_profit) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to "Gerar Production Sheet (PDF)",
+            production_sheet_production_simulation_path(@production_simulation, format: :pdf),
+            class: "action-button",
+            target: "_blank" %>
+
+<%= link_to "Voltar", production_simulations_path, class: "action-button" %>

@@ -1,0 +1,27 @@
+<h1>Ficha de Produção</h1>
+<p><strong>Produto:</strong> <%= @production_simulation.product.description %></p>
+<p><strong>Quantidade:</strong> <%= @production_simulation.quantity_in_grams %> g</p>
+
+<!-- Aqui você coloca as tabelas de insumos, subprodutos e totais -->
+
+<h3>Insumos Necessários</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Insumo</th>
+      <th>Total (g)</th>
+      <th>Custo Total</th>
+      <th>Unidades Necessárias</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @production_simulation.simulation_inputs.each do |si| %>
+      <tr>
+        <td><%= si.input.name %></td>
+        <td><%= si.total_quantity %></td>
+        <td><%= number_to_currency(si.total_cost) %></td>
+        <td><%= si.required_units %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
