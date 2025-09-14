@@ -1,12 +1,14 @@
-<% content_for :title, "Editar perfil de Tributos | Maxximiza" %>
+<main class="index-container">
+  <% content_for :title, "Editar perfil de Tributos | Maxximiza" %>
 
-<h1>Editar perfil de tributos</h1>
+  <h1>Editar perfil de tributos</h1>
 
-<%= render "form", tax: @tax %>
+  <%= render "form", tax: @tax %>
 
-<br>
+  <br>
 
-<div>
-  <%= link_to "Ver", @tax, class: "action-button" %> |
-  <%= link_to "Voltar", taxes_path, class: "action-button" %>
-</div>
+  <div>
+    <%= link_to "Ver", @tax, class: "action-button" %> |
+    <%= link_to "Voltar", taxes_path, class: "action-button" %>
+  </div>
+</main>

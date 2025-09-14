@@ -1,10 +1,12 @@
-<p style="color: green"><%= notice %></p>
+<main class="index-container">
+  <p style="color: green"><%= notice %></p>
 
-<%= render @tax %>
+  <%= render @tax %>
 
-<div>
-  <%= link_to "Edit this tax", edit_tax_path(@tax) %> |
-  <%= link_to "Back to taxes", taxes_path %>
+  <div>
+    <%= link_to "Editar", edit_tax_path(@tax) %> |
+    <%= link_to "Voltar", taxes_path %>
 
-  <%= button_to "Destroy this tax", @tax, method: :delete %>
-</div>
+    <%= button_to "Excluir", @tax, method: :delete %>
+  </div>
+</main>

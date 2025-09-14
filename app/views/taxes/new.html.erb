@@ -1,11 +1,13 @@
-<% content_for :title, "Novo Perfil de Tributos | Maxximiza" %>
+<main class="index-container">
+  <% content_for :title, "Novo Perfil de Tributos | Maxximiza" %>
 
-<h1>Novo Perfil de Tributos</h1>
+  <h1>Novo Perfil de Tributos</h1>
 
-<%= render "form", tax: @tax %>
+  <%= render "form", tax: @tax %>
 
-<br>
+  <br>
 
-<div>
-  <%= link_to "Voltar", taxes_path %>
-</div>
+  <div>
+    <%= link_to "Voltar", taxes_path %>
+  </div>
+</main>

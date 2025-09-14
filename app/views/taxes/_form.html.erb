@@ -2,7 +2,6 @@
   <% if tax.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(tax.errors.count, "error") %> prohibited this tax from being saved:</h2>
-
       <ul>
         <% tax.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -11,52 +10,61 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :description, "Nome do Perfil", style: "display: block" %>
-    <%= form.textarea :description %>
+  <div class="inline-field">
+    <div class="field">
+      <%= form.label :description, "Nome do Perfil", style: "display: block", class: "custom-field" %>
+      <%= form.text_area :description, class: "form-control" %>
+    </div>
+  </div>
+  
+  <div class="nested-fields">
+    <div class="field">
+      <%= form.label :icms, "ICMS", style: "display: block", class: "custom-field" %>
+      <%= form.text_field :icms, class: "form-control" %>
+    </div>
+
+    <div class="field">
+      <%= form.label :ipi, "IPI", style: "display: block", class: "custom-field" %>
+      <%= form.text_field :ipi, class: "form-control" %>
+    </div>
+
+    <div class="field">
+      <%= form.label :pis_cofins, "PIS/COFINS", style: "display: block", class: "custom-field" %>
+      <%= form.text_field :pis_cofins, class: "form-control" %>
+    </div>
+
+    <div class="field">
+      <%= form.label :difal, "DIFAL", style: "display: block", class: "custom-field" %>
+      <%= form.text_field :difal, class: "form-control" %>
+    </div>
   </div>
 
-  <div>
-    <%= form.label :icms, "ICMS", style: "display: block" %>
-    <%= form.text_field :icms %>
+  <div class="nested-fields">      
+    <div class="field">
+      <%= form.label :iss, "ISS", style: "display: block", class: "custom-field" %>
+      <%= form.text_field :iss, class: "form-control" %>
+    </div>
+
+    <div class="field">
+      <%= form.label :cbs, "CBS", style: "display: block", class: "custom-field" %>
+      <%= form.text_field :cbs, class: "form-control" %>
+    </div>
+
+    <div class="field">
+      <%= form.label :ibs, "IBS", style: "display: block", class: "custom-field" %>
+      <%= form.text_field :ibs, class: "form-control" %>
+    </div>
+
+    <div class="field">
+      <%= form.label :note, "Observações", style: "display: block", class: "custom-field" %>
+      <%= form.text_area :note, class: "form-control" %>
+    </div>
+
   </div>
 
-  <div>
-    <%= form.label :ipi, "IPI", style: "display: block" %>
-    <%= form.text_field :ipi %>
-  </div>
-
-  <div>
-    <%= form.label :pis_cofins, "PIS/COFINS", style: "display: block" %>
-    <%= form.text_field :pis_cofins %>
-  </div>
-
-  <div>
-    <%= form.label :difal, "DIFAL", style: "display: block" %>
-    <%= form.text_field :difal %>
-  </div>
-
-  <div>
-    <%= form.label :iss, "ISS", style: "display: block" %>
-    <%= form.text_field :iss %>
-  </div>
-
-  <div>
-    <%= form.label :cbs, "CBS", style: "display: block" %>
-    <%= form.text_field :cbs %>
-  </div>
-
-  <div>
-    <%= form.label :ibs, "IBS", style: "display: block" %>
-    <%= form.text_field :ibs %>
-  </div>
-
-  <div>
-    <%= form.label :note, "Observações", style: "display: block" %>
-    <%= form.textarea :note %>
-  </div>
-
-  <div>
-    <%= form.submit "Salvar", class: "action-button" %>
+  <div class="nested-fields">
+    <div>
+      <%= form.submit "Salvar", class: "action-button" %>
+    </div>
   </div>
 <% end %>
