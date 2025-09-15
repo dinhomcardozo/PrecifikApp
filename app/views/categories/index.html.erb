@@ -1,18 +1,28 @@
 <main class="index-container">
-  <p style="color: green"><%= notice %></p>
+  <% content_for :title, "Categorias" %>
 
-  <% content_for :title, "Categorias | Maxximiza" %>
+  <h1 class="title">Categorias</h1>
 
-  <h1>Categorias</h1>
+  <%= link_to "[+] Nova Categoria", new_category_path, class: "standart-button" %>
 
-  <div id="categories">
-    <% @categories.each do |category| %>
-      <%= render category %>
-      <p>
-        <%= link_to "Ver", category, class: "action-button" %>
-      </p>
-    <% end %>
-  </div>
-
-  <%= link_to "[+] Criar Categoria", new_category_path, class: "action-button" %>
+  <table class="index-table index-table--bordered">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th colspan="3">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @categories.each do |category| %>
+        <tr id="<%= dom_id(category) %>">
+          <td><%= category.name %></td>
+          <td>
+            <%= link_to "Mostrar", category, class: "action-button" %> |
+            <%= link_to "Editar", edit_category_path(category), class: "action-button" %> |
+            <%= link_to "Excluir", category, method: :delete, data: { confirm: "Tem certeza?" }, class: "action-button" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </main>

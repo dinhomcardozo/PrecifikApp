@@ -1,10 +1,25 @@
-<p style="color: green"><%= notice %></p>
+<main class="index-container">
+  <% content_for :title, "Categoria" %>
 
-<%= render @category %>
+  <p style="color: green"><%= notice %></p>
 
-<div>
-  <%= link_to "Edit this category", edit_category_path(@category) %> |
-  <%= link_to "Back to categories", categories_path %>
+  <h1 class="title">Categoria</h1>
 
-  <%= button_to "Destroy this category", @category, method: :delete %>
-</div>
+  <table class="index-table index-table--bordered">
+    <thead>
+      <tr>
+        <th>Nome</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><%= @category.name %></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <br>
+  <%= link_to "Editar", edit_category_path(@category), class: "action-button" %> |
+  <%= link_to "Voltar", categories_path, class: "action-button" %> |
+  <%= button_to "Excluir", @category, method: :delete, data: { confirm: "Tem certeza?" }, class: "action-button" %>
+</main>

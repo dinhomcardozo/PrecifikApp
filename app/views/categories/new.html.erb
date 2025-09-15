@@ -1,11 +1,10 @@
-<% content_for :title, "New category" %>
+<main class="index-container">
+  <% content_for :title, "Nova Categoria" %>
 
-<h1>New category</h1>
+  <h1 class="title">Nova Categoria</h1>
 
-<%= render "form", category: @category %>
+  <%= render "form", category: @category %>
 
-<br>
-
-<div>
-  <%= link_to "Back to categories", categories_path %>
-</div>
+  <br>
+  <%= link_to "Voltar", categories_path, class: "action-button" %>
+</main>

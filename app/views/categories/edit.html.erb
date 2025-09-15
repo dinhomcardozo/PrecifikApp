@@ -1,12 +1,11 @@
-<% content_for :title, "Editing category" %>
+<main class="index-container">
+  <% content_for :title, "Editar Categoria" %>
 
-<h1>Editing category</h1>
+  <h1 class="title">Editar Categoria</h1>
 
-<%= render "form", category: @category %>
+  <%= render "form", category: @category %>
 
-<br>
-
-<div>
-  <%= link_to "Show this category", @category %> |
-  <%= link_to "Back to categories", categories_path %>
-</div>
+  <br>
+  <%= link_to "Mostrar", @category, class: "action-button" %> |
+  <%= link_to "Voltar", categories_path, class: "action-button" %>
+</main>
