@@ -30,26 +30,25 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1"></script>
   </head>
   <body>
-    <% if alert.present? %>
-      <p class="alert"><%= alert %></p>
-    <% end %>
+    <div class="flash-bar" data-controller="notice">
+      <% flash.each do |type, message| %>
+        <% css_class =
+          case type.to_sym
+          when :notice then "notice-bar"
+          when :alert  then "alert-bar"
+          else "info-bar"
+          end %>
+
+        <div class="<%= css_class %>">
+          <%= message %>
+        </div>
+      <% end %>
+    </div>
     <%= render "shared/menu_top_bar" %>
     <%= render "shared/horizontal_menu" %>
     <%= render "layouts/sales_target_alert" %>
       <div class="main-content-application">
         <%= yield %>
       </div>
-
-    <% if notice %>
-      <div class="notice-bar" data-controller="notice">
-        <%= notice %>
-      </div>
-    <% end %>
-
-    <% if alert %>
-      <div class="alert-bar" data-controller="notice">
-        <%= alert %>
-      </div>
-    <% end %>
   </body>
 </html>

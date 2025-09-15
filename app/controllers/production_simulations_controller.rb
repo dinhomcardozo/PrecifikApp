@@ -51,64 +51,123 @@ class ProductionSimulationsController < ApplicationController
   end
 
   def calculate
-    product = Product.includes(:inputs, :subproducts).find(params[:product_id])
+    I18n.locale = :'pt-BR'
+    product = Product.includes(product_subproducts: { subproduct: { subproduct_compositions: :input } })
+                     .find_by(id: params[:product_id])
     quantity = params[:quantity].to_f
 
-    # Insumos
-    inputs = product.inputs.map do |input|
-      total_quantity = input.quantity_per_unit * quantity
-      total_cost = total_quantity * input.unit_cost
-      required_units = (total_quantity / input.unit_size).ceil
-
-      {
-        name: input.name,
-        total_quantity: total_quantity.round(2),
-        total_cost: view_context.number_to_currency(total_cost),
-        required_units: required_units
-      }
+    if product.nil? || quantity <= 0
+      render json: { inputs: [], subproducts: [], product: {} }
+      return
     end
 
-    # Subprodutos
-    subproducts = product.subproducts.map do |sp|
-      total_quantity = sp.quantity_per_unit * quantity
-      total_cost = total_quantity * sp.unit_cost
+    subproducts_data = []
+    inputs_data = []
 
-      {
-        name: sp.name,
-        total_quantity: total_quantity.round(2),
-        total_cost: view_context.number_to_currency(total_cost)
-      }
+    # Peso total do produto final (somando todos os subprodutos)
+    peso_total_produto_final = product.product_subproducts.sum do |psp|
+      sub = psp.subproduct
+      sub ? (psp.quantity.to_f * sub.weight_in_grams.to_f) : 0
     end
 
-    # Produto final
-    total_cost_sum = inputs.sum { |i| i[:total_cost].gsub(/[^\d,\.]/, '').to_f } +
-                    subproducts.sum { |s| s[:total_cost].gsub(/[^\d,\.]/, '').to_f }
+    product.product_subproducts.each do |psp|
+      subproduct = psp.subproduct
+      next unless subproduct
+
+      peso_total_subproduto_no_produto = psp.quantity.to_f * subproduct.weight_in_grams.to_f
+
+      proportion = if peso_total_produto_final > 0
+                    peso_total_subproduto_no_produto / peso_total_produto_final
+                  else
+                    0
+                  end
+
+      total_quantity_subproduct = quantity * proportion
+
+      total_cost_subproduct = (psp.cost_per_gram_with_loss || 0) * total_quantity_subproduct
+
+      subproducts_data << {
+        id: subproduct.id,
+        name: subproduct.name.to_s,
+        total_quantity: total_quantity_subproduct.round(2),
+        total_cost: view_context.number_to_currency(total_cost_subproduct),
+        total_cost_raw: total_cost_subproduct.round(2)
+      }
+
+      # Inputs (via subproduct_compositions)
+      subproduct.subproduct_compositions.each do |spc|
+        input = spc.input
+        next unless input
+
+        proportion_input = subproduct.weight_in_grams.to_f > 0 ? spc.quantity_cost.to_f / subproduct.weight_in_grams.to_f : 0
+        total_quantity_input = total_quantity_subproduct * proportion_input
+        total_cost_input = (input.cost_per_gram || 0) * total_quantity_input
+        required_units = input.weight.to_f > 0 ? (total_quantity_input / input.weight).ceil : 0
+
+        inputs_data << {
+          id: input.id,
+          name: input.name.to_s,
+          total_quantity: total_quantity_input.round(2),
+          total_cost: view_context.number_to_currency(total_cost_input),
+          total_cost_raw: total_cost_input.round(2),
+          required_units: required_units
+        }
+      end
+    end
+
+    # --- PRODUCT ---
+    total_quantity_product = subproducts_data.sum { |sp| sp[:total_quantity] }
+    total_cost_product = subproducts_data.sum { |sp| sp[:total_cost_raw] }
+
+    product_units = if product.final_weight.to_f > 0
+                      total_quantity_product / product.final_weight.to_f
+                    else
+                      0
+                    end
 
     product_data = {
-      total_quantity: quantity,
-      total_cost: view_context.number_to_currency(total_cost_sum),
-      minimum_selling_price: view_context.number_to_currency(total_cost_sum * 1.2), # exemplo
-      total_selling_price: view_context.number_to_currency(total_cost_sum * 1.5),   # exemplo
-      total_retail_profit: view_context.number_to_currency(total_cost_sum * 0.3),   # exemplo
-      total_wholesale_profit: view_context.number_to_currency(total_cost_sum * 0.2) # exemplo
+      total_quantity: total_quantity_product.round(2),
+      total_cost: view_context.number_to_currency(total_cost_product),
+      total_cost_raw: total_cost_product.round(2),
+      product_units: product_units.round(2),
+      minimum_selling_price: view_context.number_to_currency(product.suggested_price_wholesale || 0),
+      minimum_selling_price_raw: (product.suggested_price_wholesale || 0).round(2),
+      total_selling_price: view_context.number_to_currency(
+        product_units * (product.suggested_price_wholesale || 0)
+      ),
+      total_selling_price_raw: (
+        product_units * (product.suggested_price_wholesale || 0)
+      ).round(2),
+      total_retail_profit: view_context.number_to_currency(
+        (product.suggested_price_wholesale || 0) - (product.total_cost_with_fixed_costs || 0)
+      ),
+      total_retail_profit_raw: (
+        (product.suggested_price_wholesale || 0) - (product.total_cost_with_fixed_costs || 0)
+      ).round(2),
+      total_wholesale_profit: view_context.number_to_currency(
+        (product.suggested_price_retail || 0) - (product.total_cost_with_fixed_costs || 0)
+      ),
+      total_wholesale_profit_raw: (
+        (product.suggested_price_retail || 0) - (product.total_cost_with_fixed_costs || 0)
+      ).round(2)
     }
 
-    render json: { inputs: inputs, subproducts: subproducts, product: product_data }
+    render json: { inputs: inputs_data, subproducts: subproducts_data, product: product_data }
   end
 
-  private
+    private
 
-  def set_production_simulation
-    @production_simulation = ProductionSimulation.find(params[:id])
-  end
+    def set_production_simulation
+      @production_simulation = ProductionSimulation.find(params[:id])
+    end
 
-  def production_simulation_params
-    params.require(:production_simulation).permit(
-      :product_id,
-      :quantity_in_grams,
-      simulation_inputs_attributes: %i[id input_id total_quantity total_cost required_units _destroy],
-      simulation_subproducts_attributes: %i[id subproduct_id total_quantity total_cost _destroy],
-      simulation_products_attributes: %i[id product_id total_quantity total_cost minimum_selling_price total_selling_price total_retail_profit total_wholesale_profit _destroy]
-    )
+    def production_simulation_params
+      params.require(:production_simulation).permit(
+        :product_id,
+        :quantity_in_grams,
+        simulation_inputs_attributes: %i[id input_id total_quantity total_cost required_units _destroy],
+        simulation_subproducts_attributes: %i[id subproduct_id total_quantity total_cost _destroy],
+        simulation_products_attributes: %i[id product_id total_quantity total_cost minimum_selling_price total_selling_price total_retail_profit total_wholesale_profit _destroy]
+      )
+    end
   end
-end

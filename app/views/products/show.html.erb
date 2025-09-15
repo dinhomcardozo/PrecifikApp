@@ -99,6 +99,7 @@
           <tr>
             <th>Insumo</th>
             <th>Quantidade (g)</th>
+            <th>Quantidade c/ Perda (g)</th>
             <th>Custo Unitário (R$)</th>
           </tr>
         </thead>
@@ -107,6 +108,7 @@
             <tr>
               <td><%= ps.subproduct.name %></td>
               <td><%= ps.quantity %></td>
+              <td><%= ps.quantity_with_loss %></td>
               <td><%= number_to_currency(ps.cost, unit: "R$ ") %></td>
             </tr>
           <% end %>

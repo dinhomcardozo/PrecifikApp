@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_14_215607) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_15_190650) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -219,6 +219,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_14_215607) do
     t.decimal "dietary_fiber", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "sugars", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "sodium", precision: 10, scale: 2, default: "0.0", null: false
+    t.float "quantity_with_loss"
     t.index ["product_id"], name: "index_product_subproducts_on_product_id"
     t.index ["subproduct_id"], name: "index_product_subproducts_on_subproduct_id"
   end

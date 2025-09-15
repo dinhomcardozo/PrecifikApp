@@ -7,6 +7,7 @@ class ProductSubproduct < ApplicationRecord
   before_validation :calculate_costs,
                     if: -> { subproduct.present? && quantity.present? }
   before_save :compute_nutrients
+  before_save :set_quantity_with_loss
 
   # Validar que a quantidade (em g) seja maior que zero (opcional)
   validates :quantity,
@@ -81,5 +82,11 @@ class ProductSubproduct < ApplicationRecord
       suggested_price_wholesale:   product.suggested_price_wholesale,
       updated_at:                  Time.current
     )
+  end
+
+  def set_quantity_with_loss
+    return unless product.present?
+    loss_pct = product.weight_loss.to_f.clamp(0, 100) / 100.0
+    self.quantity_with_loss = (quantity.to_f * (1 - loss_pct)).round(2)
   end
 end

@@ -6,21 +6,30 @@
           {
             class: "form-select",
             data: {
-              controller: "select2 simulation", # 👈 os dois controllers no mesmo elemento
-              simulationTarget: "productSelect",
+              "simulation-target": "productSelect",
               action: "change->simulation#updateTables"
             }
           } %>
   </div>
 
-  <div class="field">
-    <%= f.label :quantity_in_grams, "Quantidade (g)", class: "custom-label" %>
-    <%= f.number_field :quantity_in_grams, step: 0.01,
-          class: "form-control",
-          data: {
-            simulationTarget: "quantityField",
-            action: "input->simulation#updateTables"
-          } %>
+  <div class="field d-flex gap-3 align-items-end">
+    <div>
+      <%= f.label :quantity_in_grams, "Quantidade (g)", class: "custom-label" %>
+      <%= f.number_field :quantity_in_grams, step: 0.01,
+            class: "form-control",
+            data: {
+              "simulation-target": "quantityField",
+              action: "input->simulation#updateTables input->simulation#updateKgField"
+            } %>
+    </div>
+
+    <div>
+      <%= f.label :quantity_in_kg, "Quantidade (kg)", class: "custom-label" %>
+      <%= f.number_field :quantity_in_kg, step: 0.001,
+            class: "form-control",
+            readonly: true,
+            data: { "simulation-target": "quantityKgField" } %>
+    </div>
   </div>
 
   <h4>Insumos Necessários</h4>
@@ -57,9 +66,10 @@
     <thead>
       <tr>
         <th>Total (g)</th>
+        <th>Unidades Produzidas</th>
         <th>Custo Total</th>
         <th>Preço Mínimo</th>
-        <th>Preço Total</th>
+        <th>Faturamento Previsto Total</th>
         <th>Lucro Varejo</th>
         <th>Lucro Atacado</th>
       </tr>

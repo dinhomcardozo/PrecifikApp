@@ -30,6 +30,8 @@ class Product < ApplicationRecord
 
   before_validation :compute_all_pricing_and_weights, if: :needs_recalculation?
 
+  after_save :update_subproducts_quantity_with_loss, if: -> { saved_change_to_weight_loss? || saved_change_to_total_weight? }
+
   # torna weight “somente em memória” - peso que o usuário digita
   attr_accessor :weight
 
@@ -171,6 +173,13 @@ class Product < ApplicationRecord
   def product_subproducts_changed?
     product_subproducts.any?(&:saved_change_to_cost?) ||
     product_subproducts.any?(&:saved_change_to_quantity?)
+  end
+
+  def update_subproducts_quantity_with_loss
+    product_subproducts.find_each do |ps|
+      ps.send(:set_quantity_with_loss)
+      ps.save!(validate: false)
+    end
   end
 
   def nutritional_summary
