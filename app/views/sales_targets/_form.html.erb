@@ -13,10 +13,10 @@
   <div class="field">
     <%= f.label :product_id, "Produto", class: "custom-label" %>
     <%= f.collection_select :product_id,
-          Product.left_outer_joins(:sales_target).where(sales_targets: { id: nil }),
+          Product.left_outer_joins(:sales_target).where(sales_targets: { id: nil }).or(Product.where(id: sales_target.product_id)),
           :id,
           :description,
-          { prompt: "Selecione produto" },
+          { prompt: "Selecione produto", selected: params[:product_id] || sales_target.product_id },
           { class: "form-control" } %>
   </div>
 

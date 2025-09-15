@@ -44,4 +44,29 @@
       <% end %>
     </tbody>
   </table>
+
+  <h2>Produtos sem Meta de Venda</h2>
+
+  <table class="index-table index-table--bordered">
+    <thead>
+      <tr>
+        <th>Produto</th>
+        <th>Categoria</th>
+        <th>Ação</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @products_without_sales_target.each do |product| %>
+        <tr>
+          <td><%= product.description %></td>
+          <td><%= product.category&.name || "-" %></td>
+          <td>
+            <%= link_to "Criar",
+                        new_sales_target_path(product_id: product.id),
+                        class: "action-button" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </main>

@@ -20,6 +20,11 @@ class SalesTargetsController < Clients::AuthenticatedController
 
     # Custo fixo total
     @total_fixed_cost = FixedCost.sum(:monthly_cost)
+
+    @products_without_sales_target =
+    Product.left_outer_joins(:sales_target)
+           .where(sales_targets: { id: nil })
+           .includes(:category)
   end
 
   # GET /sales_targets/1 or /sales_targets/1.json
