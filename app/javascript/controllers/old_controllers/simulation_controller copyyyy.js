@@ -1,12 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = [
-    "productSelect",
-    "productUnitsField",
-    "quantityField",
-    "quantityKgField"
-  ]
+  static targets = ["productSelect", "quantityField", "quantityKgField"]
 
   connect() {
     this.updateTables = this.debounce(this.updateTables.bind(this), 500)
@@ -20,34 +15,28 @@ export default class extends Controller {
     }
   }
 
-  updateFromUnits() {
-    const units = parseFloat(this.productUnitsFieldTarget.value) || 0
-    const selectedOption = this.productSelectTarget.selectedOptions[0]
-    const finalWeight = parseFloat(selectedOption?.dataset.finalWeight) || 0
-
-    const totalGrams = units * finalWeight
-    const totalKg = totalGrams / 1000
-
-    this.quantityFieldTarget.value = totalGrams.toFixed(2)
-    this.quantityKgFieldTarget.value = totalKg.toFixed(3)
-
-    this.updateTables()
+  updateKgField() {
+    const grams = parseFloat(this.quantityFieldTarget.value) || 0
+    this.quantityKgFieldTarget.value = (grams / 1000).toFixed(3)
   }
 
   updateTables() {
     const productId = this.productSelectTarget.value
-    const units = parseFloat(this.productUnitsFieldTarget.value) || 0
+    const quantity = parseFloat(this.quantityFieldTarget.value)
 
-    if (!productId || units <= 0) {
+    if (!productId || isNaN(quantity) || quantity <= 0) {
       this.clearTables()
       return
     }
 
-    fetch(`/clients/production_simulations/calculate?product_id=${productId}&product_units=${units}`, {
+    fetch(`/clients/production_simulations/calculate?product_id=${productId}&quantity=${quantity}`, {
       headers: { "Accept": "application/json" }
     })
       .then(res => {
-        if (!res.ok) throw new Error(`Erro HTTP ${res.status}`)
+        if (!res.ok) {
+          // Lida com erro HTTP antes de tentar parsear
+          throw new Error(`Erro HTTP ${res.status}`)
+        }
         return res.json()
       })
       .then(data => {
@@ -96,24 +85,38 @@ export default class extends Controller {
   fillProductTable(product) {
     const tbody = document.querySelector("#product-table tbody")
 
+    const totalQuantity        = product.total_quantity
+    const productUnits         = product.product_units // novo campo vindo do back-end
+    const totalCost            = product.total_cost
+    const minPrice             = product.minimum_selling_price
+    const totalSellingPrice    = product.total_selling_price
+    const retailProfit         = product.total_retail_profit
+    const wholesaleProfit      = product.total_wholesale_profit
+
+    const totalCostRaw         = product.total_cost_raw
+    const minPriceRaw          = product.minimum_selling_price_raw
+    const totalSellingPriceRaw = product.total_selling_price_raw
+    const retailProfitRaw      = product.total_retail_profit_raw
+    const wholesaleProfitRaw   = product.total_wholesale_profit_raw
+
     tbody.innerHTML = `
       <tr>
-        <td>${product.total_quantity}</td>
-        <td>${product.product_units}</td>
-        <td>${product.total_cost}</td>
-        <td>${product.minimum_selling_price}</td>
-        <td>${product.total_selling_price}</td>
-        <td>${product.total_retail_profit}</td>
-        <td>${product.total_wholesale_profit}</td>
+        <td>${totalQuantity}</td>
+        <td>${productUnits}</td> <!-- nova coluna -->
+        <td>${totalCost}</td>
+        <td>${minPrice}</td>
+        <td>${totalSellingPrice}</td>
+        <td>${retailProfit}</td>
+        <td>${wholesaleProfit}</td>
         <td style="display:none;">
           <input type="hidden" name="production_simulation[simulation_products_attributes][0][product_id]" value="${this.productSelectTarget.value}">
-          <input type="hidden" name="production_simulation[simulation_products_attributes][0][total_quantity]" value="${product.total_quantity}">
-          <input type="hidden" name="production_simulation[simulation_products_attributes][0][product_units]" value="${product.product_units}">
-          <input type="hidden" name="production_simulation[simulation_products_attributes][0][total_cost]" value="${product.total_cost_raw}">
-          <input type="hidden" name="production_simulation[simulation_products_attributes][0][minimum_selling_price]" value="${product.minimum_selling_price_raw}">
-          <input type="hidden" name="production_simulation[simulation_products_attributes][0][total_selling_price]" value="${product.total_selling_price_raw}">
-          <input type="hidden" name="production_simulation[simulation_products_attributes][0][total_retail_profit]" value="${product.total_retail_profit_raw}">
-          <input type="hidden" name="production_simulation[simulation_products_attributes][0][total_wholesale_profit]" value="${product.total_wholesale_profit_raw}">
+          <input type="hidden" name="production_simulation[simulation_products_attributes][0][total_quantity]" value="${totalQuantity}">
+          <input type="hidden" name="production_simulation[simulation_products_attributes][0][product_units]" value="${productUnits}">
+          <input type="hidden" name="production_simulation[simulation_products_attributes][0][total_cost]" value="${totalCostRaw}">
+          <input type="hidden" name="production_simulation[simulation_products_attributes][0][minimum_selling_price]" value="${minPriceRaw}">
+          <input type="hidden" name="production_simulation[simulation_products_attributes][0][total_selling_price]" value="${totalSellingPriceRaw}">
+          <input type="hidden" name="production_simulation[simulation_products_attributes][0][total_retail_profit]" value="${retailProfitRaw}">
+          <input type="hidden" name="production_simulation[simulation_products_attributes][0][total_wholesale_profit]" value="${wholesaleProfitRaw}">
         </td>
       </tr>
     `

@@ -1,7 +1,8 @@
 import { Application } from "@hotwired/stimulus"
+
 import ProductCompositionController from "./product_composition_controller"
-import AggregatedCostsController      from "./aggregated_costs_controller"
-import PricingController              from "./pricing_controller"
+import AggregatedCostsController from "./aggregated_costs_controller"
+import PricingController from "./pricing_controller"
 import NestedFormController from "./nested_form_controller"
 import TabsController from "./tabs_controller"
 import CompositionRowController from "./composition_row_controller"
@@ -18,10 +19,11 @@ import NoticeController from "./notice_controller"
 import SimulationController from "./simulation_controller"
 
 const application = Application.start()
+
 application.register("product-composition", ProductCompositionController)
-application.register("aggregated-costs",        AggregatedCostsController)
-application.register("pricing",                 PricingController)
-application.register("nested-form",  NestedFormController)
+application.register("aggregated-costs", AggregatedCostsController)
+application.register("pricing", PricingController)
+application.register("nested-form", NestedFormController)
 application.register("tabs", TabsController)
 application.register("composition-row", CompositionRowController)
 application.register("depreciation", DepreciationController)
@@ -35,3 +37,5 @@ application.register("calendar", CalendarController)
 application.register("sales-target-alert", SalesTargetAlertController)
 application.register("notice", NoticeController)
 application.register("simulation", SimulationController)
+
+window.Stimulus = application

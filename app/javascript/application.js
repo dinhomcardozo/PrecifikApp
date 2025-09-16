@@ -14,7 +14,7 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import * as bootstrap from "bootstrap"
 window.bootstrap = bootstrap
 
-import "./controllers"
+import "./controllers" // aqui o Stimulus é inicializado e registrado
 
 ActiveStorage.start()
 
@@ -28,14 +28,5 @@ document.addEventListener("turbo:load", () => {
 
 document.addEventListener("turbo:load", () => {
   const el = document.querySelector("#dashboardCarousel")
-  if (el) {
-    new bootstrap.Carousel(el)
-  }
-})
-
-document.addEventListener("turbo:load", () => {
-  const el = document.querySelector("#dashboardCarousel")
-  if (el) {
-    new bootstrap.Carousel(el)
-  }
+  if (el) new bootstrap.Carousel(el)
 })

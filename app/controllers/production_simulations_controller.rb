@@ -44,7 +44,7 @@ class ProductionSimulationsController < ApplicationController
       format.html
       format.pdf do
         render pdf: "production_sheet_#{@production_simulation.id}",
-              template: "production_simulations/production_sheet",
+              template: "production_simulations/production_sheet.html.erb",
               layout: "pdf"
       end
     end
@@ -53,10 +53,12 @@ class ProductionSimulationsController < ApplicationController
   def calculate
     I18n.locale = :'pt-BR'
     product = Product.includes(product_subproducts: { subproduct: { subproduct_compositions: :input } })
-                     .find_by(id: params[:product_id])
-    quantity = params[:quantity].to_f
+                    .find_by(id: params[:product_id])
 
-    if product.nil? || quantity <= 0
+    product_units = params[:product_units].to_f
+    quantity_in_grams = product_units * product.final_weight.to_f
+
+    if product.nil? || product_units <= 0
       render json: { inputs: [], subproducts: [], product: {} }
       return
     end
@@ -75,15 +77,9 @@ class ProductionSimulationsController < ApplicationController
       next unless subproduct
 
       peso_total_subproduto_no_produto = psp.quantity.to_f * subproduct.weight_in_grams.to_f
+      proportion = peso_total_produto_final > 0 ? peso_total_subproduto_no_produto / peso_total_produto_final : 0
 
-      proportion = if peso_total_produto_final > 0
-                    peso_total_subproduto_no_produto / peso_total_produto_final
-                  else
-                    0
-                  end
-
-      total_quantity_subproduct = quantity * proportion
-
+      total_quantity_subproduct = quantity_in_grams * proportion
       total_cost_subproduct = (psp.cost_per_gram_with_loss || 0) * total_quantity_subproduct
 
       subproducts_data << {
@@ -102,7 +98,7 @@ class ProductionSimulationsController < ApplicationController
         proportion_input = subproduct.weight_in_grams.to_f > 0 ? spc.quantity_cost.to_f / subproduct.weight_in_grams.to_f : 0
         total_quantity_input = total_quantity_subproduct * proportion_input
         total_cost_input = (input.cost_per_gram || 0) * total_quantity_input
-        required_units = input.weight.to_f > 0 ? (total_quantity_input / input.weight).ceil : 0
+        required_units = input.weight.to_f > 0 ? (total_quantity_input / input.weight) : 0
 
         inputs_data << {
           id: input.id,
@@ -110,7 +106,7 @@ class ProductionSimulationsController < ApplicationController
           total_quantity: total_quantity_input.round(2),
           total_cost: view_context.number_to_currency(total_cost_input),
           total_cost_raw: total_cost_input.round(2),
-          required_units: required_units
+          required_units: required_units.round(3)
         }
       end
     end
@@ -119,12 +115,9 @@ class ProductionSimulationsController < ApplicationController
     total_quantity_product = subproducts_data.sum { |sp| sp[:total_quantity] }
     total_cost_product = subproducts_data.sum { |sp| sp[:total_cost_raw] }
 
-    product_units = if product.final_weight.to_f > 0
-                      total_quantity_product / product.final_weight.to_f
-                    else
-                      0
-                    end
-
+    retail_profit_value = (product.suggested_price_retail || 0) - (product.total_cost_with_fixed_costs || 0)
+    wholesale_profit_value = (product.suggested_price_wholesale || 0) - (product.total_cost_with_fixed_costs || 0)
+    
     product_data = {
       total_quantity: total_quantity_product.round(2),
       total_cost: view_context.number_to_currency(total_cost_product),
@@ -132,24 +125,12 @@ class ProductionSimulationsController < ApplicationController
       product_units: product_units.round(2),
       minimum_selling_price: view_context.number_to_currency(product.suggested_price_wholesale || 0),
       minimum_selling_price_raw: (product.suggested_price_wholesale || 0).round(2),
-      total_selling_price: view_context.number_to_currency(
-        product_units * (product.suggested_price_wholesale || 0)
-      ),
-      total_selling_price_raw: (
-        product_units * (product.suggested_price_wholesale || 0)
-      ).round(2),
-      total_retail_profit: view_context.number_to_currency(
-        (product.suggested_price_wholesale || 0) - (product.total_cost_with_fixed_costs || 0)
-      ),
-      total_retail_profit_raw: (
-        (product.suggested_price_wholesale || 0) - (product.total_cost_with_fixed_costs || 0)
-      ).round(2),
-      total_wholesale_profit: view_context.number_to_currency(
-        (product.suggested_price_retail || 0) - (product.total_cost_with_fixed_costs || 0)
-      ),
-      total_wholesale_profit_raw: (
-        (product.suggested_price_retail || 0) - (product.total_cost_with_fixed_costs || 0)
-      ).round(2)
+      total_selling_price: view_context.number_to_currency(product_units * (product.suggested_price_wholesale || 0)),
+      total_selling_price_raw: (product_units * (product.suggested_price_wholesale || 0)).round(2),
+      total_retail_profit: view_context.number_to_currency(retail_profit_value),
+      total_retail_profit_raw: retail_profit_value.round(2),
+      total_wholesale_profit: view_context.number_to_currency(wholesale_profit_value),
+      total_wholesale_profit_raw: wholesale_profit_value.round(2)
     }
 
     render json: { inputs: inputs_data, subproducts: subproducts_data, product: product_data }

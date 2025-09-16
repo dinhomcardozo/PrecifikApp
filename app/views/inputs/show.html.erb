@@ -52,13 +52,13 @@
       <tr>
         <th scope="row">Criado em</th>
         <td colspan="7">
-          <%= l(@input.created_at, format: :short) %>
+          <%= l(@input.created_at, format: "%d/%m/%Y %H:%M")  %>
         </td>
       </tr>
       <tr>
         <th scope="row">Última atualização</th>
         <td colspan="7">
-          <%= l(@input.updated_at,  format: :short) %>
+          <%= l(@input.updated_at, format: "%d/%m/%Y %H:%M") %>
         </td>
       </tr>
     </tbody>

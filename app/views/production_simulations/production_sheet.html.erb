@@ -1,10 +1,25 @@
-<h1>Ficha de Produção</h1>
-<p><strong>Produto:</strong> <%= @production_simulation.product.description %></p>
-<p><strong>Quantidade:</strong> <%= @production_simulation.quantity_in_grams %> g</p>
+<h2>Simulação de Produção</h2>
 
-<!-- Aqui você coloca as tabelas de insumos, subprodutos e totais -->
+<table>
+  <tr>
+    <th>Produto</th>
+    <td><%= @production_simulation.product.description %></td>
+  </tr>
+  <tr>
+    <th>Unidades</th>
+    <td><%= @production_simulation.product_units %></td>
+  </tr>
+  <tr>
+    <th>Quantidade (g)</th>
+    <td><%= number_with_precision(@production_simulation.quantity_in_grams, precision: 2) %></td>
+  </tr>
+  <tr>
+    <th>Quantidade (kg)</th>
+    <td><%= number_with_precision(@production_simulation.quantity_in_grams / 1000, precision: 3) %></td>
+  </tr>
+</table>
 
-<h3>Insumos Necessários</h3>
+<h4>Insumos Necessários</h4>
 <table>
   <thead>
     <tr>
@@ -15,12 +30,60 @@
     </tr>
   </thead>
   <tbody>
-    <% @production_simulation.simulation_inputs.each do |si| %>
+    <% @production_simulation.simulation_inputs.each do |input| %>
       <tr>
-        <td><%= si.input.name %></td>
-        <td><%= si.total_quantity %></td>
-        <td><%= number_to_currency(si.total_cost) %></td>
-        <td><%= si.required_units %></td>
+        <td><%= input.input.name %></td>
+        <td><%= number_with_precision(input.total_quantity, precision: 2) %></td>
+        <td><%= number_to_currency(input.total_cost) %></td>
+        <td><%= number_with_precision(input.required_units, precision: 2) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h4>Subprodutos</h4>
+<table>
+  <thead>
+    <tr>
+      <th>Subproduto</th>
+      <th>Total (g)</th>
+      <th>Custo Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @production_simulation.simulation_subproducts.each do |sp| %>
+      <tr>
+        <td><%= sp.subproduct.name %></td>
+        <td><%= number_with_precision(sp.total_quantity, precision: 2) %></td>
+        <td><%= number_to_currency(sp.total_cost) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h4>Produto Final</h4>
+<table>
+  <thead>
+    <tr>
+      <th>Total (g)</th>
+      <th>Unidades Produzidas</th>
+      <th>Custo Total</th>
+      <th>Preço Mínimo</th>
+      <th>Faturamento Previsto Total</th>
+      <th>Lucro Varejo (R$)</th>
+      <th>Lucro Atacado (R$)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @production_simulation.simulation_products.each do |prod| %>
+      <tr>
+        <td><%= number_with_precision(prod.total_quantity, precision: 2) %></td>
+        <td><%= prod.product_units %></td>
+        <td><%= number_to_currency(prod.total_cost) %></td>
+        <td><%= number_to_currency(prod.minimum_selling_price) %></td>
+        <td><%= number_to_currency(prod.total_selling_price) %></td>
+        <td><%= number_to_currency(prod.total_retail_profit) %></td>
+        <td><%= number_to_currency(prod.total_wholesale_profit) %></td>
       </tr>
     <% end %>
   </tbody>
