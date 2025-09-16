@@ -6,6 +6,7 @@
       <tr>
         <th>Produto</th>
         <th>Quantidade (g)</th>
+        <th>Unidades Produzidas</th>
         <th>Custo Total</th>
         <th>Preço Mínimo</th>
         <th>Lucro Varejo</th>
@@ -18,14 +19,21 @@
         <tr>
           <td><%= sim.product.description %></td>
           <td><%= number_with_precision(sim.quantity_in_grams, precision: 2) %></td>
+          <td><%= number_with_precision(sim.product_units, precision: 2) %></td>
           <td><%= number_to_currency(sim.total_cost) %></td>
           <td><%= number_to_currency(sim.minimum_selling_price) %></td>
-          <td><%= number_to_currency(sim.total_retail_profit) %></td>
-          <td><%= number_to_currency(sim.total_wholesale_profit) %></td>
+          <td><%= number_to_currency((sim.product.net_profit_retail || 0) * (sim.product_units || 0)) %></td>
+          <td><%= number_to_currency((sim.product.net_profit_wholesale || 0) * (sim.product_units || 0)) %></td>
+
           <td>
             <%= link_to "Ver", sim, class: "action-button" %> |
             <%= link_to "Editar", edit_production_simulation_path(sim), class: "action-button" %> |
-            <%= link_to "Excluir", sim, method: :delete, data: { confirm: "Tem certeza?" }, class: "action-button" %>
+              <% if Current.user_client&.admin? %>
+                <%= link_to "Excluir",
+                            production_simulation_path(sim),
+                            data: { turbo_method: :delete, turbo_confirm: "Tem certeza que deseja excluir esta simulação?" },
+                            class: "action-button" %>
+              <% end %>
           </td>
         </tr>
       <% end %>

@@ -1,4 +1,5 @@
 class ProductionSimulationsController < ApplicationController
+  before_action :authorize_admin!, only: [:destroy]
   before_action :set_production_simulation, only: %i[show edit update destroy]
 
   def index
@@ -111,12 +112,12 @@ class ProductionSimulationsController < ApplicationController
       end
     end
 
-    # --- PRODUCT ---
     total_quantity_product = subproducts_data.sum { |sp| sp[:total_quantity] }
-    total_cost_product = subproducts_data.sum { |sp| sp[:total_cost_raw] }
+    total_cost_product     = subproducts_data.sum { |sp| sp[:total_cost_raw] }
 
-    retail_profit_value = (product.suggested_price_retail || 0) - (product.total_cost_with_fixed_costs || 0)
-    wholesale_profit_value = (product.suggested_price_wholesale || 0) - (product.total_cost_with_fixed_costs || 0)
+    # Lucro absoluto em R$ usando os valores prontos do produto
+    retail_profit_value    = (product.net_profit_retail || 0) * product_units
+    wholesale_profit_value = (product.net_profit_wholesale || 0) * product_units
     
     product_data = {
       total_quantity: total_quantity_product.round(2),
@@ -129,6 +130,7 @@ class ProductionSimulationsController < ApplicationController
       total_selling_price_raw: (product_units * (product.suggested_price_wholesale || 0)).round(2),
       total_retail_profit: view_context.number_to_currency(retail_profit_value),
       total_retail_profit_raw: retail_profit_value.round(2),
+
       total_wholesale_profit: view_context.number_to_currency(wholesale_profit_value),
       total_wholesale_profit_raw: wholesale_profit_value.round(2)
     }
@@ -150,5 +152,14 @@ class ProductionSimulationsController < ApplicationController
         simulation_subproducts_attributes: %i[id subproduct_id total_quantity total_cost _destroy],
         simulation_products_attributes: %i[id product_id total_quantity total_cost minimum_selling_price total_selling_price total_retail_profit total_wholesale_profit _destroy]
       )
+    end
+
+    private
+
+    def authorize_admin!
+      unless Current.user_client&.admin?
+        redirect_to clients_production_simulations_path,
+                    alert: "Você não tem permissão para excluir simulações."
+      end
     end
   end

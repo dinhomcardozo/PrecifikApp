@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_15_190650) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_16_022115) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -150,6 +150,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_15_190650) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "client_id", null: false
   end
 
   create_table "inputs", force: :cascade do |t|
@@ -238,6 +239,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_15_190650) do
     t.decimal "total_wholesale_profit", precision: 12, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "product_units"
     t.index ["client_id"], name: "index_production_simulations_on_client_id"
     t.index ["created_by_id"], name: "index_production_simulations_on_created_by_id"
     t.index ["product_id"], name: "index_production_simulations_on_product_id"
@@ -607,6 +609,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_15_190650) do
   add_foreign_key "fixed_costs", "clients", name: "fk_fixed_costs_client"
   add_foreign_key "input_cost_histories", "clients", name: "fk_input_cost_histories_client"
   add_foreign_key "input_cost_histories", "inputs"
+  add_foreign_key "input_types", "clients", name: "fk_input_types_clients"
   add_foreign_key "inputs", "brands"
   add_foreign_key "inputs", "clients", name: "fk_inputs_client"
   add_foreign_key "inputs", "input_types"
