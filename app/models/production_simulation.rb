@@ -14,10 +14,13 @@ class ProductionSimulation < ApplicationRecord
 
   before_save :calculate_totals
 
-  private
-
   def calculate_totals
     self.total_cost = simulation_inputs.sum(:total_cost) + simulation_subproducts.sum(:total_cost)
-    # Aqui você pode calcular minimum_selling_price, total_selling_price, etc.
+    self.minimum_selling_price = product.suggested_price_wholesale if product&.suggested_price_wholesale.present?
+    self.total_retail_profit = (product.net_profit_retail || 0) * (product_units || 0)
+    self.total_wholesale_profit = (product.net_profit_wholesale || 0) * (product_units || 0)
   end
+
+  private
+
 end

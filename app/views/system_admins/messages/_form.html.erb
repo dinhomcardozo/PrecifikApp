@@ -1,0 +1,44 @@
+<!-- app/views/system_admins/messages/_form.html.erb -->
+<%= form_with(model: @message, url: system_admins_messages_path) do |f| %>
+  <div>
+    <%= f.label :title, "Título" %>
+    <%= f.text_field :title, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :body, "Mensagem" %>
+    <%= f.text_area :body, class: "form-control", id: "editor" %>
+  </div>
+
+  <div>
+    <%= f.label :client_ids_text, "IDs de Clientes (separados por vírgula)" %>
+    <%= f.text_area :client_ids_text, class: "form-control" %>
+  </div>
+
+  <div>
+    <%= f.label :plans, "Planos" %>
+    <%= f.select :plans, ["Básico", "Pro", "Premium"], {}, multiple: true, class: "form-select" %>
+  </div>
+
+  <div>
+    <%= f.label :start_date, "Data Inicial" %>
+    <%= f.date_field :start_date, class: "form-control" %>
+  </div>
+
+  <div>
+    <%= f.label :end_date, "Data Final" %>
+    <%= f.date_field :end_date, class: "form-control" %>
+  </div>
+
+  <div>
+    <%= f.label :start_hour, "Hora Inicial" %>
+    <%= f.time_field :start_hour, class: "form-control" %>
+  </div>
+
+  <div>
+    <%= f.label :end_hour, "Hora Final" %>
+    <%= f.time_field :end_hour, class: "form-control" %>
+  </div>
+
+  <%= f.submit "Salvar", class: "action-button" %>
+<% end %>

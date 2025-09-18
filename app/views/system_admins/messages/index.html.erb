@@ -1,0 +1,44 @@
+<main class="index-container">
+  <h1>Mensagens Publicadas</h1>
+
+  <%= link_to "Nova Mensagem", new_system_admins_message_path, class: "action-button" %>
+
+  <% if @messages.any? %>
+    <table class="index-table index-table--bordered">
+      <thead>
+        <tr>
+          <th>Título</th>
+          <th>Clientes</th>
+          <th>Planos</th>
+          <th>Período</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @messages.each do |msg| %>
+          <tr>
+            <td><%= msg.title %></td>
+            <td><%= msg.client_ids_text %></td>
+            <td><%= msg.plans.join(", ") %></td>
+            <td>
+              <% if msg.start_date.present? %>
+                <%= l(msg.start_date) %>
+              <% end %>
+              <% if msg.end_date.present? %>
+                até <%= l(msg.end_date) %>
+              <% end %>
+            </td>
+            <td>
+              <%= link_to "Editar", edit_system_admins_message_path(msg), class: "action-button" %> |
+              <%= link_to "Excluir", system_admins_message_path(msg),
+                          data: { turbo_method: :delete, turbo_confirm: "Tem certeza que deseja excluir esta mensagem?" },
+                          class: "action-button" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>Não há mensagens cadastradas.</p>
+  <% end %>
+</main>

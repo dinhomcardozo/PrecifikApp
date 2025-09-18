@@ -35,6 +35,10 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :system_admins do
+    resources :messages
+  end
+
   scope path: 'clients', module: 'clients' do
     resource :settings, only: [:show]
 
@@ -91,6 +95,7 @@ Rails.application.routes.draw do
         collection { get :search, to: 'brands#search', as: :search }
       end
 
+      resources :messages, only: [:index, :show]
       resources :suppliers
       resources :channels
       resources :taxes

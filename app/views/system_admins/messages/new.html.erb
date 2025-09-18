@@ -1,0 +1,51 @@
+<main class="form-container">
+  <h1>Nova Mensagem</h1>
+
+  <%= form_with(model: @message, url: system_admins_messages_path, local: true) do |f| %>
+    <div class="form-group">
+      <%= f.label :title, "Título" %>
+      <%= f.text_field :title, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :body, "Mensagem" %>
+      <%= f.text_area :body, class: "form-control", rows: 8 %>
+      <!-- Aqui você pode integrar CKEditor/TinyMCE para formatação -->
+    </div>
+
+    <div class="form-group">
+      <%= f.label :client_ids_text, "IDs de Clientes (separados por vírgula)" %>
+      <%= f.text_area :client_ids_text, class: "form-control", rows: 2 %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :plans, "Planos" %>
+      <%= f.select :plans, ["Básico", "Pro", "Premium"], {}, multiple: true, class: "form-select" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :start_date, "Data Inicial" %>
+      <%= f.date_field :start_date, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :end_date, "Data Final" %>
+      <%= f.date_field :end_date, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :start_hour, "Hora Inicial" %>
+      <%= f.time_field :start_hour, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :end_hour, "Hora Final" %>
+      <%= f.time_field :end_hour, class: "form-control" %>
+    </div>
+
+    <div class="form-actions">
+      <%= f.submit "Salvar", class: "btn btn-primary" %>
+      <%= link_to "Voltar", system_admins_messages_path, class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+</main>

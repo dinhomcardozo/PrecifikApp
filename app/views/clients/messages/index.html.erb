@@ -1,0 +1,15 @@
+<main class="index-container">
+  <h1>Mensagens</h1>
+
+  <% if @messages.any? %>
+    <ul class="messages-list">
+      <% @messages.each do |msg| %>
+        <li>
+          <h3><%= link_to msg.title, clients_message_path(msg) %></h3>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>Não há mensagens no momento.</p>
+  <% end %>
+</main>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_16_022115) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_16_111210) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -523,6 +523,22 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_16_022115) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "client_id"
+  end
+
+  create_table "system_admins_messages", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "body", null: false
+    t.text "client_ids_text"
+    t.string "plans", default: [], array: true
+    t.date "start_date"
+    t.date "end_date"
+    t.time "start_hour"
+    t.time "end_hour"
+    t.string "created_by_type"
+    t.bigint "created_by_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_type", "created_by_id"], name: "index_system_admins_messages_on_created_by"
   end
 
   create_table "taxes", force: :cascade do |t|

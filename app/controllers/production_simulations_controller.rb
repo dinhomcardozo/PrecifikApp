@@ -24,7 +24,14 @@ class ProductionSimulationsController < ApplicationController
 
   def update
     @production_simulation.updated_by = Current.user_client
+
+    @production_simulation.simulation_inputs.destroy_all
+    @production_simulation.simulation_subproducts.destroy_all
+    @production_simulation.simulation_products.destroy_all
+
     if @production_simulation.update(production_simulation_params)
+      @production_simulation.calculate_totals
+      @production_simulation.save
       redirect_to @production_simulation, notice: "Simulação atualizada com sucesso."
     else
       render :edit
@@ -45,7 +52,8 @@ class ProductionSimulationsController < ApplicationController
       format.html
       format.pdf do
         render pdf: "production_sheet_#{@production_simulation.id}",
-              template: "production_simulations/production_sheet.html.erb",
+              template: "production_simulations/production_sheet",
+              formats: [:html],
               layout: "pdf"
       end
     end
@@ -148,6 +156,7 @@ class ProductionSimulationsController < ApplicationController
       params.require(:production_simulation).permit(
         :product_id,
         :quantity_in_grams,
+        :product_units,
         simulation_inputs_attributes: %i[id input_id total_quantity total_cost required_units _destroy],
         simulation_subproducts_attributes: %i[id subproduct_id total_quantity total_cost _destroy],
         simulation_products_attributes: %i[id product_id total_quantity total_cost minimum_selling_price total_selling_price total_retail_profit total_wholesale_profit _destroy]
