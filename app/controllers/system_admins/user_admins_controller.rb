@@ -1,8 +1,10 @@
 class SystemAdmins::UserAdminsController < ApplicationController
   before_action :set_user_admin, only: %i[ show edit update destroy ]
+  skip_before_action :authenticate_user_admin!, only: [:new, :create, :index], raise: false
+  layout 'system_admins'
 
   def index
-    @user_admins = SystemAdmins::UserAdmin.all
+    @system_admins_user_admins = SystemAdmins::UserAdmin.all
   end
 
   def show
@@ -13,6 +15,7 @@ class SystemAdmins::UserAdminsController < ApplicationController
   end
 
   def edit
+    @system_admins_user_admin = SystemAdmins::UserAdmin.find(params[:id])
   end
 
   def create
@@ -31,12 +34,12 @@ class SystemAdmins::UserAdminsController < ApplicationController
 
   def update
     respond_to do |format|
-      if @user_admin.update(user_admin_params)
-        format.html { redirect_to @user_admin, notice: "User admin was successfully updated." }
-        format.json { render :show, status: :ok, location: @user_admin }
+      if @system_admins_user_admin.update(user_admin_params)
+        format.html { redirect_to system_admins_user_admins_path, notice: "User admin atualizado com sucesso." }
+        format.json { render :show, status: :ok, location: @system_admins_user_admin }
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @user_admin.errors, status: :unprocessable_entity }
+        format.json { render json: @system_admins_user_admin.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -51,11 +54,19 @@ class SystemAdmins::UserAdminsController < ApplicationController
   end
 
   private
+  
     def set_user_admin
-      @user_admin = SystemAdmins::UserAdmin.find(params.expect(:id))
+      @system_admins_user_admin = SystemAdmins::UserAdmin.find(params[:id])
     end
 
     def user_admin_params
-      params.expect(user_admin: [ :full_name, :email, :phone, :admin ])
+      params.require(:system_admins_user_admin).permit(
+        :full_name,
+        :email,
+        :phone,
+        :admin,
+        :password,
+        :password_confirmation
+      )
     end
 end

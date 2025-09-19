@@ -21,13 +21,17 @@ Rails.application.routes.draw do
 
   devise_for :user_admins,
     class_name: 'SystemAdmins::UserAdmin',
-    path:      'system_admins/user_admins'
+    path: 'system_admins/user_admins',
+    controllers: { sessions: 'system_admins/user_admins/sessions' }
+
+   #para liberar temporáriamente cadastro sem login
+  namespace :system_admins do
+    resources :user_admins
+  end
 
   authenticate :user_admin do
     namespace :system_admins do
       root to: 'user_admins#index', as: :admin_root
-
-      resources :user_admins
       resources :user_clients
       resources :plans
       resources :banners

@@ -1,16 +1,16 @@
-<p style="color: green"><%= notice %></p>
+<main class="logged-system">
+  <% @system_admins_user_admins.each do |user_admin| %>
+    <div class="user-admin">
+      <p><strong>Nome:</strong> <%= user_admin.full_name %></p>
+      <p><strong>E-mail:</strong> <%= user_admin.email %></p>
+      <p><strong>Telefone:</strong> <%= user_admin.phone %></p>
+      <p><strong>Admin geral?:</strong> <%= user_admin.admin ? "Sim" : "Não" %></p>
+    </div>
 
-<% content_for :title, "Maxximiza | SystemAdmin" %>
-
-<h1>Todos os usuários</h1>
-
-<%= link_to "[+] Criar usuário", new_system_admins_user_admin_path, class: "standart-button" %>
-
-<div id="system_admins_user_admins">
-  <% @system_admins_user_admins.each do |system_admins_user_admin| %>
-    <%= render system_admins_user_admin %>
-    <p>
-      <%= link_to "Ver", system_admins_user_admin %>
-    </p>
+    <div class="actions">
+      <%# <%= link_to "Ver", system_admins_user_admin_path(user_admin), class: "action-button" %>
+      <%= link_to "Editar", edit_system_admins_user_admin_path(user_admin), class: "action-button" %>
+    </div>
+    <hr>
   <% end %>
-</div>
+</main>

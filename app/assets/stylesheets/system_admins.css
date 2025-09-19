@@ -1,0 +1,50 @@
+body {
+  background-color: var(--bg-menu-color);
+  margin: 0;
+  font-family: 'Raleway', sans-serif;
+}
+
+.system-admin-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.system-admin-logo .logo-img {
+  height: 50px;
+  margin-right: 10px;
+}
+
+.logo-text {
+  font-family: 'Raleway', sans-serif;
+  font-size: 20px;
+  font-weight: 300;
+  text-align: center;
+  color: var(--accent-color);
+  letter-spacing: 8px;
+}
+
+.system-admin-box {
+  max-width: 400px; /* largura máxima da caixa */
+  margin: 60px auto; /* centraliza horizontalmente e dá espaço no topo */
+  padding: 20px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc; /* borda de 1px */
+  border-radius: 8px; /* cantos arredondados */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* sombra opcional para destaque */
+  text-align: center;
+}
+
+.check-box {
+  margin-top: 10px;
+}
+
+.logged-system {
+  width: 80%;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: 4px;
+  background-color: var(--medium-gray);
+}

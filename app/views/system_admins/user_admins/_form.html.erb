@@ -1,4 +1,4 @@
-<%= form_with(model: system_admins_user_admin, local: true) do |form| %>
+<%= form_with(model: @system_admins_user_admin, local: true) do |form| %>
   <% if system_admins_user_admin.errors.any? %>
     <div style="color: red">
       <h2>
@@ -13,27 +13,50 @@
     </div>
   <% end %>
 
+  <!-- Campos do formulário -->
   <div>
-    <%= form.label :full_name,    "Nome completo",                      style: "display: block" %>
+    <%= form.label :full_name, "Nome completo", style: "display: block" %>
     <%= form.text_field :full_name %>
   </div>
 
   <div>
-    <%= form.label :email,        "E-mail corporativo",                style: "display: block" %>
-    <%= form.text_field :email %>
+    <%= form.label :email, "E-mail corporativo", style: "display: block" %>
+    <%= form.email_field :email %>
   </div>
 
   <div>
-    <%= form.label :phone,        "Telefone corporativo",              style: "display: block" %>
-    <%= form.text_field :phone %>
+    <%= form.label :phone, "Telefone corporativo", style: "display: block" %>
+    <%= form.telephone_field :phone %>
   </div>
 
   <div>
-    <%= form.label :admin,        "É usuário Admin do Sistema Geral?", style: "display: block" %>
+    <%= form.label :admin, "É usuário Admin do Sistema Geral?", style: "display: block" %>
     <%= form.check_box :admin %>
+  </div>
+
+  <!-- Campos de senha (necessários para Devise) -->
+  <div>
+    <%= form.label :password, "Senha", style: "display: block" %>
+    <%= form.password_field :password, autocomplete: "new-password" %>
+  </div>
+
+  <div>
+    <%= form.label :password_confirmation, "Confirme a senha", style: "display: block" %>
+    <%= form.password_field :password_confirmation, autocomplete: "new-password" %>
   </div>
 
   <div>
     <%= form.submit %>
+  </div>
+<% end %>
+
+<!-- Exibição dos dados do usuário (somente se já existir no banco) -->
+<% if system_admins_user_admin.persisted? %>
+  <hr>
+  <div class="user-admin">
+    <p><strong>Nome:</strong> <%= system_admins_user_admin.full_name %></p>
+    <p><strong>E-mail:</strong> <%= system_admins_user_admin.email %></p>
+    <p><strong>Telefone:</strong> <%= system_admins_user_admin.phone %></p>
+    <p><strong>Admin geral?:</strong> <%= system_admins_user_admin.admin ? "Sim" : "Não" %></p>
   </div>
 <% end %>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login - System Admin</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+  </head>
+  <body>
+  <body>
+    <div class="system-admin-box">
+        <div class="system-admin-logo">
+            <img src="<%= asset_path('logo-maxximiza_positiva.png') %>" alt="Logo do Sistema" class="logo-img">
+        </div>
+        <div>
+            <span class="logo-text">SYSTEM ADMIN</span>
+        </div>
+            <%= yield %>
+    </div>
+  </body>
+</html>

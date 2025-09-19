@@ -1,4 +1,4 @@
-<main class="form-container">
+<main class="logged-system">
   <h1>Nova Mensagem</h1>
 
   <%= form_with(model: @message, url: system_admins_messages_path, local: true) do |f| %>
@@ -44,8 +44,8 @@
     </div>
 
     <div class="form-actions">
-      <%= f.submit "Salvar", class: "btn btn-primary" %>
-      <%= link_to "Voltar", system_admins_messages_path, class: "btn btn-secondary" %>
+      <%= f.submit "Salvar", class: "action-button" %>
+      <%= link_to "Voltar", system_admins_messages_path, class: "action-button" %>
     </div>
   <% end %>
 </main>

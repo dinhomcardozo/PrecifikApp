@@ -1,12 +1,14 @@
-<% content_for :title, "Editing user admin" %>
+<main class="logged-system">
+  <% content_for :title, "Editar Usuário Admin" %>
 
-<h1>Editing user admin</h1>
+  <h1>Editing user admin</h1>
 
-<%= render "form", system_admins_user_admin: @system_admins_user_admin %>
+  <%= render "form", system_admins_user_admin: @system_admins_user_admin %>
 
-<br>
+  <br>
 
-<div>
-  <%= link_to "Show this user admin", @system_admins_user_admin %> |
-  <%= link_to "Back to user admins", system_admins_user_admins_path %>
-</div>
+  <div>
+    <%= link_to "Show this user admin", @system_admins_user_admin %> |
+    <%= link_to "Back to user admins", system_admins_user_admins_path %>
+  </div>
+</main>

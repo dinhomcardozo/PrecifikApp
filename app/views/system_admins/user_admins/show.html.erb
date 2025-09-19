@@ -1,8 +1,10 @@
-<p style="color: green"><%= notice %></p>
+<main class="logged-system">
+  <p style="color: green"><%= notice %></p>
 
-<%= render @system_admins_user_admin %>
+  <%= render @system_admins_user_admin %>
 
-<div>
-  <%= link_to "Editar usuário", edit_system_admins_user_admin_path(@system_admins_user_admin) %> |
-  <%= link_to "Voltar", system_admins_user_admins_path %>
-</div>
+  <div>
+    <%= link_to "Editar usuário", edit_system_admins_user_admin_path(@system_admins_user_admin) %> |
+    <%= link_to "Voltar", system_admins_user_admins_path %>
+  </div>
+</main>
