@@ -100,3 +100,7 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.main-content-application {
+  background-color: #ffffff;
+}

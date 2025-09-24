@@ -1,62 +1,58 @@
-class SystemAdmins::PlansController < ApplicationController
-  before_action :set_plan, only: %i[ show edit update destroy ]
+module SystemAdmins
+  class PlansController < SystemAdmins::BaseController
+    before_action :set_plan, only: %i[ show edit update destroy ]
+    before_action :ensure_super_admin!, only: %i[new create edit update destroy]
 
-  # GET /system_admins/plans or /system_admins/plans.json
-  def index
-    @plans = SystemAdmins::Plan.all
-  end
+    layout :resolve_layout
 
-  def show
-  end
+    def index
+      @system_admins_plans = SystemAdmins::Plan.all
+    end
 
-  def new
-    @plan = SystemAdmins::Plan.new
-  end
+    def show
+      @system_admins_plan = SystemAdmins::Plan.find(params[:id])
+    end
 
-  def edit
-  end
+    def new
+      @plan = SystemAdmins::Plan.new
+    end
 
-  def create
-    @plan = SystemAdmins::Plan.new(plan_params)
-
-    respond_to do |format|
+    def create
+      @plan = SystemAdmins::Plan.new(plan_params)
       if @plan.save
-        format.html { redirect_to @plan, notice: "Plano criado com sucesso." }
-        format.json { render :show, status: :created, location: @plan }
+        redirect_to system_admins_plans_path, notice: "Plano criado com sucesso."
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @plan.errors, status: :unprocessable_entity }
+        render :new, status: :unprocessable_entity
       end
     end
-  end
 
-  def update
-    respond_to do |format|
+    def update
       if @plan.update(plan_params)
-        format.html { redirect_to @plan, notice: "Plan was successfully updated." }
-        format.json { render :show, status: :ok, location: @plan }
+        redirect_to system_admins_plan_path(@plan), notice: "Plano atualizado com sucesso."
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @plan.errors, status: :unprocessable_entity }
+        render :edit, status: :unprocessable_entity
       end
     end
-  end
 
-  def destroy
-    @plan.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to plans_path, status: :see_other, notice: "Plan was successfully destroyed." }
-      format.json { head :no_content }
+    def destroy
+      @plan.destroy!
+      redirect_to system_admins_plans_path, status: :see_other, notice: "Plano excluído com sucesso."
     end
-  end
 
-  private
-    def admins_plan
-      @plan = SystemAdmins::Plan.find(params.expect(:id))
+    private
+
+    def set_plan
+      @plan = SystemAdmins::Plan.find(params[:id])
     end
 
     def plan_params
-      params.expect(plan: [ :description, :price, :status ])
+      params.require(:system_admins_plan).permit(:description, :price, :status)
     end
+
+    def ensure_super_admin!
+      unless current_user_admin&.super_admin?
+        redirect_to system_admins_plans_path, alert: "Acesso negado. Apenas super administradores podem alterar planos."
+      end
+    end
+  end
 end

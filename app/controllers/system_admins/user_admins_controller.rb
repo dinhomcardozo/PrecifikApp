@@ -1,7 +1,9 @@
-class SystemAdmins::UserAdminsController < ApplicationController
-  before_action :set_user_admin, only: %i[ show edit update destroy ]
-  skip_before_action :authenticate_user_admin!, only: [:new, :create, :index], raise: false
-  layout 'system_admins'
+class SystemAdmins::UserAdminsController < SystemAdmins::BaseController
+  before_action :authenticate_user_admin! # garante login
+  before_action :authorize_super_admin!, only: %i[new create]
+  before_action :set_system_admins_user_admin, only: %i[show edit update destroy]
+  skip_before_action :ensure_user_admin_is_admin!, only: [:edit, :update]
+  layout :resolve_layout
 
   def index
     @system_admins_user_admins = SystemAdmins::UserAdmin.all
@@ -11,23 +13,22 @@ class SystemAdmins::UserAdminsController < ApplicationController
   end
 
   def new
-    @user_admin = SystemAdmins::UserAdmin.new
+    @system_admins_user_admin = SystemAdmins::UserAdmin.new
   end
 
   def edit
-    @system_admins_user_admin = SystemAdmins::UserAdmin.find(params[:id])
   end
 
   def create
-    @user_admin = SystemAdmins::UserAdmin.new(user_admin_params)
+    @system_admins_user_admin = SystemAdmins::UserAdmin.new(user_admin_params)
 
     respond_to do |format|
-      if @user_admin.save
-        format.html { redirect_to @user_admin, notice: "User admin was successfully created." }
-        format.json { render :show, status: :created, location: @user_admin }
+      if @system_admins_user_admin.save
+        format.html { redirect_to system_admins_user_admin_path(@system_admins_user_admin), notice: "User admin criado com sucesso." }
+        format.json { render :show, status: :created, location: @system_admins_user_admin }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @user_admin.errors, status: :unprocessable_entity }
+        format.json { render json: @system_admins_user_admin.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -45,28 +46,33 @@ class SystemAdmins::UserAdminsController < ApplicationController
   end
 
   def destroy
-    @user_admin.destroy!
-
+    @system_admins_user_admin.destroy!
     respond_to do |format|
-      format.html { redirect_to user_admins_path, status: :see_other, notice: "User admin was successfully destroyed." }
+      format.html { redirect_to system_admins_user_admins_path, status: :see_other, notice: "User admin removido com sucesso." }
       format.json { head :no_content }
     end
   end
 
   private
-  
-    def set_user_admin
-      @system_admins_user_admin = SystemAdmins::UserAdmin.find(params[:id])
-    end
 
-    def user_admin_params
-      params.require(:system_admins_user_admin).permit(
-        :full_name,
-        :email,
-        :phone,
-        :admin,
-        :password,
-        :password_confirmation
-      )
+  def set_system_admins_user_admin
+    @system_admins_user_admin = SystemAdmins::UserAdmin.find(params[:id])
+  end
+
+  def user_admin_params
+    params.require(:system_admins_user_admin).permit(
+      :full_name,
+      :email,
+      :phone,
+      :admin,
+      :password,
+      :password_confirmation
+    )
+  end
+
+  def authorize_super_admin!
+    unless current_user_admin&.admin?
+      redirect_to system_admins_user_admins_path, alert: "Você não tem permissão para criar novos administradores."
     end
+  end
 end

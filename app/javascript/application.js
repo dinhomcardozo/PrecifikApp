@@ -6,7 +6,7 @@ window.$ = window.jQuery = $
 
 import "select2"
 import "select2/dist/css/select2.min.css"
-import "./ckeditor"
+import "./quill_editor"
 
 import flatpickr from "flatpickr"
 import "flatpickr/dist/flatpickr.min.css"

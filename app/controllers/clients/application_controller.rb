@@ -1,10 +1,10 @@
 # app/controllers/clients/application_controller.rb
 module Clients
   class ApplicationController < ActionController::Base
-    layout 'application'
     before_action :check_subscription
     before_action :authorize_module
     before_action :set_current_user_client
+    layout "application"
 
     private
 

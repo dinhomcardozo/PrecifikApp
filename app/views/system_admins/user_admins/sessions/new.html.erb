@@ -1,7 +1,7 @@
 <main class="index-container">
-  <h2 class="title" >Entrar em System Admin</h2>
+  <h2 class="title">Entrar em System Admin</h2>
 
-  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name), data: { turbo: false }) do |f| %>
     <div class="field">
       <%= f.label :email, "E-mail", class: "custom-label" %><br />
       <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
@@ -25,4 +25,4 @@
   <% end %>
 
   <%= render "devise/shared/links" %>
-<main class="index-container">
+</main>

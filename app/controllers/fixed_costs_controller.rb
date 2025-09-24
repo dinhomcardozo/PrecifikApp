@@ -1,6 +1,7 @@
 class FixedCostsController < Clients::AuthenticatedController
   include AuthorizationForClients
   before_action :authenticate_user_client!
+  layout "application"
   
   before_action :set_fixed_cost, only: %i[ show edit update destroy ]
 

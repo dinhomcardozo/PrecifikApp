@@ -1,9 +1,9 @@
 module Clients
-  class AuthenticatedController < ApplicationController
+  class AuthenticatedController < Clients::ApplicationController
     include Pundit::Authorization
     before_action :authenticate_user_client!
     before_action :ensure_subscription!
-    layout "application"
+    layout 'application'
 
     private
 

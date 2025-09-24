@@ -1,4 +1,8 @@
 document.addEventListener("turbo:load", () => {
+  if (!window.location.pathname.startsWith("/clients")) {
+    return;
+  }
+
   const lastShownKey = "salesTargetAlertLastShown";
 
   function shouldShowAlert() {
@@ -10,16 +14,24 @@ document.addEventListener("turbo:load", () => {
 
   if (shouldShowAlert()) {
     fetch("/clients/sales_targets/alert_data.json")
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) {
+          console.warn(`Falha ao buscar alert_data: ${res.status} ${res.statusText}`);
+          return null; // não tenta processar
+        }
+        return res.json();
+      })
       .then(data => {
+        if (!data) return;
+
         let messages = [];
 
-        if (data.vencendo.length > 0) {
+        if (Array.isArray(data.vencendo) && data.vencendo.length > 0) {
           const produtos = data.vencendo.map(p => p.product).join(", ");
           messages.push(`As metas de vendas definidas para ${produtos} vencem hoje. Clique aqui e as ajuste.`);
         }
 
-        if (data.vencidas.length > 0) {
+        if (Array.isArray(data.vencidas) && data.vencidas.length > 0) {
           const produtos = data.vencidas.map(p => p.product).join(", ");
           messages.push(`As metas de vendas definidas para ${produtos} já venceram. Clique aqui e as ajuste.`);
         }
@@ -30,6 +42,9 @@ document.addEventListener("turbo:load", () => {
           modal.show();
           localStorage.setItem(lastShownKey, Date.now().toString());
         }
+      })
+      .catch(err => {
+        console.error("Erro ao buscar alert_data:", err);
       });
   }
 });

@@ -1,9 +1,9 @@
 module SystemAdmins
-  class UserClientsController < ApplicationController
+  class UserClientsController < SystemAdmins::BaseController
     before_action :set_user_client, only: %i[ show edit update destroy ]
 
     def index
-      @user_clients = SystemAdmins::UserClient.all
+      @system_admins_user_clients = SystemAdmins::UserClient.all
     end
 
     def show
@@ -14,6 +14,7 @@ module SystemAdmins
     end
 
     def edit
+      @user_client = SystemAdmins::UserClient.find(params[:id])
     end
 
     def create
@@ -21,7 +22,7 @@ module SystemAdmins
 
       respond_to do |format|
         if @user_client.save
-          format.html { redirect_to @user_client, notice: "User client was successfully created." }
+          format.html { redirect_to system_admins_user_clients_path, notice: "User client criado com sucesso." }
           format.json { render :show, status: :created, location: @user_client }
         else
           format.html { render :new, status: :unprocessable_entity }
@@ -33,7 +34,7 @@ module SystemAdmins
     def update
       respond_to do |format|
         if @user_client.update(user_client_params)
-          format.html { redirect_to @user_client, notice: "User client was successfully updated." }
+          format.html { redirect_to system_admins_user_clients_path, notice: "User client atualizado com sucesso." }
           format.json { render :show, status: :ok, location: @user_client }
         else
           format.html { render :edit, status: :unprocessable_entity }
@@ -57,7 +58,9 @@ module SystemAdmins
     end
 
     def user_client_params
-      params.expect(user_client: [ :user_id, :client_id ])
+      params.require(:system_admins_user_client).permit(
+        :client_id, :email, :first_name, :last_name, :admin
+      )
     end
   end
 end

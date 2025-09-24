@@ -1,5 +1,6 @@
 <main class="logged-system">
     <h1><%= @message.title %></h1>
     <div><%= @message.body.html_safe %></div>
+    <p><strong>Planos:</strong> <%= @message.plans.map(&:description).join(", ") %></p>
     <%= link_to "Voltar", system_admins_messages_path %>
 </main>

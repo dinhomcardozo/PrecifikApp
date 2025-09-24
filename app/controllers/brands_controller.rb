@@ -2,6 +2,7 @@ class BrandsController < Clients::AuthenticatedController
   include AuthorizationForClients
   before_action :authenticate_user_client!
   before_action :set_brand, only: [:show, :edit, :update, :destroy]
+  layout "application"
 
   def index
     @brands = Brand.all

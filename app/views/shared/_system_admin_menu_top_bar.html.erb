@@ -1,8 +1,8 @@
 <div class="system-admin-menu-top-bar">
   <span class="top-bar-item">
-    Seja bem-vindo ao Maxximiza SystemAdmin, <strong>Bernardo!</strong>
+    Seja bem-vindo ao Maxximiza SystemAdmin, <strong><%= current_user_admin.full_name %></strong>
   </span>
   <span class="top-bar-item">
-    <strong>SAIR</strong>
+    <%= link_to "SAIR", destroy_user_admin_session_path, method: :delete, data: { turbo_method: :delete } %>
   </span>
 </div>

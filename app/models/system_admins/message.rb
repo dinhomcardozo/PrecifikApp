@@ -1,5 +1,11 @@
 class SystemAdmins::Message < ApplicationRecord
+  self.table_name = "messages"
+  
   validates :title, :body, presence: true
+
+  has_and_belongs_to_many :plans,
+                          class_name: "SystemAdmins::Plan",
+                          join_table: "messages_plans"
 
   # Converte o texto de IDs em array de inteiros
   def client_ids_array

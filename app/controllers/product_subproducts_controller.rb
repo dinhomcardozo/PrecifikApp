@@ -1,6 +1,7 @@
 class ProductSubproductsController < Clients::AuthenticatedController
   include AuthorizationForClients
   before_action :authenticate_user!
+  layout "application"
   
   before_action :set_product
 

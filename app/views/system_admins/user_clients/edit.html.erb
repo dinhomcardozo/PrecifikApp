@@ -1,12 +1,14 @@
-<% content_for :title, "Editing user client" %>
+<main class="logged-system">
+  <% content_for :title, "Editing user client" %>
 
-<h1>Editing user client</h1>
+  <h1>Editing user client</h1>
 
-<%= render "form", system_admins_user_client: @system_admins_user_client %>
+  <%= render "form", system_admins_user_client: @user_client %>
 
-<br>
+  <br>
 
-<div>
-  <%= link_to "Show this user client", @system_admins_user_client %> |
-  <%= link_to "Back to user clients", system_admins_user_clients_path %>
-</div>
+  <div>
+    <%= link_to "Show this user client", @system_admins_user_client %> |
+    <%= link_to "Back to user clients", system_admins_user_clients_path %>
+  </div>
+</main>

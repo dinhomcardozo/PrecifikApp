@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   include Pundit::Authorization 
   helper_method :current_user
   alias_method  :current_user, :current_user_client
+  layout 'application'
   
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized

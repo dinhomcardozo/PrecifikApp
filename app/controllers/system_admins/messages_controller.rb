@@ -1,39 +1,44 @@
 module SystemAdmins
-  class MessagesController < ApplicationController
-    # before_action :authenticate_user_admin!
+  class MessagesController < SystemAdmins::BaseController
+    before_action :authenticate_user_admin!
     before_action :set_message, only: [:show, :edit, :update, :destroy]
+    before_action :set_plans, only: [:new, :edit, :create, :update]
+
+    layout :resolve_layout
 
     def index
       @messages = SystemAdmins::Message.order(created_at: :desc)
+      @plans = SystemAdmins::Plan.all
     end
 
     def new
       @message = SystemAdmins::Message.new
+      @plans = SystemAdmins::Plan.all
     end
 
     def show
+      @plans = SystemAdmins::Plan.all
     end
 
     def create
       @message = SystemAdmins::Message.new(message_params)
-    # @message.created_by = Current.user_client || Current.user_admin
-
       if @message.save
         redirect_to system_admins_messages_path, notice: "Mensagem criada com sucesso."
       else
-        render :new
+        render :new, status: :unprocessable_entity
       end
     end
 
     def edit
-      render :new
+      @plans = SystemAdmins::Plan.all
     end
 
     def update
       if @message.update(message_params)
         redirect_to system_admins_messages_path, notice: "Mensagem atualizada."
       else
-        render :edit
+        @plans = SystemAdmins::Plan.all
+        render :edit, status: :unprocessable_entity
       end
     end
 
@@ -44,20 +49,26 @@ module SystemAdmins
 
     private
 
+    def resolve_layout
+      if devise_controller? && resource_name == :user_admin && action_name == "new"
+        "system_admins_login"
+      else
+        "system_admins"
+      end
+    end
+
     def set_message
       @message = SystemAdmins::Message.find(params[:id])
     end
 
-    def message_params
-      params.require(:system_admins_message).permit(
-        :title, :body, :client_ids_text, :start_date, :end_date, :start_hour, :end_hour, plans: []
-      )
+    def set_plans
+      @plans = SystemAdmins::Plan.all
     end
 
-    def authorize_admin!
-      unless Current.user_client.present? || Current.user_admin.present?
-          redirect_to root_path, alert: "Acesso negado."
-      end
+    def message_params
+      params.require(:system_admins_message).permit(
+        :title, :body, :client_ids_text, :start_date, :end_date, :start_hour, :end_hour, plan_ids: []
+      )
     end
   end
 end

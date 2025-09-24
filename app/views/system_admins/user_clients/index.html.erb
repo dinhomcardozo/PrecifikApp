@@ -1,16 +1,12 @@
-<p style="color: green"><%= notice %></p>
-
-<% content_for :title, "User clients" %>
-
-<h1>User clients</h1>
-
-<div id="system_admins_user_clients">
-  <% @system_admins_user_clients.each do |system_admins_user_client| %>
-    <%= render system_admins_user_client %>
-    <p>
-      <%= link_to "Show this user client", system_admins_user_client %>
-    </p>
-  <% end %>
-</div>
-
-<%= link_to "New user client", new_system_admins_user_client_path %>
+<main class="logged-system">
+  <div id="system_admins_user_clients">
+    <% @system_admins_user_clients.each do |system_admins_user_client| %>
+      <%= render "form", system_admins_user_client: system_admins_user_client, readonly: true %>
+      <p>
+        <%= link_to "Show this user client", system_admins_user_client %> |
+        <%= link_to "Edit", edit_system_admins_user_client_path(system_admins_user_client) %> |
+        <%= button_to "Destroy", system_admins_user_client, method: :delete, data: { confirm: "Tem certeza?" } %>
+      </p>
+    <% end %>
+  </div>
+</main>

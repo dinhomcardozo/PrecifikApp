@@ -3,6 +3,7 @@ class ProductsController < Clients::AuthenticatedController
   include AuthorizationForClients
   before_action :authenticate_user_client!
   after_action  :verify_authorized
+  layout "application"
   
   include Filterable
 

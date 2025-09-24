@@ -1,16 +1,31 @@
-<p style="color: green"><%= notice %></p>
+<main class="logged-system">
+  <p style="color: green"><%= notice %></p>
 
-<% content_for :title, "Plans" %>
+  <h1>Planos</h1>
 
-<h1>Plans</h1>
+  <div id="system_admins_plans">
+    <% @system_admins_plans.each do |plan| %>
+      <div id="<%= dom_id(plan) %>">
+        <p><strong>Descrição:</strong> <%= plan.description %></p>
+        <p><strong>Preço:</strong> <%= plan.price %></p>
+        <p><strong>Status:</strong> <%= plan.status ? "Ativo" : "Inativo" %></p>
+        <% if current_user_admin&.super_admin? %>
+          <p><strong>Super Admin:</strong> <%= plan.super_admin ? "Sim" : "Não" %></p>
+        <% end %>
+      </div>
 
-<div id="system_admins_plans">
-  <% @system_admins_plans.each do |system_admins_plan| %>
-    <%= render system_admins_plan %>
-    <p>
-      <%= link_to "Show this plan", system_admins_plan %>
-    </p>
+      <p>
+        <%= link_to "Ver", system_admins_plan_path(plan) %>
+        <% if current_user_admin&.super_admin? %>
+          | <%= link_to "Editar", edit_system_admins_plan_path(plan) %>
+          | <%= button_to "Excluir", system_admins_plan_path(plan), method: :delete, data: { confirm: "Tem certeza?" } %>
+        <% end %>
+      </p>
+      <hr>
+    <% end %>
+  </div>
+
+  <% if current_user_admin&.super_admin? %>
+    <%= link_to "Novo Plano", new_system_admins_plan_path, class: "action-button" %>
   <% end %>
-</div>
-
-<%= link_to "New plan", new_system_admins_plan_path %>
+</main>

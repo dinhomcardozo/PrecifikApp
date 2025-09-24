@@ -21,26 +21,32 @@ Rails.application.routes.draw do
 
   devise_for :user_admins,
     class_name: 'SystemAdmins::UserAdmin',
-    path: 'system_admins/user_admins',
-    controllers: { sessions: 'system_admins/user_admins/sessions' }
+    path: 'system_admins',
+    path_names: { sign_in: 'entrar', sign_out: 'sair' },
+    skip: [:registrations],
+    controllers: {
+      sessions: 'system_admins/user_admins/sessions'
+    }
 
-   #para liberar temporáriamente cadastro sem login
   namespace :system_admins do
-    resources :user_admins
-  end
+    root to: 'user_admins#index'
+      resources :user_admins
+      resources :user_clients
+      resources :plans, only: [:index, :show, :new, :create]
+      resources :banners
+      resources :clients
+      resources :messages
+  end  
 
   authenticate :user_admin do
     namespace :system_admins do
       root to: 'user_admins#index', as: :admin_root
       resources :user_clients
-      resources :plans
+      resources :plans, only: [:index, :show, :new, :create]
       resources :banners
-      resources :clients, only: %i[new create]
+      resources :clients
+      resources :messages
     end
-  end
-
-  namespace :system_admins do
-    resources :messages
   end
 
   scope path: 'clients', module: 'clients' do

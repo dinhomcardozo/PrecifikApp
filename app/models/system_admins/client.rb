@@ -2,18 +2,13 @@ module SystemAdmins
   class Client < ApplicationRecord
     self.table_name = 'clients'
 
-    # enum :plan_id, {
-    #   free:   1,
-    #   mensal: 2,
-    #   anual:  3,
-    #   trial:  4
-    # }
-
-    # enum :plan_type, { free: 1, mensal: 2, anual: 3, trial: 4 }
-
     has_many :user_clients, class_name: 'SystemAdmins::UserClient', foreign_key: :client_id
     belongs_to :plan, class_name: 'SystemAdmins::Plan', foreign_key: :plan_id
     validates :plan_id, presence: true
+
+    validates :cpf,
+              presence: true,
+              format: { with: /\A\d{11}\z/, message: "deve conter 11 números" }
     
     validates :cnpj, :razao_social, :company_name,
               :first_name, :last_name, :phone,

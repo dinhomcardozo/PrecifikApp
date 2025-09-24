@@ -19,5 +19,6 @@ module SystemAdmins
     delegate :subscription_active?, to: :client, prefix: false, allow_nil: true
     
     validates :email, presence: true, uniqueness: true
+    validates :first_name, :last_name, presence: true
   end
 end

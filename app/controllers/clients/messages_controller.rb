@@ -1,5 +1,6 @@
 class Clients::MessagesController < ApplicationController
   before_action :authenticate_user_client!
+  layout 'application'
 
   def index
     @messages = SystemAdmins::Message.all.select do |msg|

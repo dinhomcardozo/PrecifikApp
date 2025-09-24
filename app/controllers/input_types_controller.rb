@@ -2,6 +2,7 @@ class InputTypesController < Clients::AuthenticatedController
   include AuthorizationForClients
   before_action :authenticate_user_client!
   before_action :set_client_id, only: %i[create update]
+  layout "application"
   
   def index
     @input_types = InputType.all

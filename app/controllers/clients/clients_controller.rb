@@ -1,6 +1,7 @@
 # app/controllers/clients/profiles_controller.rb
 module Clients
   class ClientsController < ApplicationController
+    layout "application"
     before_action :authenticate_user_client!
 
     def edit

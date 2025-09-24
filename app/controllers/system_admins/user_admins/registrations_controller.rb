@@ -1,9 +1,7 @@
 # app/controllers/system_admins/user_admins/registrations_controller.rb
 module SystemAdmins::UserAdmins
   class RegistrationsController < Devise::RegistrationsController
-    layout "system_admins"
-
-    # Se não quiser signup público, remova :registrations das rotas Devise
+    layout :resolve_layout
 
     private
 

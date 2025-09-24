@@ -1,6 +1,6 @@
 # app/controllers/system_admins/banners_controller.rb
 module SystemAdmins
-  class BannersController < ApplicationController
+  class BannersController < SystemAdmins::BaseController
     before_action :set_banner, only: %i[show edit update destroy]
 
     def index

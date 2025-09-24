@@ -2,7 +2,6 @@
   <% if system_admins_user_client.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(system_admins_user_client.errors.count, "error") %> prohibited this system_admins_user_client from being saved:</h2>
-
       <ul>
         <% system_admins_user_client.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -11,17 +10,54 @@
     </div>
   <% end %>
 
+  <!-- ID do registro -->
   <div>
-    <%= form.label :user_id, style: "display: block" %>
-    <%= form.text_field :user_id %>
+    <%= form.label :id, "ID do registro", style: "display: block" %>
+    <%= form.text_field :id, value: system_admins_user_client.id, readonly: true %>
   </div>
 
+  <!-- Client vinculado -->
   <div>
-    <%= form.label :client_id, style: "display: block" %>
-    <%= form.text_field :client_id %>
+    <%= form.label :client_id, "ID do cliente", style: "display: block" %>
+    <%= form.text_field :client_id, readonly: local_assigns[:readonly] %>
   </div>
 
+  <!-- Email -->
   <div>
-    <%= form.submit %>
+    <%= form.label :email, style: "display: block" %>
+    <%= form.email_field :email, readonly: local_assigns[:readonly] %>
   </div>
+
+  <!-- First name -->
+  <div>
+    <%= form.label :first_name, "Primeiro nome", style: "display: block" %>
+    <%= form.text_field :first_name, readonly: local_assigns[:readonly] %>
+  </div>
+
+  <!-- Last name -->
+  <div>
+    <%= form.label :last_name, "Sobrenome", style: "display: block" %>
+    <%= form.text_field :last_name, readonly: local_assigns[:readonly] %>
+  </div>
+
+  <!-- Admin (booleano) -->
+  <div>
+    <%= form.label :admin, "Administrador?", style: "display: block" %>
+    <% if local_assigns[:readonly] %>
+      <%= form.check_box :admin, disabled: true %>
+    <% else %>
+      <%= form.check_box :admin %>
+      <!-- ou, se preferir radio buttons -->
+      <!--
+      <%= form.radio_button :admin, true %> Sim
+      <%= form.radio_button :admin, false %> Não
+      -->
+    <% end %>
+  </div>
+
+  <% unless local_assigns[:readonly] %>
+    <div>
+      <%= form.submit %>
+    </div>
+  <% end %>
 <% end %>

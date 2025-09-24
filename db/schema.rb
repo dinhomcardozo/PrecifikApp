@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_16_111210) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_21_211832) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -175,6 +175,27 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_16_111210) do
     t.index ["brand_id"], name: "index_inputs_on_brand_id"
     t.index ["input_type_id"], name: "index_inputs_on_input_type_id"
     t.index ["supplier_id"], name: "index_inputs_on_supplier_id"
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "body", null: false
+    t.text "client_ids_text"
+    t.string "plans", default: [], array: true
+    t.date "start_date"
+    t.date "end_date"
+    t.time "start_hour"
+    t.time "end_hour"
+    t.string "created_by_type"
+    t.bigint "created_by_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_type", "created_by_id"], name: "index_system_admins_messages_on_created_by"
+  end
+
+  create_table "messages_plans", id: false, force: :cascade do |t|
+    t.bigint "message_id", null: false
+    t.bigint "plan_id", null: false
   end
 
   create_table "payment_method_installments", force: :cascade do |t|
@@ -525,22 +546,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_16_111210) do
     t.bigint "client_id"
   end
 
-  create_table "system_admins_messages", force: :cascade do |t|
-    t.string "title", null: false
-    t.text "body", null: false
-    t.text "client_ids_text"
-    t.string "plans", default: [], array: true
-    t.date "start_date"
-    t.date "end_date"
-    t.time "start_hour"
-    t.time "end_hour"
-    t.string "created_by_type"
-    t.bigint "created_by_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["created_by_type", "created_by_id"], name: "index_system_admins_messages_on_created_by"
-  end
-
   create_table "taxes", force: :cascade do |t|
     t.text "description"
     t.decimal "icms"
@@ -579,6 +584,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_16_111210) do
     t.integer "failed_attempts", default: 0, null: false
     t.string "unlock_token"
     t.datetime "locked_at", precision: nil
+    t.boolean "super_admin", default: false, null: false
     t.index ["confirmation_token"], name: "index_user_admins_on_confirmation_token", unique: true
     t.index ["reset_password_token"], name: "index_user_admins_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_user_admins_on_unlock_token", unique: true

@@ -1,6 +1,7 @@
-class ProductionSimulationsController < ApplicationController
+class ProductionSimulationsController < Clients::AuthenticatedController
   before_action :authorize_admin!, only: [:destroy]
   before_action :set_production_simulation, only: %i[show edit update destroy]
+  layout 'application'
 
   def index
     @production_simulations = ProductionSimulation.all

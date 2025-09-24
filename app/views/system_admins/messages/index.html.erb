@@ -19,7 +19,7 @@
           <tr>
             <td><%= msg.title %></td>
             <td><%= msg.client_ids_text %></td>
-            <td><%= msg.plans.join(", ") %></td>
+            <td><%= msg.plans.map(&:description).join(", ") %></td>
             <td>
               <% if msg.start_date.present? %>
                 <%= l(msg.start_date) %>

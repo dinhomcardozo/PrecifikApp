@@ -1,19 +1,11 @@
 <%= form_with(model: system_admins_client) do |form| %>
   <% if system_admins_client.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(system_admins_client.errors.count, "error") %> prohibited this system_admins_client from being saved:</h2>
-
-      <ul>
-        <% system_admins_client.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
+    <!-- mensagens de erro -->
   <% end %>
 
   <div>
-    <%= form.label :razao_social, style: "display: block" %>
-    <%= form.text_field :razao_social %>
+    <%= form.label :razao_social %>
+    <%= form.text_field :razao_social, readonly: local_assigns[:readonly] %>
   </div>
 
   <div>
@@ -63,27 +55,27 @@
 
   <div>
     <%= form.label :signup_date, style: "display: block" %>
-    <%= form.date_field :signup_date %>
+    <%= form.date_field :signup_date, readonly: true %>
   </div>
 
   <div>
     <%= form.label :first_payment, style: "display: block" %>
-    <%= form.date_field :first_payment %>
+    <%= form.date_field :first_payment, readonly: true %>
   </div>
 
   <div>
     <%= form.label :last_payment, style: "display: block" %>
-    <%= form.date_field :last_payment %>
+    <%= form.date_field :last_payment, readonly: true %>
   </div>
 
   <div>
     <%= form.label :first_login, style: "display: block" %>
-    <%= form.datetime_field :first_login %>
+    <%= form.datetime_field :first_login, readonly: true %>
   </div>
 
   <div>
     <%= form.label :last_login, style: "display: block" %>
-    <%= form.datetime_field :last_login %>
+    <%= form.datetime_field :last_login, readonly: true %>
   </div>
 
   <div>

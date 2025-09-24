@@ -1,5 +1,4 @@
-<!-- app/views/system_admins/messages/_form.html.erb -->
-<%= form_with(model: @message, url: system_admins_messages_path) do |f| %>
+<%= form_with(model: @message, url: @message.new_record? ? system_admins_messages_path : system_admins_message_path(@message)) do |f| %>
   <div>
     <%= f.label :title, "Título" %>
     <%= f.text_field :title, class: "form-control" %>
@@ -7,7 +6,8 @@
 
   <div class="form-group">
     <%= f.label :body, "Mensagem" %>
-    <%= f.text_area :body, class: "form-control", id: "editor" %>
+    <%= f.hidden_field :body, id: "message_body" %>
+    <div id="quill-editor" style="height: 300px;"></div>
   </div>
 
   <div>
@@ -16,8 +16,8 @@
   </div>
 
   <div>
-    <%= f.label :plans, "Planos" %>
-    <%= f.select :plans, ["Básico", "Pro", "Premium"], {}, multiple: true, class: "form-select" %>
+    <%= f.label :plan_ids, "Planos" %>
+    <%= f.collection_select :plan_ids, @plans, :id, :description, {}, { multiple: true, class: "form-select" } %>
   </div>
 
   <div>

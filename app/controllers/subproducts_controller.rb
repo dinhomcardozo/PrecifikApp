@@ -1,6 +1,7 @@
 class SubproductsController < Clients::AuthenticatedController
   include AuthorizationForClients
   before_action :authenticate_user_client!
+  layout "application"
   
   include Filterable
   

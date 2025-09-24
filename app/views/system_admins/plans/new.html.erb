@@ -1,11 +1,8 @@
-<% content_for :title, "New plan" %>
+<main class="logged-system">
+  <h1>Novo Plano</h1>
 
-<h1>New plan</h1>
+  <%= render "form", system_admins_plan: @system_admins_plan %>
 
-<%= render "form", system_admins_plan: @system_admins_plan %>
-
-<br>
-
-<div>
-  <%= link_to "Back to plans", system_admins_plans_path %>
-</div>
+  <br>
+  <%= link_to "Voltar para Planos", system_admins_plans_path %>
+</main>

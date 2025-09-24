@@ -1,5 +1,5 @@
 body {
-  background-color: var(--bg-menu-color);
+  background-color: #ffffff;
   margin: 0;
   font-family: 'Raleway', sans-serif;
 }
@@ -26,13 +26,13 @@ body {
 }
 
 .system-admin-box {
-  max-width: 400px; /* largura máxima da caixa */
-  margin: 60px auto; /* centraliza horizontalmente e dá espaço no topo */
+  max-width: 400px;
+  margin: 60px auto;
   padding: 20px;
   background-color: #f0f0f0;
-  border: 1px solid #ccc; /* borda de 1px */
-  border-radius: 8px; /* cantos arredondados */
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* sombra opcional para destaque */
+  border: 1px solid #ccc; 
+  border-radius: 8px; 
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
   text-align: center;
 }
 

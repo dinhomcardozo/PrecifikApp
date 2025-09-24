@@ -1,16 +1,18 @@
-<p style="color: green"><%= notice %></p>
+<main class="logged-system">
+  <% content_for :title, "Clients" %>
 
-<% content_for :title, "Clients" %>
+  <h1>Clientes</h1>
 
-<h1>Clients</h1>
+  <div id="system_admins_clients">
+    <% @system_admins_clients.each do |system_admins_client| %>
+      <%= render "form", system_admins_client: system_admins_client %>
+      <p>
+        <%= link_to "Show this client", system_admins_client %> |
+        <%= link_to "Edit", edit_system_admins_client_path(system_admins_client) %> |
+        <%= button_to "Destroy", system_admins_client, method: :delete, data: { confirm: "Tem certeza?" } %>
+      </p>
+    <% end %>
+  </div>
 
-<div id="system_admins_clients">
-  <% @system_admins_clients.each do |system_admins_client| %>
-    <%= render system_admins_client %>
-    <p>
-      <%= link_to "Show this client", system_admins_client %>
-    </p>
-  <% end %>
-</div>
-
-<%= link_to "New client", new_system_admins_client_path %>
+  <%= link_to "Novo cliente", new_system_admins_client_path %>
+</main
