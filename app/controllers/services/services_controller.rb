@@ -7,7 +7,7 @@ module Services
     before_action :load_collections,   only: %i[new edit create update]
 
     def index
-      @services = Service.all
+      @services = Services::Service.where(client_id: current_user_client.client_id)
     end
 
     def show
@@ -16,12 +16,9 @@ module Services
     def new
       @service = Services::Service.new
       @service.service_inputs.build
-      @professionals = Professional.order(:full_name)
     end
 
     def edit
-      @service = Services::Service.find(params[:id])
-      @professionals = Professional.order(:full_name)
       @service.hourly_rate ||= @service.professional&.hourly_rate
     end
 
@@ -79,47 +76,19 @@ module Services
       end
 
       def load_collections
-        @professionals     = Professional.order(:full_name)
+        @professionals = Services::Professional
+                   .where(client_id: current_user_client.client_id)
+                   .order(:full_name)
         @available_inputs  = Input.order(:name)
-        @available_equipments = Equipment.order(:description)
-        @available_energies   = Energy.order(:description)
+        @available_equipments = Services::Equipment.where(client_id: current_user_client.client_id).order(:description)
+        @available_energies   = Services::Energy.where(client_id: current_user_client.client_id).order(:description)
         @available_products   = Product.order(:description)
         @available_subproducts = Subproduct.order(:name)
       end
 
       # Only allow a list of trusted parameters through.
       def service_params
-        params.require(:services_service).permit!  # <–– aceita tudo
+        params.require(:services_service).permit!
       end
-
-      # def service_params
-      #   params.require(:services_service).permit(
-      #     :description,
-      #     :professional_id,
-      #     :hourly_rate,
-      #     :total_hours_raw,
-      #     :total_hours,
-      #     :tax,
-      #     :profit_margin,
-      #     :service_price,
-      #     :service_items_cost,
-      #     :final_service_price,
-      #     service_inputs_attributes: [
-      #       :id, :input_id, :quantity_for_service, :cost, :_destroy
-      #     ],
-      #     service_subproducts_attributes: [
-      #       :id, :subproduct_id, :quantity_for_service, :cost, :_destroy
-      #     ],
-      #     service_products_attributes: [
-      #       :id, :product_id, :quantity_for_service, :cost, :_destroy
-      #     ],
-      #     service_energies_attributes: [
-      #       :id, :energy_id, :hours_per_service, :cost, :_destroy
-      #     ],
-      #     service_equipments_attributes: [
-      #       :id, :equipment_id, :hours_per_service, :cost, :_destroy
-      #     ]
-      #   )
-      # end
   end
 end

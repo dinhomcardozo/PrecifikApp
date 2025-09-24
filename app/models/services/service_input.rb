@@ -9,6 +9,10 @@ module Services
                autosave:    true
     belongs_to :input, optional: true
 
+    belongs_to :client, class_name: "SystemAdmins::Client"
+    validates :client_id, presence: true
+    before_validation { self.client_id ||= service&.client_id }
+
     private
     
     def calculate_cost

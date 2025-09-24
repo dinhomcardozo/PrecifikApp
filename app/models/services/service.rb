@@ -2,6 +2,7 @@ module Services
   class Service < ApplicationRecord
     self.table_name = "services"
 
+    belongs_to :client, class_name: "SystemAdmins::Client"
     belongs_to :role, optional: true
     belongs_to :professional
 
@@ -22,6 +23,7 @@ module Services
     validates :total_hours, presence: true
     validates :service_price, presence: true
     validates :final_service_price, presence: true
+    validates :client_id, presence: true
 
     accepts_nested_attributes_for :service_inputs,
                                   allow_destroy: true,

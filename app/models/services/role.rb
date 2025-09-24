@@ -1,7 +1,11 @@
 module Services
-    class Role < ApplicationRecord
-        self.table_name = 'roles'
+  class Role < ApplicationRecord
+    self.table_name = 'roles'
 
-        has_many :services, class_name: "Services::Service", foreign_key: :role_id
-    end
+    belongs_to :client, class_name: "SystemAdmins::Client"
+    has_many :services, class_name: "Services::Service", foreign_key: :role_id
+
+    validates :description, presence: true
+    validates :client_id, presence: true
+  end
 end

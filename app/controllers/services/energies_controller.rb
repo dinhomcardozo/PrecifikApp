@@ -6,7 +6,7 @@ module Services
     before_action :set_energy, only: %i[ show edit update destroy ]
 
     def index
-      @energies = Energy.all
+      @energies = Energy.where(client_id: current_user_client.client_id)
     end
 
     def show
@@ -35,15 +35,13 @@ module Services
     end
 
     def update
-      respond_to do |format|
+      @energy.client_id = current_user_client.client_id
+
         if @energy.update(energy_params)
-          format.html { redirect_to @energy, notice: "Energy was successfully updated." }
-          format.json { render :show, status: :ok, location: @energy }
+          redirect_to clients_services_energy_path(@energy), notice: "Energia atualizada com sucesso."
         else
-          format.html { render :edit, status: :unprocessable_entity }
-          format.json { render json: @energy.errors, status: :unprocessable_entity }
+          render :edit, status: :unprocessable_entity
         end
-      end
     end
 
     def destroy

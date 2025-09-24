@@ -26,7 +26,7 @@
     <%= form.label :role_id, "Função", style: "display: block", class: "custom-label" %>
     <%= form.collection_select(
       :role_id,
-      Services::Role.all,
+      @roles,
       :id,
       :description,
       { prompt: "Selecione" },

@@ -4,11 +4,11 @@
   <%= render @energy %>
 
   <div>
-    <%= link_to "Editar", edit_services_energy_path(@energy), class: "action-button" %> |
+    <%= link_to "Editar", edit_clients_services_energy_path(@energy), class: "action-button" %> |
     <%= link_to "Voltar para Energias", clients_services_energies_path, class: "standart-button" %>
 
     <%= button_to "Excluir",
-                  services_energy_path(@energy),
+                  clients_services_energies_path(@energy),
                   method: :delete,
                   class: "action-button",
                   data: { confirm: "Are you sure?" } %>

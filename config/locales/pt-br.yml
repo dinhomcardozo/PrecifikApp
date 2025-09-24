@@ -6,6 +6,24 @@ pt-BR:
         separator: ","
         delimiter: "."
         format: "%u %n"
+
   date:
     formats:
       default: "%d/%m/%Y"
+
+  activerecord:
+    models:
+      system_admins/user_client: "Usuário Cliente"
+    attributes:
+      system_admins/user_client:
+        first_name: "Nome"
+        last_name: "Sobrenome"
+
+  errors:
+    models:
+      system_admins/user_client:
+        attributes:
+          first_name:
+            blank: "não pode ficar em branco"
+          last_name:
+            blank: "não pode ficar em branco"

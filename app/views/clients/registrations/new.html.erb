@@ -16,6 +16,16 @@
   <%= f.email_field :email, placeholder: "E-mail" %>
   <%= f.password_field :password, placeholder: "Senha" %>
   <%= f.password_field :password_confirmation, placeholder: "Confirmação da senha" %>
+  <div>
+    <%= f.label :first_name, "Nome" %>
+    <%= f.text_field :first_name, required: true %>
+  </div>
+
+  <div>
+    <%= f.label :last_name, "Sobrenome" %>
+    <%= f.text_field :last_name, required: true %>
+  </div>
+
   <div class="actions">
     <%= f.submit "Criar conta" %>
   </div>
