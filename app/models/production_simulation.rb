@@ -2,11 +2,15 @@ class ProductionSimulation < ApplicationRecord
   belongs_to :client, class_name: "SystemAdmins::Client"
   belongs_to :created_by, class_name: "SystemAdmins::UserClient"
   belongs_to :updated_by, class_name: "SystemAdmins::UserClient", optional: true
-  belongs_to :product
+  belongs_to :product, optional: false
 
   has_many :simulation_inputs, dependent: :destroy
   has_many :simulation_subproducts, dependent: :destroy
   has_many :simulation_products, dependent: :destroy
+
+  validates :product, presence: true
+  validates :client_id, presence: true
+  validate :product_must_belong_to_same_client
 
   accepts_nested_attributes_for :simulation_inputs, allow_destroy: true
   accepts_nested_attributes_for :simulation_subproducts, allow_destroy: true
@@ -23,4 +27,9 @@ class ProductionSimulation < ApplicationRecord
 
   private
 
+  def product_must_belong_to_same_client
+    if product && product.client_id != client_id
+      errors.add(:product, "não pertence a este cliente")
+    end
+  end
 end
