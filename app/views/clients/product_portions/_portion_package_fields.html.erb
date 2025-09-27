@@ -1,0 +1,37 @@
+<%# app/views/clients/product_portions/_portion_package_fields.html.erb %>
+<div class="nested-fields" data-new-record="<%= f.object.new_record? %>">
+  <div>
+    <%= f.label :package_id, "Embalagem", class: "custom-label" %>
+    <select name="<%= f.object_name %>[package_id]"
+            id="<%= f.object_name %>_package_id"
+            class="form-select"
+            data-action="change->portion-packages#updateTotal">
+      <option value="">Selecione</option>
+      <% Package.all.order(:description).each do |pkg| %>
+        <option value="<%= pkg.id %>" data-unit-price="<%= pkg.unit_price %>">
+          <%= pkg.description %>
+        </option>
+      <% end %>
+    </select>
+  </div>
+
+  <div>
+    <%= f.label :package_units, "Qtd. Embalagens", class: "custom-label" %>
+    <%= f.number_field :package_units,
+                       class: "form-control",
+                       data: { action: "input->portion-packages#updateTotal" } %>
+  </div>
+
+  <div>
+    <%= f.label :total_package_price, "Preço Total", class: "custom-label" %>
+    <%= f.text_field :total_package_price,
+                     readonly: true,
+                     class: "form-control total-price-field" %>
+  </div>
+
+  <%= f.hidden_field :_destroy %>
+  <%= button_tag "Remover",
+                type: "button",
+                data: { action: "portion-packages#remove" },
+                class: "action-button" %>
+</div>

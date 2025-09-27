@@ -1,0 +1,36 @@
+<main class="index-container">
+  <% content_for :title, "Embalagens" %>
+
+  <h1 class="title">Embalagens</h1>
+
+  <table class="index-table index-table--bordered">
+    <thead>
+      <tr>
+        <th class="custom-label" >Descrição</th>
+        <th class="custom-label" >Fornecedor</th>
+        <th class="custom-label" >Preço Unitário</th>
+        <th colspan="3" class="custom-label" >Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @packages.each do |package| %>
+        <tr>
+          <td><%= package.description %></td>
+          <td><%= package.supplier&.name %></td>
+          <td><%= number_to_currency(package.unit_price, unit: "R$", separator: ",", delimiter: ".") %></td>
+          <td class="cell-actions">
+            <%= link_to "Mostrar", package, class: "action-button" %>
+          </td>
+          <td class="cell-actions">
+            <%= link_to "Editar", edit_package_path(package), class: "action-button" %>
+          </td>
+          <td class="cell-actions">
+            <%= button_to "Excluir", package, method: :delete, data: { confirm: "Tem certeza?" }, class: "action-button" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= link_to "Nova Embalagem", new_package_path, class: "action-button" %>
+</main>

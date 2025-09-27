@@ -66,6 +66,10 @@ Rails.application.routes.draw do
         resources :user_clients, only: [:new, :create, :edit, :show, :update, :destroy]
 
         resource :settings, only: [:show]
+
+        resources :packages
+        resources :product_portions
+        resources :portion_packages
         
         scope path: 'dashboards', as: 'dashboards' do
           get 'overview', to: 'dashboards/overview#index', as: :overview

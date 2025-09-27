@@ -1,21 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-   description: MyString
-   brand: one
-   channel: one
-   total_weight: 1.5
-   general_discount: 9.99
-   subtotal_price: 9.99
-   total_price: 9.99
-   final_price: 9.99
+  description: MyString
+  supplier: one
+  unit_price: 1.5
 
 two:
-   description: MyString
-   brand: two
-   channel: two
-   total_weight: 1.5
-   general_discount: 9.99
-   subtotal_price: 9.99
-   total_price: 9.99
-   final_price: 9.99
+  description: MyString
+  supplier: two
+  unit_price: 1.5

@@ -1,0 +1,40 @@
+<%= form_with(model: package) do |form| %>
+  <% if package.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(package.errors.count, "error") %> prohibited this package from being saved:</h2>
+
+      <ul>
+        <% package.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :description, "Descrição da Embalagem", style: "display: block", class: "custom-label" %>
+    <%= form.text_field :description, class: "form-control" %>
+  </div>
+
+  <div>
+    <%= form.label :supplier_id, "Fornecedor", style: "display: block", class: "custom-label" %>
+    <%= form.collection_select :supplier_id,
+                              Supplier.all.order(:name),
+                              :id,
+                              :name,
+                              { prompt: "Selecione um fornecedor" },
+                              class: "form-control" %>
+  </div>
+
+  <div>
+    <%= form.label :unit_price, "Preço Unitário (R$)", style: "display: block", class: "custom-label" %>
+    <%= form.number_field :unit_price,
+                          step: 0.01,
+                          class: "form-control",
+                          placeholder: "0,00" %>
+  </div>
+
+  <div>
+    <%= form.submit "Salvar", class: "action-button" %>
+  </div>
+<% end %>

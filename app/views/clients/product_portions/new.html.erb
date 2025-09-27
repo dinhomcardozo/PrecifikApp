@@ -1,0 +1,13 @@
+<main class="index-container">
+  <% content_for :title, "Porções | Maxximiza | Precificação Empresarial" %>
+
+  <h1 class="title">Novo Produto Porcionado</h1>
+
+  <%= render "form", product_portion: @product_portion %>
+
+  <br>
+
+  <div>
+    <%= link_to "Voltar", product_portions_path, class: "standart-button" %>
+  </div>
+</main>

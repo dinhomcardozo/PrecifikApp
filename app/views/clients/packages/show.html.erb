@@ -1,0 +1,26 @@
+<main class="index-container">
+  <% content_for :title, "Detalhes da Embalagem" %>
+
+  <h1>Detalhes da Embalagem</h1>
+
+  <table class="index-table index-table--bordered">
+    <tr>
+      <th class="custom-label" >Descrição</th>
+      <td><%= @package.description %></td>
+    </tr>
+    <tr>
+      <th class="custom-label" >Fornecedor</th>
+      <td><%= @package.supplier&.name %></td>
+    </tr>
+    <tr>
+      <th class="custom-label" >Preço Unitário</th>
+      <td><%= number_to_currency(@package.unit_price, unit: "R$", separator: ",", delimiter: ".") %></td>
+    </tr>
+  </table>
+
+  <div>
+    <%= link_to "Editar", edit_package_path(@package), class: "action-button" %>
+    <%= link_to "Voltar", packages_path, class: "action-button" %>
+    <%= button_to "Excluir", @package, method: :delete, data: { confirm: "Tem certeza?" }, class: "action-button" %>
+  </div>
+</main>

@@ -35,6 +35,7 @@
     </button>
     <!-- Menu que será mostrado/ocultado -->
     <div data-dropdown-target="menu" class="dropdown-menu">
+      <%= link_to "Porções", product_portions_path, class: "dropdown-item" %>
       <%= link_to "Produtos", products_path, class: "dropdown-item" %>
       <%= link_to "Subprodutos", subproducts_path, class: "dropdown-item" %>
       <%= link_to "Insumos", inputs_path, class: "dropdown-item" %>
@@ -69,6 +70,8 @@
       <%= link_to "Metas de Vendas", sales_targets_path, class: "dropdown-item" %>
       <%= link_to "Tributos", taxes_path, class: "dropdown-item" %>
       <%= link_to "Custos Fixos", fixed_costs_path, class: "dropdown-item" %>
+      <%= link_to "Canais", channels_path, class: "dropdown-item" %>
+      <%= link_to "Embalagens", packages_path, class: "dropdown-item" %>
       <%= link_to "Marcas", brands_path, class: "dropdown-item" %>
       <%= link_to "Tipos de Insumo", input_types_path, class: "dropdown-item" %>
       <%= link_to "Categorias", categories_path, class: "dropdown-item" %>

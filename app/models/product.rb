@@ -15,6 +15,11 @@ class Product < ApplicationRecord
   has_many :service_products, class_name: 'Services::ServiceProduct', inverse_of: :product
   has_many :services, through: :service_products, class_name: 'Services::Service'
 
+  # Porções e embalagens
+  has_many :product_portions, dependent: :destroy
+  has_many :portion_packages, through: :product_portions
+  has_many :packages, through: :portion_packages
+
   has_one_attached :image
 
   delegate :distributed_fixed_cost, to: :sales_target, allow_nil: true

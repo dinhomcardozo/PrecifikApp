@@ -17,7 +17,7 @@ class PackagesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create package" do
     assert_difference("Package.count") do
-      post packages_url, params: { package: {  brand_id: @package. brand_id,  channel_id: @package. channel_id,  description: @package. description,  final_price: @package. final_price,  general_discount: @package. general_discount,  subtotal_price: @package. subtotal_price,  total_price: @package. total_price,  total_weight: @package. total_weight } }
+      post packages_url, params: { package: { description: @package.description, supplier_id: @package.supplier_id, unit_price: @package.unit_price } }
     end
 
     assert_redirected_to package_url(Package.last)
@@ -34,7 +34,7 @@ class PackagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update package" do
-    patch package_url(@package), params: { package: {  brand_id: @package. brand_id,  channel_id: @package. channel_id,  description: @package. description,  final_price: @package. final_price,  general_discount: @package. general_discount,  subtotal_price: @package. subtotal_price,  total_price: @package. total_price,  total_weight: @package. total_weight } }
+    patch package_url(@package), params: { package: { description: @package.description, supplier_id: @package.supplier_id, unit_price: @package.unit_price } }
     assert_redirected_to package_url(@package)
   end
 

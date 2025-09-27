@@ -17,6 +17,7 @@ import CalendarController from "./calendar_controller"
 import SalesTargetAlertController from "./sales_target_alert_controller"
 import NoticeController from "./notice_controller"
 import SimulationController from "./simulation_controller"
+import PortionPackagesController from "./portion_packages_controller"
 
 const application = Application.start()
 
@@ -37,5 +38,6 @@ application.register("calendar", CalendarController)
 application.register("sales-target-alert", SalesTargetAlertController)
 application.register("notice", NoticeController)
 application.register("simulation", SimulationController)
+application.register("portion-packages", PortionPackagesController)
 
 window.Stimulus = application

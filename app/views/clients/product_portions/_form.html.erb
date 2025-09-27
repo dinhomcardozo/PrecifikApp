@@ -1,0 +1,62 @@
+<%= form_with(model: product_portion) do |form| %>
+  <% if product_portion.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(product_portion.errors.count, "erro") %> impediram o salvamento:</h2>
+      <ul>
+        <% product_portion.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- Produto -->
+  <div>
+    <%= form.label :product_id, "Produto", style: "display: block" %>
+    <%= form.collection_select :product_id,
+                           Product.all.order(:description),
+                           :id,
+                           :description,
+                           { prompt: "Selecione um produto" },
+                           class: "form-select"  %>
+  </div>
+
+  <!-- Quantidade porcionada -->
+  <div>
+    <%= form.label :portioned_quantity, "Quantidade porcionada (g)", style: "display: block" %>
+    <%= form.number_field :portioned_quantity, step: 0.01 %>
+  </div>
+
+  <!-- Preço final (soma dos portion_packages) -->
+  <div>
+    <%= form.label :final_package_price, "Preço Final das Embalagens", style: "display: block" %>
+    <%= form.text_field :final_package_price, readonly: true %>
+  </div>
+
+  <hr>
+
+  <!-- Portion Packages (nested) -->
+  <h3>Embalagens</h3>
+    <div data-controller="portion-packages">
+      <div data-portion-packages-target="container">
+        <%= form.fields_for :portion_packages do |pp_form| %>
+          <%= render "portion_package_fields", f: pp_form %>
+        <% end %>
+      </div>
+
+      <template data-portion-packages-target="template">
+        <%= form.fields_for :portion_packages, PortionPackage.new, child_index: "NEW_RECORD" do |pp_form| %>
+          <%= render "portion_package_fields", f: pp_form %>
+        <% end %>
+      </template>
+
+      <%= button_tag "Adicionar Embalagem",
+                    type: "button",
+                    data: { action: "portion-packages#add" },
+                    class: "action-button" %>
+    </div>
+
+  <div>
+    <%= form.submit "Salvar", class: "action-button" %>
+  </div>
+<% end %>

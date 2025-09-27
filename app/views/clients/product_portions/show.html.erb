@@ -1,0 +1,43 @@
+<main class="index-container">
+  <h2>Detalhes da Porção</h2>
+  <table class="index-table index-table--bordered">
+    <tr>
+      <th>Produto</th>
+      <td><%= @product_portion.product.description %></td>
+    </tr>
+    <tr>
+      <th>Quantidade porcionada</th>
+      <td><%= @product_portion.portioned_quantity %></td>
+    </tr>
+    <tr>
+      <th>Preço final embalagens</th>
+      <td><%= number_to_currency(@product_portion.final_package_price, unit: "R$", separator: ",", delimiter: ".") %></td>
+    </tr>
+  </table>
+
+  <h3>Embalagens</h3>
+  <table class="index-table index-table--bordered">
+    <thead>
+      <tr>
+        <th>Embalagem</th>
+        <th>Qtd</th>
+        <th>Preço Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @product_portion.portion_packages.each do |pp| %>
+        <tr>
+          <td><%= pp.package.description %></td>
+          <td><%= pp.package_units %></td>
+          <td><%= number_to_currency(pp.total_package_price, unit: "R$", separator: ",", delimiter: ".") %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div>
+    <%= link_to "Editar", edit_product_portion_path(@product_portion), class: "standart-button" %> |
+    <%= link_to "Voltar", product_portions_path, class: "standart-button" %>
+    <%= button_to "Excluir", @product_portion, method: :delete, data: { confirm: "Tem certeza?" }, class: "standart-button" %>
+  </div>
+</main>

@@ -1,0 +1,13 @@
+<main class="index-container">
+  <% content_for :title, "Nova Embalagem" %>
+
+  <h1>Nova Embalagem</h1>
+
+  <%= render "form", package: @package %>
+
+  <br>
+
+  <div>
+    <%= link_to "Voltar", packages_path, class: "action-button" %>
+  </div>
+</main>

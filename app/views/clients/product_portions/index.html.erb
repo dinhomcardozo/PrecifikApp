@@ -1,0 +1,42 @@
+<main class="index-container">
+  <% content_for :title, "Porções | Maxximiza | Precificação Empresarial" %>
+
+  <h1 class="title">Porções de Produtos</h1>
+
+  <table class="index-table index-table--bordered">
+    <thead>
+      <tr>
+        <th>Produto</th>
+        <th>Qtd. porcionada</th>
+        <th>Preço final embalagens</th>
+        <th colspan="3">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @product_portions.each do |product_portion| %>
+        <tr>
+          <td><%= product_portion.product.description %></td>
+          <td><%= product_portion.portioned_quantity %></td>
+          <td><%= number_to_currency(product_portion.final_package_price,
+                                    unit: "R$",
+                                    separator: ",",
+                                    delimiter: ".") %></td>
+          <td class="cell-actions">
+            <%= link_to "Mostrar", product_portion, class: "action-button" %>
+          </td>
+          <td class="cell-actions">
+            <%= link_to "Editar", edit_product_portion_path(product_portion), class: "action-button" %>
+          </td>
+          <td class="cell-actions">
+            <%= button_to "Excluir", product_portion,
+                          method: :delete,
+                          data: { confirm: "Tem certeza?" },
+                          class: "action-button" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= link_to "Nova porção", new_product_portion_path, class: "action-button" %>
+</main>
