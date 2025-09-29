@@ -2,17 +2,14 @@
 <div class="nested-fields" data-new-record="<%= f.object.new_record? %>">
   <div>
     <%= f.label :package_id, "Embalagem", class: "custom-label" %>
-    <select name="<%= f.object_name %>[package_id]"
-            id="<%= f.object_name %>_package_id"
-            class="form-select"
-            data-action="change->portion-packages#updateTotal">
-      <option value="">Selecione</option>
-      <% Package.all.order(:description).each do |pkg| %>
-        <option value="<%= pkg.id %>" data-unit-price="<%= pkg.unit_price %>">
-          <%= pkg.description %>
-        </option>
-      <% end %>
-    </select>
+    <%= select_tag "#{f.object_name}[package_id]",
+          options_for_select(
+            [["Selecione uma embalagem", ""]] + 
+            Package.all.order(:description).map { |pkg| [pkg.description, pkg.id, { "data-unit-price": pkg.unit_price }] },
+            f.object.package_id
+          ),
+          class: "form-select",
+          data: { action: "change->portion-packages#updateTotal" } %>
   </div>
 
   <div>

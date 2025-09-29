@@ -4,7 +4,13 @@ export default class extends Controller {
   static targets = ["container", "template"]
 
   connect() {
-    this.updateFinalPrice()
+    this.containerTarget.querySelectorAll(".nested-fields").forEach(wrapper => {
+      const select = wrapper.querySelector("select")
+      const unitsInput = wrapper.querySelector("input[name*='[package_units]']")
+      if (select && unitsInput) {
+        this.updateTotal({ target: unitsInput })
+      }
+    })
   }
 
   add(event) {

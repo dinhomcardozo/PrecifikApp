@@ -128,6 +128,32 @@
 
   <%= render 'nutritional_summary' %>
 
+  <section class="show-portions">
+    <h2 class="subtitle">Outras Porções do Produto</h2>
+    <table class="index-table index-table--bordered">
+      <thead>
+        <tr>
+          <th>Quantidade (g)</th>
+          <th>Custo Produto</th>
+          <th>Custo Embalado (sem margem)</th>
+          <th>Preço Varejo</th>
+          <th>Preço Atacado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @product.product_portions.each do |portion| %>
+          <tr>
+            <td><%= portion.portioned_quantity %></td>
+            <td><%= number_to_currency(portion.portion_cost, unit: "R$ ") %></td>
+            <td><%= number_to_currency(portion.packaged_cost, unit: "R$ ") %></td>
+            <td><%= number_to_currency(portion.packaged_price_retail, unit: "R$ ") %></td>
+            <td><%= number_to_currency(portion.packaged_price_wholesale, unit: "R$ ") %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </section>
+
   <section class="show-channels-pricing">
     <h2 class="subtitle">Preço Final por Canal</h2>
     <table class="index-table index-table--bordered">

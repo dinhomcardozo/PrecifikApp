@@ -24,8 +24,19 @@
   </tbody>
 </table>
 
-<p>
-  Peso final: <%= @product.final_weight %> g<br>
-  Calorias por grama (antes perda): <%= @product.calories_per_gram_before_loss.round(2) %> kcal/g<br>
-  Calorias por grama (após perda): <%= @product.calories_per_gram_after_loss.round(2) %> kcal/g
-</p>
+<section>
+  <table class="vertical-table--bordered" >
+    <tr>
+      <th>Peso final (g) (com perda):</th>
+      <td><%= @product.final_weight %> g</td>
+    </tr>
+    <tr>
+      <th>Calorias por grama (antes perda):</th>
+      <td><%= @product.calories_per_gram_before_loss.round(2) %> kcal/g</td>
+    </tr>
+    <tr>
+      <th>Calorias por grama (após perda):</th>
+      <td><%= @product.calories_per_gram_after_loss.round(2) %> kcal/g</td>
+    </tr>
+  </table>
+</section>
