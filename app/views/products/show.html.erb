@@ -126,56 +126,97 @@
     <hr>
   <% end %>
 
-  <%= render 'nutritional_summary' %>
+  <div class="accordion" id="productAccordion">
 
-  <section class="show-portions">
-    <h2 class="subtitle">Outras Porções do Produto</h2>
-    <table class="index-table index-table--bordered">
-      <thead>
-        <tr>
-          <th>Quantidade (g)</th>
-          <th>Custo Produto</th>
-          <th>Custo Embalado (sem margem)</th>
-          <th>Preço Varejo</th>
-          <th>Preço Atacado</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @product.product_portions.each do |portion| %>
-          <tr>
-            <td><%= portion.portioned_quantity %></td>
-            <td><%= number_to_currency(portion.portion_cost, unit: "R$ ") %></td>
-            <td><%= number_to_currency(portion.packaged_cost, unit: "R$ ") %></td>
-            <td><%= number_to_currency(portion.packaged_price_retail, unit: "R$ ") %></td>
-            <td><%= number_to_currency(portion.packaged_price_wholesale, unit: "R$ ") %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </section>
+    <!-- Nutritional Summary -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingNutritional">
+        <button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#collapseNutritional"
+                aria-expanded="false" aria-controls="collapseNutritional">
+          Informações Nutricionais
+        </button>
+      </h2>
+      <div id="collapseNutritional" class="accordion-collapse collapse"
+          aria-labelledby="headingNutritional" data-bs-parent="#productAccordion">
+        <div class="accordion-body">
+          <%= render 'nutritional_summary' %>
+        </div>
+      </div>
+    </div>
 
-  <section class="show-channels-pricing">
-    <h2 class="subtitle">Preço Final por Canal</h2>
-    <table class="index-table index-table--bordered">
-      <thead>
-        <tr>
-          <th>Canal</th>
-          <th>Percentagem do Canal (%)</th>
-          <th>Preço Final com Comissão (R$)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% Channel.all.each do |channel| %>
-          <% base_price = @product.suggested_price_retail.to_f %>
-          <% final_price = base_price * (1 + channel.channel_cost.to_f / 100) %>
-          <tr>
-            <td><%= channel.description %></td>
-            <td><%= number_to_percentage(channel.channel_cost, precision: 2) %></td>
-            <td><%= number_to_currency(final_price, unit: "R$ ") %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </section>
+    <!-- Outras Porções -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingPortions">
+        <button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#collapsePortions"
+                aria-expanded="false" aria-controls="collapsePortions">
+          Outras Porções do Produto
+        </button>
+      </h2>
+      <div id="collapsePortions" class="accordion-collapse collapse"
+          aria-labelledby="headingPortions" data-bs-parent="#productAccordion">
+        <div class="accordion-body">
+          <table class="index-table index-table--bordered">
+            <thead>
+              <tr>
+                <th>Quantidade (g)</th>
+                <th>Custo Produto</th>
+                <th>Custo Embalado (sem margem)</th>
+                <th>Preço Varejo</th>
+                <th>Preço Atacado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @product.product_portions.each do |portion| %>
+                <tr>
+                  <td><%= portion.portioned_quantity %></td>
+                  <td><%= number_to_currency(portion.portion_cost, unit: "R$ ") %></td>
+                  <td><%= number_to_currency(portion.packaged_cost, unit: "R$ ") %></td>
+                  <td><%= number_to_currency(portion.packaged_price_retail, unit: "R$ ") %></td>
+                  <td><%= number_to_currency(portion.packaged_price_wholesale, unit: "R$ ") %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
+    <!-- Preço Final por Canal -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingChannels">
+        <button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#collapseChannels"
+                aria-expanded="false" aria-controls="collapseChannels">
+          Preço Final por Canal
+        </button>
+      </h2>
+      <div id="collapseChannels" class="accordion-collapse collapse"
+          aria-labelledby="headingChannels" data-bs-parent="#productAccordion">
+        <div class="accordion-body">
+          <table class="index-table index-table--bordered">
+            <thead>
+              <tr>
+                <th>Canal</th>
+                <th>Percentagem do Canal (%)</th>
+                <th>Preço Final com Comissão (R$)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% Channel.all.each do |channel| %>
+                <% base_price = @product.suggested_price_retail.to_f %>
+                <% final_price = base_price * (1 + channel.channel_cost.to_f / 100) %>
+                <tr>
+                  <td><%= channel.description %></td>
+                  <td><%= number_to_percentage(channel.channel_cost, precision: 2) %></td>
+                  <td><%= number_to_currency(final_price, unit: "R$ ") %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>

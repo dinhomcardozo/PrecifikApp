@@ -55,6 +55,17 @@
         <th>Ação</th>
       </tr>
     </thead>
+
+    <hr>
+    <div class="totals-box">
+      <p><strong>Faturamento previsto Varejo (ativos):</strong>
+        <%= number_to_currency(@expected_retail_revenue, unit: "R$ ") %>
+      </p>
+      <p><strong>Faturamento previsto Atacado (ativos):</strong>
+        <%= number_to_currency(@expected_wholesale_revenue, unit: "R$ ") %>
+      </p>
+    </div>
+
     <tbody>
       <% @products_without_sales_target.each do |product| %>
         <tr>

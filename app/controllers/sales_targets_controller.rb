@@ -26,6 +26,14 @@ class SalesTargetsController < Clients::AuthenticatedController
     Product.left_outer_joins(:sales_target)
            .where(sales_targets: { id: nil })
            .includes(:category)
+
+    @expected_retail_revenue = @sales_targets
+      .where("start_date <= :today AND end_date >= :today", today: today)
+      .sum { |st| st.product&.suggested_price_retail.to_f * st.monthly_target.to_i }
+
+    @expected_wholesale_revenue = @sales_targets
+      .where("start_date <= :today AND end_date >= :today", today: today)
+      .sum { |st| st.product&.suggested_price_wholesale.to_f * st.monthly_target.to_i }
   end
 
   # GET /sales_targets/1 or /sales_targets/1.json
@@ -36,6 +44,12 @@ class SalesTargetsController < Clients::AuthenticatedController
     @sales_target_sum        = @sales_target.sales_target_sum
     @sales_target_active_sum = @sales_target.sales_target_active_sum
     @total_fixed_cost        = FixedCost.sum(:monthly_cost)
+
+    @expected_retail_revenue =
+      @sales_target.product&.suggested_price_retail.to_f * @sales_target.monthly_target.to_i
+
+    @expected_wholesale_revenue =
+      @sales_target.product&.suggested_price_wholesale.to_f * @sales_target.monthly_target.to_i
   end
 
   # GET /sales_targets/new
