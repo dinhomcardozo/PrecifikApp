@@ -45,39 +45,70 @@
     </tbody>
   </table>
 
-  <h2>Produtos sem Meta de Venda</h2>
+  <hr>
 
-  <table class="index-table index-table--bordered">
-    <thead>
-      <tr>
-        <th>Produto</th>
-        <th>Categoria</th>
-        <th>Ação</th>
-      </tr>
-    </thead>
+  <div class="accordion" id="salesTargetsAccordion">
 
-    <hr>
-    <div class="totals-box">
-      <p><strong>Faturamento previsto Varejo (ativos):</strong>
-        <%= number_to_currency(@expected_retail_revenue, unit: "R$ ") %>
-      </p>
-      <p><strong>Faturamento previsto Atacado (ativos):</strong>
-        <%= number_to_currency(@expected_wholesale_revenue, unit: "R$ ") %>
-      </p>
+    <!-- Expected Revenue -->
+    <div class="accordion-item expected-revenue">
+      <h2 class="accordion-header" id="headingExpectedRevenue">
+        <button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#collapseExpectedRevenue"
+                aria-expanded="false" aria-controls="collapseExpectedRevenue">
+          Previsão de Faturamento
+        </button>
+      </h2>
+      <div id="collapseExpectedRevenue" class="accordion-collapse collapse"
+          aria-labelledby="headingExpectedRevenue" data-bs-parent="#salesTargetsAccordion">
+        <div class="accordion-body">
+          <div class="totals-box">
+            <p><strong>Faturamento previsto Varejo (ativos):</strong>
+              <%= number_to_currency(@expected_retail_revenue, unit: "R$ ") %>
+            </p>
+            <p><strong>Faturamento previsto Atacado (ativos):</strong>
+              <%= number_to_currency(@expected_wholesale_revenue, unit: "R$ ") %>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <tbody>
-      <% @products_without_sales_target.each do |product| %>
-        <tr>
-          <td><%= product.description %></td>
-          <td><%= product.category&.name || "-" %></td>
-          <td>
-            <%= link_to "Criar",
-                        new_sales_target_path(product_id: product.id),
-                        class: "action-button" %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+    <!-- Products Without Sales Targets -->
+    <div class="accordion-item products-without-sales-targets">
+      <h2 class="accordion-header" id="headingProductsWithout">
+        <button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#collapseProductsWithout"
+                aria-expanded="false" aria-controls="collapseProductsWithout">
+          Produtos sem Meta de Venda
+        </button>
+      </h2>
+      <div id="collapseProductsWithout" class="accordion-collapse collapse"
+          aria-labelledby="headingProductsWithout" data-bs-parent="#salesTargetsAccordion">
+        <div class="accordion-body">
+          <table class="index-table index-table--bordered">
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Categoria</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @products_without_sales_target.each do |product| %>
+                <tr>
+                  <td><%= product.description %></td>
+                  <td><%= product.category&.name || "-" %></td>
+                  <td>
+                    <%= link_to "Criar",
+                                new_sales_target_path(product_id: product.id),
+                                class: "action-button" %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>

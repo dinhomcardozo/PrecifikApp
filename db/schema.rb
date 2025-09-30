@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_27_144656) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_30_221645) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -204,6 +204,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_27_144656) do
     t.float "unit_price"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "client_id"
+    t.index ["client_id"], name: "index_packages_on_client_id"
     t.index ["supplier_id"], name: "index_packages_on_supplier_id"
   end
 
@@ -241,6 +243,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_27_144656) do
     t.float "total_package_price"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "client_id"
+    t.index ["client_id"], name: "index_portion_packages_on_client_id"
     t.index ["package_id"], name: "index_portion_packages_on_package_id"
     t.index ["product_portion_id"], name: "index_portion_packages_on_product_portion_id"
   end
@@ -252,6 +256,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_27_144656) do
     t.boolean "active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "client_id"
+    t.index ["client_id"], name: "index_product_portions_on_client_id"
     t.index ["product_id"], name: "index_product_portions_on_product_id"
   end
 
@@ -666,10 +672,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_27_144656) do
   add_foreign_key "inputs", "clients", name: "fk_inputs_client"
   add_foreign_key "inputs", "input_types"
   add_foreign_key "inputs", "suppliers"
+  add_foreign_key "packages", "clients"
   add_foreign_key "packages", "suppliers"
   add_foreign_key "payment_method_installments", "payment_methods"
+  add_foreign_key "portion_packages", "clients"
   add_foreign_key "portion_packages", "packages"
   add_foreign_key "portion_packages", "product_portions"
+  add_foreign_key "product_portions", "clients"
   add_foreign_key "product_portions", "products"
   add_foreign_key "product_subproducts", "clients", name: "fk_product_subproducts_client"
   add_foreign_key "product_subproducts", "products"
