@@ -22,6 +22,14 @@ class SalesTargetsController < Clients::AuthenticatedController
     # Custo fixo total
     @total_fixed_cost = FixedCost.sum(:monthly_cost)
 
+      # Custo fixo distribuído global por unidade
+    @distributed_fixed_cost =
+      if @sales_target_sum.zero?
+        0
+      else
+        (@total_fixed_cost / @sales_target_sum).round(2)
+      end
+
     @products_without_sales_target =
     Product.left_outer_joins(:sales_target)
            .where(sales_targets: { id: nil })

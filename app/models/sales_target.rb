@@ -3,7 +3,7 @@ class SalesTarget < ApplicationRecord
   belongs_to :product, optional: true
   has_many :fixed_cost_items
 
-  after_commit :update_global_sums, on: %i[create update destroy]
+  after_commit :update_global_sums_and_products, on: %i[create update destroy]
 
   validates :monthly_target,
             presence: true,
@@ -17,16 +17,22 @@ class SalesTarget < ApplicationRecord
   scope :vencidas, -> { where("end_date < ?", Date.current) }
   scope :vence_hoje, -> { where(end_date: Date.current) }
 
-  # custo fixo distribuído por unidade
   def distributed_fixed_cost
-    return 0 if monthly_target.to_i.zero?
-    (total_fixed_cost.to_f / monthly_target).round(2)
+    total_fixed_costs     = FixedCost.sum(:monthly_cost)
+    total_monthly_targets = SalesTarget.sum(:monthly_target).to_f
+    return 0 if total_monthly_targets.zero?
+
+    (total_fixed_costs / total_monthly_targets).round(2)
   end
 
-  def recalc_total_fixed_cost!
-    update_column(:total_fixed_cost, fixed_cost_items.sum(:amount))
-  end
+  def self.global_distributed_fixed_cost
+    total_fixed_costs     = FixedCost.sum(:monthly_cost)
+    total_monthly_targets = SalesTarget.sum(:monthly_target).to_f
+    return 0 if total_monthly_targets.zero?
 
+    (total_fixed_costs / total_monthly_targets).round(2)
+  end
+  
   private
 
   def end_after_start
@@ -46,20 +52,6 @@ class SalesTarget < ApplicationRecord
     if overlapping
       errors.add(:base, "Já existe uma meta ativa para este produto nesse período")
     end
-  end
-
-  def update_global_sums
-    total  = SalesTarget.sum(:monthly_target)
-    today  = Date.current
-    active = SalesTarget
-               .where("start_date <= ? AND end_date >= ?", today, today)
-               .sum(:monthly_target)
-
-    # Atualiza todas as linhas para manter os dois campos sincronizados
-    SalesTarget.update_all(
-      sales_target_sum: total,
-      sales_target_active_sum: active
-    )
   end
 
   def update_global_sums_and_products
@@ -105,7 +97,8 @@ class SalesTarget < ApplicationRecord
       new_total_with_fixed = (prod.total_cost.to_f + distributed_cost).round(2)
 
       prod.update_columns(
-        total_cost_with_fixed_costs: new_total_with_fixed,
+        fixed_cost: distributed_cost,
+        total_cost_with_fixed_costs: (prod.total_cost.to_f + distributed_cost).round(2),
         updated_at: Time.current
       )
     end

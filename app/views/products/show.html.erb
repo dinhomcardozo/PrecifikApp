@@ -62,9 +62,12 @@
         <td><%= number_to_currency(@product.total_cost, unit: "R$ ") %></td>
       </tr>
       <tr>
-        <th>Total c/ Tributos (R$):</th>
-        <td><%= number_to_currency(@product.total_cost_with_taxes, unit: "R$ ") %></td>
+        <th>Custo Fixo Distribuído (R$):</th>
+        <td><%= number_to_currency(SalesTarget.global_distributed_fixed_cost, unit: "R$ ") %></td>
       </tr>
+      <tr>
+        <th>Total c/ Tributos + Custos Fixos (R$):</th>
+        <td><%= number_to_currency(@product.calculated_final_cost, unit: "R$ ") %></td>      </tr>
       <tr>
         <th>Preço Sugerido Varejo (R$):</th>
         <td><%= number_to_currency(@product.suggested_price_retail, unit: "R$ ") %></td>

@@ -22,8 +22,6 @@ class Product < ApplicationRecord
 
   has_one_attached :image
 
-  delegate :distributed_fixed_cost, to: :sales_target, allow_nil: true
-
   delegate :monthly_target,
            to: :sales_target,
            prefix: false,
@@ -46,21 +44,30 @@ class Product < ApplicationRecord
     product_subproducts.sum(&:cost)
   end
 
-  # soma dos costs já atualizados em recalculate_weights
   def compute_total_cost
     self.total_cost = product_subproducts.sum { |ps| ps.cost.to_f }.round(4)
   end
 
-  # total_cost_with_taxes permanece o mesmo, pois parte de total_cost
   def compute_total_cost_with_taxes
     rate_sum = %i[icms ipi pis_cofins difal iss cbs ibs]
-              .sum { |a| tax&.public_send(a).to_f / 100.0 }
+                .sum { |a| tax&.public_send(a).to_f / 100.0 }
     self.total_cost_with_taxes = (total_cost * (1 + rate_sum)).round(2)
   end
 
-  # total_cost_with_fixed_costs idem
   def compute_total_cost_with_fixed_costs
-    self.total_cost_with_fixed_costs = (total_cost + distributed_fixed_cost.to_f).round(2)
+    self.total_cost_with_fixed_costs = (total_cost + SalesTarget.global_distributed_fixed_cost).round(2)
+  end
+
+  def compute_fixed_cost
+    self.fixed_cost = SalesTarget.global_distributed_fixed_cost
+  end
+
+  def calculated_final_cost
+    (total_cost_with_taxes.to_f + SalesTarget.global_distributed_fixed_cost).round(2)
+  end
+
+  def compute_final_cost
+    self.final_cost = calculated_final_cost
   end
 
 # 1 – Composição
@@ -141,6 +148,16 @@ class Product < ApplicationRecord
     compute_total_cost_with_taxes
     compute_total_cost_with_fixed_costs
     compute_suggested_prices
+    compute_fixed_cost 
+    compute_final_cost
+  end
+
+  def calculated_final_cost
+    (total_cost_with_taxes.to_f + SalesTarget.global_distributed_fixed_cost).round(2)
+  end
+
+  def compute_final_cost
+    self.final_cost = calculated_final_cost
   end
 
   def compute_total_cost
@@ -154,15 +171,19 @@ class Product < ApplicationRecord
   end
 
   def compute_total_cost_with_fixed_costs
-    self.total_cost_with_fixed_costs = (total_cost + distributed_fixed_cost.to_f).round(2)
+    self.total_cost_with_fixed_costs = (total_cost + SalesTarget.global_distributed_fixed_cost).round(2)
+  end
+
+  def compute_fixed_cost
+    self.fixed_cost = SalesTarget.global_distributed_fixed_cost
   end
 
   def compute_suggested_prices
     r_factor = 1 + profit_margin_retail.to_f / 100.0
     w_factor = 1 + profit_margin_wholesale.to_f / 100.0
 
-    self.suggested_price_retail    = (total_cost_with_taxes * r_factor).round(2)
-    self.suggested_price_wholesale = (total_cost_with_taxes * w_factor).round(2)
+    self.suggested_price_retail    = (final_cost * r_factor).round(2)
+    self.suggested_price_wholesale = (final_cost * w_factor).round(2)
   end
 
   def real_profit_retail_margin

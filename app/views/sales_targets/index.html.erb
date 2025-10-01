@@ -45,6 +45,16 @@
     </tbody>
   </table>
 
+  <div class="totals-box mt-3">
+    <p class="custom-label"><strong>Total de Metas (unidades):</strong>
+      <%= @sales_target_sum %>
+    </p>
+    <p class="custom-label"><strong>Custo Fixo Distribuído Global (R$):</strong>
+      <%= number_to_currency(SalesTarget.global_distributed_fixed_cost, unit: "R$ ") %>
+    </p>
+  </div>
+
+
   <hr>
 
   <div class="accordion" id="salesTargetsAccordion">
