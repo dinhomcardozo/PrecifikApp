@@ -11,12 +11,14 @@
   <% end %>
   
   <div class="field">
-    <%= f.label :product_id, "Produto", class: "custom-label" %>
-    <%= f.collection_select :product_id,
-          Product.left_outer_joins(:sales_target).where(sales_targets: { id: nil }).or(Product.where(id: sales_target.product_id)),
+    <%= f.label :product_portion_id, "Porção do Produto", class: "custom-label" %>
+    <%= f.collection_select :product_portion_id,
+          ProductPortion.left_outer_joins(:sales_target)
+                        .where(sales_targets: { id: nil })
+                        .or(ProductPortion.where(id: sales_target.product_portion_id)),
           :id,
-          :description,
-          { prompt: "Selecione produto", selected: params[:product_id] || sales_target.product_id },
+          ->(portion) { "#{portion.product.description} - #{portion.portioned_quantity} g" },
+          { prompt: "Selecione a porção", selected: params[:product_portion_id] || sales_target.product_portion_id },
           { class: "form-control" } %>
   </div>
 
@@ -67,7 +69,14 @@
   <table class="index-table index-table-bordered">
     <tbody>
       <tr id="<%= dom_id sales_target %>">
-        <td><%= sales_target.product&.description || "-" %></td>
+        <td>
+          <% if sales_target.product_portion.present? %>
+            <%= sales_target.product_portion.product.description %>
+            (<%= sales_target.product_portion.portioned_quantity %> g)
+          <% else %>
+            -
+          <% end %>
+        </td>
         <td><%= sales_target.monthly_target %></td>
         <td><%= l(sales_target.start_date, format: "%d/%m/%Y") %></td>
         <td><%= l(sales_target.end_date, format: "%d/%m/%Y") %></td>

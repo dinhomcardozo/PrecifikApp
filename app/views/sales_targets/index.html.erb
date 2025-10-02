@@ -13,7 +13,7 @@
         <th>Meta Mensal</th>
         <th>Data Inicial</th>
         <th>Data Final</th>
-        <th>Ações</th>
+        <th colspan="2">Ações</th>
         <th>Status</th>
       </tr>
     </thead>
@@ -21,11 +21,27 @@
     <tbody>
       <% @sales_targets.each do |sales_target| %>
         <tr id="<%= dom_id sales_target %>">
-          <td><%= sales_target.product&.description || "-" %></td>
+          <td>
+            <% if sales_target.product_portion.present? %>
+              <%= sales_target.product_portion.product.description %>
+              (<%= number_with_precision(sales_target.product_portion.portioned_quantity, precision: 0) %> g)
+            <% else %>
+              -
+            <% end %>
+          </td>
           <td><%= sales_target.monthly_target %></td>
           <td><%= l(sales_target.start_date, format: "%d/%m/%Y") %></td>
           <td><%= l(sales_target.end_date, format: "%d/%m/%Y") %></td>
-          <td><%= link_to "Editar", edit_sales_target_path(sales_target), class: "action-button" %></td>
+          <td class="cell-actions">
+            <%= link_to "Editar", edit_sales_target_path(sales_target), class: "action-button" %>
+          </td>
+          <td class="cell-actions">
+            <%= link_to "Excluir",
+                        sales_target_path(sales_target),
+                        method: :delete,
+                        data: { confirm: "Tem certeza que deseja excluir esta meta?" },
+                        class: "action-button" %>
+          </td>
           <td>
             <% today  = Date.current
               start  = sales_target.start_date
@@ -104,13 +120,13 @@
               </tr>
             </thead>
             <tbody>
-              <% @products_without_sales_target.each do |product| %>
+              <% @product_portions_without_sales_target.each do |portion| %>
                 <tr>
-                  <td><%= product.description %></td>
-                  <td><%= product.category&.name || "-" %></td>
+                  <td><%= portion.product.description %> (<%= portion.portioned_quantity %> g)</td>
+                  <td><%= portion.product.category&.name || "-" %></td>
                   <td>
                     <%= link_to "Criar",
-                                new_sales_target_path(product_id: product.id),
+                                new_sales_target_path(product_portion_id: portion.id),
                                 class: "action-button" %>
                   </td>
                 </tr>

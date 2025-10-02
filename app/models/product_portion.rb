@@ -1,9 +1,11 @@
 class ProductPortion < ApplicationRecord
+  default_scope { where(client_id: Current.user_client.client_id) if Current.user_client }
+
   belongs_to :product
   belongs_to :client
-  default_scope { where(client_id: Current.user_client.client_id) if Current.user_client }
   has_many :portion_packages, dependent: :destroy
   has_many :packages, through: :portion_packages
+  has_one :sales_target, inverse_of: :product_portion, dependent: :destroy
 
   accepts_nested_attributes_for :portion_packages, allow_destroy: true
 

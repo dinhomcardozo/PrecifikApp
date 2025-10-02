@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_01_223958) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_02_223631) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -257,6 +257,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_01_223958) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "client_id"
+    t.decimal "fixed_cost", precision: 10, scale: 2
     t.index ["client_id"], name: "index_product_portions_on_client_id"
     t.index ["product_id"], name: "index_product_portions_on_product_id"
   end
@@ -402,12 +403,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_01_223958) do
     t.date "end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "product_id", null: false
     t.decimal "total_fixed_cost", precision: 10, scale: 2, default: "0.0"
     t.integer "sales_target_sum", default: 0, null: false
     t.integer "sales_target_active_sum", default: 0, null: false
     t.bigint "client_id"
-    t.index ["product_id"], name: "index_sales_targets_on_product_id"
+    t.bigint "product_portion_id"
+    t.index ["product_portion_id"], name: "index_sales_targets_on_product_portion_id"
   end
 
   create_table "service_energies", force: :cascade do |t|
@@ -698,7 +699,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_01_223958) do
   add_foreign_key "roles", "clients", name: "fk_roles_client"
   add_foreign_key "sales_orders", "sales_quotes"
   add_foreign_key "sales_quotes", "sales_clients", column: "client_id"
-  add_foreign_key "sales_targets", "products"
+  add_foreign_key "sales_targets", "product_portions"
   add_foreign_key "service_energies", "clients", name: "fk_service_energies_client"
   add_foreign_key "service_energies", "energies"
   add_foreign_key "service_energies", "services"

@@ -30,18 +30,18 @@ class SalesTargetsController < Clients::AuthenticatedController
         (@total_fixed_cost / @sales_target_sum).round(2)
       end
 
-    @products_without_sales_target =
-    Product.left_outer_joins(:sales_target)
-           .where(sales_targets: { id: nil })
-           .includes(:category)
+    @product_portions_without_sales_target =
+      ProductPortion.left_outer_joins(:sales_target)
+                    .where(sales_targets: { id: nil })
+                    .includes(:product => :category)
 
     @expected_retail_revenue = @sales_targets
       .where("start_date <= :today AND end_date >= :today", today: today)
-      .sum { |st| st.product&.suggested_price_retail.to_f * st.monthly_target.to_i }
+      .sum { |st| st.product_portion&.product&.suggested_price_retail.to_f * st.monthly_target.to_i }
 
     @expected_wholesale_revenue = @sales_targets
       .where("start_date <= :today AND end_date >= :today", today: today)
-      .sum { |st| st.product&.suggested_price_wholesale.to_f * st.monthly_target.to_i }
+      .sum { |st| st.product_portion&.product&.suggested_price_wholesale.to_f * st.monthly_target.to_i }
   end
 
   # GET /sales_targets/1 or /sales_targets/1.json
@@ -54,10 +54,10 @@ class SalesTargetsController < Clients::AuthenticatedController
     @total_fixed_cost        = FixedCost.sum(:monthly_cost)
 
     @expected_retail_revenue =
-      @sales_target.product&.suggested_price_retail.to_f * @sales_target.monthly_target.to_i
+      @sales_target.product_portion&.product&.suggested_price_retail.to_f * @sales_target.monthly_target.to_i
 
     @expected_wholesale_revenue =
-      @sales_target.product&.suggested_price_wholesale.to_f * @sales_target.monthly_target.to_i
+      @sales_target.product_portion&.product&.suggested_price_wholesale.to_f * @sales_target.monthly_target.to_i
   end
 
   # GET /sales_targets/new
@@ -104,8 +104,8 @@ class SalesTargetsController < Clients::AuthenticatedController
     vencendo = SalesTarget.where(end_date: today)
 
     render json: {
-      vencidas: vencidas.map { |st| { product: st.product&.description, dias: (today - st.end_date).to_i.abs } },
-      vencendo: vencendo.map { |st| { product: st.product&.description, dias: (st.end_date - today).to_i } }
+      vencidas: vencidas.map { |st| { product: st.product_portion&.product&.description, dias: (today - st.end_date).to_i.abs } },
+      vencendo: vencendo.map { |st| { product: st.product_portion&.product&.description, dias: (st.end_date - today).to_i } }
     }
   end
 
@@ -117,7 +117,7 @@ class SalesTargetsController < Clients::AuthenticatedController
 
   def sales_target_params
     params.require(:sales_target).permit(
-      :product_id,
+      :product_portion_id,
       :total_fixed_cost,
       :monthly_target,
       :start_date,
