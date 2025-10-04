@@ -17,6 +17,13 @@
       <%= form.number_field :portioned_quantity, class: "form-control", step: 0.01 %>
     </div>
 
+    <div class="field">
+      <%= form.label :profit_margin, "Margem Adicionada (%)", class: "custom-label" %>
+      <%= form.number_field :profit_margin,
+            step: 0.01,
+            class: "form-control" %>
+    </div>
+
     <!-- Preço final das embalagens -->
     <div class="field">
       <%= form.label :final_package_price, "Preço Final das Embalagens", class: "custom-label" %>

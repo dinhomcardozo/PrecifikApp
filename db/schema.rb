@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_04_152754) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_04_172811) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -66,6 +66,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_04_152754) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "client_id"
+  end
+
+  create_table "channel_product_portions", force: :cascade do |t|
+    t.bigint "client_id", null: false
+    t.bigint "product_portion_id", null: false
+    t.bigint "channel_id", null: false
+    t.decimal "corrected_final_price", precision: 12, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id", "product_portion_id", "channel_id"], name: "idx_cpp_unique", unique: true
   end
 
   create_table "channels", force: :cascade do |t|
@@ -262,6 +272,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_04_152754) do
     t.decimal "final_cost"
     t.decimal "final_price"
     t.decimal "profit_margin"
+    t.decimal "custom_final_price", precision: 10, scale: 2
+    t.decimal "cost", precision: 12, scale: 2
     t.index ["client_id"], name: "index_product_portions_on_client_id"
     t.index ["product_id"], name: "index_product_portions_on_product_id"
     t.index ["tax_id"], name: "index_product_portions_on_tax_id"
@@ -313,12 +325,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_04_152754) do
     t.text "description"
     t.float "total_weight"
     t.decimal "total_cost", precision: 10, scale: 2, default: "0.0", null: false
-    t.decimal "profit_margin_retail", precision: 10, scale: 2, default: "0.0", null: false
     t.bigint "brand_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.decimal "total_taxes"
-    t.decimal "suggested_price_retail", precision: 10, scale: 2, default: "0.0", null: false
     t.string "image"
     t.bigint "category_id"
     t.decimal "weight_loss", default: "0.0"
@@ -659,6 +668,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_04_152754) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "brands", "clients", name: "fk_brands_client"
   add_foreign_key "categories", "clients", name: "fk_categories_client"
+  add_foreign_key "channel_product_portions", "channels"
+  add_foreign_key "channel_product_portions", "product_portions"
   add_foreign_key "channels", "clients", name: "fk_channels_client"
   add_foreign_key "client_plans", "clients"
   add_foreign_key "client_plans", "plans"

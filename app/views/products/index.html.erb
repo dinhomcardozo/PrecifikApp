@@ -9,21 +9,24 @@
                   class: "standart-button" %>
     </div>
     <hr>
-    <div data-controller="table-filter">
-      <input type="text"
-                  class="form-control"
-                  placeholder="Digite o nome de algum produto..."
-                  data-table-filter-target="input">
 
+    <%= form_with url: products_path, method: :get,
+                  data: { controller: "autosubmit", turbo_frame: "products_table" } do %>
+      <%= text_field_tag :q, params[:q],
+            class: "form-control",
+            placeholder: "Digite o nome de algum produto...",
+            data: { action: "input->autosubmit#submit" } %>
+      <button type="submit" hidden></button>
+    <% end %>
+
+    <%= turbo_frame_tag "products_table" do %>
       <table id="products-table" class="index-table index-table--bordered">
         <thead>
           <tr>
             <% headers = [
                 ["products.description",            "Descrição"],
                 ["products.image",            "Imagem"],
-                ["products.total_cost",             "Custo Total (R$)"],
-                ["products.suggested_price_retail", "Preço Varejo"],
-                ["products.net_profit_retail",      "Lucro Varejo (R$)"]
+                ["products.total_cost",             "Custo Total (R$)"]
               ] %>
 
             <% headers.each do |column, title| %>
@@ -63,8 +66,6 @@
                 <% end %>
               </td>
               <td><%= number_to_currency(p.total_cost,               unit: "R$ ") %></td>
-              <td><%= number_to_currency(p.suggested_price_retail,    unit: "R$ ") %></td>
-              <td><%= number_to_currency(p.net_profit_retail,         unit: "R$ ") %></td>
               <td class="cell-actions">
                 <%= link_to product_path(p),
                             data: { turbo_frame: "_top" },
@@ -89,7 +90,7 @@
           <% end %>
         </tbody>
       </table>
-    </div>
+    <% end %>
 
     <% if action_name == "index" %>
       <%= will_paginate @products,

@@ -57,16 +57,6 @@ class Product < ApplicationRecord
     (total_cost.to_f / weight).round(4)
   end
 
-   # 4. Preços sugeridos
-  def suggested_price_retail
-    (total_cost * (1 + profit_margin_retail.to_f / 100.0)).round(2)
-  end
-
-  # lucro líquido | varejo e atacado
-  def net_profit_retail
-    (suggested_price_retail - total_cost).round(2)
-  end
-
   def recalculate_weights
     total_qty = product_subproducts.sum { |ps| ps.quantity.to_f }
     pct_loss  = weight_loss.to_f.clamp(0, 100) / 100.0
@@ -88,14 +78,12 @@ class Product < ApplicationRecord
   def needs_recalculation?
     product_subproducts.any?(&:saved_change_to_cost?) ||
       product_subproducts.any?(&:saved_change_to_quantity?) ||
-      profit_margin_retail_changed? ||
       weight_loss_changed?
   end
 
   def compute_all_pricing_and_weights
     recalculate_weights
     compute_total_cost
-    compute_suggested_prices
     compute_final_cost
   end
 
@@ -109,16 +97,6 @@ class Product < ApplicationRecord
 
   def compute_total_cost
     self.total_cost = product_subproducts.sum { |ps| ps.cost_per_gram_with_loss * ps.quantity }
-  end
-
-  def compute_suggested_prices
-    r_factor = 1 + profit_margin_retail.to_f / 100.0
-    self.suggested_price_retail = (total_cost.to_f * r_factor).round(2)
-  end
-
-  def real_profit_retail_margin
-    return 0 if suggested_price_retail.to_f.zero?
-    ((net_profit_retail.to_f / suggested_price_retail.to_f) * 100).round(2)
   end
 
   def product_subproducts_changed?

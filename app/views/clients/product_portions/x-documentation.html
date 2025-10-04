@@ -1,0 +1,85 @@
++-------------------+
+|      Product      |
++-------------------+
+| id                |
+| description       |
+| total_cost        |  ← custo total de todos os subprodutos
+| profit_margin_*   |  (migrado para ProductPortion)
+| ...               |
++-------------------+
+| has_many :product_portions
+| has_many :product_subproducts
++-------------------+
+
+           1
+Product ------------------< ProductPortion
+                          
+
++-------------------------+
+|    ProductPortion       |
++-------------------------+
+| id                      |
+| product_id (FK)         |
+| portioned_quantity      |  ← quantidade em gramas
+| cost                    |  ← custo proporcional à quantidade
+| final_package_price     |  ← soma das embalagens
+| distributed_fixed_cost  |  ← custo fixo distribuído
+| taxes_amount            |  ← impostos calculados
+| final_cost              |  ← cost + fixed + taxes + packages
+| profit_margin           |  ← % digitada pelo usuário
+| final_price             |  ← final_cost + margem
+| custom_final_price      |  ← opcional, ≥ final_with_commission
+| ...                     |
++-------------------------+
+| belongs_to :product
+| belongs_to :tax
+| has_many :portion_packages
+| has_many :channel_product_portions
++-------------------------+
+
+           1
+ProductPortion ------------------< PortionPackage
+                                  
+
++----------------------+
+|   PortionPackage     |
++----------------------+
+| id                   |
+| product_portion_id   |
+| package_id           |
+| package_units        |
+| total_package_price  |
++----------------------+
+| belongs_to :product_portion
+| belongs_to :package
++----------------------+
+
+           1
+ProductPortion ------------------< ChannelProductPortion
+                                  
+
++-----------------------------+
+|   ChannelProductPortion     |
++-----------------------------+
+| id                          |
+| product_portion_id (FK)     |
+| channel_id (FK)             |
+| corrected_final_price       | ← opcional, ≥ final_with_commission
++-----------------------------+
+| belongs_to :product_portion |
+| belongs_to :channel         |
++-----------------------------+
+
+           1
+Channel ------------------< ChannelProductPortion
+                          
+
++-------------------+
+|     Channel       |
++-------------------+
+| id                |
+| description       |
+| channel_cost (%)  | ← comissão do canal
++-------------------+
+| has_many :channel_product_portions
++-------------------+

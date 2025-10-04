@@ -16,6 +16,10 @@ class ProductsController < Clients::AuthenticatedController
       authorize Product, policy_class: Clients::BasePolicy
       @products = Product.all
 
+      if params[:q].present?
+        @products = @products.where("products.description ILIKE ?", "%#{params[:q]}%")
+      end
+      
       if params[:subproduct_name].present?
         @products = @products
           .joins(:subproducts)
@@ -33,11 +37,11 @@ class ProductsController < Clients::AuthenticatedController
           .joins(:brand)
           .where("brands.main_brand ILIKE ?", "%#{params[:brand_name]}%")
       end
-    
-    @products = @products
-        .order("#{sort_column} #{sort_direction}")
-        .yield_self { |rel| apply_filters(rel) }
-        .paginate(page: params[:page])
+        
+      @products = @products
+                    .order("#{sort_column} #{sort_direction}")
+                    .yield_self { |rel| apply_filters(rel) }
+                    .paginate(page: params[:page])
   end
 
   def new
@@ -164,12 +168,6 @@ class ProductsController < Clients::AuthenticatedController
       :brand_id,
       :category_id,
       :image,
-      :tax_id,
-      :profit_margin_wholesale,
-      :profit_margin_retail,
-      :total_cost_with_taxes,
-      :suggested_price_retail,
-      :suggested_price_wholesale,
       :weight_loss,
       product_subproducts_attributes: %i[
         id
@@ -192,9 +190,6 @@ class ProductsController < Clients::AuthenticatedController
   def sortable_columns
     %w[
       products.description
-      total_cost_with_taxes
-      suggested_price_retail
-      suggested_price_wholesale
       # adicione outras colunas numéricas ou textuais aqui
     ]
   end

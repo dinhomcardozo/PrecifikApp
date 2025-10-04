@@ -3,20 +3,36 @@
   <table class="index-table index-table--bordered">
     <thead>
       <tr>
-        <th >Produto</th>
+        <th>Produto</th>
         <td><%= @product_portion.product.description %></td>
       </tr>
       <tr>
         <th>Quantidade porcionada</th>
-        <td><%= @product_portion.portioned_quantity %></td>
+        <td><%= @product_portion.portioned_quantity %> g</td>
+      </tr>
+      <tr>
+        <th>Custo da Porção</th>
+        <td><%= number_to_currency(@product_portion.cost, unit: "R$", separator: ",", delimiter: ".") %></td>
+      </tr>
+      <tr>
+        <th>Impostos (R$)</th>
+        <td><%= number_to_currency(@product_portion.taxes_amount, unit: "R$", separator: ",", delimiter: ".") %></td>
       </tr>
       <tr>
         <th>Custo fixo distribuído</th>
         <td><%= number_to_currency(@product_portion.distributed_fixed_cost_per_unit, unit: "R$", separator: ",", delimiter: ".") %></td>
       </tr>
       <tr>
-        <th>Preço final embalagens</th>
+        <th>Embalagens</th>
         <td><%= number_to_currency(@product_portion.final_package_price, unit: "R$", separator: ",", delimiter: ".") %></td>
+      </tr>
+      <tr>
+        <th>Markup (%)</th>
+        <td><%= number_to_percentage(@product_portion.profit_margin.to_f, precision: 2) %></td>
+      </tr>
+      <tr>
+        <th>Margem de Lucro Real (%)</th>
+        <td><%= number_to_percentage(@product_portion.real_profit_margin.to_f, precision: 2) %></td>
       </tr>
       <tr>
         <th>Preço final da Porção</th>
@@ -70,33 +86,65 @@
           Preço Final por Canal
         </button>
       </h2>
-      <div id="collapseChannels" class="accordion-collapse collapse"
+      <div id="collapseChannels" class="accordion-collapse collapse <%= 'show' if params[:edit_channel_id].present? %>"
           aria-labelledby="headingChannels" data-bs-parent="#portionAccordion">
         <div class="accordion-body">
-          <table class="index-table index-table--bordered">
-            <thead>
-              <tr>
-                <th>Canal</th>
-                <th>Percentagem do Canal (%)</th>
-                <th>Preço Final com Comissão (R$)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% Channel.all.each do |channel| %>
-                <% base_price = @product_portion.final_price.to_f %>
-                <% final_price = base_price * (1 + channel.channel_cost.to_f / 100) %>
+          <%= form_with model: @product_portion, url: product_portion_path(@product_portion), method: :patch do |f| %>
+            <table class="index-table index-table--bordered">
+              <thead>
                 <tr>
-                  <td><%= channel.description %></td>
-                  <td><%= number_to_percentage(channel.channel_cost, precision: 2) %></td>
-                  <td><%= number_to_currency(final_price, unit: "R$ ") %></td>
+                  <th>Canal</th>
+                  <th>Comissão Canal (%)</th>
+                  <th>Preço com Comissão (R$)</th>
+                  <th>Preço Corrigido (opcional)</th>
+                  <th>Preço Efetivo (R$)</th>
+                  <th>Ações</th>
                 </tr>
-              <% end %>
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                <% @channel_rows.each_with_index do |cpp, idx| %>
+                  <%= f.fields_for :channel_product_portions, cpp do |cf| %>
+                    <tr>
+                      <td><%= cpp.channel.description %></td>
+                      <td><%= number_to_percentage(cpp.channel.channel_cost, precision: 2) %></td>
+                      <td><%= number_to_currency(cpp.final_with_commission, unit: "R$ ") %></td>
+                      
+                      <td data-controller="inline-edit">
+                        <span data-inline-edit-target="display">
+                          <% if cpp.corrected_final_price.present? %>
+                            <%= number_to_currency(cpp.corrected_final_price, unit: "R$ ") %>
+                          <% else %>
+                            –
+                          <% end %>
+                          <a href="#" data-action="inline-edit#edit">✏️</a>
+                        </span>
+
+                        <span data-inline-edit-target="form" class="d-none">
+                          <%= cf.hidden_field :channel_id %>
+                          <%= cf.number_field :corrected_final_price,
+                                value: cpp.corrected_final_price || "",
+                                step: 0.01,
+                                min: cpp.final_with_commission,
+                                class: "form-control" %>
+                          <%= f.submit "Salvar", class: "action-button" %>
+                          <a href="#" data-action="inline-edit#cancel", , class="action-button">Cancelar</a>
+                        </span>
+                      </td>
+
+                      <td><%= number_to_currency(cpp.effective_price, unit: "R$ ") %></td>
+                      <td>
+                        <%# espaço para ações futuras (resetar, etc.) %>
+                      </td>
+                    </tr>
+                  <% end %>
+                <% end %>
+              </tbody>
+            </table>
+            <%= f.submit "Salvar", class: "action-button" %>
+          <% end %>
         </div>
       </div>
     </div>
-  </div>
 
   <hr>
 
