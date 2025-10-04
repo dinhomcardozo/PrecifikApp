@@ -10,8 +10,16 @@
       <td><%= @product_portion.portioned_quantity %></td>
     </tr>
     <tr>
+      <th>Custo fixo distribuído</th>
+      <td><%= number_to_currency(@product_portion.distributed_fixed_cost_per_unit, unit: "R$", separator: ",", delimiter: ".") %></td>
+    </tr>
+    <tr>
       <th>Preço final embalagens</th>
       <td><%= number_to_currency(@product_portion.final_package_price, unit: "R$", separator: ",", delimiter: ".") %></td>
+    </tr>
+    <tr>
+      <th>Preço final da Porção</th>
+      <td><%= number_to_currency(@product_portion.final_price, unit: "R$", separator: ",", delimiter: ".") %></td>
     </tr>
   </table>
 

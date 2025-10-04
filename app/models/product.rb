@@ -4,9 +4,8 @@ class Product < ApplicationRecord
   
   belongs_to :main_brand, class_name: 'Brand', optional: true
   belongs_to :brand
-  belongs_to :tax,      optional: true
   belongs_to :category, optional: true
-  has_one  :sales_target, inverse_of: :product, dependent: :destroy
+  
   has_many :product_subproducts, inverse_of: :product, dependent: :destroy
   has_many :subproducts, through: :product_subproducts
   has_many   :inputs, through: :subproduct_compositions
@@ -21,11 +20,6 @@ class Product < ApplicationRecord
   has_many :packages, through: :portion_packages
 
   has_one_attached :image
-
-  delegate :monthly_target,
-           to: :sales_target,
-           prefix: false,
-           allow_nil: true
 
   accepts_nested_attributes_for :product_subproducts,
                                 allow_destroy: true,
@@ -48,24 +42,6 @@ class Product < ApplicationRecord
     self.total_cost = product_subproducts.sum { |ps| ps.cost.to_f }.round(4)
   end
 
-  def compute_total_cost_with_taxes
-    rate_sum = %i[icms ipi pis_cofins difal iss cbs ibs]
-                .sum { |a| tax&.public_send(a).to_f / 100.0 }
-    self.total_cost_with_taxes = (total_cost * (1 + rate_sum)).round(2)
-  end
-
-  def compute_total_cost_with_fixed_costs
-    self.total_cost_with_fixed_costs = (total_cost + SalesTarget.global_distributed_fixed_cost).round(2)
-  end
-
-  def compute_fixed_cost
-    self.fixed_cost = SalesTarget.global_distributed_fixed_cost
-  end
-
-  def calculated_final_cost
-    (total_cost_with_taxes.to_f + SalesTarget.global_distributed_fixed_cost).round(2)
-  end
-
   def compute_final_cost
     self.final_cost = calculated_final_cost
   end
@@ -81,38 +57,14 @@ class Product < ApplicationRecord
     (total_cost.to_f / weight).round(4)
   end
 
-  # 3 – TRIBUTOS
-
-      # Custo total com tributos
-  def total_cost_with_taxes
-    (total_cost + total_taxes_amount).round(2)
-  end
-
-      # Soma de todos os % de tributos sobre total_cost
-  def total_taxes_amount
-    return 0 unless tax
-
-    %i[icms ipi pis_cofins difal iss cbs ibs].sum do |field|
-      (tax.send(field).to_f / 100.0) * total_cost
-    end.round(2)
-  end
-
    # 4. Preços sugeridos
   def suggested_price_retail
-    (total_cost_with_taxes * (1 + profit_margin_retail.to_f / 100.0)).round(2)
-  end
-
-  def suggested_price_wholesale
-    (total_cost_with_taxes * (1 + profit_margin_wholesale.to_f / 100.0)).round(2)
+    (total_cost * (1 + profit_margin_retail.to_f / 100.0)).round(2)
   end
 
   # lucro líquido | varejo e atacado
   def net_profit_retail
-    (suggested_price_retail - total_cost_with_taxes).round(2)
-  end
-
-  def net_profit_wholesale
-    (suggested_price_wholesale - total_cost_with_taxes).round(2)
+    (suggested_price_retail - total_cost).round(2)
   end
 
   def recalculate_weights
@@ -136,24 +88,19 @@ class Product < ApplicationRecord
   def needs_recalculation?
     product_subproducts.any?(&:saved_change_to_cost?) ||
       product_subproducts.any?(&:saved_change_to_quantity?) ||
-      tax_id_changed? ||
       profit_margin_retail_changed? ||
-      profit_margin_wholesale_changed? ||
       weight_loss_changed?
   end
 
   def compute_all_pricing_and_weights
     recalculate_weights
     compute_total_cost
-    compute_total_cost_with_taxes
-    compute_total_cost_with_fixed_costs
     compute_suggested_prices
-    compute_fixed_cost 
     compute_final_cost
   end
 
   def calculated_final_cost
-    (total_cost_with_taxes.to_f + SalesTarget.global_distributed_fixed_cost).round(2)
+    total_cost.to_f.round(2)
   end
 
   def compute_final_cost
@@ -164,36 +111,14 @@ class Product < ApplicationRecord
     self.total_cost = product_subproducts.sum { |ps| ps.cost_per_gram_with_loss * ps.quantity }
   end
 
-  def compute_total_cost_with_taxes
-    rate_sum = %i[icms ipi pis_cofins difal iss cbs ibs]
-               .sum { |a| tax&.public_send(a).to_f / 100.0 }
-    self.total_cost_with_taxes = (total_cost * (1 + rate_sum)).round(2)
-  end
-
-  def compute_total_cost_with_fixed_costs
-    self.total_cost_with_fixed_costs = (total_cost + SalesTarget.global_distributed_fixed_cost).round(2)
-  end
-
-  def compute_fixed_cost
-    self.fixed_cost = SalesTarget.global_distributed_fixed_cost
-  end
-
   def compute_suggested_prices
     r_factor = 1 + profit_margin_retail.to_f / 100.0
-    w_factor = 1 + profit_margin_wholesale.to_f / 100.0
-
-    self.suggested_price_retail    = (final_cost * r_factor).round(2)
-    self.suggested_price_wholesale = (final_cost * w_factor).round(2)
+    self.suggested_price_retail = (total_cost.to_f * r_factor).round(2)
   end
 
   def real_profit_retail_margin
     return 0 if suggested_price_retail.to_f.zero?
     ((net_profit_retail.to_f / suggested_price_retail.to_f) * 100).round(2)
-  end
-
-  def real_profit_wholesale_margin
-    return 0 if suggested_price_wholesale.to_f.zero?
-    ((net_profit_wholesale.to_f / suggested_price_wholesale.to_f) * 100).round(2)
   end
 
   def product_subproducts_changed?
@@ -204,7 +129,7 @@ class Product < ApplicationRecord
   def update_subproducts_quantity_with_loss
     product_subproducts.find_each do |ps|
       ps.send(:set_quantity_with_loss)
-      ps.save!(validate: false)
+      ps.update_columns(quantity_with_loss: ps.quantity_with_loss, updated_at: Time.current)
     end
   end
 

@@ -1,6 +1,6 @@
 module Clients
   class ProductPortionsController < ApplicationController
-    before_action :set_product_portion, only: %i[ show edit update destroy ]
+    before_action :set_product_portion, only: %i[ show edit update destroy ] 
 
     # GET /product_portions or /product_portions.json
     def index
@@ -15,12 +15,14 @@ module Clients
     def new
       @product_portion = ProductPortion.new
       @product_portion.portion_packages.build
+      @taxes = Tax.all
     end
 
     # GET /product_portions/1/edit
     def edit
       @product_portion = ProductPortion.find(params[:id])
       @product_portion.portion_packages.build if @product_portion.portion_packages.empty?
+      @taxes = Tax.all
     end
 
     # POST /product_portions or /product_portions.json
@@ -74,6 +76,9 @@ module Clients
         :product_id,
         :portioned_quantity,
         :final_package_price,
+        :final_cost,
+        :final_price,
+        :tax_id,
         portion_packages_attributes: [
           :id,
           :package_id,

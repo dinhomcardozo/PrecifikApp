@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_02_223631) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_04_001404) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -258,8 +258,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_02_223631) do
     t.datetime "updated_at", null: false
     t.bigint "client_id"
     t.decimal "fixed_cost", precision: 10, scale: 2
+    t.bigint "tax_id"
+    t.decimal "final_cost"
+    t.decimal "final_price"
     t.index ["client_id"], name: "index_product_portions_on_client_id"
     t.index ["product_id"], name: "index_product_portions_on_product_id"
+    t.index ["tax_id"], name: "index_product_portions_on_tax_id"
   end
 
   create_table "product_subproducts", force: :cascade do |t|
@@ -309,16 +313,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_02_223631) do
     t.float "total_weight"
     t.decimal "total_cost", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "profit_margin_retail", precision: 10, scale: 2, default: "0.0", null: false
-    t.decimal "profit_margin_wholesale", precision: 10, scale: 2, default: "0.0", null: false
     t.bigint "brand_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "tax_id"
     t.decimal "total_taxes"
     t.decimal "suggested_price_retail", precision: 10, scale: 2, default: "0.0", null: false
-    t.decimal "suggested_price_wholesale", precision: 10, scale: 2, default: "0.0", null: false
-    t.decimal "total_cost_with_taxes", precision: 10, scale: 2, default: "0.0", null: false
-    t.decimal "total_cost_with_fixed_costs", precision: 10, scale: 2, default: "0.0", null: false
     t.string "image"
     t.bigint "category_id"
     t.decimal "weight_loss", default: "0.0"
@@ -332,10 +331,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_02_223631) do
     t.decimal "sugars", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "sodium", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "final_cost"
-    t.decimal "fixed_cost"
     t.index ["brand_id"], name: "index_products_on_brand_id"
     t.index ["category_id"], name: "index_products_on_category_id"
-    t.index ["tax_id"], name: "index_products_on_tax_id"
   end
 
   create_table "professionals", force: :cascade do |t|
@@ -683,6 +680,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_02_223631) do
   add_foreign_key "portion_packages", "product_portions"
   add_foreign_key "product_portions", "clients"
   add_foreign_key "product_portions", "products"
+  add_foreign_key "product_portions", "taxes"
   add_foreign_key "product_subproducts", "clients", name: "fk_product_subproducts_client"
   add_foreign_key "product_subproducts", "products"
   add_foreign_key "product_subproducts", "subproducts"
@@ -693,7 +691,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_02_223631) do
   add_foreign_key "products", "brands"
   add_foreign_key "products", "categories"
   add_foreign_key "products", "clients", name: "fk_products_client"
-  add_foreign_key "products", "taxes"
   add_foreign_key "professionals", "clients", name: "fk_professionals_client"
   add_foreign_key "professionals", "roles"
   add_foreign_key "roles", "clients", name: "fk_roles_client"

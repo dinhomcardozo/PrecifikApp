@@ -15,8 +15,7 @@ class ProductSubproduct < ApplicationRecord
             numericality: { greater_than: 0 }
 
   after_commit :sync_product_pricing, on: %i[create update]
-  after_save :update_product_totals
-  after_destroy :update_product_totals
+  after_commit :update_product_totals, on: %i[create update destroy]
 
   after_destroy_commit do
     sync_product_pricing unless product.destroyed?
@@ -37,15 +36,19 @@ class ProductSubproduct < ApplicationRecord
   end
 
   def update_product_totals
-    product.update(
-      calories:       product.product_subproducts.sum(:calories),
-      total_fat:      product.product_subproducts.sum(:total_fat),
-      protein:        product.product_subproducts.sum(:protein),
-      carbs:          product.product_subproducts.sum(:carbs),
-      dietary_fiber:  product.product_subproducts.sum(:dietary_fiber),
-      sugars:         product.product_subproducts.sum(:sugars),
-      sodium:         product.product_subproducts.sum(:sodium)
-    )
+    return if product.destroyed?
+
+    totals = {
+      calories:      product.product_subproducts.sum(:calories),
+      total_fat:     product.product_subproducts.sum(:total_fat),
+      protein:       product.product_subproducts.sum(:protein),
+      carbs:         product.product_subproducts.sum(:carbs),
+      dietary_fiber: product.product_subproducts.sum(:dietary_fiber),
+      sugars:        product.product_subproducts.sum(:sugars),
+      sodium:        product.product_subproducts.sum(:sodium)
+    }
+
+    product.update_columns(totals.merge(updated_at: Time.current))
   end
 
   private
@@ -68,19 +71,14 @@ class ProductSubproduct < ApplicationRecord
 
     product.recalculate_weights
     product.compute_total_cost
-    product.compute_total_cost_with_taxes
-    product.compute_total_cost_with_fixed_costs
     product.compute_suggested_prices
 
     product.update_columns(
-      total_weight:                product.total_weight,
-      final_weight:                product.final_weight,
-      total_cost:                  product.total_cost,
-      total_cost_with_taxes:       product.total_cost_with_taxes,
-      total_cost_with_fixed_costs: product.total_cost_with_fixed_costs,
-      suggested_price_retail:      product.suggested_price_retail,
-      suggested_price_wholesale:   product.suggested_price_wholesale,
-      updated_at:                  Time.current
+      total_weight:           product.total_weight,
+      final_weight:           product.final_weight,
+      total_cost:             product.total_cost,
+      suggested_price_retail: product.suggested_price_retail,
+      updated_at:             Time.current
     )
   end
 

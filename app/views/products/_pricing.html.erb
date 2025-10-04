@@ -4,42 +4,9 @@
 <section
   data-controller="pricing"
   data-pricing-base-cost-value="<%= product.total_cost %>"
-  data-pricing-fixed-cost-value="<%= product.sales_target&.total_fixed_cost.to_f %>"
-  data-pricing-active-sum-value="<%= @sales_target_active_sum || 0 %>"
   data-pricing-margin-retail-value="<%= product.profit_margin_retail %>"
-  data-pricing-margin-wholesale-value="<%= product.profit_margin_wholesale %>"
 >
-<h5 class="subtitle">3) Tributos e Precificação</h5>
-
-  <!-- select de imposto -->
-  <div class="field-inline">
-    <%= f.label :tax_id, "Imposto", class: "custom-label" %>
-    <%= f.select :tax_id,
-        options_for_select(
-          Tax.all.map { |t| [ t.description, t.id, { "data-json": t.to_json } ] },
-          product.tax_id
-        ),
-        { prompt: "– escolha um imposto –" },
-        class: "form-select",
-        data: {
-          pricing_target: "taxSelect",
-          action: "change->pricing#fillTaxFields change->pricing#recalculate"
-        }
-    %>
-  </div>
-
-  <!-- linhas de alíquotas -->
-  <% [:icms, :ipi, :pis_cofins, :difal, :iss, :cbs, :ibs].each do |attr| %>
-    <div class="form-row-inline">
-      <%= label_tag attr, attr.to_s.upcase, class: "custom-label" %>
-      <%= number_field_tag nil,
-            product.tax&.public_send(attr).to_f.round(2),
-            readonly: true,
-            class: "field-inline",
-            step: 0.01,
-            data: { pricing_target: attr.to_s } %>
-    </div>
-  <% end %>
+<h5 class="subtitle">3) Precificação Básica</h5>
 
   <hr>
   <div class="form-row-inline">
@@ -55,42 +22,6 @@
             class: "form-control",
             data: { pricing_target: "baseCost" } %>
     </div>
-
-      <!-- custo total com tributos -->
-      <div class="field-inline">
-        <%= f.label :total_cost_with_taxes, "Custo c/ Tributos (R$)", class: "custom-label" %>
-        <%= f.number_field :total_cost_with_taxes,
-              readonly: true,
-              class: "form-control",
-              step: 0.01,
-              data: { pricing_target: "totalCostWithTaxes" } %>
-      </div>
-
-    <!-- Custo Fixo Distribuído Ativo -->
-    <div class="field-inline">
-      <%= label_tag :distributed_fixed_cost_active,
-                    "Custo Fixo Distribuído Ativo (R$)",
-                    class: "custom-label" %>
-      <%= number_field_tag nil,
-            nil,
-            readonly: true,
-            step: 0.01,
-            class: "form-control",
-            data: { pricing_target: "distributedFixedCostActive" } %>
-    </div>
-
-    <!-- Custo Total + Fixo (sem tributos) -->
-    <div class="field-inline">
-      <%= label_tag :total_cost_with_fixed_costs,
-                    "Custo Total + Fixo (R$)",
-                    class: "custom-label" %>
-      <%= number_field_tag nil,
-            nil,
-            readonly: true,
-            step: 0.01,
-            class: "form-control",
-            data: { pricing_target: "totalCostWithFixedCosts" } %>
-    </div>
   </div>
 
   <div class="form-row-inline">
@@ -104,38 +35,16 @@
             data: { pricing_target: "suggestedRetail" } %>
     </div>
 
-    <!-- preço sugerido atacado -->
-    <div class="field-inline">
-      <%= f.label :suggested_price_wholesale, "Preço Sugerido Atacado (R$)", class: "custom-label" %>
-      <%= f.number_field :suggested_price_wholesale,
-            readonly: true,
-            step: 0.01,
-            class: "form-control",
-            data: { pricing_target: "suggestedWholesale" } %>
-    </div>
-
     <!-- margem real de lucro varejo -->
     <div class="field-inline">
       <%= label_tag :real_profit_retail_margin, "Margem Real Lucro Varejo (%)", class: "custom-label" %>
       <%= number_field_tag nil,
-            product.suggested_price_retail.present? && product.total_cost_with_taxes.present? ?
-              (((product.suggested_price_retail - product.total_cost_with_taxes) / product.suggested_price_retail) * 100).round(2) : nil,
+            product.suggested_price_retail.present? && product.total_cost.present? ?
+              (((product.suggested_price_retail - product.total_cost) / product.suggested_price_retail) * 100).round(2) : nil,
             readonly: true,
             step: 0.01,
             class: "form-control",
             data: { pricing_target: "realProfitRetailMargin" } %>
-    </div>
-
-    <!-- margem real de lucro atacado -->
-    <div class="field-inline">
-      <%= label_tag :real_profit_wholesale_margin, "Margem Real Lucro Atacado (%)", class: "custom-label" %>
-      <%= number_field_tag nil,
-            product.suggested_price_wholesale.present? && product.total_cost_with_taxes.present? ?
-              (((product.suggested_price_wholesale - product.total_cost_with_taxes) / product.suggested_price_wholesale) * 100).round(2) : nil,
-            readonly: true,
-            step: 0.01,
-            class: "form-control",
-            data: { pricing_target: "realProfitWholesaleMargin" } %>
     </div>
   <div>
 </section>

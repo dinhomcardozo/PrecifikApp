@@ -21,13 +21,9 @@
             <% headers = [
                 ["products.description",            "Descrição"],
                 ["products.image",            "Imagem"],
-                ["sales_targets.monthly_target",    "Meta Mensal (un.)"],
                 ["products.total_cost",             "Custo Total (R$)"],
-                ["products.total_cost_with_taxes",  "CT + Impostos"],
                 ["products.suggested_price_retail", "Preço Varejo"],
-                ["products.suggested_price_wholesale", "Preço Atacado"],
-                ["products.net_profit_retail",      "Lucro Varejo (R$)"],
-                ["products.net_profit_wholesale",   "Lucro Atacado (R$)"]
+                ["products.net_profit_retail",      "Lucro Varejo (R$)"]
               ] %>
 
             <% headers.each do |column, title| %>
@@ -66,13 +62,9 @@
                   Nenhuma
                 <% end %>
               </td>
-              <td><%= p.monthly_target || "0" %></td>
               <td><%= number_to_currency(p.total_cost,               unit: "R$ ") %></td>
-              <td><%= number_to_currency(p.total_cost_with_taxes,     unit: "R$ ") %></td>
               <td><%= number_to_currency(p.suggested_price_retail,    unit: "R$ ") %></td>
-              <td><%= number_to_currency(p.suggested_price_wholesale, unit: "R$ ") %></td>
               <td><%= number_to_currency(p.net_profit_retail,         unit: "R$ ") %></td>
-              <td><%= number_to_currency(p.net_profit_wholesale,      unit: "R$ ") %></td>
               <td class="cell-actions">
                 <%= link_to product_path(p),
                             data: { turbo_frame: "_top" },

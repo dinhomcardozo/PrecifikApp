@@ -62,34 +62,16 @@
         <td><%= number_to_currency(@product.total_cost, unit: "R$ ") %></td>
       </tr>
       <tr>
-        <th>Custo Fixo Distribuído (R$):</th>
-        <td><%= number_to_currency(SalesTarget.global_distributed_fixed_cost, unit: "R$ ") %></td>
-      </tr>
-      <tr>
-        <th>Total c/ Tributos + Custos Fixos (R$):</th>
-        <td><%= number_to_currency(@product.calculated_final_cost, unit: "R$ ") %></td>      </tr>
-      <tr>
         <th>Preço Sugerido Varejo (R$):</th>
         <td><%= number_to_currency(@product.suggested_price_retail, unit: "R$ ") %></td>
-      </tr>
-      <tr>
-        <th>Preço Sugerido Atacado (R$):</th>
-        <td><%= number_to_currency(@product.suggested_price_wholesale, unit: "R$ ") %></td>
       </tr>
       <tr>
         <th>Lucro Líquido Varejo (R$):</th>
         <td><%= number_to_currency(@product.net_profit_retail, unit: "R$ ") %></td>
       </tr>
       <tr>
-        <th>Lucro Líquido Atacado (R$):</th>
-        <td><%= number_to_currency(@product.net_profit_wholesale, unit: "R$ ") %></td>
-      </tr>
-      <tr>
-        <th>Margem Real Varejo (%) (R$):</th>
-        <td><%= number_to_percentage(@product.real_profit_retail_margin, precision: 2) %></td>      </tr>
-      <tr>
-        <th>Margem Real Atacado (%):</th>
-        <td><%= number_to_percentage(@product.real_profit_wholesale_margin, precision: 2) %></td>
+        <th>Margem Real Varejo (%):</th>
+        <td><%= number_to_percentage(@product.real_profit_retail_margin, precision: 2) %></td>
       </tr>
     </table>
 
@@ -167,7 +149,6 @@
                 <th>Custo Produto</th>
                 <th>Custo Embalado (sem margem)</th>
                 <th>Preço Varejo</th>
-                <th>Preço Atacado</th>
               </tr>
             </thead>
             <tbody>
@@ -177,7 +158,6 @@
                   <td><%= number_to_currency(portion.portion_cost, unit: "R$ ") %></td>
                   <td><%= number_to_currency(portion.packaged_cost, unit: "R$ ") %></td>
                   <td><%= number_to_currency(portion.packaged_price_retail, unit: "R$ ") %></td>
-                  <td><%= number_to_currency(portion.packaged_price_wholesale, unit: "R$ ") %></td>
                 </tr>
               <% end %>
             </tbody>

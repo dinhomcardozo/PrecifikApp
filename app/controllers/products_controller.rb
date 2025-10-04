@@ -10,7 +10,6 @@ class ProductsController < Clients::AuthenticatedController
   before_action :init_product, only: %i[new create]
   before_action :set_product, only: %i[show edit update destroy]
   before_action :build_subproducts, only: %i[new edit]
-  before_action :set_sales_target_active_sum, only: %i[edit update]
   before_action :set_main_brands, only: %i[new edit create update]
 
   def index      
@@ -37,7 +36,6 @@ class ProductsController < Clients::AuthenticatedController
     
     @products = @products
         .order("#{sort_column} #{sort_direction}")
-        .includes(:sales_target)
         .yield_self { |rel| apply_filters(rel) }
         .paginate(page: params[:page])
   end
@@ -156,13 +154,6 @@ class ProductsController < Clients::AuthenticatedController
     @product.product_subproducts.build if @product.product_subproducts.empty?
   end
 
-  def set_sales_target_active_sum
-    @sales_target_active_sum =
-      SalesTarget
-        .where("start_date <= ? AND end_date >= ?", Date.current, Date.current)
-        .sum(:monthly_target)
-  end
-
   def set_main_brands
     @main_brands = Brand.main_brands.order(:name)
   end
@@ -199,14 +190,14 @@ class ProductsController < Clients::AuthenticatedController
   end
 
   def sortable_columns
-  %w[
-    products.description
-    total_cost_with_taxes
-    suggested_price_retail
-    suggested_price_wholesale
-    # adicione outras colunas numéricas ou textuais aqui
-  ]
-end
+    %w[
+      products.description
+      total_cost_with_taxes
+      suggested_price_retail
+      suggested_price_wholesale
+      # adicione outras colunas numéricas ou textuais aqui
+    ]
+  end
 
   def sort_column
     sortable_columns.include?(params[:sort]) ? params[:sort] : "products.created_at"
