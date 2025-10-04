@@ -1,7 +1,7 @@
 <!-- app/views/subproducts/_subproduct_compositions_fields.html.erb -->
 <tr>
   <td>
-    <%= f.collection_select :input_id, Input.all, :id, :name,
+    <%= f.collection_select :input_id, Input.order(:name), :id, :name,
                             { include_blank: "Escolha insumo" },
                             class: "custom-field",
                             data: { action: "change->nested-form#updateCost" } %>

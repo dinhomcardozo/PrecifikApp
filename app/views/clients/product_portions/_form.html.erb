@@ -11,20 +11,21 @@
   </div>
 
   <!-- Quantidade porcionada -->
-  <div>
-    <%= form.label :portioned_quantity, "Quantidade porcionada (g)" %>
-    <%= form.number_field :portioned_quantity, step: 0.01 %>
-  </div>
+  <div class="form-row">
+    <div class="field">
+      <%= form.label :portioned_quantity, "Quantidade porcionada (g)", class: "custom-label" %>
+      <%= form.number_field :portioned_quantity, class: "form-control", step: 0.01 %>
+    </div>
 
-  <!-- Preço final das embalagens -->
-  <div>
-    <%= form.label :final_package_price, "Preço Final das Embalagens" %>
-    <%= form.text_field :final_package_price,
-          readonly: true,
-          data: { product_portion_pricing_target: "finalPackagePrice" } %>
+    <!-- Preço final das embalagens -->
+    <div class="field">
+      <%= form.label :final_package_price, "Preço Final das Embalagens", class: "custom-label" %>
+      <%= form.text_field :final_package_price,
+            readonly: true,
+            class: "form-control",
+            data: { product_portion_pricing_target: "finalPackagePrice" } %>
+    </div>
   </div>
-
-  <hr>
 
   <!-- Controller de precificação -->
   <section
@@ -34,7 +35,7 @@
 
     <!-- Select de imposto -->
     <div class="field-inline">
-      <%= form.label :tax_id, "Imposto" %>
+      <%= form.label :tax_id, "Imposto", class: "custom-label" %>
       <%= form.select :tax_id,
             options_for_select(
               Tax.all.map { |t| [t.description, t.id, { "data-json": t.to_json }] },
@@ -47,43 +48,52 @@
     </div>
 
     <!-- Alíquotas -->
-    <% [:icms, :ipi, :pis_cofins, :difal, :iss, :cbs, :ibs].each do |attr| %>
-      <div class="form-row-inline">
-        <%= label_tag attr, attr.to_s.upcase %>
-        <%= number_field_tag nil,
-              product_portion.tax&.public_send(attr).to_f.round(2),
-              readonly: true,
-              step: 0.01,
-              data: { product_portion_pricing_target: attr.to_s } %>
-      </div>
-    <% end %>
+    <div class="taxes-row">
+      <% [:icms, :ipi, :pis_cofins, :difal, :iss, :cbs, :ibs].each do |attr| %>
+        <div class="tax-field">
+          <%= label_tag attr, attr.to_s.upcase, class: "custom-label" %>
+          <%= number_field_tag nil,
+                product_portion.tax&.public_send(attr).to_f.round(2),
+                readonly: true,
+                step: 0.01,
+                class: "form-control",
+                data: { product_portion_pricing_target: attr.to_s } %>
+        </div>
+      <% end %>
+    </div>
 
     <!-- Custo fixo distribuído -->
-    <div class="form-row-inline">
-      <%= label_tag :distributed_fixed_cost, "Custo Fixo Distribuído (R$)" %>
-      <%= number_field_tag nil,
-            SalesTarget.global_distributed_fixed_cost_live.to_f,
-            readonly: true,
-            step: 0.01,
-            data: { product_portion_pricing_target: "distributedFixedCost" } %>
+    <div class="form-row">
+      <div class="field">
+        <%= label_tag :distributed_fixed_cost, "Custo Fixo Distribuído (R$)", class: "custom-label" %>
+        <%= number_field_tag nil,
+              SalesTarget.global_distributed_fixed_cost_live.to_f,
+              readonly: true,
+              class: "form-control",
+              step: 0.01,
+              data: { product_portion_pricing_target: "distributedFixedCost" } %>
+      </div>
+
+      <!-- Custo final calculado -->
+      <div class="field">
+        <%= form.label :final_cost, "Custo Final (R$)", class: "custom-label" %>
+        <%= form.text_field :final_cost,
+              class: "form-control",
+              readonly: true,
+              step: 0.01,
+              data: { product_portion_pricing_target: "finalCost" } %>
+      </div>
+          <!-- Preço final calculado -->
+      <div class="field">
+        <%= form.label :final_price, "Preço Final (R$)", class: "custom-label" %>
+        <%= form.text_field :final_price,
+              class: "form-control",
+              readonly: true,
+              step: 0.01 %>
+      </div>
     </div>
 
-    <!-- Custo final calculado -->
-    <div class="form-row-inline">
-      <%= form.label :final_cost, "Custo Final (R$)" %>
-      <%= form.text_field :final_cost,
-            readonly: true,
-            step: 0.01,
-            data: { product_portion_pricing_target: "finalCost" } %>
-    </div>
 
-    <!-- Preço final calculado -->
-    <div class="form-row-inline">
-      <%= form.label :final_price, "Preço Final (R$)" %>
-      <%= form.text_field :final_price,
-            readonly: true,
-            step: 0.01 %>
-    </div>
   </section>
 
   <hr>

@@ -23,7 +23,7 @@
     <div class="field">
       <%= f.label :category_id, "Categoria", class: "custom-label" %>
       <%= f.collection_select :category_id,
-                              Category.all,
+                              Category.order(:name),
                               :id,
                               :name,
                               { prompt: "Selecione Categoria" },

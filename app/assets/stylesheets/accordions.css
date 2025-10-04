@@ -1,12 +1,12 @@
 .accordion-button:not(.collapsed) {
   background-color: var(--bg-menu-color) !important;
   font-weight: 900;     
-  color: 0.25rem var(--accent-color);
+  color: var(--accent-color);
 }
 
 .accordion-button:focus {
   outline: none;
-  box-shadow: var(--accent-color);
+  box-shadow: 0 0 0 0.25rem var(--accent-color);
   color: var(--accent-color);
 }
 

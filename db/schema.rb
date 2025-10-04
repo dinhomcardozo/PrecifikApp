@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_04_001404) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_04_152754) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -261,6 +261,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_04_001404) do
     t.bigint "tax_id"
     t.decimal "final_cost"
     t.decimal "final_price"
+    t.decimal "profit_margin"
     t.index ["client_id"], name: "index_product_portions_on_client_id"
     t.index ["product_id"], name: "index_product_portions_on_product_id"
     t.index ["tax_id"], name: "index_product_portions_on_tax_id"

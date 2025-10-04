@@ -9,6 +9,9 @@ module Clients
 
     # GET /product_portions/1 or /product_portions/1.json
     def show
+      @product_portion = ProductPortion.find(params[:id])
+      @product = @product_portion.product
+      @nutritional_summary = @product.nutritional_summary
     end
 
     # GET /product_portions/new

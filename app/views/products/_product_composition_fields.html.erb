@@ -11,7 +11,7 @@
         <%= f.label :subproduct_id, "Subproduto", class: "custom-label" %>
         <%= f.select :subproduct_id,
           options_for_select(
-            Subproduct.all.map { |s|
+            Subproduct.order(:name).map { |s|
               [ s.name, s.id, { "data-cost-per-gram": s.cost_per_gram } ]
             },
             f.object.subproduct_id

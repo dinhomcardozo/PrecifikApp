@@ -1,26 +1,28 @@
 <main class="index-container">
   <h2>Detalhes da Porção</h2>
   <table class="index-table index-table--bordered">
-    <tr>
-      <th>Produto</th>
-      <td><%= @product_portion.product.description %></td>
-    </tr>
-    <tr>
-      <th>Quantidade porcionada</th>
-      <td><%= @product_portion.portioned_quantity %></td>
-    </tr>
-    <tr>
-      <th>Custo fixo distribuído</th>
-      <td><%= number_to_currency(@product_portion.distributed_fixed_cost_per_unit, unit: "R$", separator: ",", delimiter: ".") %></td>
-    </tr>
-    <tr>
-      <th>Preço final embalagens</th>
-      <td><%= number_to_currency(@product_portion.final_package_price, unit: "R$", separator: ",", delimiter: ".") %></td>
-    </tr>
-    <tr>
-      <th>Preço final da Porção</th>
-      <td><%= number_to_currency(@product_portion.final_price, unit: "R$", separator: ",", delimiter: ".") %></td>
-    </tr>
+    <thead>
+      <tr>
+        <th >Produto</th>
+        <td><%= @product_portion.product.description %></td>
+      </tr>
+      <tr>
+        <th>Quantidade porcionada</th>
+        <td><%= @product_portion.portioned_quantity %></td>
+      </tr>
+      <tr>
+        <th>Custo fixo distribuído</th>
+        <td><%= number_to_currency(@product_portion.distributed_fixed_cost_per_unit, unit: "R$", separator: ",", delimiter: ".") %></td>
+      </tr>
+      <tr>
+        <th>Preço final embalagens</th>
+        <td><%= number_to_currency(@product_portion.final_package_price, unit: "R$", separator: ",", delimiter: ".") %></td>
+      </tr>
+      <tr>
+        <th>Preço final da Porção</th>
+        <td><%= number_to_currency(@product_portion.final_price, unit: "R$", separator: ",", delimiter: ".") %></td>
+      </tr>
+    </thead>
   </table>
 
   <h3>Embalagens</h3>
@@ -42,6 +44,61 @@
       <% end %>
     </tbody>
   </table>
+
+  <div class="accordion" id="productAccordion">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingNutritional">
+        <button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#collapseNutritional"
+                aria-expanded="false" aria-controls="collapseNutritional">
+          Informações Nutricionais
+        </button>
+      </h2>
+      <div id="collapseNutritional" class="accordion-collapse collapse"
+          aria-labelledby="headingNutritional" data-bs-parent="#portionAccordion">
+        <div class="accordion-body">
+          <%= render 'products/nutritional_summary' %>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingChannels">
+        <button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#collapseChannels"
+                aria-expanded="false" aria-controls="collapseChannels">
+          Preço Final por Canal
+        </button>
+      </h2>
+      <div id="collapseChannels" class="accordion-collapse collapse"
+          aria-labelledby="headingChannels" data-bs-parent="#portionAccordion">
+        <div class="accordion-body">
+          <table class="index-table index-table--bordered">
+            <thead>
+              <tr>
+                <th>Canal</th>
+                <th>Percentagem do Canal (%)</th>
+                <th>Preço Final com Comissão (R$)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% Channel.all.each do |channel| %>
+                <% base_price = @product_portion.final_price.to_f %>
+                <% final_price = base_price * (1 + channel.channel_cost.to_f / 100) %>
+                <tr>
+                  <td><%= channel.description %></td>
+                  <td><%= number_to_percentage(channel.channel_cost, precision: 2) %></td>
+                  <td><%= number_to_currency(final_price, unit: "R$ ") %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
 
   <div>
     <%= link_to "Editar", edit_product_portion_path(@product_portion), class: "standart-button" %> |
