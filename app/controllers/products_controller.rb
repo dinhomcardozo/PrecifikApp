@@ -42,6 +42,8 @@ class ProductsController < Clients::AuthenticatedController
                     .order("#{sort_column} #{sort_direction}")
                     .yield_self { |rel| apply_filters(rel) }
                     .paginate(page: params[:page])
+
+      @portions = @product.product_portions.order(:portioned_quantity)
   end
 
   def new

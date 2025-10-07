@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_04_172811) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_06_234827) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -75,6 +75,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_04_172811) do
     t.decimal "corrected_final_price", precision: 12, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "effective_final_price"
     t.index ["client_id", "product_portion_id", "channel_id"], name: "idx_cpp_unique", unique: true
   end
 
@@ -272,7 +273,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_04_172811) do
     t.decimal "final_cost"
     t.decimal "final_price"
     t.decimal "profit_margin"
-    t.decimal "custom_final_price", precision: 10, scale: 2
     t.decimal "cost", precision: 12, scale: 2
     t.index ["client_id"], name: "index_product_portions_on_client_id"
     t.index ["product_id"], name: "index_product_portions_on_product_id"

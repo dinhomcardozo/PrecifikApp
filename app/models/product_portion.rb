@@ -15,15 +15,17 @@ class ProductPortion < ApplicationRecord
 
   before_save :calculate_totals
   before_validation :set_client_id
+  after_save :update_channel_prices
+  after_create :ensure_channel_product_portions
 
   validates :product_id, presence: true
   validates :portioned_quantity, numericality: { greater_than: 0 }
   validates :profit_margin, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
-  validates :custom_final_price,
-            numericality: { greater_than_or_equal_to: :final_price },
-            allow_nil: true
+
+  attr_readonly :product_id
 
   def cost
+    return 0 unless product
     (product.cost_per_gram.to_f * portioned_quantity.to_f).round(2)
   end
 
@@ -33,6 +35,10 @@ class ProductPortion < ApplicationRecord
 
   def packaged_cost
     portion_cost + final_package_price.to_f
+  end
+
+  def final_package_price
+    portion_packages.sum { |pp| pp.total_package_price.to_f }.round(2)
   end
 
   def taxes_amount
@@ -51,34 +57,30 @@ class ProductPortion < ApplicationRecord
     (final_cost * (1 + profit_margin.to_f / 100.0)).round(2)
   end
 
-  def suggested_price
-    (final_cost.to_f * (1 + profit_margin.to_f / 100.0)).round(2)
-  end
-
   def net_profit
-    (suggested_price - final_cost.to_f).round(2)
+    (final_price - final_cost.to_f).round(2)
   end
 
   def real_profit_margin
-    return 0 if suggested_price.to_f.zero?
-    ((net_profit.to_f / suggested_price.to_f) * 100).round(2)
-  end
-
-  def corrected_profit_margin
-    final_cost.to_f
-  end
-
-  def effective_final_price
-    custom_final_price.presence || final_price
-  end
-
-  def final_with_commission(channel)
-    (final_price * (1 + channel.channel_cost.to_f / 100.0)).round(2)
+    return 0 if final_price.to_f.zero?
+    ((net_profit.to_f / final_price.to_f) * 100).round(2)
   end
 
   def channel_row_for(channel)
     channel_product_portions.find_by(channel_id: channel.id) ||
       channel_product_portions.build(channel: channel, client_id: client_id)
+  end
+
+  def update_channel_prices
+    channel_product_portions.find_each do |cpp|
+      cpp.update_columns(effective_final_price: cpp.compute_effective_final_price)
+    end
+  end
+
+  def ensure_channel_product_portions
+    Channel.where(client_id: client_id).find_each do |channel|
+      channel_product_portions.find_or_create_by!(channel: channel)
+    end
   end
 
   private

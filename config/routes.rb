@@ -69,6 +69,7 @@ Rails.application.routes.draw do
 
         resources :packages
         resources :product_portions
+        resources :channel_product_portions, only: [:show, :update]
         resources :portion_packages
         
         scope path: 'dashboards', as: 'dashboards' do

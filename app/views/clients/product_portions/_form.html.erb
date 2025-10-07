@@ -1,44 +1,52 @@
 <%= form_with(model: product_portion) do |form| %>
 
-  <!-- Produto -->
-  <div>
-    <%= form.label :product_id, "Produto" %>
-    <%= form.collection_select :product_id,
-          Product.all.order(:description),
-          :id, :description,
-          { prompt: "Selecione um produto" },
-          class: "form-select" %>
-  </div>
-
-  <!-- Quantidade porcionada -->
-  <div class="form-row">
-    <div class="field">
-      <%= form.label :portioned_quantity, "Quantidade porcionada (g)", class: "custom-label" %>
-      <%= form.number_field :portioned_quantity, class: "form-control", step: 0.01 %>
-    </div>
-
-    <div class="field">
-      <%= form.label :profit_margin, "Margem Adicionada (%)", class: "custom-label" %>
-      <%= form.number_field :profit_margin,
-            step: 0.01,
-            class: "form-control" %>
-    </div>
-
-    <!-- Preço final das embalagens -->
-    <div class="field">
-      <%= form.label :final_package_price, "Preço Final das Embalagens", class: "custom-label" %>
-      <%= form.text_field :final_package_price,
-            readonly: true,
-            class: "form-control",
-            data: { product_portion_pricing_target: "finalPackagePrice" } %>
-    </div>
-  </div>
-
   <!-- Controller de precificação -->
   <section
     data-controller="product-portion-pricing"
     data-product-portion-pricing-base-cost-value="<%= product_portion.product.present? ? product_portion.product.total_cost.to_f : 0 %>"
-    data-product-portion-pricing-fixed-cost-value="<%= SalesTarget.global_distributed_fixed_cost_live.to_f %>">
+    data-product-portion-pricing-fixed-cost-value="<%= SalesTarget.global_distributed_fixed_cost_live.to_f %>"
+    data-product-portion-pricing-margin-retail-value="<%= product_portion.profit_margin.to_f %>">
+
+    <!-- Produto -->
+    <div>
+      <% if product_portion.new_record? %>
+        <%= form.label :product_id, "Produto" %>
+        <%= form.collection_select :product_id,
+              Product.all.order(:description),
+              :id, :description,
+              { prompt: "Selecione um produto" },
+              class: "form-select" %>
+      <% else %>
+        <p>
+          <strong>Produto:</strong>
+          <%= product_portion.product.description %>
+        </p>
+      <% end %>
+    </div>
+
+    <!-- Quantidade porcionada -->
+    <div class="form-row">
+      <div class="field">
+        <%= form.label :portioned_quantity, "Quantidade porcionada (g)", class: "custom-label" %>
+        <%= form.number_field :portioned_quantity, class: "form-control", step: 0.01 %>
+      </div>
+
+      <div class="field">
+        <%= form.label :profit_margin, "Margem Adicionada (%)", class: "custom-label" %>
+        <%= form.number_field :profit_margin,
+              step: 0.01,
+              class: "form-control" %>
+      </div>
+
+      <!-- Preço final das embalagens -->
+      <div class="field">
+        <%= form.label :final_package_price, "Preço Final das Embalagens", class: "custom-label" %>
+        <%= form.text_field :final_package_price,
+              readonly: true,
+              class: "form-control",
+              data: { product_portion_pricing_target: "finalPackagePrice" } %>
+      </div>
+    </div>
 
     <!-- Select de imposto -->
     <div class="field-inline">
@@ -90,17 +98,25 @@
               step: 0.01,
               data: { product_portion_pricing_target: "finalCost" } %>
       </div>
-          <!-- Preço final calculado -->
+      <!-- Final price (R$) -->
       <div class="field">
         <%= form.label :final_price, "Preço Final (R$)", class: "custom-label" %>
         <%= form.text_field :final_price,
               class: "form-control",
               readonly: true,
-              step: 0.01 %>
+              step: 0.01,
+              data: { product_portion_pricing_target: "finalPrice" } %>
       </div>
-    </div>
 
-
+      <!-- Real profit margin (%) -->
+      <div class="field">
+        <%= label_tag :real_profit_margin, "Margem Real (%)", class: "custom-label" %>
+        <%= text_field_tag :real_profit_margin, nil,
+              readonly: true,
+              class: "form-control",
+              step: 0.01,
+              data: { product_portion_pricing_target: "realProfitMargin" } %>
+      </div>
   </section>
 
   <hr>

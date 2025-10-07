@@ -61,18 +61,6 @@
         <th>Total Custo (R$):</th>
         <td><%= number_to_currency(@product.total_cost, unit: "R$ ") %></td>
       </tr>
-      <tr>
-        <th>Preço Sugerido Varejo (R$):</th>
-        <td><%= number_to_currency(@product.suggested_price_retail, unit: "R$ ") %></td>
-      </tr>
-      <tr>
-        <th>Lucro Líquido Varejo (R$):</th>
-        <td><%= number_to_currency(@product.net_profit_retail, unit: "R$ ") %></td>
-      </tr>
-      <tr>
-        <th>Margem Real Varejo (%):</th>
-        <td><%= number_to_percentage(@product.real_profit_retail_margin, precision: 2) %></td>
-      </tr>
     </table>
 
     <hr>
@@ -146,18 +134,18 @@
             <thead>
               <tr>
                 <th>Quantidade (g)</th>
-                <th>Custo Produto</th>
-                <th>Custo Embalado (sem margem)</th>
-                <th>Preço Varejo</th>
+                <th>Ações</th>
               </tr>
             </thead>
             <tbody>
-              <% @product.product_portions.each do |portion| %>
+              <% @product.product_portions.order(:portioned_quantity).each do |portion| %>
                 <tr>
-                  <td><%= number_to_currency(portion.portion_cost, unit: "R$ ") %></td>
-                  <td><%= number_to_currency(portion.packaged_cost, unit: "R$ ") %></td>
-                  <td><%= number_to_currency(portion.final_price, unit: "R$ ") %></td>
-                  <td></td>
+                  <td><%= portion.portioned_quantity %></td>
+                  <td>
+                    <%= link_to "Ver", product_portion_path(portion),
+                                class: "standart-button",
+                                data: { turbo_frame: "_top" } %>
+                  </td>
                 </tr>
               <% end %>
             </tbody>

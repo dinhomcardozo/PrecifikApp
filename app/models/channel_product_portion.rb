@@ -4,17 +4,37 @@ class ChannelProductPortion < ApplicationRecord
   belongs_to :product_portion
   belongs_to :channel
 
-  # preço com comissão (não persistido)
-  def final_with_commission
-    product_portion.final_with_commission(channel)
+  before_save :update_effective_final_price
+
+  def price_with_commission
+    (product_portion.final_price * (1 + channel.channel_cost.to_f / 100.0)).round(2)
   end
 
-  def effective_price
-    corrected_final_price.presence || final_with_commission
+  def compute_effective_final_price
+    commission_price = price_with_commission
+    base_price       = corrected_final_price.to_f
+
+    if corrected_final_price.blank? || base_price.zero? || base_price < commission_price
+      commission_price
+    else
+      base_price
+    end
   end
 
-  # validação: se preencher, deve ser >= final_with_commission
+  def update_effective_final_price
+    self.effective_final_price = compute_effective_final_price
+  end
+
+  def final_channel_cost
+    (product_portion.final_cost.to_f * (1 + channel.channel_cost.to_f / 100.0)).round(2)
+  end
+
+  def corrected_profit_margin
+    return nil unless effective_final_price.to_f > 0
+    ((effective_final_price - final_channel_cost) / effective_final_price) * 100
+  end
+  
   validates :corrected_final_price,
-            numericality: { greater_than_or_equal_to: ->(cpp) { cpp.final_with_commission } },
+            numericality: { greater_than_or_equal_to: ->(cpp) { cpp.product_portion.final_price.to_f } },
             allow_nil: true
 end

@@ -14,8 +14,8 @@
 
 .nested-fields .remove-btn {
   display: flex;
-  align-items: flex-end; /* botão na base */
-  padding-bottom: 0px;   /* ajuste fino */
+  align-items: flex-end;
+  padding-bottom: 0px;
 }
 
 .form-row-inline {

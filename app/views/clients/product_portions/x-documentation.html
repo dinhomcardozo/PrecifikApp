@@ -64,7 +64,10 @@ ProductPortion ------------------< ChannelProductPortion
 | id                          |
 | product_portion_id (FK)     |
 | channel_id (FK)             |
-| corrected_final_price       | ← opcional, ≥ final_with_commission
+| price_with_commission       | ← final_price + channel_cost
+| corrected_final_price       | ← opcional, ≥ final_price
+| effective_final_price       | ← se corrected_final_price < price_with_commission e/ou corrected_final_price for 0 ou nil
+| corrected_profit_margin     | ← margem será a diferença entre final_channel_cost e effective_final_price
 +-----------------------------+
 | belongs_to :product_portion |
 | belongs_to :channel         |

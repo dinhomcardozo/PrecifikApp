@@ -1,0 +1,5 @@
+<%= turbo_stream.replace "channels" do %>
+  <%= render "clients/product_portions/channels",
+             product_portion: @product_portion,
+             channel_rows: @channel_rows %>
+<% end %>

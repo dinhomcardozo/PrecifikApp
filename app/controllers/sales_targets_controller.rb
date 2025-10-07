@@ -36,12 +36,12 @@ class SalesTargetsController < Clients::AuthenticatedController
                     .includes(:product => :category)
 
     @expected_retail_revenue = @sales_targets
-      .where("start_date <= :today AND end_date >= :today", today: today)
-      .sum { |st| st.product_portion&.product&.suggested_price_retail.to_f * st.monthly_target.to_i }
+    .where("start_date <= :today AND end_date >= :today", today: today)
+    .sum { |st| st.product_portion&.final_price.to_f * st.monthly_target.to_i }
 
     @expected_wholesale_revenue = @sales_targets
-      .where("start_date <= :today AND end_date >= :today", today: today)
-      .sum { |st| st.product_portion&.product&.suggested_price_wholesale.to_f * st.monthly_target.to_i }
+    .where("start_date <= :today AND end_date >= :today", today: today)
+    .sum { |st| st.product_portion&.final_price.to_f * st.monthly_target.to_i }
   end
 
   # GET /sales_targets/1 or /sales_targets/1.json
@@ -54,10 +54,10 @@ class SalesTargetsController < Clients::AuthenticatedController
     @total_fixed_cost        = FixedCost.sum(:monthly_cost)
 
     @expected_retail_revenue =
-      @sales_target.product_portion&.product&.suggested_price_retail.to_f * @sales_target.monthly_target.to_i
+    @sales_target.product_portion&.final_price.to_f * @sales_target.monthly_target.to_i
 
     @expected_wholesale_revenue =
-      @sales_target.product_portion&.product&.suggested_price_wholesale.to_f * @sales_target.monthly_target.to_i
+    @sales_target.product_portion&.final_price.to_f * @sales_target.monthly_target.to_i
   end
 
   # GET /sales_targets/new

@@ -5,12 +5,12 @@ export default class extends Controller {
     "taxSelect",
     "icms","ipi","pis_cofins","difal","iss","cbs","ibs",
     "distributedFixedCost","finalPackagePrice",
-    "finalCost","suggestedRetail","realProfitRetailMargin"
+    "finalCost","finalPrice","realProfitMargin"
   ]
 
   static values = {
-    baseCost: Number,   // product.total_cost
-    fixedCost: Number,  // custo fixo total (distributed)
+    baseCost: Number,
+    fixedCost: Number,
     marginRetail: Number
   }
 
@@ -50,29 +50,28 @@ export default class extends Controller {
       this.difalTarget, this.issTarget, this.cbsTarget, this.ibsTarget
     ]
 
-    // soma dos percentuais (ex: 0.18 para 18%)
     const sumRates = rates.reduce((acc, el) => {
-      return acc + ((parseFloat(el.value) || 0) / 100)
+      return acc + ((parseFloat(el?.value) || 0) / 100)
     }, 0)
 
-    // 1) Custo fixo distribuído
-    this.distributedFixedCostTarget.value = fixedCost.toFixed(2)
+    if (this.hasDistributedFixedCostTarget) {
+      this.distributedFixedCostTarget.value = fixedCost.toFixed(2)
+    }
 
-    // 2) Total com tributos
     const totalWithTaxes = (baseCost + fixedCost) * (1 + sumRates)
 
-    // 3) Final cost = base + fixo + impostos + embalagens
     const finalCost = totalWithTaxes + packageCost
-    this.finalCostTarget.value = finalCost.toFixed(2)
+    if (this.hasFinalCostTarget) {
+      this.finalCostTarget.value = finalCost.toFixed(2)
+    }
 
-    // 4) Preço sugerido varejo
-    const retailFactor = 1 + (this.marginRetailValue || 0) / 100
-    this.suggestedRetailTarget.value = (finalCost * retailFactor).toFixed(2)
-
-    // 5) Margem real varejo
-    const retail = parseFloat(this.suggestedRetailTarget.value) || 0
-    if (retail > 0) {
-      this.realProfitRetailMarginTarget.value = (((retail - finalCost) / retail) * 100).toFixed(2)
+    const retail = parseFloat(this.finalPriceTarget.value) || 0
+    if (this.hasRealProfitMarginTarget) {
+      const retail = finalPrice
+      const net    = retail - finalCost
+      this.realProfitMarginTarget.value = retail > 0
+        ? ((net / retail) * 100).toFixed(2)
+        : "0.00"
     }
   }
 }

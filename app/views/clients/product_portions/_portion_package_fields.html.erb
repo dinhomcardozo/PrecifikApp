@@ -27,8 +27,9 @@
   </div>
 
   <%= f.hidden_field :_destroy %>
-  <%= button_tag "Remover",
-                type: "button",
-                data: { action: "portion-packages#remove" },
-                class: "action-button" %>
+  <%= button_tag type: "button",
+                 data: { action: "portion-packages#remove" },
+                 class: "remove-btn" do %>
+    <%= image_tag "icons/excluir.png", alt: "Remover", class: "icon-delete" %>
+  <% end %>
 </div>

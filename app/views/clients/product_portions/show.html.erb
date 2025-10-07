@@ -27,6 +27,10 @@
         <td><%= number_to_currency(@product_portion.final_package_price, unit: "R$", separator: ",", delimiter: ".") %></td>
       </tr>
       <tr>
+        <th>Custo Final</th>
+        <td><%= number_to_currency(@product_portion.final_cost, unit: "R$", separator: ",", delimiter: ".") %></td>
+      </tr>
+      <tr>
         <th>Markup (%)</th>
         <td><%= number_to_percentage(@product_portion.profit_margin.to_f, precision: 2) %></td>
       </tr>
@@ -35,33 +39,50 @@
         <td><%= number_to_percentage(@product_portion.real_profit_margin.to_f, precision: 2) %></td>
       </tr>
       <tr>
+        <th>Lucro Líquido (R$)</th>
+        <td><%= number_to_currency(@product_portion.net_profit, unit: "R$", separator: ",", delimiter: ".") %></td>
+      </tr>
+      <tr>
         <th>Preço final da Porção</th>
         <td><%= number_to_currency(@product_portion.final_price, unit: "R$", separator: ",", delimiter: ".") %></td>
       </tr>
     </thead>
   </table>
 
-  <h3>Embalagens</h3>
-  <table class="index-table index-table--bordered">
-    <thead>
-      <tr>
-        <th>Embalagem</th>
-        <th>Qtd</th>
-        <th>Preço Total</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @product_portion.portion_packages.each do |pp| %>
-        <tr>
-          <td><%= pp.package.description %></td>
-          <td><%= pp.package_units %></td>
-          <td><%= number_to_currency(pp.total_package_price, unit: "R$", separator: ",", delimiter: ".") %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-
   <div class="accordion" id="productAccordion">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingPackages">
+        <button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#collapsePackages"
+                aria-expanded="false" aria-controls="collapsePackages">
+          Embalagens
+        </button>
+      </h2>
+      <div id="collapsePackages" class="accordion-collapse collapse"
+          aria-labelledby="headingPackages" data-bs-parent="#productAccordion">
+        <div class="accordion-body">
+          <table class="index-table index-table--bordered">
+            <thead>
+              <tr>
+                <th>Embalagem</th>
+                <th>Qtd</th>
+                <th>Preço Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @product_portion.portion_packages.each do |pp| %>
+                <tr>
+                  <td><%= pp.package.description %></td>
+                  <td><%= pp.package_units %></td>
+                  <td><%= number_to_currency(pp.total_package_price, unit: "R$", separator: ",", delimiter: ".") %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingNutritional">
         <button class="accordion-button collapsed" type="button"
@@ -89,59 +110,9 @@
       <div id="collapseChannels" class="accordion-collapse collapse <%= 'show' if params[:edit_channel_id].present? %>"
           aria-labelledby="headingChannels" data-bs-parent="#portionAccordion">
         <div class="accordion-body">
-          <%= form_with model: @product_portion, url: product_portion_path(@product_portion), method: :patch do |f| %>
-            <table class="index-table index-table--bordered">
-              <thead>
-                <tr>
-                  <th>Canal</th>
-                  <th>Comissão Canal (%)</th>
-                  <th>Preço com Comissão (R$)</th>
-                  <th>Preço Corrigido (opcional)</th>
-                  <th>Preço Efetivo (R$)</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @channel_rows.each_with_index do |cpp, idx| %>
-                  <%= f.fields_for :channel_product_portions, cpp do |cf| %>
-                    <tr>
-                      <td><%= cpp.channel.description %></td>
-                      <td><%= number_to_percentage(cpp.channel.channel_cost, precision: 2) %></td>
-                      <td><%= number_to_currency(cpp.final_with_commission, unit: "R$ ") %></td>
-                      
-                      <td data-controller="inline-edit">
-                        <span data-inline-edit-target="display">
-                          <% if cpp.corrected_final_price.present? %>
-                            <%= number_to_currency(cpp.corrected_final_price, unit: "R$ ") %>
-                          <% else %>
-                            –
-                          <% end %>
-                          <a href="#" data-action="inline-edit#edit">✏️</a>
-                        </span>
-
-                        <span data-inline-edit-target="form" class="d-none">
-                          <%= cf.hidden_field :channel_id %>
-                          <%= cf.number_field :corrected_final_price,
-                                value: cpp.corrected_final_price || "",
-                                step: 0.01,
-                                min: cpp.final_with_commission,
-                                class: "form-control" %>
-                          <%= f.submit "Salvar", class: "action-button" %>
-                          <a href="#" data-action="inline-edit#cancel", , class="action-button">Cancelar</a>
-                        </span>
-                      </td>
-
-                      <td><%= number_to_currency(cpp.effective_price, unit: "R$ ") %></td>
-                      <td>
-                        <%# espaço para ações futuras (resetar, etc.) %>
-                      </td>
-                    </tr>
-                  <% end %>
-                <% end %>
-              </tbody>
-            </table>
-            <%= f.submit "Salvar", class: "action-button" %>
-          <% end %>
+          <%= render "clients/product_portions/channels",
+                    product_portion: @product_portion,
+                    channel_rows: @channel_rows %>
         </div>
       </div>
     </div>
