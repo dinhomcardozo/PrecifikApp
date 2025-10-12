@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_06_234827) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_12_165739) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -258,6 +258,33 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_06_234827) do
     t.index ["client_id"], name: "index_portion_packages_on_client_id"
     t.index ["package_id"], name: "index_portion_packages_on_package_id"
     t.index ["product_portion_id"], name: "index_portion_packages_on_product_portion_id"
+  end
+
+  create_table "price_list_rules", force: :cascade do |t|
+    t.bigint "price_list_id", null: false
+    t.bigint "product_portion_id", null: false
+    t.bigint "channel_id", null: false
+    t.string "unit_type"
+    t.decimal "initial_quantity"
+    t.decimal "final_quantity"
+    t.string "discount_type"
+    t.decimal "discount_value"
+    t.decimal "final_price"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["channel_id"], name: "index_price_list_rules_on_channel_id"
+    t.index ["price_list_id"], name: "index_price_list_rules_on_price_list_id"
+    t.index ["product_portion_id"], name: "index_price_list_rules_on_product_portion_id"
+  end
+
+  create_table "price_lists", force: :cascade do |t|
+    t.string "description"
+    t.bigint "product_portion_id", null: false
+    t.string "list_type"
+    t.boolean "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_portion_id"], name: "index_price_lists_on_product_portion_id"
   end
 
   create_table "product_portions", force: :cascade do |t|
@@ -690,6 +717,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_06_234827) do
   add_foreign_key "portion_packages", "clients"
   add_foreign_key "portion_packages", "packages"
   add_foreign_key "portion_packages", "product_portions"
+  add_foreign_key "price_list_rules", "channels"
+  add_foreign_key "price_list_rules", "price_lists"
+  add_foreign_key "price_list_rules", "product_portions"
+  add_foreign_key "price_lists", "product_portions"
   add_foreign_key "product_portions", "clients"
   add_foreign_key "product_portions", "products"
   add_foreign_key "product_portions", "taxes"

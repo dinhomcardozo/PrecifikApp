@@ -1,0 +1,32 @@
+<%= form_with(model: [:sales, @price_list]) do |form| %>
+  <div class="form-group">
+    <%= form.label :description, "Descrição" %>
+    <%= form.text_field :description, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :list_type, "Tipo de Lista" %>
+    <%= form.select :list_type,
+          options_for_select([["Por Produto", "per_product"], ["Por Canal", "per_channel"]], @price_list.list_type),
+          {}, class: "form-control",
+          data: { action: "change->price-list#togglePartials" } %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :active, "Ativa?" %>
+    <%= form.check_box :active %>
+  </div>
+
+  <!-- Partials condicionais -->
+  <div id="per-product-fields" style="<%= @price_list.list_type == 'per_product' ? '' : 'display:none;' %>">
+    <%= render "per_product_fields", f: form %>
+  </div>
+
+  <div id="per-channel-fields" style="<%= @price_list.list_type == 'per_channel' ? '' : 'display:none;' %>">
+    <%= render "per_channel_fields", f: form %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Salvar", class: "action-button" %>
+  </div>
+<% end %>

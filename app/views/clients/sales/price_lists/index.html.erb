@@ -1,0 +1,27 @@
+<h1>Listas de Preços</h1>
+
+<%= link_to "Nova Lista de Preços", new_sales_price_list_path, class: "btn btn-primary" %>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Descrição</th>
+      <th>Tipo</th>
+      <th>Ativa?</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @price_lists.each do |pl| %>
+      <tr>
+        <td><%= pl.description %></td>
+        <td><%= pl.list_type %></td>
+        <td><%= pl.active? ? "Sim" : "Não" %></td>
+        <td>
+          <%= link_to "Editar", edit_sales_price_list_path(pl), class: "btn btn-sm btn-warning" %>
+          <%= link_to "Excluir", sales_price_list_path(pl), method: :delete, data: { confirm: "Tem certeza?" }, class: "btn btn-sm btn-danger" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

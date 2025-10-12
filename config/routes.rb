@@ -61,6 +61,17 @@ Rails.application.routes.draw do
     scope path: 'clients' do
 
       scope module: 'clients' do
+        namespace :sales do
+          resources :price_lists do
+            resources :price_list_rules, only: [:new, :create, :edit, :update, :destroy]
+            member do
+              post :duplicate
+              patch :activate
+              patch :deactivate
+            end
+          end
+        end
+
         root to: 'dashboards/overview#index', as: :clients_root
 
         resources :user_clients, only: [:new, :create, :edit, :show, :update, :destroy]

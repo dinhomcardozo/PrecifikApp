@@ -6,6 +6,22 @@
     <%= link_to "Dashboards", dashboards_overview_path, class: "menu-item" %>
   </div>
 
+  <!-- Dropdown Vendas -->
+  <div data-controller="dropdown" class="menu-item dropdown">
+    <!-- Botão dispara o toggle -->
+    <button data-action="click->dropdown#toggle"
+            class="dropdown-toggle"
+            aria-expanded="false">
+      Vendas
+      <svg class="chevron" width="10" height="6"></svg>
+    </button>
+
+    <!-- Menu que será mostrado/ocultado -->
+    <div data-dropdown-target="menu" class="dropdown-menu">
+      <%= link_to "Listas de Preço", sales_price_lists_path, class: "dropdown-item" %>
+    </div>
+  </div>
+
   <!-- Dropdown Serviços -->
   <div data-controller="dropdown" class="menu-item dropdown">
     <!-- Botão dispara o toggle -->
@@ -77,9 +93,5 @@
       <%= link_to "Categorias", categories_path, class: "dropdown-item" %>
       <%= link_to "Fornecedores", suppliers_path, class: "dropdown-item" %>
     </div>
-  </div>
-
-  <div>
-        <%= link_to "Configurações", settings_path, class: "menu-item" %>
   </div>
 </div>

@@ -24,3 +24,14 @@
 .remove-btn:hover .icon-delete {
   filter: brightness(0.8);
 }
+
+.settings-link .icon-gear {
+  fill: var(--accent-color);   
+  transition: fill 0.2s ease;
+  stroke: var(--bg-menu-color);
+}
+
+.settings-link:hover .icon-gear {
+  fill: var(--accent-hover);
+  stroke: var(--accent-color);
+}

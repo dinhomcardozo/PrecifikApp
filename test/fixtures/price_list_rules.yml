@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  price_list: one
+  product_portion: one
+  channel: one
+  unit_type: MyString
+  initial_quantity: 9.99
+  final_quantity: 9.99
+  discount_type: MyString
+  discount_value: 9.99
+  final_price: 9.99
+
+two:
+  price_list: two
+  product_portion: two
+  channel: two
+  unit_type: MyString
+  initial_quantity: 9.99
+  final_quantity: 9.99
+  discount_type: MyString
+  discount_value: 9.99
+  final_price: 9.99

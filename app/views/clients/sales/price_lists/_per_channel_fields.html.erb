@@ -1,0 +1,13 @@
+<div class="form-group">
+  <%= f.label :channel_ids, "Canais de Venda" %>
+  <%= f.collection_select :channel_ids, Channel.all, :id, :name, {}, { multiple: true, class: "form-control" } %>
+</div>
+
+<h4>Faixas de Quantidade</h4>
+<div id="rules-container">
+  <%= f.fields_for :price_list_rules do |rule_form| %>
+    <%= render "rule_fields", f: rule_form %>
+  <% end %>
+</div>
+
+<%= button_tag "Adicionar Faixa", type: "button", class: "btn btn-secondary", data: { action: "price-list#addRule" } %>
