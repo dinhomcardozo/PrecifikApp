@@ -1,4 +1,3 @@
-# app/controllers/system_admins/banners_controller.rb
 module SystemAdmins
   class BannersController < SystemAdmins::BaseController
     before_action :set_banner, only: %i[show edit update destroy]
@@ -18,7 +17,7 @@ module SystemAdmins
       @banner = SystemAdmins::Banner.new(banner_params)
       handle_image_upload
       if @banner.save
-        redirect_to banner_path(@banner), notice: "Banner criado."
+        redirect_to system_admins_banner_path(@banner), notice: "Banner criado."
       else
         render :new, status: :unprocessable_entity
       end
@@ -31,7 +30,7 @@ module SystemAdmins
       @banner.assign_attributes(banner_params)
       handle_image_upload
       if @banner.save
-        redirect_to banner_path(@banner), notice: "Banner atualizado."
+        redirect_to system_admins_banner_path(@banner), notice: "Banner atualizado."
       else
         render :edit, status: :unprocessable_entity
       end
@@ -39,7 +38,7 @@ module SystemAdmins
 
     def destroy
       @banner.destroy
-      redirect_to banners_path, notice: "Banner removido."
+      redirect_to system_admins_banners_path, notice: "Banner removido."
     end
 
     private
@@ -49,12 +48,12 @@ module SystemAdmins
     end
 
     def banner_params
-      params.require(:banner)
-            .permit(:link, :start_date, :end_date, :interval, :image)
+      params.require(:system_admins_banner)
+            .permit(:link, :start_date, :end_date, :interval, :image, :plan_id, :client_ids_csv)
     end
 
     def handle_image_upload
-      upload = params[:banner][:image]
+      upload = params[:system_admins_banner][:image]
       return unless upload.respond_to?(:original_filename)
 
       filename = "#{SecureRandom.uuid}_#{upload.original_filename}"

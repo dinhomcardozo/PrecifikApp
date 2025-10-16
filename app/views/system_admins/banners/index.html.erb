@@ -1,16 +1,44 @@
-<p style="color: green"><%= notice %></p>
+<main class="logged-system">
+  <% content_for :title, "Banners" %>
 
-<% content_for :title, "Banners" %>
+  <h1>Banners</h1>
 
-<h1>Banners</h1>
+  <div id="system_admins_banners">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Imagem</th>
+          <th>Link</th>
+          <th>Início</th>
+          <th>Fim</th>
+          <th>Intervalo (ms)</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @banners.each do |banner| %>
+          <tr>
+            <td>
+              <% if banner.image.present? %>
+                <%= image_tag banner.image, width: 120 %>
+              <% end %>
+            </td>
+            <td><%= banner.link %></td>
+            <td><%= l(banner.start_date) %></td>
+            <td><%= l(banner.end_date) %></td>
+            <td><%= banner.interval %></td>
+            <td>
+              <%= link_to "Mostrar", system_admins_banner_path(banner) %> |
+              <%= link_to "Editar", edit_system_admins_banner_path(banner) %> |
+              <%= link_to "Excluir", system_admins_banner_path(banner),
+                            method: :delete,
+                            data: { confirm: "Tem certeza?" } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 
-<div id="system_admins_banners">
-  <% @system_admins_banners.each do |system_admins_banner| %>
-    <%= render system_admins_banner %>
-    <p>
-      <%= link_to "Show this banner", system_admins_banner %>
-    </p>
-  <% end %>
-</div>
-
-<%= link_to "New banner", new_system_admins_banner_path %>
+  <%= link_to "Novo banner", new_system_admins_banner_path, class: "action-button" %>
+</main>

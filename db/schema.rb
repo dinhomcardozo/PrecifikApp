@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_15_004600) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_16_194450) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -43,6 +43,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_15_004600) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "banner_clients", force: :cascade do |t|
+    t.bigint "banner_id", null: false
+    t.bigint "client_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["banner_id"], name: "index_banner_clients_on_banner_id"
+    t.index ["client_id"], name: "index_banner_clients_on_client_id"
+  end
+
   create_table "banners", force: :cascade do |t|
     t.string "image"
     t.string "link"
@@ -51,6 +60,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_15_004600) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "interval", default: 5000, null: false
+    t.integer "plan_id"
+    t.index ["plan_id"], name: "index_banners_on_plan_id"
   end
 
   create_table "brands", force: :cascade do |t|
@@ -697,6 +708,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_15_004600) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "banner_clients", "banners"
+  add_foreign_key "banner_clients", "clients"
   add_foreign_key "brands", "clients", name: "fk_brands_client"
   add_foreign_key "categories", "clients", name: "fk_categories_client"
   add_foreign_key "channel_product_portions", "channels"

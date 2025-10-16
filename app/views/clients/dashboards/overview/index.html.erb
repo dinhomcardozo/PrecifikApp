@@ -16,15 +16,16 @@
       <% end %>
     </div>
 
-    <div class="carousel-inner" style="height: 300px;">
+    <!-- Ajuste da altura para 180px -->
+    <div class="carousel-inner" style="height: 180px;">
       <% @banners.each_with_index do |banner, idx| %>
         <div class="carousel-item <%= 'active' if idx.zero? %>"
              data-bs-interval="<%= banner.interval %>">
           <%= link_to banner.link, target: "_blank", rel: "noopener" do %>
             <%= image_tag banner.image,
                           alt: "Banner #{idx+1}",
-                          class: "d-block w-100",
-                          style: "height:180px; object-fit:cover;" %>
+                          class: "d-block w-100 h-100",
+                          style: "object-fit:cover;" %>
           <% end %>
         </div>
       <% end %>

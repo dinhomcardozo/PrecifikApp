@@ -12,11 +12,6 @@ Rails.application.routes.draw do
       registrations: 'clients/registrations'
     }
 
-  devise_for :clients,
-              class_name: 'SystemAdmins::UserClient',
-              path: 'clients',
-              controllers: { sessions: 'clients/sessions' }
-
   root to: redirect('/clients')
 
   devise_for :user_admins,

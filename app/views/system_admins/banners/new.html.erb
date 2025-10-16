@@ -1,11 +1,13 @@
-<% content_for :title, "New banner" %>
+<main class="logged-system">
+  <% content_for :title, "New banner" %>
 
-<h1>New banner</h1>
+  <h1>New banner</h1>
 
-<%= render "form", system_admins_banner: @system_admins_banner %>
+  <%= render "form", banner: @banner %>
 
-<br>
+  <br>
 
-<div>
-  <%= link_to "Back to banners", system_admins_banners_path %>
-</div>
+  <div>
+    <%= link_to "Back to banners", system_admins_banners_path %>
+  </div>
+</main>

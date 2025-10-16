@@ -3,7 +3,7 @@ module Clients
     class OverviewController < Clients::AuthenticatedController
       layout "application"
       def index
-        @banners = SystemAdmins::Banner.active.order(:start_date)
+        @banners = SystemAdmins::Banner.for_client(current_user_client.client)
       end
     end
   end

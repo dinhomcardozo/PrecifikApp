@@ -1,46 +1,42 @@
-<%= form_with(model: @system_admins_banner, local: true, html: { multipart: true }) do |form| %>
-    <% if system_admins_banner.errors.any? %>
-    <div style="color: red">
-      <h2>
-        <%= pluralize(system_admins_banner.errors.count, "erro") %> proibiu este banner de ser salvo:
-      </h2>
-      <ul>
-        <% system_admins_banner.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="mb-3">
-    <%= form.label :image, "Imagem do Banner (1200×180)", class: "form-label" %>
-    <%= form.file_field :image, class: "form-control" %>
+<%= form_with(model: @banner, local: true) do |f| %>
+  <div class="field">
+    <%= f.label :link %>
+    <%= f.text_field :link %>
   </div>
 
-  <div class="mb-3">
-    <%= form.label :link, "URL de destino", class: "form-label" %>
-    <%= form.text_field :link, class: "form-control" %>
+  <div class="field">
+    <%= f.label :start_date %>
+    <%= f.date_field :start_date %>
   </div>
 
-  <div class="mb-3">
-    <%= form.label :start_date, "Data de Início", class: "form-label" %>
-    <%= form.date_field :start_date, class: "form-control" %>
+  <div class="field">
+    <%= f.label :end_date %>
+    <%= f.date_field :end_date %>
   </div>
 
-  <div class="mb-3">
-    <%= form.label :end_date, "Data de Término", class: "form-label" %>
-    <%= form.date_field :end_date, class: "form-control" %>
+  <div class="field">
+    <%= f.label :interval, "Intervalo (ms)" %>
+    <%= f.number_field :interval %>
   </div>
 
-  <div class="mb-3">
-    <%= form.label :interval, "Intervalo de troca (ms)", class: "form-label" %>
-    <%= form.number_field :interval,
-          class: "form-control",
-          step: 100,
-          min: 1000 %>
+  <div class="field">
+    <%= f.label :image %>
+    <%= f.file_field :image %>
+    <% if banner.image.present? %>
+      <%= image_tag banner.image, width: 200 %>
+    <% end %>
   </div>
 
-  <div>
-    <%= form.submit class: "standart-button" %>
+  <div class="field">
+    <%= f.label :plan_id, "Plano" %>
+    <%= f.collection_select :plan_id, SystemAdmins::Plan.all, :id, :description,
+          { include_blank: "Todos os planos" }, class: "form-select" %>
   </div>
+
+  <div class="field">
+    <%= f.label :client_ids_csv, "Clientes específicos (IDs separados por vírgula)" %>
+    <%= f.text_field :client_ids_csv, value: @banner.clients.pluck(:id).join(","), class: "form-control" %>
+  </div>
+
+  <%= f.submit %>
 <% end %>

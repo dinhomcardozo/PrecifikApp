@@ -1,10 +1,26 @@
-<p style="color: green"><%= notice %></p>
+<main class="logged-system">
+  <p style="color: green"><%= notice %></p>
 
-<%= render @system_admins_banner %>
+  <p>
+    <strong>Link:</strong>
+    <%= @banner.link %>
+  </p>
 
-<div>
-  <%= link_to "Edit this banner", edit_system_admins_banner_path(@system_admins_banner) %> |
-  <%= link_to "Back to banners", system_admins_banners_path %>
+  <p>
+    <strong>Período:</strong>
+    <%= l(@banner.start_date) %> até <%= l(@banner.end_date) %>
+  </p>
 
-  <%= button_to "Destroy this banner", @system_admins_banner, method: :delete %>
-</div>
+  <p>
+    <strong>Imagem:</strong><br>
+    <%= image_tag @banner.image if @banner.image.present? %>
+  </p>
+
+  <div>
+    <%= link_to "Edit this banner", edit_system_admins_banner_path(@banner) %> |
+    <%= link_to "Back to banners", system_admins_banners_path %> |
+    <%= link_to "Destroy", system_admins_banner_path(@banner),
+                method: :delete,
+                data: { confirm: "Tem certeza?" } %>
+  </div>
+</main>
