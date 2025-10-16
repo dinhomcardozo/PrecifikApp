@@ -4,7 +4,6 @@
 <section
   data-controller="pricing"
   data-pricing-base-cost-value="<%= product.total_cost %>"
-  data-pricing-margin-retail-value="<%= product.profit_margin_retail %>"
 >
 <h5 class="subtitle">3) Precificação Básica</h5>
 
@@ -23,28 +22,4 @@
             data: { pricing_target: "baseCost" } %>
     </div>
   </div>
-
-  <div class="form-row-inline">
-    <!-- preço sugerido varejo -->
-    <div class="field-inline">
-      <%= f.label :suggested_price_retail, "Preço Sugerido Varejo (R$)", class: "custom-label" %>
-      <%= f.number_field :suggested_price_retail,
-            readonly: true,
-            step: 0.01,
-            class: "form-control",
-            data: { pricing_target: "suggestedRetail" } %>
-    </div>
-
-    <!-- margem real de lucro varejo -->
-    <div class="field-inline">
-      <%= label_tag :real_profit_retail_margin, "Margem Real Lucro Varejo (%)", class: "custom-label" %>
-      <%= number_field_tag nil,
-            product.suggested_price_retail.present? && product.total_cost.present? ?
-              (((product.suggested_price_retail - product.total_cost) / product.suggested_price_retail) * 100).round(2) : nil,
-            readonly: true,
-            step: 0.01,
-            class: "form-control",
-            data: { pricing_target: "realProfitRetailMargin" } %>
-    </div>
-  <div>
 </section>

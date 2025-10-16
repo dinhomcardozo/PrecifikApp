@@ -71,14 +71,14 @@ class ProductSubproduct < ApplicationRecord
 
     product.recalculate_weights
     product.compute_total_cost
-    product.compute_suggested_prices
+
+    product.product_portions.find_each(&:save)
 
     product.update_columns(
-      total_weight:           product.total_weight,
-      final_weight:           product.final_weight,
-      total_cost:             product.total_cost,
-      suggested_price_retail: product.suggested_price_retail,
-      updated_at:             Time.current
+      total_weight:  product.total_weight,
+      final_weight:  product.final_weight,
+      total_cost:    product.total_cost,
+      updated_at:    Time.current
     )
   end
 

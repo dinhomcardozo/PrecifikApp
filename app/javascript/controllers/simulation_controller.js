@@ -35,15 +35,15 @@ export default class extends Controller {
   }
 
   updateTables() {
-    const productId = this.productSelectTarget.value
+    const portionId = this.productSelectTarget.value
     const units = parseFloat(this.productUnitsFieldTarget.value) || 0
 
-    if (!productId || units <= 0) {
+    if (!portionId || units <= 0) {
       this.clearTables()
       return
     }
 
-    fetch(`/clients/production_simulations/calculate?product_id=${productId}&product_units=${units}`, {
+    fetch(`/clients/production_simulations/calculate?product_portion_id=${portionId}&product_units=${units}`, {
       headers: { "Accept": "application/json" }
     })
       .then(res => {
@@ -60,6 +60,7 @@ export default class extends Controller {
         this.clearTables()
       })
   }
+
 
   fillInputsTable(inputs) {
     const tbody = document.querySelector("#inputs-table tbody")
@@ -106,9 +107,8 @@ export default class extends Controller {
         <td>${product.total_retail_profit}</td>
         <td>${product.total_wholesale_profit}</td>
         <td style="display:none;">
-          <input type="hidden" name="production_simulation[simulation_products_attributes][0][product_id]" value="${this.productSelectTarget.value}">
+          <input type="hidden" name="production_simulation[simulation_products_attributes][0][product_portion_id]" value="${this.productSelectTarget.value}">
           <input type="hidden" name="production_simulation[simulation_products_attributes][0][total_quantity]" value="${product.total_quantity}">
-          <input type="hidden" name="production_simulation[simulation_products_attributes][0][product_units]" value="${product.product_units}">
           <input type="hidden" name="production_simulation[simulation_products_attributes][0][total_cost]" value="${product.total_cost_raw}">
           <input type="hidden" name="production_simulation[simulation_products_attributes][0][minimum_selling_price]" value="${product.minimum_selling_price_raw}">
           <input type="hidden" name="production_simulation[simulation_products_attributes][0][total_selling_price]" value="${product.total_selling_price_raw}">
@@ -118,7 +118,6 @@ export default class extends Controller {
       </tr>
     `
   }
-
   clearTables() {
     document.querySelector("#inputs-table tbody").innerHTML = ""
     document.querySelector("#subproducts-table tbody").innerHTML = ""

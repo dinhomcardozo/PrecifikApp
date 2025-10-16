@@ -151,10 +151,10 @@
 
         <hr>
 
-        <h3 class="subtitle">Produtos Utilizados</h3>
+        <h3 class="subtitle">Porções de Produtos Utilizados</h3>
 
-      <div data-controller="service-nested-form"
-          data-service-nested-form-association-value="clients/products">
+        <div data-controller="service-nested-form"
+            data-service-nested-form-association-value="clients/product_portions">
 
           <div data-service-nested-form-target="items">
             <%= f.fields_for :service_products do |ff| %>
@@ -170,7 +170,7 @@
             <% end %>
           </template>
 
-          <%= link_to "Adicionar Produto", "#",
+          <%= link_to "Adicionar Porção", "#",
                 class: "action-button",
                 data: { action: "service-nested-form#add" } %>
         </div>

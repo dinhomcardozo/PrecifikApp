@@ -17,6 +17,11 @@ module Clients
       @editing_custom_price = params[:edit_custom_price].present?
       @channels = Channel.all.order(:description)
       @channel_rows = @channels.map { |ch| @product_portion.channel_row_for(ch) }
+
+      respond_to do |format|
+        format.html # renderiza show.html.erb normalmente
+        format.json { render json: { cost_per_unit: @product_portion.cost.to_f } }
+      end
     end
 
     # GET /product_portions/new

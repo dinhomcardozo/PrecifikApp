@@ -6,7 +6,8 @@ module Services
     belongs_to :service,
                class_name: 'Services::Service',
                inverse_of:  :service_inputs,
-               autosave:    true
+               autosave:    true,
+               touch: true
     belongs_to :input, optional: true
 
     belongs_to :client, class_name: "SystemAdmins::Client"

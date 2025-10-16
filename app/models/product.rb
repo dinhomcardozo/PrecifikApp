@@ -10,14 +10,13 @@ class Product < ApplicationRecord
   has_many :subproducts, through: :product_subproducts
   has_many   :inputs, through: :subproduct_compositions
 
-  # Serviços diretos
-  has_many :service_products, class_name: 'Services::ServiceProduct', inverse_of: :product
-  has_many :services, through: :service_products, class_name: 'Services::Service'
-
   # Porções e embalagens
   has_many :product_portions, dependent: :destroy
   has_many :portion_packages, through: :product_portions
   has_many :packages, through: :portion_packages
+
+  has_many :service_products, through: :product_portions, class_name: 'Services::ServiceProduct'
+  has_many :services, through: :service_products, class_name: 'Services::Service'
 
   has_one_attached :image
 

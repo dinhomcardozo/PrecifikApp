@@ -6,7 +6,7 @@ class ProductionSimulationsController < Clients::AuthenticatedController
     def index
       @production_simulations = ProductionSimulation
                                   .where(client_id: Current.user_client.client_id)
-                                  .includes(:product)
+                                  .includes(:product_portion)
     end
 
     def new
@@ -21,7 +21,8 @@ class ProductionSimulationsController < Clients::AuthenticatedController
       if @production_simulation.save
         redirect_to @production_simulation, notice: "Simulação criada com sucesso."
       else
-        render :new
+        Rails.logger.debug @production_simulation.errors.full_messages.inspect
+        render :new, status: :unprocessable_entity
       end
     end
 
@@ -37,7 +38,8 @@ class ProductionSimulationsController < Clients::AuthenticatedController
         @production_simulation.save
         redirect_to @production_simulation, notice: "Simulação atualizada com sucesso."
       else
-        render :edit
+        Rails.logger.debug @production_simulation.errors.full_messages.inspect
+        render :edit, status: :unprocessable_entity
       end
     end
 
@@ -64,17 +66,18 @@ class ProductionSimulationsController < Clients::AuthenticatedController
 
     def calculate
       I18n.locale = :'pt-BR'
-      product = Product.includes(product_subproducts: { subproduct: { subproduct_compositions: :input } })
-                      .find_by(id: params[:product_id])
+        portion = ProductPortion.includes(product: { product_subproducts: { subproduct: { subproduct_compositions: :input } } })
+                                .find_by(id: params[:product_portion_id])
 
       product_units = params[:product_units].to_f
-      quantity_in_grams = product_units * product.final_weight.to_f
 
-      if product.nil? || product_units <= 0
+      if portion.nil? || product_units <= 0
         render json: { inputs: [], subproducts: [], product: {} }
         return
       end
 
+      quantity_in_grams = product_units * portion.portioned_quantity.to_f
+      product = portion.product
       subproducts_data = []
       inputs_data = []
 
@@ -126,22 +129,21 @@ class ProductionSimulationsController < Clients::AuthenticatedController
       total_quantity_product = subproducts_data.sum { |sp| sp[:total_quantity] }
       total_cost_product     = subproducts_data.sum { |sp| sp[:total_cost_raw] }
 
-      # Lucro absoluto em R$ usando os valores prontos do produto
-      retail_profit_value    = (product.net_profit_retail || 0) * product_units
-      wholesale_profit_value = (product.net_profit_wholesale || 0) * product_units
-      
+      # Lucro absoluto em R$ (se quiser manter, pode calcular a partir de preços sugeridos)
+      retail_profit_value    = 0
+      wholesale_profit_value = 0
+
       product_data = {
         total_quantity: total_quantity_product.round(2),
         total_cost: view_context.number_to_currency(total_cost_product),
         total_cost_raw: total_cost_product.round(2),
         product_units: product_units.round(2),
-        minimum_selling_price: view_context.number_to_currency(product.suggested_price_wholesale || 0),
-        minimum_selling_price_raw: (product.suggested_price_wholesale || 0).round(2),
-        total_selling_price: view_context.number_to_currency(product_units * (product.suggested_price_wholesale || 0)),
-        total_selling_price_raw: (product_units * (product.suggested_price_wholesale || 0)).round(2),
+        minimum_selling_price: view_context.number_to_currency(portion.final_price || 0),
+        minimum_selling_price_raw: (portion.final_price || 0).round(2),
+        total_selling_price: view_context.number_to_currency(product_units * (portion.final_price || 0)),
+        total_selling_price_raw: (product_units * (portion.final_price || 0)).round(2),
         total_retail_profit: view_context.number_to_currency(retail_profit_value),
         total_retail_profit_raw: retail_profit_value.round(2),
-
         total_wholesale_profit: view_context.number_to_currency(wholesale_profit_value),
         total_wholesale_profit_raw: wholesale_profit_value.round(2)
       }
@@ -160,12 +162,20 @@ class ProductionSimulationsController < Clients::AuthenticatedController
 
     def production_simulation_params
       params.require(:production_simulation).permit(
-        :product_id,
-        :quantity_in_grams,
+        :product_portion_id,
         :product_units,
-        simulation_inputs_attributes: %i[id input_id total_quantity total_cost required_units _destroy],
-        simulation_subproducts_attributes: %i[id subproduct_id total_quantity total_cost _destroy],
-        simulation_products_attributes: %i[id product_id total_quantity total_cost minimum_selling_price total_selling_price total_retail_profit total_wholesale_profit _destroy]
+        :quantity_in_grams,
+        simulation_inputs_attributes: %i[
+          id input_id total_quantity total_cost required_units _destroy
+        ],
+        simulation_subproducts_attributes: %i[
+          id subproduct_id total_quantity total_cost _destroy
+        ],
+        simulation_products_attributes: %i[
+          id product_portion_id total_quantity total_cost
+          minimum_selling_price total_selling_price total_retail_profit
+          total_wholesale_profit _destroy
+        ]
       )
     end
 

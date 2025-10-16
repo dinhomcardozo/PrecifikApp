@@ -3,13 +3,13 @@
     
     <!-- Produto -->
     <div>
-      <%= f.label :product_id, "Produto", class: "custom-label" %>
-      <%= f.select :product_id,
+      <%= f.label :product_portion_id, "Porção de Produto", class: "custom-label" %>
+      <%= f.select :product_portion_id,
             options_for_select(
-              Product.all.map { |p| [p.description, p.id, { 'data-final-weight': p.final_weight }] },
-              @production_simulation.product_id
+              ProductPortion.includes(:product).map { |pp| ["#{pp.product.description} - #{pp.portioned_quantity}g", pp.id, { 'data-final-weight': pp.portioned_quantity }] },
+              @production_simulation.product_portion_id
             ),
-            { prompt: "Selecione um produto" },
+            { prompt: "Selecione uma porção" },
             { class: "form-select",
               data: { "simulation-target": "productSelect", action: "change->simulation#updateFromUnits" } } %>
     </div>
@@ -33,8 +33,11 @@
     <!-- Quantidade em kg -->
     <div>
       <%= f.label :quantity_in_kg, "Quantidade (kg)", class: "custom-label" %>
-      <%= f.number_field :quantity_in_kg, step: 0.001,
-            class: "form-control", readonly: true,
+      <%= number_field_tag :quantity_in_kg,
+            nil,
+            step: 0.001,
+            class: "form-control",
+            readonly: true,
             data: { "simulation-target": "quantityKgField" } %>
     </div>
   </div>

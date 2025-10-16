@@ -82,7 +82,7 @@ module Services
         @available_inputs  = Input.order(:name)
         @available_equipments = Services::Equipment.where(client_id: current_user_client.client_id).order(:description)
         @available_energies   = Services::Energy.where(client_id: current_user_client.client_id).order(:description)
-        @available_products   = Product.order(:description)
+        @available_product_portions = ProductPortion.includes(:product).order(:id)
         @available_subproducts = Subproduct.order(:name)
       end
 

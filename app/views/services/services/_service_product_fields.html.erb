@@ -2,12 +2,12 @@
   <%= f.hidden_field :id %>
   <!-- Select de Product -->
   <div class="field">
-    <%= f.label :product_id, "Product" %>
-    <%= f.collection_select :product_id,
-                            @available_products,
+    <%= f.label :product_portion_id, "Porção de Produto" %>
+    <%= f.collection_select :product_portion_id,
+                            @available_product_portions,
                             :id,
-                            :description,
-                            { prompt: "Selecione Product" },
+                            :label,
+                            { prompt: "Selecione a Porção" },
                             class: "form-control",
                             data: { action: "change->service-nested-form#loadCost" } %>
   </div>

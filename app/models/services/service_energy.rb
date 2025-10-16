@@ -7,7 +7,8 @@ module Services
     belongs_to :service,
                class_name:  "Services::Service",
                inverse_of: :service_energies,
-               autosave:   true
+               autosave:   true,
+               touch: true
     belongs_to :energy, class_name: "Services::Energy", optional: true
     belongs_to :client, class_name: "SystemAdmins::Client"
 

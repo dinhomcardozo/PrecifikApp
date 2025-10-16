@@ -10,7 +10,8 @@ module Services
     belongs_to :service,
                class_name:  "Services::Service",
                inverse_of:   :service_equipments,
-               autosave:     true
+               autosave:     true,
+               touch: true
     belongs_to :equipment, optional: true
 
     private

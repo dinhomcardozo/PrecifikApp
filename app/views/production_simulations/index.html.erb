@@ -9,23 +9,17 @@
         <th>Unidades Produzidas</th>
         <th>Custo Total</th>
         <th>Preço Mínimo</th>
-        <th>Lucro Varejo</th>
-        <th>Lucro Atacado</th>
         <th></th>
       </tr>
     </thead>
     <tbody>
       <% @production_simulations.each do |sim| %>
         <tr>
-          <td><%= sim.product&.description || "Produto não encontrado" %></td>
+          <td><%= sim.product_portion&.product&.description || "Produto não encontrado" %></td>
           <td><%= number_with_precision(sim.quantity_in_grams, precision: 2) %></td>
           <td><%= number_with_precision(sim.product_units, precision: 2) %></td>
           <td><%= number_to_currency(sim.total_cost) %></td>
           <td><%= number_to_currency(sim.minimum_selling_price) %></td>
-          <td><%= number_to_currency(((sim.product&.net_profit_retail) || 0) * (sim.product_units || 0)) %></td>
-          <td><%= number_to_currency(((sim.product&.net_profit_wholesale) || 0) * (sim.product_units || 0)) %></td>
-
-
           <td>
             <%= link_to "Ver", sim, class: "action-button" %> |
             <%= link_to "Editar", edit_production_simulation_path(sim), class: "action-button" %> |

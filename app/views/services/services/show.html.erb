@@ -71,7 +71,7 @@
           <% @service.service_products.each do |item| %>
             <tr>
               <td>Produto</td>
-              <td><%= item.product&.description %></td>
+              <td><%= item.product_portion&.label %></td>
               <td><%= item.quantity_for_service %></td>
               <td><%= number_to_currency(item.cost, unit: "R$ ") %></td>
             </tr>

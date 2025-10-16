@@ -6,8 +6,9 @@ module Services
     belongs_to :service,
                class_name: "Services::Service",
                inverse_of: :service_products,
-               autosave:   true
-    belongs_to :product, optional: true
+               autosave:   true,
+               touch: true
+    belongs_to :product_portion, optional: true
 
     belongs_to :client, class_name: "SystemAdmins::Client"
     validates :client_id, presence: true
@@ -16,8 +17,11 @@ module Services
     private
 
     def calculate_cost
-      return if quantity_for_service.blank? || product.blank?
-      self.cost = quantity_for_service.to_f * product.cost_per_gram.to_f
+      return if quantity_for_service.blank? || product_portion.blank?
+
+      if product_portion.cost.present?
+        self.cost = quantity_for_service.to_f * product_portion.cost.to_f
+      end
     end
   end
 end

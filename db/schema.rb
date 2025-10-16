@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_12_165739) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_15_004600) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -331,7 +331,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_12_165739) do
     t.bigint "client_id", null: false
     t.bigint "created_by_id", null: false
     t.bigint "updated_by_id"
-    t.bigint "product_id", null: false
     t.decimal "quantity_in_grams", precision: 10, scale: 2, null: false
     t.decimal "total_quantity", precision: 10, scale: 2
     t.decimal "total_cost", precision: 12, scale: 2
@@ -342,9 +341,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_12_165739) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.decimal "product_units"
+    t.bigint "product_portion_id"
+    t.decimal "total_profit"
     t.index ["client_id"], name: "index_production_simulations_on_client_id"
     t.index ["created_by_id"], name: "index_production_simulations_on_created_by_id"
-    t.index ["product_id"], name: "index_production_simulations_on_product_id"
+    t.index ["product_portion_id"], name: "index_production_simulations_on_product_portion_id"
     t.index ["updated_by_id"], name: "index_production_simulations_on_updated_by_id"
   end
 
@@ -483,12 +484,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_12_165739) do
 
   create_table "service_products", force: :cascade do |t|
     t.bigint "service_id", null: false
-    t.bigint "product_id", null: false
     t.decimal "quantity_for_service"
     t.decimal "cost"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["product_id"], name: "index_service_products_on_product_id"
+    t.bigint "product_portion_id"
+    t.bigint "client_id"
+    t.index ["client_id"], name: "index_service_products_on_client_id"
+    t.index ["product_portion_id"], name: "index_service_products_on_product_portion_id"
     t.index ["service_id"], name: "index_service_products_on_service_id"
   end
 
@@ -548,7 +551,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_12_165739) do
 
   create_table "simulation_products", force: :cascade do |t|
     t.bigint "production_simulation_id", null: false
-    t.bigint "product_id", null: false
     t.decimal "total_quantity", precision: 10, scale: 2
     t.decimal "total_cost", precision: 12, scale: 2
     t.decimal "minimum_selling_price", precision: 12, scale: 2
@@ -557,7 +559,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_12_165739) do
     t.decimal "total_wholesale_profit", precision: 12, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["product_id"], name: "index_simulation_products_on_product_id"
+    t.bigint "product_portion_id"
+    t.decimal "total_profit"
+    t.index ["product_portion_id"], name: "index_simulation_products_on_product_portion_id"
     t.index ["production_simulation_id"], name: "index_simulation_products_on_production_simulation_id"
   end
 
@@ -728,7 +732,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_12_165739) do
   add_foreign_key "product_subproducts", "products"
   add_foreign_key "product_subproducts", "subproducts"
   add_foreign_key "production_simulations", "clients"
-  add_foreign_key "production_simulations", "products"
+  add_foreign_key "production_simulations", "product_portions"
   add_foreign_key "production_simulations", "user_clients", column: "created_by_id"
   add_foreign_key "production_simulations", "user_clients", column: "updated_by_id"
   add_foreign_key "products", "brands"
@@ -749,7 +753,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_12_165739) do
   add_foreign_key "service_inputs", "clients", name: "fk_service_inputs_client"
   add_foreign_key "service_inputs", "inputs"
   add_foreign_key "service_inputs", "services"
-  add_foreign_key "service_products", "products"
+  add_foreign_key "service_products", "clients"
+  add_foreign_key "service_products", "product_portions"
   add_foreign_key "service_products", "services"
   add_foreign_key "service_professionals", "clients", name: "fk_service_professionals_client"
   add_foreign_key "service_professionals", "professionals"
@@ -762,8 +767,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_12_165739) do
   add_foreign_key "services", "roles"
   add_foreign_key "simulation_inputs", "inputs"
   add_foreign_key "simulation_inputs", "production_simulations"
+  add_foreign_key "simulation_products", "product_portions"
   add_foreign_key "simulation_products", "production_simulations"
-  add_foreign_key "simulation_products", "products"
   add_foreign_key "simulation_subproducts", "production_simulations"
   add_foreign_key "simulation_subproducts", "subproducts"
   add_foreign_key "subproduct_compositions", "clients", name: "fk_subproduct_compositions_client"

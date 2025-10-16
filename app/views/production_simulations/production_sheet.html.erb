@@ -71,8 +71,7 @@
         <th>Custo Total</th>
         <th>Preço Mínimo</th>
         <th>Faturamento Previsto Total</th>
-        <th>Lucro Varejo (R$)</th>
-        <th>Lucro Atacado (R$)</th>
+        <th>Lucro (R$)</th>
       </tr>
     </thead>
     <tbody>
@@ -83,8 +82,7 @@
           <td><%= number_to_currency(prod.total_cost) %></td>
           <td><%= number_to_currency(prod.minimum_selling_price) %></td>
           <td><%= number_to_currency(prod.total_selling_price) %></td>
-          <td><%= number_to_currency(prod.total_retail_profit) %></td>
-          <td><%= number_to_currency(prod.total_wholesale_profit) %></td>
+          <td><%= number_to_currency(prod.total_profit) %></td>
         </tr>
       <% end %>
     </tbody>

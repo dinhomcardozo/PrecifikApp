@@ -107,5 +107,10 @@ module Services
     end
 
     alias_method :compute_final_price, :compute_items_costs_and_final_price
+
+    def recalculate!
+      compute_items_costs_and_final_price
+      save!
+    end
   end
 end

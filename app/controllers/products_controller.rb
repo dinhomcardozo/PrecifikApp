@@ -43,7 +43,7 @@ class ProductsController < Clients::AuthenticatedController
                     .yield_self { |rel| apply_filters(rel) }
                     .paginate(page: params[:page])
 
-      @portions = @product.product_portions.order(:portioned_quantity)
+      #@portions = @product.product_portions.order(:portioned_quantity)
   end
 
   def new
@@ -116,8 +116,8 @@ class ProductsController < Clients::AuthenticatedController
 
     # Serviços diretos que usam este produto
     @services = Services::Service
-                  .joins(:service_products)
-                  .where(service_products: { product_id: @product.id })
+                  .joins(service_products: :product_portion)
+                  .where(product_portions: { product_id: @product.id })
                   .distinct
 
     # Contagem

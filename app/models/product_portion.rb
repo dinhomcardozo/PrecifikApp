@@ -8,6 +8,11 @@ class ProductPortion < ApplicationRecord
   has_many :packages, through: :portion_packages
   has_many :channel_product_portions, dependent: :destroy
 
+  has_many :service_products, class_name: "Services::ServiceProduct"
+  has_many :services, through: :service_products, class_name: "Services::Service"
+
+  after_save :touch_services
+
   has_one :sales_target, inverse_of: :product_portion, dependent: :destroy
 
   accepts_nested_attributes_for :channel_product_portions, allow_destroy: true
@@ -83,6 +88,10 @@ class ProductPortion < ApplicationRecord
     end
   end
 
+  def label
+    "#{product.description} - #{portioned_quantity}g"
+  end
+
   private
 
   def calculate_totals
@@ -93,5 +102,10 @@ class ProductPortion < ApplicationRecord
 
   def set_client_id
     self.client_id ||= Current.user_client.client_id if Current.user_client
+  end
+
+  def touch_services
+    services.find_each(&:compute_final_price)
+    services.find_each(&:save!)
   end
 end
