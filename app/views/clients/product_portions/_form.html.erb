@@ -5,8 +5,7 @@
     data-controller="product-portion-pricing"
     data-product-portion-pricing-base-cost-value="<%= product_portion.product.present? ? product_portion.product.total_cost.to_f : 0 %>"
     data-product-portion-pricing-fixed-cost-value="<%= SalesTarget.global_distributed_fixed_cost_live.to_f %>"
-    data-product-portion-pricing-margin-retail-value="<%= product_portion.profit_margin.to_f %>">
-
+    data-product-portion-pricing-margin-value="<%= product_portion.profit_margin.to_f %>">
     <!-- Produto -->
     <div>
       <% if product_portion.new_record? %>
@@ -35,7 +34,9 @@
         <%= form.label :profit_margin, "Margem Adicionada (%)", class: "custom-label" %>
         <%= form.number_field :profit_margin,
               step: 0.01,
-              class: "form-control" %>
+              class: "form-control",
+              data: { product_portion_pricing_target: "margin",
+              action: "input->product-portion-pricing#recalculate" } %>
       </div>
 
       <!-- Preço final das embalagens -->

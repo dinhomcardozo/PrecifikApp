@@ -54,8 +54,7 @@
         <th>Custo Total</th>
         <th>Preço Mínimo</th>
         <th>Preço Total</th>
-        <th>Lucro Varejo</th>
-        <th>Lucro Atacado</th>
+        <th>Lucro</th>
       </tr>
     </thead>
     <tbody>
@@ -65,8 +64,7 @@
           <td><%= number_to_currency(sp.total_cost) %></td>
           <td><%= number_to_currency(sp.minimum_selling_price) %></td>
           <td><%= number_to_currency(sp.total_selling_price) %></td>
-          <td><%= number_to_currency(sp.total_retail_profit) %></td>
-          <td><%= number_to_currency(sp.total_wholesale_profit) %></td>
+          <td><%= number_to_currency(sp.total_profit) %></td>
         </tr>
       <% end %>
     </tbody>
