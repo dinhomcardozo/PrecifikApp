@@ -18,6 +18,26 @@
   padding-bottom: 0px;
 }
 
+.rule-fields {
+  display: flex;
+  align-items: flex-middle; /* alinha todos pela base */
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.65rem; /* 0.5rem estava muito pequeno */
+  font-weight: 600;
+}
+
+.rule-fields .field {
+  display: flex;
+  flex-direction: column;
+}
+
+.rule-fields.has-error {
+  border: 1px solid red;
+  padding: 5px;
+  border-radius: 4px;
+}
+
 .form-row-inline {
   display: flex;
   gap: 1rem; /* espaço entre os campos */

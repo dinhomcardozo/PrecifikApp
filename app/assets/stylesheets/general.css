@@ -104,3 +104,17 @@
 .main-content-application {
   background-color: #ffffff;
 }
+
+.list-select {
+  display: flex;
+  gap: 20px; /* espaço entre os campos */
+}
+
+.list-select .flex-item {
+  flex: 1; /* divide igualmente */
+}
+
+.tall-select {
+  min-height: 180px;
+  max-height: 350px;
+}

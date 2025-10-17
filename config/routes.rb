@@ -56,6 +56,7 @@ Rails.application.routes.draw do
     scope path: 'clients' do
 
       scope module: 'clients' do
+        
         namespace :sales do
           resources :price_lists do
             resources :price_list_rules, only: [:new, :create, :edit, :update, :destroy]

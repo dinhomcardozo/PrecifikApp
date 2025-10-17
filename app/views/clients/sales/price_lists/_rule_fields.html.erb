@@ -1,28 +1,28 @@
 <div class="rule-fields">
-  <div class="form-group">
-    <%= f.label :unit_type, "Unidade" %>
-    <%= f.select :unit_type, [["Gramas", "g"], ["Unidades", "un"]], {}, class: "form-control" %>
-  </div>
-
-  <div class="form-group">
+  <div class="fields">
     <%= f.label :initial_quantity, "De" %>
-    <%= f.number_field :initial_quantity, step: 0.01, class: "form-control" %>
+    <%= f.number_field :initial_quantity, step: 1, class: "form-control",
+          data: { action: "input->price-list#validateIntervals" } %>
   </div>
 
-  <div class="form-group">
+  <div class="fields">
     <%= f.label :final_quantity, "Até" %>
-    <%= f.number_field :final_quantity, step: 0.01, class: "form-control" %>
+    <%= f.number_field :final_quantity, step: 1, class: "form-control",
+          data: { action: "input->price-list#validateIntervals" } %>
   </div>
 
-  <div class="form-group">
+  <div class="fields">
     <%= f.label :discount_type, "Tipo de Desconto" %>
     <%= f.select :discount_type, [["%", "percent"], ["R$", "amount"]], {}, class: "form-control" %>
   </div>
 
-  <div class="form-group">
+  <div class="fields">
     <%= f.label :discount_value, "Valor do Desconto" %>
     <%= f.number_field :discount_value, step: 0.01, class: "form-control" %>
   </div>
 
-  <%= link_to "Remover", "#", class: "remove-rule btn btn-danger", data: { action: "price-list#removeRule" } %>
+  <div class="fields">
+    <%= link_to "Remover", "#", class: "action-button",
+          data: { action: "price-list#removeRule" } %>
+  </div>
 </div>

@@ -41,10 +41,12 @@
           end %>
 
         <div class="<%= css_class %>">
+          <button type="button" class="close-btn" data-action="click->notice#close">×</button>
           <%= message %>
         </div>
       <% end %>
     </div>
+
     <%= render "shared/menu_top_bar" %>
     <%= render "shared/horizontal_menu" %>
     <%= render "layouts/sales_target_alert" %>

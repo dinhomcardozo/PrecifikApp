@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_16_194450) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_17_203543) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -97,6 +97,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_16_194450) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "client_id"
+  end
+
+  create_table "channels_price_lists", force: :cascade do |t|
+    t.bigint "price_list_id", null: false
+    t.bigint "channel_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["channel_id"], name: "index_channels_price_lists_on_channel_id"
+    t.index ["price_list_id"], name: "index_channels_price_lists_on_price_list_id"
   end
 
   create_table "client_plans", force: :cascade do |t|
@@ -273,8 +282,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_16_194450) do
 
   create_table "price_list_rules", force: :cascade do |t|
     t.bigint "price_list_id", null: false
-    t.bigint "product_portion_id", null: false
-    t.bigint "channel_id", null: false
     t.string "unit_type"
     t.decimal "initial_quantity"
     t.decimal "final_quantity"
@@ -283,19 +290,26 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_16_194450) do
     t.decimal "final_price"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["channel_id"], name: "index_price_list_rules_on_channel_id"
     t.index ["price_list_id"], name: "index_price_list_rules_on_price_list_id"
-    t.index ["product_portion_id"], name: "index_price_list_rules_on_product_portion_id"
   end
 
   create_table "price_lists", force: :cascade do |t|
     t.string "description"
-    t.bigint "product_portion_id", null: false
     t.string "list_type"
     t.boolean "active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["product_portion_id"], name: "index_price_lists_on_product_portion_id"
+    t.bigint "client_id", null: false
+    t.index ["client_id"], name: "index_price_lists_on_client_id"
+  end
+
+  create_table "price_lists_product_portions", force: :cascade do |t|
+    t.bigint "price_list_id", null: false
+    t.bigint "product_portion_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["price_list_id"], name: "index_price_lists_product_portions_on_price_list_id"
+    t.index ["product_portion_id"], name: "index_price_lists_product_portions_on_product_portion_id"
   end
 
   create_table "product_portions", force: :cascade do |t|
@@ -715,6 +729,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_16_194450) do
   add_foreign_key "channel_product_portions", "channels"
   add_foreign_key "channel_product_portions", "product_portions"
   add_foreign_key "channels", "clients", name: "fk_channels_client"
+  add_foreign_key "channels_price_lists", "channels"
+  add_foreign_key "channels_price_lists", "price_lists"
   add_foreign_key "client_plans", "clients"
   add_foreign_key "client_plans", "plans"
   add_foreign_key "clients", "plans"
@@ -734,10 +750,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_16_194450) do
   add_foreign_key "portion_packages", "clients"
   add_foreign_key "portion_packages", "packages"
   add_foreign_key "portion_packages", "product_portions"
-  add_foreign_key "price_list_rules", "channels"
   add_foreign_key "price_list_rules", "price_lists"
-  add_foreign_key "price_list_rules", "product_portions"
-  add_foreign_key "price_lists", "product_portions"
+  add_foreign_key "price_lists", "clients"
+  add_foreign_key "price_lists_product_portions", "price_lists"
+  add_foreign_key "price_lists_product_portions", "product_portions"
   add_foreign_key "product_portions", "clients"
   add_foreign_key "product_portions", "products"
   add_foreign_key "product_portions", "taxes"

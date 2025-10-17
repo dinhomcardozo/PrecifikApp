@@ -1,0 +1,13 @@
+<% if object && object.errors.any? %>
+  <div class="flash-bar" data-controller="notice">
+    <div class="alert-bar">
+      <button type="button" class="close-btn" data-action="click->notice#close">×</button>
+      <h4>Não foi possível salvar <%= object.model_name.human %>:</h4>
+      <ul>
+        <% object.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+<% end %>

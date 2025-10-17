@@ -1,15 +1,9 @@
-<%= form_with(model: [:sales, @price_list]) do |form| %>
+<%= render "shared/errors", object: @price_list %>
+
+<%= form_with(model: [:sales, @price_list], data: { controller: "price-list" }) do |form| %>
   <div class="form-group">
     <%= form.label :description, "Descrição" %>
     <%= form.text_field :description, class: "form-control" %>
-  </div>
-
-  <div class="form-group">
-    <%= form.label :list_type, "Tipo de Lista" %>
-    <%= form.select :list_type,
-          options_for_select([["Por Produto", "per_product"], ["Por Canal", "per_channel"]], @price_list.list_type),
-          {}, class: "form-control",
-          data: { action: "change->price-list#togglePartials" } %>
   </div>
 
   <div class="form-group">
@@ -17,14 +11,43 @@
     <%= form.check_box :active %>
   </div>
 
-  <!-- Partials condicionais -->
-  <div id="per-product-fields" style="<%= @price_list.list_type == 'per_product' ? '' : 'display:none;' %>">
-    <%= render "per_product_fields", f: form %>
+  <!-- Seleção de Product Portions -->
+  <div class="list-select">
+    <!-- Seleção de Product Portions -->
+    <div class="form-group flex-item">
+      <%= form.label :product_portion_ids, "Porções de Produto" %>
+      <%= form.collection_select :product_portion_ids,
+            ProductPortion.all, :id, :label,
+            {}, { multiple: true, class: "form-control tall-select" } %>
+    </div>
+
+    <!-- Seleção de Channels -->
+    <div class="form-group flex-item">
+      <%= form.label :channel_ids, "Canais de Venda" %>
+      <%= form.collection_select :channel_ids,
+            Channel.all, :id, :description,
+            {}, { multiple: true, class: "form-control tall-select" } %>
+    </div>
   </div>
 
-  <div id="per-channel-fields" style="<%= @price_list.list_type == 'per_channel' ? '' : 'display:none;' %>">
-    <%= render "per_channel_fields", f: form %>
+
+  <!-- Regras -->
+  <h4 class="subtitle">Faixas de Quantidade</h4>
+  <div id="rules-container" data-price-list-target="rulesContainer">
+    <%= form.fields_for :price_list_rules do |rule_form| %>
+      <%= render "rule_fields", f: rule_form %>
+    <% end %>
   </div>
+
+  <template id="rule-template">
+    <%= form.fields_for :price_list_rules, PriceListRule.new, child_index: "NEW_RECORD" do |rule_form| %>
+      <%= render "rule_fields", f: rule_form %>
+    <% end %>
+  </template>
+
+  <%= button_tag "Adicionar Faixa", type: "button",
+        class: "mini-button",
+        data: { action: "price-list#addRule" } %>
 
   <div class="actions">
     <%= form.submit "Salvar", class: "action-button" %>

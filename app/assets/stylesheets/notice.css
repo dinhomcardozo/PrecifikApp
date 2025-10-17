@@ -45,3 +45,15 @@
   width: 100%;
   z-index: 9999;
 }
+
+.close-btn {
+  position: absolute;
+  top: 4px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+}
