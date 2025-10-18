@@ -43,3 +43,12 @@
     }
   });
 </script>
+
+<main class="index-container">
+  <div class="dashboard-grid">
+    <%= render "clients/dashboards/overview/indicators/inputs", count: @inputs_count %>
+    <%= render "clients/dashboards/overview/indicators/subproducts", count: @subproducts_count %>
+    <%= render "clients/dashboards/overview/indicators/products", count: @products_count %>
+    <%= render "clients/dashboards/overview/indicators/product_portions", count: @product_portions_count %>
+  </div>
+</main>
