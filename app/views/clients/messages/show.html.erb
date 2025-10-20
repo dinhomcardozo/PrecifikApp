@@ -1,8 +1,9 @@
-<main class="message-container">
-  <h1><%= @message.title %></h1>
-  <div class="message-body">
-    <%= @message.body.html_safe %>
-  </div>
+<main class="index-container">
+  <h2><%= @message.title %></h2>
+    <div class="prose">
+      <%= raw @message.body %>
+    </div>
+    <p class="text-sm text-gray-500 mt-4">Enviado em <%= l(@message.created_at, format: :short) %></p>
 
-  <%= link_to "Voltar", clients_messages_path, class: "action-button" %>
+    <%= link_to "Voltar", clients_messages_path, class: "action-button" %>
 </main>

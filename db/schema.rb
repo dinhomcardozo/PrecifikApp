@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_17_203543) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_20_143008) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -206,6 +206,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_17_203543) do
     t.index ["brand_id"], name: "index_inputs_on_brand_id"
     t.index ["input_type_id"], name: "index_inputs_on_input_type_id"
     t.index ["supplier_id"], name: "index_inputs_on_supplier_id"
+  end
+
+  create_table "message_reads", force: :cascade do |t|
+    t.bigint "message_id", null: false
+    t.bigint "client_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "read_at"
+    t.index ["client_id"], name: "index_message_reads_on_client_id"
+    t.index ["message_id"], name: "index_message_reads_on_message_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -744,6 +754,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_17_203543) do
   add_foreign_key "inputs", "clients", name: "fk_inputs_client"
   add_foreign_key "inputs", "input_types"
   add_foreign_key "inputs", "suppliers"
+  add_foreign_key "message_reads", "clients"
+  add_foreign_key "message_reads", "messages"
   add_foreign_key "packages", "clients"
   add_foreign_key "packages", "suppliers"
   add_foreign_key "payment_method_installments", "payment_methods"

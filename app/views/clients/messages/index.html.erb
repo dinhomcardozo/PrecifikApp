@@ -1,15 +1,18 @@
 <main class="index-container">
-  <h1>Mensagens</h1>
+  <h2>Mensagens</h2>
 
-  <% if @messages.any? %>
-    <ul class="messages-list">
-      <% @messages.each do |msg| %>
-        <li>
-          <h3><%= link_to msg.title, clients_message_path(msg) %></h3>
-        </li>
-      <% end %>
-    </ul>
-  <% else %>
-    <p>Não há mensagens no momento.</p>
-  <% end %>
+  <ul class="divide-y divide-gray-200">
+    <% @messages.each do |message| %>
+      <% read = message.read_by?(current_user_client.client) %>
+      <li class="py-3 flex justify-between items-center">
+        <div>
+          <%= link_to message.title, message_path(message), class: (read ? "text-gray-500" : "text-black font-bold") %>
+          <p class="text-sm text-gray-600"><%= truncate(strip_tags(message.body), length: 80) %></p>
+        </div>
+        <span class="text-xs <%= read ? 'text-green-600' : 'text-red-600' %>">
+          <%= read ? "Lido" : "Não lido" %>
+        </span>
+      </li>
+    <% end %>
+  </ul>
 </main>

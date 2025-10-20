@@ -3,6 +3,8 @@ class SystemAdmins::Message < ApplicationRecord
   
   validates :title, :body, presence: true
 
+  has_many :message_reads, dependent: :destroy
+
   has_and_belongs_to_many :plans,
                           class_name: "SystemAdmins::Plan",
                           join_table: "messages_plans"
@@ -28,5 +30,9 @@ class SystemAdmins::Message < ApplicationRecord
                     (end_hour.nil? || now_time <= end_hour.strftime("%H:%M"))
 
     in_date_range && in_time_range
+  end
+
+  def read_by?(client)
+    message_reads.where(client_id: client.id).where.not(read_at: nil).exists?
   end
 end

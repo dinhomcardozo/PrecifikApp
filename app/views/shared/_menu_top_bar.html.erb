@@ -1,11 +1,21 @@
 <div class="menu-top-bar">
   <% if user_client_signed_in? %>
+
     <span class="top-bar-item">
       Seja bem-vindo ao Maxximiza, 
       <strong><%= current_user_client.first_name %>!    |     </strong>
     </span>
     <span class="top-bar-item">
       <%= button_to 'SAIR', destroy_user_client_session_path, method: :delete %>
+    </span>
+    <span class="top-bar-item">
+      <%= link_to messages_path, class: "settings-link", title: "Mensagens" do %>
+        <!-- Ícone de mensagens (SVG envelope) -->
+        <svg class="icon-gear" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-18 8h18a2 2 0 002-2V6a2 2 0 00-2-2H3a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+        </svg>
+      <% end %>
     </span>
     <span class="top-bar-item">
       <%= link_to settings_path, class: "settings-link", title: "Configurações" do %>
