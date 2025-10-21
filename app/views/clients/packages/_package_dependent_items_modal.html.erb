@@ -1,0 +1,32 @@
+<div class="modal fade" id="packageAssocModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Porções de Produto que usam esta Embalagem</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <% if product_portions.any? %>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Produto</th>
+                <th>Quantidade Porcionada</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% product_portions.each do |pp| %>
+                <tr>
+                  <td><%= pp.product.description %></td>
+                  <td><%= pp.portioned_quantity %> g</td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% else %>
+          <p>Nenhuma porção de produto utiliza esta embalagem.</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

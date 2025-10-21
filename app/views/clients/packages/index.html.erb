@@ -25,7 +25,11 @@
             <%= link_to "Editar", edit_package_path(package), class: "action-button" %>
           </td>
           <td class="cell-actions">
-            <%= button_to "Excluir", package, method: :delete, data: { confirm: "Tem certeza?" }, class: "action-button" %>
+            <%= link_to "Excluir",
+                        package_path(package),
+                        data: { turbo_method: :delete,
+                                turbo_confirm: "Deseja excluir Embalagem? Pode impactar em porções de produtos." },
+                        class: "action-button" %>
           </td>
         </tr>
       <% end %>

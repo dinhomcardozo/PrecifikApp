@@ -17,14 +17,17 @@
       <% @fixed_costs.each do |fc| %>
         <tr>
           <td><%= fc.description %></td>
-          <td><%= number_to_currency(fc.monthly_cost, unit: "R$ ") %></td>
+          <td><%= number_to_currency(fc.monthly_cost) %></td>
           <td><%= fc.fixed_cost_type %></td>
-          <td><%= link_to "Mostrar", fc, class: "action-button" %></td>
-          <td><%= link_to "Editar",   edit_fixed_cost_path(fc), class: "action-button" %></td>
-          <td><%= link_to "Apagar",   fc,
-                          method: :delete,
-                          data: { confirm: "Tem certeza?" },
-                          class: "action-button" %></td>
+
+          <td><%= link_to "Editar", edit_fixed_cost_path(fc), class: "action-button" %></td>
+          <td>
+            <%= link_to "Excluir",
+                        fixed_cost_path(fc),
+                        method: :delete,
+                        data: { confirm: "Tem certeza que deseja excluir este custo fixo?" },
+                        class: "action-button" %>
+          </td>
         </tr>
       <% end %>
     </tbody>

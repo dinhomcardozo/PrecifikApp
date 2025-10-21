@@ -25,13 +25,31 @@
   filter: brightness(0.8);
 }
 
-.settings-link .icon-gear {
-  fill: var(--accent-color);   
-  transition: fill 0.2s ease;
-  stroke: var(--bg-menu-color);
+.icon-link {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 
-.settings-link:hover .icon-gear {
-  fill: var(--accent-hover);
-  stroke: var(--accent-color);
+/* Mensagens */
+.icon-link.messages {
+  background-image: url("icons/messages-regular.png");
+  max-height: 18px;
+  margin-top: 2px;
+}
+.icon-link.messages:hover {
+  background-image: url("icons/messages-hover.png");
+}
+
+/* Configurações */
+.icon-link.settings {
+  background-image: url("icons/settings-regular.png");
+  max-height: 18px;
+  margin-top: 2px;
+}
+.icon-link.settings:hover {
+  background-image: url("icons/settings-hover.png");
 }

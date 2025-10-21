@@ -3,6 +3,24 @@
 
   <h1>Detalhes da Embalagem</h1>
 
+    <div class="detailed-box">
+      <div>
+        <p class="detailed-text">
+          <strong>ATENÇÃO!</strong> Edite isso com cuidado. Outras porções de produtos podem depender desta Embalagem.
+        </p>
+        <p class="dependent-item-count">
+          <%= "Você tem #{pluralize(@product_portions_count, 'Porção de Produto')}" %> utilizando esta embalagem.
+          <a href="#" data-bs-toggle="modal" data-bs-target="#packageAssocModal">
+            Clique aqui e veja a lista.
+          </a>
+        </p>
+
+        <div>
+          <%= render "package_dependent_items_modal", product_portions: @product_portions %>
+        </div>
+      </div>
+    </div>
+
   <table class="index-table index-table--bordered">
     <tr>
       <th class="custom-label" >Descrição</th>

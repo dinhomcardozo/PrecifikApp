@@ -1,12 +1,14 @@
-<% content_for :title, "Editing fixed cost" %>
+<main class="index-container">
+  <% content_for :title, "Editing fixed cost" %>
 
-<h1>Editar Custo Fixo</h1>
+  <h1>Editar Custo Fixo</h1>
 
-<%= render "form", fixed_cost: @fixed_cost %>
+  <%= render "form", fixed_cost: @fixed_cost %>
 
-<br>
+  <br>
 
-<div>
-  <%= link_to "Mostrar", @fixed_cost, class: "action-button" %> |
-  <%= link_to "Voltar", fixed_costs_path, class: "action-button" %>
-</div>
+  <div>
+    <%= link_to "Mostrar", @fixed_cost, class: "action-button" %> |
+    <%= link_to "Voltar", fixed_costs_path, class: "action-button" %>
+  </div>
+</main>

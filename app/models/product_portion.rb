@@ -38,6 +38,16 @@ class ProductPortion < ApplicationRecord
     SalesTarget.global_distributed_fixed_cost_live
   end
 
+  def self.distribute_fixed_costs!
+    find_each do |portion|
+      portion.update!(
+        cost: portion.cost,
+        final_cost: portion.final_cost,
+        final_price: portion.final_price
+      )
+    end
+  end
+
   def packaged_cost
     portion_cost + final_package_price.to_f
   end

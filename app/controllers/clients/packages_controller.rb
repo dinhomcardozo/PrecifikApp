@@ -9,6 +9,9 @@ module Clients
 
     # GET /packages/1 or /packages/1.json
     def show
+      @package = Package.find(params[:id])
+      @product_portions = @package.product_portions.includes(:product)
+      @product_portions_count = @product_portions.size
     end
 
     # GET /packages/new
@@ -26,8 +29,8 @@ module Clients
 
       respond_to do |format|
         if @package.save
-          format.html { redirect_to @package, notice: "Package was successfully created." }
-          format.json { render :show, status: :created, location: @package }
+          format.html { redirect_to packages_path, notice: "Package was successfully created." }
+          format.json { render :index, status: :created, location: packages_path }
         else
           format.html { render :new, status: :unprocessable_entity }
           format.json { render json: @package.errors, status: :unprocessable_entity }
@@ -39,8 +42,8 @@ module Clients
     def update
       respond_to do |format|
         if @package.update(package_params)
-          format.html { redirect_to @package, notice: "Package was successfully updated." }
-          format.json { render :show, status: :ok, location: @package }
+          format.html { redirect_to packages_path, notice: "Package was successfully updated." }
+          format.json { render :index, status: :ok, location: packages_path }
         else
           format.html { render :edit, status: :unprocessable_entity }
           format.json { render json: @package.errors, status: :unprocessable_entity }
@@ -48,10 +51,8 @@ module Clients
       end
     end
 
-    # DELETE /packages/1 or /packages/1.json
     def destroy
       @package.destroy!
-
       respond_to do |format|
         format.html { redirect_to packages_path, status: :see_other, notice: "Package was successfully destroyed." }
         format.json { head :no_content }
@@ -59,14 +60,13 @@ module Clients
     end
 
     private
-      # Use callbacks to share common setup or constraints between actions.
-      def set_package
-        @package = Package.find(params.expect(:id))
-      end
+    
+    def set_package
+      @package = Package.find(params[:id])
+    end
 
-      # Only allow a list of trusted parameters through.
-      def package_params
-        params.expect(package: [ :description, :supplier_id, :unit_price ])
-      end
+    def package_params
+      params.require(:package).permit(:description, :supplier_id, :unit_price, :client_id)
+    end
   end
 end

@@ -1,6 +1,5 @@
 class Package < ApplicationRecord
   belongs_to :supplier
-  belongs_to :client
   default_scope { where(client_id: Current.user_client.client_id) if Current.user_client }
   has_many :portion_packages, dependent: :destroy
   has_many :product_portions, through: :portion_packages
