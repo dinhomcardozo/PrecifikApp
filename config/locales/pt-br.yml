@@ -10,6 +10,14 @@ pt-BR:
   date:
     formats:
       default: "%d/%m/%Y"
+      short: "%d/%m"
+      long: "%d de %B de %Y"
+
+  time:
+    formats:
+      default: "%d/%m/%Y %H:%M"
+      short: "%d/%m/%Y %H:%M"
+      long: "%A, %d de %B de %Y %H:%M"
 
   activerecord:
     models:

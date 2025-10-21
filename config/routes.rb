@@ -118,7 +118,12 @@ Rails.application.routes.draw do
         collection { get :search, to: 'brands#search', as: :search }
       end
 
-      resources :suppliers
+      resources :suppliers do
+        collection do
+          get :new_upload, to: "suppliers#new_upload"
+          post :import, to: "suppliers#import"
+        end
+      end
       resources :channels
       resources :taxes
       resources :fixed_costs

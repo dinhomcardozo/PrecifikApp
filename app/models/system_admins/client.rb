@@ -1,6 +1,8 @@
 module SystemAdmins
   class Client < ApplicationRecord
     self.table_name = 'clients'
+    has_many :message_clients, dependent: :destroy
+    has_many :messages, through: :message_clients
 
     has_many :user_clients, class_name: 'SystemAdmins::UserClient', foreign_key: :client_id
     belongs_to :plan, class_name: 'SystemAdmins::Plan', foreign_key: :plan_id

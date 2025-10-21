@@ -1,26 +1,75 @@
 <main class="index-container">
-  <h1>Fornecedores</h1>
+  <h1 class="title">Fornecedores</h1>
 
-  <table class="index-table index-table--bordered">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nome</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% Supplier.all.each do |supplier| %>
+  <div class="buttons-group">
+    <div class="button">
+      <%= link_to "Novo Fornecedor", new_supplier_path, class: "standart-button" %>
+    </div>
+    <div class="button">
+      <%= link_to "Upload de fornecedores", new_upload_suppliers_path, class: "standart-button" %>
+    </div>
+  </div>
+
+  <hr>
+
+  <%= form_with url: suppliers_path, method: :get,
+                data: { controller: "autosubmit", turbo_frame: "suppliers_table" } do %>
+    <%= text_field_tag :q, params[:q],
+          class: "form-control",
+          placeholder: "Digite o nome ou CNPJ...",
+          data: { action: "input->autosubmit#submit" } %>
+    <button type="submit" hidden></button>
+  <% end %>
+
+  <%= turbo_frame_tag "suppliers_table" do %>
+    <table class="index-table index-table--bordered">
+      <thead>
         <tr>
-          <td><%= supplier.id %></td>
-          <td><%= supplier.name %></td>
-          <td>
-            <%= link_to "Editar", edit_supplier_path(supplier), class: "action-button" %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+          <% headers = [
+              ["suppliers.id",    "ID"],
+              ["suppliers.name",  "Nome"],
+              ["suppliers.cnpj",  "CNPJ"],
+              ["suppliers.email", "Email"]
+            ] %>
 
-  <%= link_to "Novo Fornecedor", new_supplier_path, class: "standart-button" %>
+          <% headers.each do |column, title| %>
+            <% current = params[:sort] == column %>
+            <% dir     = current && params[:direction] == "asc" ? "asc" : "desc" %>
+            <% th_css  = current ? "sorted #{dir}" : nil %>
+
+            <th class="<%= th_css %>">
+              <%= link_to title,
+                    url_for(
+                      request.query_parameters
+                            .merge(sort: column,
+                                  direction: (current && dir == "asc" ? "desc" : "asc"),
+                                  page: nil)
+                    ) %>
+            </th>
+          <% end %>
+
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @suppliers.each do |supplier| %>
+          <tr>
+            <td><%= supplier.id %></td>
+            <td><%= supplier.name %></td>
+            <td><%= supplier.cnpj %></td>
+            <td><%= supplier.email %></td>
+            <td>
+              <%= link_to "Editar", edit_supplier_path(supplier), class: "action-button" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+
+  <% if action_name == "index" %>
+    <%= will_paginate @suppliers,
+          previous_label: '<i class="bi bi-arrow-left"></i> Anterior'.html_safe,
+          next_label: 'Próximo <i class="bi bi-arrow-right"></i>'.html_safe %>
+  <% end %>
 </main>

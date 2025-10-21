@@ -1,0 +1,22 @@
+<main class="index-container">
+  <div class="upload-container">
+    <h2>Upload de fornecedores</h2>
+
+    <%= form_with url: import_suppliers_path, local: true, multipart: true do |f| %>
+    <div class="mb-3">
+        <%= f.label :file, "Selecione a planilha (CSV ou XLSX)" %>
+        <%= f.file_field :file, class: "form-control" %>
+    </div>
+
+    <%= f.submit "Importar", class: "standart-button" %>
+
+    <div class="mt-3">
+      <%= link_to "Baixe a planilha modelo (.csv)", "/suppliers_modelo.csv", class: "text-blue-600 underline" %>
+    </div>
+    <ul>
+      <li>CNPJ somente números (sem '-' ou '.')
+      <li>CNPJs já existentes serão ignorados e mantidos registros anteriores
+    </div>
+    <% end %>
+  </div>
+</main>

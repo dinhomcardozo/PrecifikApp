@@ -91,6 +91,13 @@
   font-size: 0.400rem;
 }
 
+.buttons-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.1rem;
+  margin-bottom: 1.5rem;
+}
+
 .index-table--bordered {
   width: 100%;
   border-collapse: separate;
@@ -187,4 +194,37 @@
 .taxes-row .tax-field {
   flex: 1 1 120px;
   min-width: 120px;
+}
+
+.upload-container {
+  background: #fff;                  
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+.upload-container h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.upload-container .mb-3 {
+  margin-bottom: 1rem;
+}
+
+.upload-container label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.upload-container .form-control {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
 }

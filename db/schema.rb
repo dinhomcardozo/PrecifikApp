@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_20_143008) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_21_130245) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -208,6 +208,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_20_143008) do
     t.index ["supplier_id"], name: "index_inputs_on_supplier_id"
   end
 
+  create_table "message_clients", force: :cascade do |t|
+    t.bigint "message_id", null: false
+    t.bigint "client_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_message_clients_on_client_id"
+    t.index ["message_id"], name: "index_message_clients_on_message_id"
+  end
+
   create_table "message_reads", force: :cascade do |t|
     t.bigint "message_id", null: false
     t.bigint "client_id", null: false
@@ -231,6 +240,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_20_143008) do
     t.bigint "created_by_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "image"
     t.index ["created_by_type", "created_by_id"], name: "index_system_admins_messages_on_created_by"
   end
 
@@ -656,6 +666,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_20_143008) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "client_id"
+    t.string "cnpj"
+    t.string "email"
+    t.string "phone"
+    t.string "address"
+    t.string "number_address"
+    t.string "city"
+    t.string "state"
   end
 
   create_table "taxes", force: :cascade do |t|
@@ -754,6 +771,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_20_143008) do
   add_foreign_key "inputs", "clients", name: "fk_inputs_client"
   add_foreign_key "inputs", "input_types"
   add_foreign_key "inputs", "suppliers"
+  add_foreign_key "message_clients", "clients"
+  add_foreign_key "message_clients", "messages"
   add_foreign_key "message_reads", "clients"
   add_foreign_key "message_reads", "messages"
   add_foreign_key "packages", "clients"

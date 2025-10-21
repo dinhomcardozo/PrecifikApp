@@ -1,7 +1,7 @@
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 
-document.addEventListener("turbo:load", () => {
+document.addEventListener("DOMContentLoaded", () => {
   const editorContainer = document.querySelector("#quill-editor");
   const hiddenInput = document.querySelector("#message_body");
 

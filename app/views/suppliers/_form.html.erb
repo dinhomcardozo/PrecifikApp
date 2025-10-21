@@ -1,10 +1,53 @@
 <%= form_with(model: supplier, local: true) do |f| %>
-  <div class="mb-3">
-    <%= f.label :name %>
-    <%= f.text_field :name, class: "form-control" %>
+  <div class="form-row">
+    <div class="field">
+      <%= f.label :name, "Nome" %>
+      <%= f.text_field :name, class: "form-control" %>
+    </div>
+
+    <div class="field">
+      <%= f.label :cnpj, "CNPJ" %>
+      <%= f.text_field :cnpj, class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="field">
+      <%= f.label :email, "E-mail" %>
+      <%= f.email_field :email, class: "form-control" %>
+    </div>
+
+    <div class="field">
+      <%= f.label :phone, "Telefone" %>
+      <%= f.telephone_field :phone, class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="field">
+      <%= f.label :address, "Endereço" %>
+      <%= f.text_field :address, class: "form-control" %>
+    </div>
+
+    <div class="field">
+      <%= f.label :number_address, "Número" %>
+      <%= f.text_field :number_address, class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="field">
+      <%= f.label :city, "Cidade" %>
+      <%= f.text_field :city, class: "form-control" %>
+    </div>
+
+    <div class="field">
+      <%= f.label :state, "Estado" %>
+      <%= f.text_field :state, class: "form-control" %>
+    </div>
   </div>
 
   <div>
-    <%= f.submit class: "standart-button" %>
+    <%= f.submit "Criar Fornecedor", class: "standart-button" %>
   </div>
 <% end %>

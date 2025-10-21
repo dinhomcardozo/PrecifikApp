@@ -1,9 +1,15 @@
 <main class="index-container">
   <h2><%= @message.title %></h2>
-    <div class="prose">
+    <div class="body-message">
       <%= raw @message.body %>
     </div>
-    <p class="text-sm text-gray-500 mt-4">Enviado em <%= l(@message.created_at, format: :short) %></p>
+    <p class="text-message">Enviado em <%= l(@message.created_at, format: :short) %></p>
 
-    <%= link_to "Voltar", clients_messages_path, class: "action-button" %>
+    <% if @message.image.attached? %>
+      <div class="mt-4">
+        <%= image_tag @message.image, alt: @message.title, class: "max-w-full h-auto rounded shadow" %>
+      </div>
+    <% end %>
+
+    <%= link_to "Voltar", messages_path, class: "action-button" %>
 </main>

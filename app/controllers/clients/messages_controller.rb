@@ -7,15 +7,14 @@ class Clients::MessagesController < ApplicationController
   def index
     client_id = current_user_client.client_id
 
-    # Busca só mensagens destinadas a este client e ativas
-    @messages = SystemAdmins::Message
-                  .all
-                  .select { |m| m.client_ids_array.include?(client_id) && m.active_now? }
-                  .sort_by(&:created_at).reverse
+    @messages = current_user_client.client.messages
+                  .select { |m| m.active_now? }
+                  .sort_by(&:created_at)
+                  .reverse
   end
 
   def show
-    unless @message.active_now? && @message.client_ids_array.include?(current_user_client.client_id)
+    unless @message.active_now? && @message.clients.exists?(id: current_user_client.client_id)
       redirect_to messages_path, alert: "Mensagem não disponível." and return
     end
 
@@ -31,7 +30,7 @@ class Clients::MessagesController < ApplicationController
   def set_message
     @message = SystemAdmins::Message.find(params[:id])
 
-    unless @message.client_ids_array.include?(current_user_client.client_id)
+    unless @message.clients.exists?(id: current_user_client.client_id)
       redirect_to messages_path, alert: "Você não tem acesso a esta mensagem."
     end
   end

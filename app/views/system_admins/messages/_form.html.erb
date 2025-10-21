@@ -1,4 +1,6 @@
-<%= form_with(model: @message, url: @message.new_record? ? system_admins_messages_path : system_admins_message_path(@message)) do |f| %>
+<%= form_with(model: @message,
+              url: @message.new_record? ? system_admins_messages_path : system_admins_message_path(@message),
+              html: { multipart: true }) do |f| %>
   <div>
     <%= f.label :title, "Título" %>
     <%= f.text_field :title, class: "form-control" %>
@@ -6,8 +8,12 @@
 
   <div class="form-group">
     <%= f.label :body, "Mensagem" %>
-    <%= f.hidden_field :body, id: "message_body" %>
-    <div id="quill-editor" style="height: 300px;"></div>
+    <%= f.text_area :body, class: "form-control", rows: 6 %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :image, "Imagem" %>
+    <%= f.file_field :image, class: "form-control" %>
   </div>
 
   <div>

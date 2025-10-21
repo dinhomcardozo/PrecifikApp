@@ -20,3 +20,5 @@
 @import "./accordions.css";
 @import "./icons.css";
 @import "./dashboards.css";
+@import "quill/dist/quill.snow.css";
+@import "./messages.css";

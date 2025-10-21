@@ -67,7 +67,7 @@ module SystemAdmins
 
     def message_params
       params.require(:system_admins_message).permit(
-        :title, :body, :client_ids_text, :start_date, :end_date, :start_hour, :end_hour, plan_ids: []
+        :title, :body, :client_ids_text, :start_date, :end_date, :start_hour, :end_hour, :image, plan_ids: []
       )
     end
   end
