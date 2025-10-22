@@ -31,27 +31,13 @@
     <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
   </head>
   <body>
-    <div class="flash-bar" data-controller="notice">
-      <% flash.each do |type, message| %>
-        <% css_class =
-          case type.to_sym
-          when :notice then "notice-bar"
-          when :alert  then "alert-bar"
-          else "info-bar"
-          end %>
-
-        <div class="<%= css_class %>">
-          <button type="button" class="close-btn" data-action="click->notice#close">×</button>
-          <%= message %>
-        </div>
-      <% end %>
-    </div>
-
+    <%= render "shared/flash" %>
     <%= render "shared/menu_top_bar" %>
     <%= render "shared/horizontal_menu" %>
     <%= render "layouts/sales_target_alert" %>
       <div class="main-content-application">
         <%= yield %>
+        <turbo-frame id="modal_helper"></turbo-frame>
       </div>
   </body>
 </html>

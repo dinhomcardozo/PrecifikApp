@@ -1,7 +1,14 @@
 <main class="index-container">
-  <p style="color: green"><%= notice %></p>
-
   <%= render @tax %>
+
+  <div class="detailed-box">
+    <p class="detailed-text">
+      <strong>ATENÇÃO!</strong> Este perfil de imposto pode estar em uma ou mais Porções de Produto.
+      Veja <a href="#" data-bs-toggle="modal" data-bs-target="#taxAssocModal">AQUI</a> quais porções podem ser comprometidas.
+    </p>
+  </div>
+
+  <%= render "tax_dependent_items_modal", product_portions: @product_portions %>
 
   <div>
     <%= link_to "Editar", edit_tax_path(@tax) %> |

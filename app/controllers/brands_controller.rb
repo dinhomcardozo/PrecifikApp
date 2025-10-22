@@ -17,15 +17,20 @@ class BrandsController < Clients::AuthenticatedController
   end
 
   def create
-    @brand = Brand.new(brand_params)
-    @brand.client_id = current_user_client.client_id
-
-    puts params[:brand].inspect
+    @brand = Brand.find_or_initialize_by(
+      name: params[:brand][:name],
+      client_id: Current.user_client.client_id
+    )
+    @brand.main_brand = params[:brand][:main_brand]
 
     if @brand.save
-      redirect_to brands_path, notice: "Marca criada com sucesso."
+      respond_to do |format|
+        format.turbo_stream
+        format.html { redirect_back fallback_location: inputs_path, notice: "Marca criada com sucesso." }
+      end
     else
-      render :new
+      flash.now[:alert] = @brand.errors.full_messages.to_sentence
+      render :new, status: :unprocessable_entity
     end
   end
 

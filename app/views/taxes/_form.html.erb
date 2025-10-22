@@ -1,15 +1,4 @@
 <%= form_with(model: tax) do |form| %>
-  <% if tax.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(tax.errors.count, "error") %> prohibited this tax from being saved:</h2>
-      <ul>
-        <% tax.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
   <div class="inline-field">
     <div class="field">
       <%= form.label :description, "Nome do Perfil", style: "display: block", class: "custom-field" %>

@@ -118,3 +118,8 @@
   min-height: 180px;
   max-height: 350px;
 }
+
+#brands_select option.new-brand-option {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}

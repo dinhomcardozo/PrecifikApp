@@ -40,9 +40,15 @@
 
 .flash-bar {
   position: fixed;
+  font-family: Raleway, sans-serif;
   bottom: 0;
   left: 0;
   width: 100%;
+  background-color: var(--accent-hover);
+  color: var(--text-dark);
+  text-align: center;
+  padding: 6px 10px;
+  font-size: 14px;
   z-index: 9999;
 }
 

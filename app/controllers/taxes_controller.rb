@@ -12,6 +12,8 @@ class TaxesController < Clients::AuthenticatedController
 
   # GET /taxes/1 or /taxes/1.json
   def show
+    @tax = Tax.find(params[:id])
+    @product_portions = @tax.product_portions.includes(:product)
   end
 
   # GET /taxes/new
@@ -19,46 +21,34 @@ class TaxesController < Clients::AuthenticatedController
     @tax = Tax.new
   end
 
-  # GET /taxes/1/edit
   def edit
+    @tax = Tax.find(params[:id])
+    @product_portions = @tax.product_portions.includes(:product)
   end
 
-  # POST /taxes or /taxes.json
   def create
     @tax = Tax.new(tax_params)
 
-    respond_to do |format|
-      if @tax.save
-        format.html { redirect_to taxes_path, notice: "Tax was successfully created." }
-        format.json { render :show, status: :created, location: @tax }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @tax.errors, status: :unprocessable_entity }
-      end
+    if @tax.save
+      redirect_to taxes_path, notice: "Perfil de impostos criado com sucesso."
+    else
+      flash.now[:alert] = @tax.errors.full_messages.to_sentence
+      render :new, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /taxes/1 or /taxes/1.json
   def update
-    respond_to do |format|
-      if @tax.update(tax_params)
-        format.html { redirect_to taxes_path, notice: "Tax was successfully updated." }
-        format.json { render :show, status: :ok, location: @tax }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @tax.errors, status: :unprocessable_entity }
-      end
+    if @tax.update(tax_params)
+      redirect_to taxes_path, notice: "Perfil de impostos atualizado com sucesso."
+    else
+      flash.now[:alert] = @tax.errors.full_messages.to_sentence
+      render :edit, status: :unprocessable_entity
     end
   end
 
-  # DELETE /taxes/1 or /taxes/1.json
   def destroy
     @tax.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to taxes_path, status: :see_other, notice: "Tax was successfully destroyed." }
-      format.json { head :no_content }
-    end
+    redirect_to taxes_path, notice: "Perfil de impostos excluído com sucesso.", status: :see_other
   end
 
   private

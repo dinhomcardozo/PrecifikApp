@@ -3,7 +3,7 @@ class Input < ApplicationRecord
   before_save :set_nutritional_defaults
   belongs_to :supplier
   belongs_to :input_type
-  belongs_to :brand, optional: true
+  belongs_to :brand, optional: false
 
   # Serviços diretos (via service_inputs)
   has_many :service_inputs, class_name: 'Services::ServiceInput', inverse_of: :input
@@ -21,6 +21,7 @@ class Input < ApplicationRecord
   has_one_attached :image
 
   validates :name, presence: true
+  validates :brand_id, presence: true
   validates_inclusion_of :unit_of_measurement, in: %w[g mL kg L], message: "não é válido"
   validates :cost, numericality: { greater_than_or_equal_to: 0.0 }, allow_nil: true
   validates :weight, numericality: { greater_than_or_equal_to: 0.0 }, allow_nil: true

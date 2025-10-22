@@ -1,0 +1,18 @@
+<turbo-stream action="append" target="brands_select">
+  <template>
+    <option value="<%= @brand.id %>"><%= @brand.name %></option>
+  </template>
+</turbo-stream>
+
+<turbo-stream action="update" target="modal_helper">
+  <template>
+    <script>
+      var modal = bootstrap.Modal.getInstance(document.getElementById('newBrandModal'));
+      if (modal) { modal.hide(); }
+
+      window.dispatchEvent(new CustomEvent("brand:created", {
+        detail: { id: "<%= @brand.id %>", name: "<%= @brand.name %>" }
+      }));
+    </script>
+  </template>
+</turbo-stream>

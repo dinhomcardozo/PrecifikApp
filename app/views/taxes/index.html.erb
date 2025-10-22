@@ -1,10 +1,6 @@
 <main class="index-container">
   <% content_for :title, "Maxximiza | Cadastro de Tributos" %>
 
-  <% if notice %>
-    <p style="color: green"><%= notice %></p>
-  <% end %>
-
   <h1>Tributos</h1>
 
   <%= link_to "[+] Novo Tributo",
@@ -22,7 +18,7 @@
         <th>ISS</th>
         <th>CBS</th>
         <th>IBS</th>
-        <th>Ações</th>
+        <th colspan="2">Ações</th>
       </tr>
     </thead>
 
@@ -41,7 +37,8 @@
             <%= link_to "Editar",
                         edit_tax_path(tax),
                         class: "action-button" %>
-
+          </td>
+          <td class="cell-actions">
             <%= button_to "Excluir",
                           tax,
                           method: :delete,

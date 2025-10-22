@@ -1,0 +1,15 @@
+<div class="flash-bar" data-controller="notice">
+  <% flash.each do |type, message| %>
+    <% css_class =
+      case type.to_sym
+      when :notice then "notice-bar"
+      when :alert  then "alert-bar"
+      else "info-bar"
+      end %>
+
+    <div class="<%= css_class %>">
+      <button type="button" class="close-btn" data-action="click->notice#close">×</button>
+      <%= message %>
+    </div>
+  <% end %>
+</div>

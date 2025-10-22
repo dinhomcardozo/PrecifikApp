@@ -22,6 +22,7 @@ import ProductPortionPricingController from "./product_portion_pricing_controlle
 import InlineEditController from "./inline_edit_controller"
 import AutosubmitController from "./autosubmit_controller"
 import PriceListController from "./price_list_controller"
+import NewBrandInputsController from "./new_brand_inputs_controller"
 
 const application = Application.start()
 
@@ -47,5 +48,6 @@ application.register("product-portion-pricing", ProductPortionPricingController)
 application.register("inline-edit", InlineEditController)
 application.register("autosubmit", AutosubmitController)
 application.register("price-list", PriceListController)
+application.register("new-brand-inputs", NewBrandInputsController)
 
 window.Stimulus = application
