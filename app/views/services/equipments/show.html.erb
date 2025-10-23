@@ -1,24 +1,24 @@
 <main class="index-container">
-   <% content_for :title, "Equipamento: #{@equipment.description}" %>
-   <h1><%= @equipment.description %></h1>
+  <% content_for :title, "Equipamento: #{@equipment.description}" %>
+  <h1><%= @equipment.description %></h1>
 
-   <p><strong>Valor:</strong>
-      <%= number_to_currency(@equipment.value, unit: "R$ ") %></p>
-   <p><strong>Depreciação (%):</strong>
-      <%= number_with_precision(@equipment.depreciation_percent, precision: 2) %></p>
-   <p><strong>Depreciação (R$):</strong>
-      <%= number_to_currency(@equipment.depreciation_value, unit: "R$ ") %></p>
+  <p><strong>Valor:</strong>
+     <%= number_to_currency(@equipment.value, unit: "R$ ") %></p>
+  <p><strong>Depreciação (%):</strong>
+     <%= number_with_precision(@equipment.depreciation_percent, precision: 4, strip_insignificant_zeros: true) %></p>
+  <p><strong>Depreciação (R$):</strong>
+     <%= number_to_currency(@equipment.depreciation_value, unit: "R$ ") %></p>
 
-   <div>
-      <%= link_to "Editar", edit_clients_services_equipment_path(@equipment), class: "action-button" %> |
-      <%= link_to "Voltar", clients_services_equipments_path, class: "action-button" %>
-   </div>
+  <div>
+     <%= link_to "Editar", edit_clients_services_equipment_path(@equipment), class: "action-button" %> |
+     <%= link_to "Voltar", clients_services_equipments_path, class: "action-button" %>
+  </div>
 
-   <div style="margin-top: 1em">
-      <%= button_to "Excluir",
-                  clients_services_equipment_path(@equipment),
-                  method: :delete,
-                  data: { confirm: "Confirma exclusão?" },
-                  class: "action-button" %>
-   </div>
+  <div style="margin-top: 1em">
+     <%= button_to "Excluir",
+                   clients_services_equipment_path(@equipment),
+                   method: :delete,
+                   data: { confirm: "Confirma exclusão?" },
+                   class: "action-button" %>
+  </div>
 </main>

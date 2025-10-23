@@ -1,5 +1,6 @@
 <main class="index-container">
     <% content_for :title, action_name == "new" ? "Novo equipamento" : "Editar equipamento" %>
+
     <h1><%= yield :title %></h1>
 
     <%= render "form", equipment: @equipment %>

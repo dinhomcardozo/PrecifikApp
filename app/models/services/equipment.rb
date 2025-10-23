@@ -4,10 +4,14 @@ module Services
 
     validates :description, presence: true
     validates :value,
-              :depreciation_percent,
               :depreciation_value,
               presence: true,
               numericality: { greater_than_or_equal_to: 0 }
+
+    validates :depreciation_percent,
+          numericality: { greater_than_or_equal_to: 0 },
+          format: { with: /\A\d+(\.\d{1,4})?\z/, message: "máximo 4 casas decimais" }
+
 
     # Callback para recalcular depreciação antes de salvar
     before_validation :calculate_depreciation_value,

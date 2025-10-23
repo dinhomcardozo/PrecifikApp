@@ -1,10 +1,17 @@
 <main class="index-container">
   <% content_for :title, "Equipamentos" %>
+
   <h1 class="title" >Equipamentos</h1>
-  <p style="color: green"><%= notice %></p>
-  <%= link_to "Novo equipamento",
-              new_clients_services_equipment_path,
-              class: "standart-button" %>
+
+  <div>
+    <%= link_to "Novo equipamento",
+                new_clients_services_equipment_path,
+                class: "standart-button" %>
+
+    <a href="#" data-bs-toggle="modal" data-bs-target="#depreciationTableModal" style="font-size: 0.8em; margin-left: 10px;">
+      Tabela padrão de depreciação por tipo de equipamento
+    </a>
+  </div>
 
   <table class="index-table index-table--bordered">
     <thead>
@@ -21,7 +28,7 @@
         <tr id="<%= dom_id(eq) %>">
           <td><%= eq.description %></td>
           <td><%= number_to_currency(eq.value, unit: "R$ ") %></td>
-          <td><%= number_with_precision(eq.depreciation_percent, precision: 2) %></td>
+          <td><%= number_with_precision(eq.depreciation_percent, precision: 4) %></td>
           <td><%= number_to_currency(eq.depreciation_value, unit: "R$ ") %></td>
           <td class="cell-actions">
             <%= link_to "Editar",
@@ -40,3 +47,5 @@
     </tbody>
   </table>
 </main>
+
+<%= render "services/equipments/depreciation_table" %>

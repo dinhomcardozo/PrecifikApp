@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_21_130245) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_23_005602) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -150,7 +150,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_21_130245) do
   create_table "equipments", force: :cascade do |t|
     t.string "description"
     t.decimal "value"
-    t.float "depreciation_percent"
+    t.decimal "depreciation_percent", precision: 6, scale: 4
     t.decimal "depreciation_value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

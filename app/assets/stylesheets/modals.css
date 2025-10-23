@@ -139,3 +139,10 @@
   border-color: var(--accent-color);
   font-family: Raleway, sans-serif;
 }
+
+#depreciationTableModal .featured-column,
+#depreciationTableModal td:nth-child(4) {
+  background-color: var(--bg-menu-color);
+  font-weight: bold;
+  color: var(--accent-color);
+}
