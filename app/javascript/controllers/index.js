@@ -23,6 +23,7 @@ import InlineEditController from "./inline_edit_controller"
 import AutosubmitController from "./autosubmit_controller"
 import PriceListController from "./price_list_controller"
 import NewBrandInputsController from "./new_brand_inputs_controller"
+import NewRoleProfessionalsController from "./new_role_professionals_controller"
 
 const application = Application.start()
 
@@ -49,5 +50,6 @@ application.register("inline-edit", InlineEditController)
 application.register("autosubmit", AutosubmitController)
 application.register("price-list", PriceListController)
 application.register("new-brand-inputs", NewBrandInputsController)
+application.register("new-role-professionals", NewRoleProfessionalsController)
 
 window.Stimulus = application

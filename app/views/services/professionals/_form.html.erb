@@ -2,21 +2,6 @@
               scope: :professional,
               url: professional.persisted? ? clients_services_professional_path(professional) : clients_services_professionals_path,
               local: true do |form| %>
-
-  <% if professional.errors.any? %>
-    <div style="color: red">
-      <h2>
-        <%= pluralize(professional.errors.count, "erro") %>
-        proibiu este profissional de ser salvo:
-      </h2>
-      <ul>
-        <% professional.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
   <div>
     <%= form.label :full_name, "Nome completo", style: "display: block", class: "custom-label" %>
     <%= form.text_field :full_name, class: "form-control" %>
@@ -24,14 +9,22 @@
 
   <div>
     <%= form.label :role_id, "Função", style: "display: block", class: "custom-label" %>
-    <%= form.collection_select(
-      :role_id,
-      @roles,
-      :id,
-      :description,
-      { prompt: "Selecione" },
-      { class: "form-select" }
-    ) %>
+    <%= form.select :role_id,
+          options_for_select(
+            [["+ CRIAR FUNÇÃO", "new_role", { class: "new-role-option" }]] +
+            @roles.pluck(:description, :id),
+            form.object.role_id
+          ),
+          { prompt: "Selecione" },
+          {
+            class: "form-select",
+            id: "roles_select",
+            data: {
+              controller: "new-role-professionals",
+              action: "change->new-role-professionals#openModalIfNew",
+              new_role_professionals_target: "select"
+            }
+          } %>
   </div>
 
   <div>
@@ -58,3 +51,5 @@
     <%= form.submit (professional.persisted? ? "Atualizar" : "Criar"), class: "standart-button" %>
   </div>
 <% end %>
+
+<%= render "services/roles/new_modal" %>

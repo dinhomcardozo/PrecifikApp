@@ -1,0 +1,20 @@
+<div class="modal fade" id="newRoleModal" tabindex="-1" aria-labelledby="newRoleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="newRoleModalLabel">Criar Nova Função</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <%= form_with model: Services::Role.new,
+                      url: clients_services_roles_path do |f| %>
+          <div class="mb-3">
+            <%= f.label :description, "Descrição", class: "form-label" %>
+            <%= f.text_field :description, class: "form-control" %>
+          </div>
+          <%= f.submit "Salvar", class: "mini-button" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

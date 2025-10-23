@@ -22,11 +22,14 @@ module Services
       @role = Services::Role.new(role_params)
       @role.client_id = current_user_client.client_id
 
-      if @role.save
-        redirect_to clients_services_roles_path,
-                    notice: "Função criada com sucesso."
-      else
-        render :new, status: :unprocessable_entity
+      respond_to do |format|
+        if @role.save
+          format.turbo_stream
+          format.html { redirect_to clients_services_professionals_path, notice: "Função criada com sucesso." }
+        else
+          format.turbo_stream { render turbo_stream: turbo_stream.replace("new_role_form", partial: "services/roles/form", locals: { role: @role }) }
+          format.html { render :new, status: :unprocessable_entity }
+        end
       end
     end
 

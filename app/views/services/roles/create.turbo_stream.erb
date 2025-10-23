@@ -1,0 +1,15 @@
+<turbo-stream action="append" target="roles_select">
+  <template>
+    <option value="<%= @role.id %>" selected><%= @role.description %></option>
+  </template>
+</turbo-stream>
+
+<turbo-stream action="after" target="roles_select">
+  <template>
+    <script>
+      const modalEl = document.getElementById("newRoleModal")
+      const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl)
+      modal.hide()
+    </script>
+  </template>
+</turbo-stream>
