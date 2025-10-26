@@ -32,23 +32,22 @@ class SuppliersController < Clients::AuthenticatedController
 
   def create
     @supplier = Supplier.new(supplier_params)
-    @supplier.client = current_user_client.client
+    @supplier.client_id = current_user_client.client_id
 
     if @supplier.save
       redirect_to suppliers_path, notice: "Fornecedor criado com sucesso."
     else
       flash.now[:alert] = @supplier.errors.full_messages.join("<br>").html_safe
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
   def update
-    @supplier = Supplier.find(params[:id])
-
     if @supplier.update(supplier_params)
       redirect_to suppliers_path, notice: "Fornecedor atualizado com sucesso."
     else
-      render :edit
+      flash.now[:alert] = @supplier.errors.full_messages.join("<br>").html_safe
+      render :edit, status: :unprocessable_entity
     end
   end
 

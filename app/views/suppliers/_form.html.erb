@@ -7,7 +7,13 @@
 
     <div class="field">
       <%= f.label :cnpj, "CNPJ" %>
-      <%= f.text_field :cnpj, class: "form-control" %>
+      <%= f.text_field :cnpj,
+            class: "form-control",
+            pattern: "\\d*",
+            inputmode: "numeric",
+            maxlength: 14,
+            placeholder: "Somente números (14 dígitos)" %>
+      <small class="form-text text-muted">O CNPJ deve ser preenchido com 14 números, sem pontos ou traços.</small>
     </div>
   </div>
 
@@ -31,7 +37,11 @@
 
     <div class="field">
       <%= f.label :number_address, "Número" %>
-      <%= f.text_field :number_address, class: "form-control" %>
+      <%= f.text_field :number_address,
+            class: "form-control",
+            pattern: "\\d*",
+            inputmode: "numeric",
+            placeholder: "Somente números" %>
     </div>
   </div>
 
@@ -41,10 +51,42 @@
       <%= f.text_field :city, class: "form-control" %>
     </div>
 
-    <div class="field">
-      <%= f.label :state, "Estado" %>
-      <%= f.text_field :state, class: "form-control" %>
-    </div>
+  <div class="field">
+    <%= f.label :state, "Estado" %>
+    <%= f.select :state,
+          options_for_select([
+            ["AC - Acre", "AC"],
+            ["AL - Alagoas", "AL"],
+            ["AP - Amapá", "AP"],
+            ["AM - Amazonas", "AM"],
+            ["BA - Bahia", "BA"],
+            ["CE - Ceará", "CE"],
+            ["DF - Distrito Federal", "DF"],
+            ["ES - Espírito Santo", "ES"],
+            ["GO - Goiás", "GO"],
+            ["MA - Maranhão", "MA"],
+            ["MT - Mato Grosso", "MT"],
+            ["MS - Mato Grosso do Sul", "MS"],
+            ["MG - Minas Gerais", "MG"],
+            ["PA - Pará", "PA"],
+            ["PB - Paraíba", "PB"],
+            ["PR - Paraná", "PR"],
+            ["PE - Pernambuco", "PE"],
+            ["PI - Piauí", "PI"],
+            ["RJ - Rio de Janeiro", "RJ"],
+            ["RN - Rio Grande do Norte", "RN"],
+            ["RS - Rio Grande do Sul", "RS"],
+            ["RO - Rondônia", "RO"],
+            ["RR - Roraima", "RR"],
+            ["SC - Santa Catarina", "SC"],
+            ["SP - São Paulo", "SP"],
+            ["SE - Sergipe", "SE"],
+            ["TO - Tocantins", "TO"]
+          ], f.object.state),
+          { prompt: "Selecione o estado" },
+          class: "form-select" %>
+  </div>
+
   </div>
 
   <div>

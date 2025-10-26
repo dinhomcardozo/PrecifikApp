@@ -59,7 +59,10 @@
             <td><%= supplier.cnpj %></td>
             <td><%= supplier.email %></td>
             <td>
-              <%= link_to "Editar", edit_supplier_path(supplier), class: "action-button" %>
+              <%= link_to "Editar",
+                      edit_supplier_path(supplier),
+                      class: "action-button",
+                      data: { turbo_frame: "_top" } %>
             </td>
           </tr>
         <% end %>

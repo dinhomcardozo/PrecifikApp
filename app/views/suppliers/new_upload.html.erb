@@ -4,18 +4,29 @@
 
     <%= form_with url: import_suppliers_path, local: true, multipart: true do |f| %>
     <div class="mb-3">
-        <%= f.label :file, "Selecione a planilha (CSV ou XLSX)" %>
+        <%= f.label :file, "Selecione o arquivo (CSV)" %>
         <%= f.file_field :file, class: "form-control" %>
     </div>
 
     <%= f.submit "Importar", class: "standart-button" %>
 
     <div class="mt-3">
-      <%= link_to "Baixe a planilha modelo (.csv)", "/suppliers_modelo.csv", class: "text-blue-600 underline" %>
+      Baixe o arquivo  <%= link_to "modelo (.csv)", "/suppliers_modelo.csv", class: "text-blue-600 underline" %>,
+      ou baixe a planilha  <%= link_to "modelo (.xlsx)", "/suppliers_modelo.xlsx", class: "text-red-600 underline" %>
     </div>
     <ul>
+      <li>Escolha o modelo de arquivo de sua preferência, mas <strong>salve em formato .csv</strong>
       <li>CNPJ somente números (sem '-' ou '.')
       <li>CNPJs já existentes serão ignorados e mantidos registros anteriores
+
+      <div class="buttons-group">
+        <div class="button">
+          <%= link_to "Fornecedores", suppliers_path, class: "standart-button" %>
+        </div>
+        <div class="button">
+          <%= link_to "Novo Fornecedor", new_supplier_path, class: "standart-button" %>
+        </div>
+      </div>
     </div>
     <% end %>
   </div>
