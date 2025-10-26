@@ -5,50 +5,58 @@
     <%= link_to "[+] Novo Insumo", new_input_path, class: "standart-button" %>
   </div>
 
-  <table class="index-table index-table--bordered">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Insumo</th>
-        <th>Tipo</th>
-        <th>Custo (R$)</th>
-        <th>Peso</th>
-        <th>Unidade</th>
-        <th>Imagem</th>
-        <th>Ver</th>
-        <th>Editar</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @inputs.each do |input| %>
+  <% if @inputs.any? %>
+    <table class="index-table index-table--bordered">
+      <thead>
         <tr>
-          <td><%= input.id %></td>
-          <td><%= input.name %></td>
-          <td><%= input.input_type&.name || "-" %></td>
-          <td>R$ <%= number_with_precision(input.cost, precision: 2, separator: ',', delimiter: '.') %></td>
-          <td><%= input.weight %></td>
-          <td><%= input.unit_of_measurement %></td>
-          <td class="image-cell">
-            <% if input.image.attached? %>
-              <%= image_tag url_for(input.image),
-                            alt: input.name,
-                            class: "index_image" %>
-            <% else %>
-              <span class="no-image">Nenhuma</span>
-            <% end %>
-          </td>
-          <td class="cell-actions">
-            <%= link_to input_path(input), class: "link-icon-actions" do %>
-              <%= image_tag "icons/ver.png", alt: "Ver", title: "Ver", class: "action-icon" %>
-            <% end %>
-          </td>
-          <td class="cell-actions">
-            <%= link_to edit_input_path(input), class: "link-icon-actions" do %>
-              <%= image_tag "icons/editar.png", alt: "Editar", title: "Editar", class: "action-icon" %>
-            <% end %>
-          </td>
+          <th>ID</th>
+          <th>Insumo</th>
+          <th>Tipo</th>
+          <th>Custo (R$)</th>
+          <th>Peso</th>
+          <th>Unidade</th>
+          <th>Imagem</th>
+          <th>Ver</th>
+          <th>Editar</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% @inputs.each do |input| %>
+          <tr>
+            <td><%= input.id %></td>
+            <td><%= input.name %></td>
+            <td><%= input.input_type&.name || "-" %></td>
+            <td>R$ <%= number_with_precision(input.cost, precision: 2, separator: ',', delimiter: '.') %></td>
+            <td><%= input.weight %></td>
+            <td><%= input.unit_of_measurement %></td>
+            <td class="image-cell">
+              <% if input.image.attached? %>
+                <%= image_tag url_for(input.image),
+                              alt: input.name,
+                              class: "index_image" %>
+              <% else %>
+                <span class="no-image">Nenhuma</span>
+              <% end %>
+            </td>
+            <td class="cell-actions">
+              <%= link_to input_path(input), class: "link-icon-actions" do %>
+                <%= image_tag "icons/ver.png", alt: "Ver", title: "Ver", class: "action-icon" %>
+              <% end %>
+            </td>
+            <td class="cell-actions">
+              <%= link_to edit_input_path(input), class: "link-icon-actions" do %>
+                <%= image_tag "icons/editar.png", alt: "Editar", title: "Editar", class: "action-icon" %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <div class="detailed-box">
+      <p><strong>Você ainda não cadastrou Insumos.</strong></p>
+      <p>Comece cadastrando <%= link_to "Tipos de Insumo", input_types_path %>, para organizar seus cadastros.</p>
+      <p><em>Ex.: Matéria-prima, componentes, etc.</em></p>
+    </div>
+  <% end %>
 </main>
