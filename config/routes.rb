@@ -72,7 +72,7 @@ Rails.application.routes.draw do
 
         resources :user_clients, only: [:new, :create, :edit, :show, :update, :destroy]
 
-        resource :settings, only: [:show]
+        resource :settings, only: [:show, :update]
         resources :messages, only: [:index, :show]
 
         resources :packages

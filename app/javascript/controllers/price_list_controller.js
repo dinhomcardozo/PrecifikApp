@@ -42,10 +42,10 @@ export default class extends Controller {
         const b = intervals[j]
 
         // sobreposição se os ranges se tocam ou cruzam
-        if (!(a.final < b.initial || b.final < a.initial)) {
-          a.rule.classList.add("has-error")
-          b.rule.classList.add("has-error")
-        }
+      if (a.final >= b.initial && a.initial <= b.final) {
+        a.rule.classList.add("has-error")
+        b.rule.classList.add("has-error")
+      }
       }
     }
   }

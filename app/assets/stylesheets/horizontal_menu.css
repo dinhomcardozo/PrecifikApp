@@ -168,10 +168,3 @@
 .system-admin-menu-horizontal .dropdown-toggle:hover + .dropdown-menu {
   display: block;
 }
-
-/* Imagem de índice */
-.index_image {
-  max-height: 50px;
-  width: auto;
-  border-radius: 4px;
-}

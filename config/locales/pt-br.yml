@@ -6,6 +6,9 @@ pt-BR:
         separator: ","
         delimiter: "."
         format: "%u %n"
+  errors:
+    messages:
+      overlap: "Intervalos não podem se sobrepor"
 
   date:
     formats:

@@ -6,8 +6,8 @@
     <p class="text-message">Enviado em <%= l(@message.created_at, format: :short) %></p>
 
     <% if @message.image.attached? %>
-      <div class="mt-4">
-        <%= image_tag @message.image, alt: @message.title, class: "max-w-full h-auto rounded shadow" %>
+      <div class="img-message">
+        <%= image_tag @message.image, alt: @message.title, class: "img-message" %>
       </div>
     <% end %>
 

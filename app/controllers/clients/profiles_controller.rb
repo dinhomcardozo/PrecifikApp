@@ -1,6 +1,5 @@
-# app/controllers/clients/profiles_controller.rb
 module Clients
-  class ClientsController < ApplicationController
+  class ProfilesController < ApplicationController
     layout "application"
     before_action :authenticate_user_client!
 
@@ -10,7 +9,7 @@ module Clients
 
     def update
       @client = current_user_client.client
-      if @client.update(public_client_params)
+      if @client.update(client_params)
         redirect_to edit_clients_profile_path, notice: 'Perfil atualizado.'
       else
         render :edit
@@ -26,4 +25,5 @@ module Clients
         :address, :number_address, :food_industry
       )
     end
+  end
 end

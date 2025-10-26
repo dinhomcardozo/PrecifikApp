@@ -14,6 +14,21 @@
       <% end %>
     </li>
     <li><strong>Administrador:</strong> <%= @client.first_name %> <%= @client.last_name %></li>
+    <li class="inline-field">
+      <%= form_with model: @client,
+                    scope: :client,
+                    url: settings_path,
+                    method: :patch,
+                    local: true do |f| %>
+        <strong>Sou produtor de alimentos:</strong>
+        <%= f.select :food_industry,
+                    [["SIM", true], ["NÃO", false]],
+                    { selected: @client.food_industry },
+                    class: "mini-form-select" %>
+
+        <%= f.submit "Salvar", class: "mini-button" %>
+      <% end %>
+    </li>
   </ul>
 
   <hr>

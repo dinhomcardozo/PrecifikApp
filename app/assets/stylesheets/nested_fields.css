@@ -1,9 +1,9 @@
 .nested-fields {
   display: flex;
-  align-items: flex-middle; /* alinha todos pela base */
+  align-items: flex-middle;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
-  font-size: 0.65rem; /* 0.5rem estava muito pequeno */
+  font-size: 0.75rem; 
   font-weight: 600;
 }
 
@@ -14,16 +14,17 @@
 
 .nested-fields .remove-btn {
   display: flex;
-  align-items: flex-end;
+  align-items: middle;
   padding-bottom: 0px;
+  margin-top: 10px;
 }
 
 .rule-fields {
   display: flex;
-  align-items: flex-middle; /* alinha todos pela base */
+  align-items: flex-middle; 
   gap: 0.5rem;
   margin-bottom: 0.5rem;
-  font-size: 0.65rem; /* 0.5rem estava muito pequeno */
+  font-size: 0.75rem; 
   font-weight: 600;
 }
 
@@ -33,9 +34,11 @@
 }
 
 .rule-fields.has-error {
-  border: 1px solid red;
-  padding: 5px;
+  border: 2px solid rgb(218, 36, 36);
+  padding: 2px;
   border-radius: 4px;
+  background-color: #f0f0f0;
+  color: rgb(218, 36, 36);
 }
 
 .form-row-inline {

@@ -57,13 +57,12 @@
   color: var(--bg-menu-color);
 }
 
-.index-container img {
+.index-container .img-message {
   display: block;
   max-width: 100%;
   align-content: center;
   height: auto;
   border-radius: 8px;
-  /* box-shadow: 0 2px 6px rgba(0,0,0,0.15); */
   margin: 1rem 0;
 }
 

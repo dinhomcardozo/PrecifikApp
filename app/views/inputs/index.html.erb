@@ -12,7 +12,6 @@
         <th>Insumo</th>
         <th>Tipo</th>
         <th>Custo (R$)</th>
-        <th>Fornecedor</th>
         <th>Peso</th>
         <th>Unidade</th>
         <th>Imagem</th>
@@ -27,14 +26,15 @@
           <td><%= input.name %></td>
           <td><%= input.input_type&.name || "-" %></td>
           <td>R$ <%= number_with_precision(input.cost, precision: 2, separator: ',', delimiter: '.') %></td>
-          <td><%= input.supplier&.name || "-" %></td>
           <td><%= input.weight %></td>
           <td><%= input.unit_of_measurement %></td>
-          <td class="cell-actions">
+          <td class="image-cell">
             <% if input.image.attached? %>
-              <%= image_tag input.image.url, class: "index_image", alt: input.name %>
+              <%= image_tag url_for(input.image),
+                            alt: input.name,
+                            class: "index_image" %>
             <% else %>
-              Nenhuma
+              <span class="no-image">Nenhuma</span>
             <% end %>
           </td>
           <td class="cell-actions">

@@ -1,26 +1,35 @@
-<h4 class="title" >Tabela Nutricional</h4>
+<% if Current.user_client.client.food_industry? %>
+  <h4 class="title" >Tabela Nutricional</h4>
 
-<table class="index-table index-table--bordered">
-  <thead>
-    <tr>
-      <th>Gorduras totais (g)</th>
-      <th>Proteínas (g)</th>
-      <th>Carboidratos (g)</th>
-      <th>Fibras (g)</th>
-      <th>Açúcares (g)</th>
-      <th>Sódio (mg)</th>
-      <th>Calorias (kcal)</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><%= number_with_precision(@input.total_fat, precision: 2) %></td>
-      <td><%= number_with_precision(@input.protein, precision: 2) %></td>
-      <td><%= number_with_precision(@input.carbs, precision: 2) %></td>
-      <td><%= number_with_precision(@input.dietary_fiber, precision: 2) %></td>
-      <td><%= number_with_precision(@input.sugars, precision: 2) %></td>
-      <td><%= number_with_precision(@input.sodium, precision: 2) %></td>
-      <td><%= number_with_precision(@input.calories, precision: 2) %></td>
-    </tr>
-  </tbody>
-</table>
+  <table class="index-table index-table--bordered">
+    <thead>
+      <tr>
+        <th>Gorduras totais (g)</th>
+        <th>Proteínas (g)</th>
+        <th>Carboidratos (g)</th>
+        <th>Fibras (g)</th>
+        <th>Açúcares (g)</th>
+        <th>Sódio (mg)</th>
+        <th>Calorias (kcal)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><%= number_with_precision(@input.total_fat, precision: 2) %></td>
+        <td><%= number_with_precision(@input.protein, precision: 2) %></td>
+        <td><%= number_with_precision(@input.carbs, precision: 2) %></td>
+        <td><%= number_with_precision(@input.dietary_fiber, precision: 2) %></td>
+        <td><%= number_with_precision(@input.sugars, precision: 2) %></td>
+        <td><%= number_with_precision(@input.sodium, precision: 2) %></td>
+        <td><%= number_with_precision(@input.calories, precision: 2) %></td>
+      </tr>
+    </tbody>
+  </table>
+<% else %>
+  <div class="detailed-box">
+    <p>Se você é do segmento de produção de alimentos, pode ter acesso à Tabela Nutricional.</p>
+    <p>
+      Se deseja ativar, <%= link_to "clique aqui", settings_path, target: "_blank", rel: "noopener noreferrer" %>
+    </p>
+  </div>
+<% end %>

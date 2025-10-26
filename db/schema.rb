@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_23_005602) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_26_151451) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -135,6 +135,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_23_005602) do
     t.datetime "last_login"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "food_industry", default: false, null: false
     t.index ["cnpj"], name: "index_clients_on_cnpj", unique: true
     t.index ["plan_id"], name: "index_clients_on_plan_id"
   end
