@@ -22,7 +22,7 @@ class Input < ApplicationRecord
 
   validates :name, presence: true
   validates :brand_id, presence: true
-  validates_inclusion_of :unit_of_measurement, in: %w[g mL kg L], message: "não é válido"
+  validates_inclusion_of :unit_of_measurement, in: %w[g mL un], message: "não é válido"
   validates :cost, numericality: { greater_than_or_equal_to: 0.0 }, allow_nil: true
   validates :weight, numericality: { greater_than_or_equal_to: 0.0 }, allow_nil: true
   validates :total_fat, :protein, :carbs, :dietary_fiber, :sugars, :sodium,

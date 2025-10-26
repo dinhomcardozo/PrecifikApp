@@ -45,13 +45,13 @@
     </div>
 
     <div class="field-inline">
-      <%= f.label :weight, "Peso", class: "custom-label" %>
+      <%= f.label :weight, "Peso (g)", class: "custom-label" %>
       <%= f.number_field :weight, step: "any", class: "form-control" %>
     </div>
 
     <div class="field-inline">
-      <%= f.label :unit_of_measurement, "Unidade de Medida", class: "custom-label" %>
-      <%= f.select :unit_of_measurement, ['g', 'mL'], {}, class: "form-select" %>
+      <%= f.label :unit_of_measurement, "Unidade de Medida Geral", class: "custom-label" %>
+      <%= f.select :unit_of_measurement, ['g', 'mL', 'un'], {}, class: "form-select" %>
     </div>
   </div>
 

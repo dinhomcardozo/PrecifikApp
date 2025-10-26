@@ -143,6 +143,8 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :plans, only: [:index, :show]
+
       scope path: 'services', module: 'services', as: 'clients_services' do
         resources :services
         resources :energies

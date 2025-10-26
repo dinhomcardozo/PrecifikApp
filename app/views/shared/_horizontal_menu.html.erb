@@ -50,12 +50,25 @@
       <svg class="chevron" width="10" height="6" …></svg>
     </button>
     <!-- Menu que será mostrado/ocultado -->
-    <div data-dropdown-target="menu" class="dropdown-menu">
-      <%= link_to "Porções", product_portions_path, class: "dropdown-item" %>
-      <%= link_to "Produtos", products_path, class: "dropdown-item" %>
-      <%= link_to "Subprodutos", subproducts_path, class: "dropdown-item" %>
-      <%= link_to "Insumos", inputs_path, class: "dropdown-item" %>
-    </div>
+      <div data-dropdown-target="menu" class="dropdown-menu">
+        <%= link_to "Porções", product_portions_path, class: "dropdown-item" %>
+        <%= link_to "Produtos", products_path, class: "dropdown-item" %>
+        <%= link_to "Subprodutos", subproducts_path, class: "dropdown-item" %>
+
+        <!-- Novo submenu Inputs -->
+        <div data-controller="dropdown" class="dropdown-submenu">
+          <button data-action="click->dropdown#toggle"
+                  class="dropdown-toggle"
+                  aria-expanded="false">
+            Insumos
+            <svg class="chevron" width="10" height="6"></svg>
+          </button>
+          <div data-dropdown-target="menu" class="dropdown-menu">
+            <%= link_to "Todos os Insumos", inputs_path, class: "dropdown-item" %>
+            <%= link_to "Tipos de Insumo", input_types_path, class: "dropdown-item" %>
+          </div>
+        </div>
+      </div>
   </div>
 
   <!-- Dropdown Simulador de Produção -->

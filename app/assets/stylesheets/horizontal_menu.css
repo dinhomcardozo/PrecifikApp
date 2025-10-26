@@ -168,3 +168,27 @@
 .system-admin-menu-horizontal .dropdown-toggle:hover + .dropdown-menu {
   display: block;
 }
+
+/* Botão do dropdown Insumos */
+.dropdown-submenu > .dropdown-toggle:hover {
+  background-color: #2f2f2f; /* cinza chumbo bem escuro */
+  color: #fff;              /* texto branco para contraste */
+}
+
+/* Container do menu de itens */
+.dropdown-submenu .dropdown-menu {
+  background-color: #fff;   /* fundo branco */
+  border: 1px solid #ccc;   /* borda leve para destacar */
+}
+
+/* Links dentro do submenu */
+.dropdown-submenu .dropdown-menu .dropdown-item {
+  color: #333;              /* texto escuro */
+  background-color: #fff;   /* fundo branco */
+}
+
+/* Hover nos links */
+.dropdown-submenu .dropdown-menu .dropdown-item:hover {
+  background-color: #f2f2f2; /* leve cinza no hover */
+  color: #000;
+}
