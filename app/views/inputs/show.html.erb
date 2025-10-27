@@ -94,9 +94,9 @@
       <table class="index-table index-table--bordered">
         <thead>
           <tr>
-            <th>Margem de lucro (%)</th>
+            <th>Margem Adicionada (%)</th>
             <th>Preço de venda</th>
-            <th>Margem real (%)</th>
+            <th>Margem Real (%)</th>
           </tr>
         </thead>
         <tbody>
@@ -113,8 +113,46 @@
     </div>
   <% end %>
 
-  <div>
-    <%= render 'nutritional_table_show' %>
+  <!-- Accordions -->
+  <div class="accordion" id="inputAccordion">
+
+    <!-- Tabela Nutricional -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingNutritional">
+        <button class="accordion-button collapsed" type="button"
+                data-bs-toggle="collapse" data-bs-target="#collapseNutritional"
+                aria-expanded="false" aria-controls="collapseNutritional">
+          Informações Nutricionais
+        </button>
+      </h2>
+      <div id="collapseNutritional" class="accordion-collapse collapse"
+           aria-labelledby="headingNutritional" data-bs-parent="#inputAccordion">
+        <div class="accordion-body">
+          <%= render 'nutritional_table_show' %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preço por Canal -->
+    <% if @input.resalable_product? %>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingChannels">
+          <button class="accordion-button collapsed" type="button"
+                  data-bs-toggle="collapse" data-bs-target="#collapseChannels"
+                  aria-expanded="false" aria-controls="collapseChannels">
+            Preço Final por Canal
+          </button>
+        </h2>
+        <div id="collapseChannels" class="accordion-collapse collapse"
+            aria-labelledby="headingChannels" data-bs-parent="#inputAccordion">
+          <div class="accordion-body">
+            <%= render "inputs/channels",
+                      input: @input,
+                      channel_rows: @input.channel_inputs %>
+          </div>
+        </div>
+      </div>
+    <% end %>
   </div>
 
   <div>                 

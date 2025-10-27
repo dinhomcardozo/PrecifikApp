@@ -1,0 +1,36 @@
+<tr id="<%= dom_id(ci) %>">
+  <td><%= ci.channel.description %></td>
+  <td><%= number_to_percentage(ci.channel.channel_cost, precision: 2) %></td>
+  <td><%= number_to_currency(ci.price_with_commission, unit: "R$ ") %></td>
+  <td data-controller="resalable-inline-edit">
+    <turbo-frame id="<%= dom_id(ci) %>">
+      <span data-resalable-inline-edit-target="display">
+        <% if ci.corrected_final_price.present? %>
+          <%= number_to_currency(ci.corrected_final_price, unit: "R$ ") %>
+        <% else %>
+          –
+        <% end %>
+        <a href="#" data-action="resalable-inline-edit#edit">
+          <%= image_tag "icons/editar.png", alt: "Editar", class: "icon-edit" %>
+        </a>
+      </span>
+
+      <span data-resalable-inline-edit-target="form" class="d-none">
+        <%= form_with model: ci,
+                      url: channel_input_path(ci),
+                      method: :patch,
+                      data: { turbo_frame: dom_id(ci) } do |cf| %>
+          <%= cf.hidden_field :channel_id %>
+          <%= cf.number_field :corrected_final_price,
+                value: ci.corrected_final_price || "",
+                step: 0.01,
+                min: ci.price_with_commission,
+                class: "form-control" %>
+          <%= cf.submit "Salvar", class: "action-button" %>
+          <a href="#" data-action="resalable-inline-edit#cancel" class="action-button">Cancelar</a>
+        <% end %>
+      </span>
+    </turbo-frame>
+  </td>
+  <td><%= number_to_currency(ci.effective_final_price, unit: "R$ ") %></td>
+</tr>

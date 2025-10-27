@@ -1,0 +1,16 @@
+<table class="index-table index-table--bordered">
+  <thead>
+    <tr>
+      <th>Canal</th>
+      <th>Comissão Canal (%)</th>
+      <th>Preço com Comissão (R$)</th>
+      <th>Preço Corrigido</th>
+      <th>Preço Efetivo (R$)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% channel_rows.each do |ci| %>
+      <%= render "inputs/channel_input", ci: ci %>
+    <% end %>
+  </tbody>
+</table>

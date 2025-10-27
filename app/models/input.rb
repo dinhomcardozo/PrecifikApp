@@ -20,6 +20,11 @@ class Input < ApplicationRecord
   has_many :subproducts, through: :subproduct_compositions
   has_many :input_cost_histories, dependent: :destroy
 
+  has_many :channel_inputs, dependent: :destroy
+
+  after_save :update_channel_prices, if: :resalable_product?
+  after_create :ensure_channel_inputs, if: :resalable_product?
+
   has_one_attached :image
 
   validates :name, presence: true
@@ -58,6 +63,23 @@ class Input < ApplicationRecord
         prod.compute_all_pricing_and_weights
         prod.save!(validate: false)
       end
+    end
+  end
+
+  def channel_row_for(channel)
+    channel_inputs.find_by(channel_id: channel.id) ||
+      channel_inputs.build(channel: channel, client_id: client_id)
+  end
+
+  def update_channel_prices
+    channel_inputs.find_each do |ci|
+      ci.update_columns(effective_final_price: ci.compute_effective_final_price)
+    end
+  end
+
+  def ensure_channel_inputs
+    Channel.where(client_id: client_id).find_each do |channel|
+      channel_inputs.find_or_create_by!(channel: channel)
     end
   end
 

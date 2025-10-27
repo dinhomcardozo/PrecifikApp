@@ -25,6 +25,7 @@ import PriceListController from "./price_list_controller"
 import NewBrandInputsController from "./new_brand_inputs_controller"
 import NewRoleProfessionalsController from "./new_role_professionals_controller"
 import ResalableController from "./resalable_controller"
+import ResalableInlineEditController from "./resalable_inline_edit_controller"
 
 const application = Application.start()
 
@@ -53,5 +54,6 @@ application.register("price-list", PriceListController)
 application.register("new-brand-inputs", NewBrandInputsController)
 application.register("new-role-professionals", NewRoleProfessionalsController)
 application.register("resalable", ResalableController)
+application.register("resalable-inline-edit", ResalableInlineEditController)
 
 window.Stimulus = application

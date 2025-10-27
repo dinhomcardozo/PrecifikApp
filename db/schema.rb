@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_27_031606) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_27_141931) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -77,6 +77,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_27_031606) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "client_id"
+  end
+
+  create_table "channel_inputs", force: :cascade do |t|
+    t.bigint "input_id", null: false
+    t.bigint "channel_id", null: false
+    t.decimal "corrected_final_price", precision: 10, scale: 2
+    t.decimal "effective_final_price", precision: 10, scale: 2
+    t.bigint "client_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["channel_id"], name: "index_channel_inputs_on_channel_id"
+    t.index ["input_id"], name: "index_channel_inputs_on_input_id"
   end
 
   create_table "channel_product_portions", force: :cascade do |t|
@@ -791,6 +803,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_27_031606) do
   add_foreign_key "banner_clients", "clients"
   add_foreign_key "brands", "clients", name: "fk_brands_client"
   add_foreign_key "categories", "clients", name: "fk_categories_client"
+  add_foreign_key "channel_inputs", "channels"
+  add_foreign_key "channel_inputs", "inputs"
   add_foreign_key "channel_product_portions", "channels"
   add_foreign_key "channel_product_portions", "product_portions"
   add_foreign_key "channels", "clients", name: "fk_channels_client"

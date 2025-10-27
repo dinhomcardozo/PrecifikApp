@@ -112,6 +112,8 @@ Rails.application.routes.draw do
         collection { get :search }
       end
 
+      resources :channel_inputs, only: [:show, :update]
+
       resources :input_types
 
       resources :brands do
