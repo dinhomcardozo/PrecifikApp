@@ -76,10 +76,18 @@ class InputsController < Clients::AuthenticatedController
     if @input.update(input_params)
       redirect_to @input, notice: "Insumo atualizado com sucesso."
     else
-      puts "❌ Erro ao atualizar insumo"
-      puts "→ Erros: #{@input.errors.full_messages}"
-      puts "→ Params rejeitados: #{input_params.to_h}"
-      puts "→ A imagem foi anexada? #{@input.image.attached?}"
+      # Log para debug
+      Rails.logger.error "❌ Erro ao atualizar insumo"
+      Rails.logger.error "→ Erros: #{@input.errors.full_messages}"
+      Rails.logger.error "→ Params rejeitados: #{input_params.to_h}"
+      Rails.logger.error "→ A imagem foi anexada? #{@input.image.attached?}"
+
+      # Flash amigável para o usuário
+      flash.now[:alert] = if @input.errors[:input_type].present?
+                            "Você precisa selecionar um tipo de insumo antes de salvar."
+                          else
+                            @input.errors.full_messages.to_sentence
+                          end
 
       render :edit, status: :unprocessable_entity
     end

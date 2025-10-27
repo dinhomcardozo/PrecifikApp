@@ -102,6 +102,11 @@ class ProductPortion < ApplicationRecord
     "#{product.description} - #{portioned_quantity}g"
   end
 
+  def touch_services
+    services.find_each(&:compute_final_price)
+    services.find_each(&:save!)
+  end
+
   private
 
   def calculate_totals
@@ -112,10 +117,5 @@ class ProductPortion < ApplicationRecord
 
   def set_client_id
     self.client_id ||= Current.user_client.client_id if Current.user_client
-  end
-
-  def touch_services
-    services.find_each(&:compute_final_price)
-    services.find_each(&:save!)
   end
 end

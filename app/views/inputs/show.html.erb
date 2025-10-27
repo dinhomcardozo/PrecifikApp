@@ -1,10 +1,11 @@
 <main class="index-container">
   <h1 class="title" >Detalhes do Insumo "<%= @input.name %>"</h1>
 
-  <div>
+  <div class="custom-label">
     <%= link_to "Editar Insumo",
             edit_input_path(@input),
             class: "action-button" %>
+    <%= link_to "Voltar", inputs_path, class: "action-button" %>
   </div>
 
   <div class="space"></div>
