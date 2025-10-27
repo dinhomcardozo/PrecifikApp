@@ -8,7 +8,12 @@
     <div class="form-row-inline">
       <div class="field-inline">
         <%= f.label :input_type_id, "Tipo de Insumo", class: "custom-label" %>
-        <%= f.collection_select :input_type_id, InputType.all, :id, :name, { include_blank: true }, class: "form-select" %>
+        <%= f.collection_select :input_type_id,
+            InputType.for_client(Current.user_client.client_id),
+            :id,
+            :name,
+            { include_blank: true },
+            class: "form-select" %>
       </div>
 
       <div class="field-inline">

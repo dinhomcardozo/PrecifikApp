@@ -1,10 +1,12 @@
 /* scope na sua tabela, opcional mas recomendado */
-.index-table--bordered thead th a.sorted.asc::after {
+.index-table--bordered thead th a.sorted.asc::after,
+.index-table--bordered-vertical thead th a.sorted.asc::after {
   content: " ▲";
   margin-left: 4px;
 }
 
-.index-table--bordered thead th a.sorted.desc::after {
+.index-table--bordered thead th a.sorted.desc::after,
+.index-table--bordered-vertical thead th a.sorted.desc::after {
   content: " ▼";
   margin-left: 4px;
 }
@@ -98,7 +100,8 @@
   margin-bottom: 1.5rem;
 }
 
-.index-table--bordered {
+.index-table--bordered,
+.index-table--bordered-vertical {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
@@ -111,6 +114,22 @@
 }
 
 .index-table--bordered th,
+.index-table--bordered-vertical th {
+  border: 1px solid #8f8f8f;
+  padding: 0.5rem 0.75rem;
+  text-align: center;
+  font-weight: 300;
+  font-size: 0.8rem;
+  vertical-align: middle;
+  height: 22px;
+  color: var(--text-dark);
+}
+
+.index-table--bordered th a,
+.index-table--bordered-vertical th a {
+  color: var(--text-dark);
+}
+
 .index-table--bordered td {
   border: 1px solid #8f8f8f;
   padding: 0.5rem 0.75rem;
@@ -121,32 +140,49 @@
   height: 60px;
 }
 
-.index-table--bordered thead th {
+.index-table--bordered-vertical td {
+  border: 1px solid #8f8f8f;
+  padding: 0.5rem 0.75rem;
+  text-align: center;
+  font-weight: 300;
+  font-size: 0.8rem;
+  vertical-align: middle;
+  height: 20px;
+}
+
+.index-table--bordered thead th,
+.index-table--bordered-vertical thead th {
   background-color: #ccc;
   font-weight: 600;
   font-size: 0.6rem;
   color: var(--text-dark);
 }
 
-.index-table--bordered thead th:first-child {
+.index-table--bordered thead th:first-child,
+.index-table--bordered-vertical thead th:first-child {
   border-top-left-radius: 0.5rem;
 }
-.index-table--bordered thead th:last-child {
+.index-table--bordered thead th:last-child,
+.index-table--bordered-vertical thead th:last-child {
   border-top-right-radius: 0.5rem;
 }
 
-.index-table--bordered tbody tr:last-child td:first-child {
+.index-table--bordered tbody tr:last-child td:first-child,
+.index-table--bordered-vertical tbody tr:last-child td:first-child {
   border-bottom-left-radius: 0.5rem;
 }
-.index-table--bordered tbody tr:last-child td:last-child {
+.index-table--bordered tbody tr:last-child td:last-child,
+.index-table--bordered-vertical tbody tr:last-child td:last-child {
   border-bottom-right-radius: 0.5rem;
 }
 
-.index-table--bordered tbody tr:nth-child(even) {
+.index-table--bordered tbody tr:nth-child(even),
+.index-table--bordered-vertical tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 
-.index-table--bordered tbody tr:hover {
+.index-table--bordered tbody tr:hover,
+.index-table--bordered-vertical tbody tr:hover {
   background-color: #e9e9e9;
 }
 
@@ -231,7 +267,8 @@
   border-radius: 6px;
 }
 
-.index-table--bordered td.image-cell {
+.index-table--bordered td.image-cell,
+.index-table--bordered-vertical td.image-cell {
   display: flex;
   justify-content: center;  /* centro horizontal */
   align-items: center;      /* centro vertical */

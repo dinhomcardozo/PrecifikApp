@@ -6,7 +6,7 @@
       <strong><%= current_user_client.first_name %>!    |     </strong>
     </span>
     <span class="top-bar-item">
-      <%= button_to 'SAIR', destroy_user_client_session_path, method: :delete %>
+      <%= button_to 'SAIR', destroy_user_client_session_path, method: :delete, class: "login-links" %>
     </span>
     <span class="top-bar-item">
       <%= link_to messages_path, class: "icon-link messages", title: "Mensagens" do %>

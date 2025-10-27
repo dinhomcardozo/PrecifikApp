@@ -12,6 +12,7 @@
 .system-admin-menu-top-bar .top-bar-item {
   margin-left: 0.1rem;
   font-size: 0.7rem;
+  border: none;
 }
 
 /* Menu Principal Horizontal */
@@ -191,4 +192,21 @@
 .dropdown-submenu .dropdown-menu .dropdown-item:hover {
   background-color: #f2f2f2; /* leve cinza no hover */
   color: #000;
+}
+
+.login-links {
+  color: var(--text-dark);
+  padding: 0px 3px 0px 3px;
+  margin: 0px 3px 0px 3px;
+  border-radius: 8px;
+  border: solid 2px var(--accent-color);
+  font-weight: 800;
+  background-color: var(--accent-color);
+}
+
+.login-links:hover {
+  color: var(--accent-color);
+  background-color: var(--bg-menu-color);
+  border: solid 2px var(--bg-menu-color);
+  font-weight: 900;
 }
