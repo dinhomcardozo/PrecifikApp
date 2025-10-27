@@ -53,10 +53,14 @@
             <td><%= sp.subproduct_compositions.sum(&:quantity_for_a_unit) %></td>
             <td>R$ <%= number_with_precision(sp.total_composition_cost, precision: 2) %></td>
             <td class="cell-actions">
-              <%= link_to "Ver", subproduct_path(sp), class: "action-button" %>
+              <%= link_to "Ver", subproduct_path(sp),
+                          class: "action-button",
+                          data: { turbo_frame: "_top" } %>
             </td>
             <td class="cell-actions">
-              <%= link_to "Editar", edit_subproduct_path(sp), class: "action-button" %>
+              <%= link_to "Editar", edit_subproduct_path(sp),
+                          class: "action-button",
+                          data: { turbo_frame: "_top" } %>
             </td>
             <td class="cell-actions">
               <%= button_to "Excluir",

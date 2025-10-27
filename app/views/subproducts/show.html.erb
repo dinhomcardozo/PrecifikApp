@@ -3,11 +3,14 @@
 
   <div>
     <div class="custom-label">
-      <%= link_to "Voltar", subproducts_path, class: "action-button" %> | 
-      <%= link_to "[+] Novo Subproduto",
-                new_subproduct_path,
-                class: "standart-button",
-                data: { turbo_frame: "_top" } %>
+      <%= link_to "Voltar",
+                  subproducts_path,
+                  class: "action-button",
+                  data: { turbo_frame: "_top" } %> |
+      <%= link_to "Editar",
+                  edit_subproduct_path(@subproduct),
+                  class: "action-button",
+                  data: { turbo_frame: "_top" } %>
     </div>
   </div>
 
