@@ -4,6 +4,8 @@ class Input < ApplicationRecord
   belongs_to :supplier
   belongs_to :input_type
   belongs_to :brand, optional: false
+  scope :resalable, -> { where(resalable_product: true) }
+  before_save :calculate_resalable_fields, if: :resalable_product?
 
   # Serviços diretos (via service_inputs)
   has_many :service_inputs, class_name: 'Services::ServiceInput', inverse_of: :input
@@ -76,5 +78,11 @@ class Input < ApplicationRecord
     self.sugars         ||= 0
     self.sodium         ||= 0
     self.calories       ||= 0
+  end
+
+  def calculate_resalable_fields
+    self.final_cost = cost.to_f
+    self.selling_price = final_cost + (final_cost * profit_margin.to_f / 100.0)
+    self.real_profit_margin = selling_price > 0 ? ((selling_price - final_cost) / selling_price) * 100 : 0
   end
 end

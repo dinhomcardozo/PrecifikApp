@@ -7,6 +7,29 @@
             class: "action-button" %>
   </div>
 
+  <div class="space"></div>
+
+  <div class="detailed-box">
+    <div>
+      <p class="detailed-text">
+        <strong>ATENÇÃO!</strong> Edite isso com cuidado. Outros itens podem depender deste Insumo.
+      </p>                 
+      <p class="dependent-item-count">
+        <%= "Você tem " + "#{pluralize(@subproducts_count, 'Subproduto')} | " \
+            "#{pluralize(@services_count, 'Serviço')}" + " utilizando este item" %>.
+        <a href="#" data-bs-toggle="modal" data-bs-target="#assocModal">
+          Clique aqui e veja a lista.
+        </a>
+      </p>
+
+      <div>
+        <%= render "input_dependent_items_modal",
+                  subproducts: @subproducts,
+                  services: @services %>
+      </div>
+    </div>
+  </div>
+
   <table class="index-table index-table--bordered">
     <thead>
       <tr>
@@ -64,26 +87,31 @@
     </tbody>
   </table>
 
-  <div class="detailed-box">
+  <% if @input.resalable_product? %>
     <div>
-      <p class="detailed-text">
-        <strong>ATENÇÃO!</strong> Edite isso com cuidado. Outros itens podem depender deste Insumo.
-      </p>                 
-      <p class="dependent-item-count">
-        <%= "Você tem " + "#{pluralize(@subproducts_count, 'Subproduto')} | " \
-            "#{pluralize(@services_count, 'Serviço')}" + " utilizando este item" %>.
-        <a href="#" data-bs-toggle="modal" data-bs-target="#assocModal">
-          Clique aqui e veja a lista.
-        </a>
-      </p>
+      <h3 class="subtitle">Configurações de produto de revenda</h3>
 
-      <div>
-        <%= render "input_dependent_items_modal",
-                   subproducts: @subproducts,
-                   services: @services %>
-      </div>
+      <table class="index-table index-table--bordered">
+        <thead>
+          <tr>
+            <th>Margem de lucro (%)</th>
+            <th>Preço de venda</th>
+            <th>Margem real (%)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><%= number_with_precision(@input.profit_margin.to_f, precision: 2) %></td>
+            <td>
+              <%= number_to_currency(@input.selling_price.to_f,
+                    unit: "R$ ", delimiter: ".", separator: ",") %>
+            </td>
+            <td><%= number_with_precision(@input.real_profit_margin.to_f, precision: 2) %></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-  </div>
+  <% end %>
 
   <div>
     <%= render 'nutritional_table_show' %>

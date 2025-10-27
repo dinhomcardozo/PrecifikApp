@@ -1,79 +1,100 @@
 <main class="index-container">
-<%= form_with(model: input, multipart: true, local: true) do |f| %>
-  <div class="mb-3">
-    <%= f.label :name, "Nome do Insumo", class: "custom-label" %>
-    <%= f.text_field :name, class: "form-control" %>
-  </div>
-
-  <div class="form-row-inline">
-    <div class="field-inline">
-      <%= f.label :input_type_id, "Tipo de Insumo", class: "custom-label" %>
-      <%= f.collection_select :input_type_id, InputType.all, :id, :name, { include_blank: true }, class: "form-select" %>
+  <%= form_with(model: input, multipart: true, local: true) do |f| %>
+    <div class="mb-3">
+      <%= f.label :name, "Nome do Insumo", class: "custom-label" %>
+      <%= f.text_field :name, class: "form-control" %>
     </div>
 
-    <div class="field-inline">
-      <%= f.label :supplier_id, "Fornecedor", class: "custom-label" %>
-      <%= f.collection_select :supplier_id, Supplier.all, :id, :name, { include_blank: true }, class: "form-select" %>
+    <div class="form-row-inline">
+      <div class="field-inline">
+        <%= f.label :input_type_id, "Tipo de Insumo", class: "custom-label" %>
+        <%= f.collection_select :input_type_id, InputType.all, :id, :name, { include_blank: true }, class: "form-select" %>
+      </div>
+
+      <div class="field-inline">
+        <%= f.label :supplier_id, "Fornecedor", class: "custom-label" %>
+        <%= f.collection_select :supplier_id, Supplier.all, :id, :name, { include_blank: true }, class: "form-select" %>
+      </div>
+
+      <div class="field-inline">
+        <%= f.label :brand_id, "Marca", class: "custom-label" %>
+        <%= f.select :brand_id,
+                    options_for_select(
+                      [["+ CRIAR NOVA MARCA", "new_brand", { class: "new-brand-option" }]] +
+                      Brand.where(client_id: Current.user_client.client_id).pluck(:name, :id),
+                      f.object.brand_id
+                    ),
+                    { prompt: "Selecione uma marca" },
+                    {
+                      class: "form-select",
+                      required: true,
+                      id: "brands_select",
+                      data: {
+                        controller: "new-brand-inputs",
+                        action: "change->new-brand-inputs#openModalIfNew",
+                        new_brand_inputs_target: "select"
+                      }
+                    } %>
+      </div>
     </div>
 
-    <div class="field-inline">
-      <%= f.label :brand_id, "Marca", class: "custom-label" %>
-      <%= f.select :brand_id,
-                  options_for_select(
-                    [["+ CRIAR NOVA MARCA", "new_brand", { class: "new-brand-option" }]] +
-                    Brand.where(client_id: Current.user_client.client_id).pluck(:name, :id),
-                    f.object.brand_id
-                  ),
-                  { prompt: "Selecione uma marca" },
-                  {
-                    class: "form-select",
-                    required: true,
-                    id: "brands_select",
-                    data: {
-                      controller: "new-brand-inputs",
-                      action: "change->new-brand-inputs#openModalIfNew",
-                      new_brand_inputs_target: "select"
-                    }
-                  } %>
-    </div>
-  </div>
+    <div class="form-row-inline">
 
-  <div class="form-row-inline">
-    <div class="field-inline">
-      <%= f.label :cost, "Custo (R$)", class: "custom-label" %>
-      <%= f.number_field :cost, step: "any", class: "form-control" %>
+      <div class="field-inline">
+        <%= f.label :weight, "Peso (g)", class: "custom-label" %>
+        <%= f.number_field :weight, step: "any", class: "form-control" %>
+      </div>
+
+      <div class="upload-image">
+        <%= f.label :image, "Imagem", style: "display: block", class: "custom-label"  %>
+        <%= f.file_field :image %>
+      </div>
     </div>
 
-    <div class="field-inline">
-      <%= f.label :weight, "Peso (g)", class: "custom-label" %>
-      <%= f.number_field :weight, step: "any", class: "form-control" %>
+    <!-- Controller Stimulus começa aqui -->
+    <div data-controller="resalable">
+
+      <div class="form-row-inline">  
+        <div class="field-inline">
+          <%= f.label :cost, "Custo (R$)", class: "custom-label" %>
+          <%= f.number_field :cost,
+                step: "any",
+                class: "form-control",
+                data: { resalable_target: "cost", action: "input->resalable#recalculate" } %>
+        </div>
+
+        <div class="field-inline">
+          <%= f.label :unit_of_measurement, "Unidade de Venda", class: "custom-label" %>
+          <%= f.select :unit_of_measurement, ['g', 'mL', 'un', 'm²'], {},
+                class: "form-select",
+                data: { resalable_target: "unitField", final_cost: f.object.cost.to_f } %>
+        </div>
+
+        <div class="checkbox">
+          <%= f.check_box :resalable_product,
+                data: { action: "resalable#toggle" } %>
+          <%= f.label :resalable_product, "Produto Pronto para Revenda?", class: "custom-label" %>
+        </div>
+      </div>
+
+      <%= render "inputs/resalable_product", f: f %>
     </div>
+    <!-- Controller Stimulus termina aqui -->
 
-    <div class="field-inline">
-      <%= f.label :unit_of_measurement, "Unidade de Medida Geral", class: "custom-label" %>
-      <%= f.select :unit_of_measurement, ['g', 'mL', 'un'], {}, class: "form-select" %>
-    </div>
-  </div>
-
-  <div>
-    <%= f.label :image, "Imagem", style: "display: block", class: "custom-label"  %>
-    <%= f.file_field :image %>
-  </div>
-
-  <hr>
-
-  <div>
-    <%= render 'nutritional_table_fields', f: f %>
-  </div>
-
-  <div>
     <div>
-     <%= f.submit "Salvar Insumo", class: "standart-button" %>
+      <hr>
+      <%= render 'nutritional_table_fields', f: f %>
     </div>
-    <div>
-      <%= link_to "Voltar", inputs_path, class: "action-button" %>
-    </div>
-  </div>
-<% end %>
 
-<%= render "brands/new_modal" %>
+    <div>
+      <div>
+      <%= f.submit "Salvar Insumo", class: "standart-button" %>
+      </div>
+      <div>
+        <%= link_to "Voltar", inputs_path, class: "action-button" %>
+      </div>
+    </div>
+  <% end %>
+
+  <%= render "brands/new_modal" %>
+</main>

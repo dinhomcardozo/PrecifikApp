@@ -103,7 +103,12 @@ class InputsController < Clients::AuthenticatedController
       :dietary_fiber,
       :sugars,
       :sodium,
-      :calories
+      :calories,
+      :resalable_product,
+      :profit_margin,
+      :final_cost,
+      :selling_price,
+      :real_profit_margin
     ).tap do |whitelisted|
       if %w[kg L].include?(whitelisted[:unit_of_measurement])
         whitelisted[:weight] = whitelisted[:weight].to_f * 1000

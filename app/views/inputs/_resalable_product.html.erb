@@ -1,0 +1,29 @@
+<div data-resalable-target="fields" style="<%= f.object.resalable_product? ? '' : 'display:none;' %>">
+  <hr>  
+
+  <h3 class="subtitle">Configurações de Produto de Revenda</h3>
+
+  <div class="field">
+    <%= f.label :profit_margin, "Margem de Lucro (%)" %>
+    <%= f.number_field :profit_margin,
+          step: 0.01,
+          class: "form-control",
+          data: { resalable_target: "profitMargin", action: "input->resalable#recalculate" } %>
+  </div>
+
+  <div class="field">
+    <%= f.label :selling_price, "Preço de Venda (R$)" %>
+    <%= f.text_field :selling_price,
+          readonly: true,
+          class: "form-control",
+          data: { resalable_target: "sellingPrice" } %>
+  </div>
+
+  <div class="field">
+    <%= f.label :real_profit_margin, "Margem Real (%)" %>
+    <%= f.text_field :real_profit_margin,
+          readonly: true,
+          class: "form-control",
+          data: { resalable_target: "realProfitMargin" } %>
+  </div>
+</div>

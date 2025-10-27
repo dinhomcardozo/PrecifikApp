@@ -119,6 +119,18 @@
   max-height: 350px;
 }
 
+.checkbox {
+  margin-top: 30px;
+}
+
+.upload-image {
+  margin: 5px;
+}
+
+.space {
+  margin-top: 15px;
+}
+
 #brands_select option.new-brand-option {
   background-color: #f0f0f0;
   font-weight: bold;

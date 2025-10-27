@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_26_151451) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_27_015035) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -140,6 +140,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_26_151451) do
     t.index ["plan_id"], name: "index_clients_on_plan_id"
   end
 
+  create_table "custom_costs", force: :cascade do |t|
+    t.bigint "resalable_product_id", null: false
+    t.bigint "input_id", null: false
+    t.string "unit_of_measurement"
+    t.float "weight"
+    t.float "quantity"
+    t.float "cost"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["input_id"], name: "index_custom_costs_on_input_id"
+    t.index ["resalable_product_id"], name: "index_custom_costs_on_resalable_product_id"
+  end
+
   create_table "energies", force: :cascade do |t|
     t.string "description"
     t.decimal "consume_per_hour"
@@ -204,6 +217,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_26_151451) do
     t.float "sugars"
     t.float "sodium"
     t.float "calories"
+    t.boolean "resalable_product", default: false, null: false
+    t.decimal "profit_margin", precision: 10, scale: 2, default: "0.0"
+    t.decimal "final_cost", precision: 10, scale: 2, default: "0.0"
+    t.decimal "selling_price", precision: 10, scale: 2, default: "0.0"
+    t.decimal "real_profit_margin", precision: 10, scale: 2, default: "0.0"
     t.index ["brand_id"], name: "index_inputs_on_brand_id"
     t.index ["input_type_id"], name: "index_inputs_on_input_type_id"
     t.index ["supplier_id"], name: "index_inputs_on_supplier_id"
@@ -431,6 +449,25 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_26_151451) do
     t.datetime "updated_at", null: false
     t.bigint "client_id"
     t.index ["role_id"], name: "index_professionals_on_role_id"
+  end
+
+  create_table "resalable_products", force: :cascade do |t|
+    t.bigint "client_id", null: false
+    t.string "name"
+    t.string "description"
+    t.bigint "category_id"
+    t.float "profit_margin", default: 0.0
+    t.boolean "custom", default: false
+    t.string "custom_type"
+    t.float "purchase_price", default: 0.0
+    t.bigint "supplier_id"
+    t.bigint "tax_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_resalable_products_on_category_id"
+    t.index ["client_id"], name: "index_resalable_products_on_client_id"
+    t.index ["supplier_id"], name: "index_resalable_products_on_supplier_id"
+    t.index ["tax_id"], name: "index_resalable_products_on_tax_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -762,6 +799,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_26_151451) do
   add_foreign_key "client_plans", "clients"
   add_foreign_key "client_plans", "plans"
   add_foreign_key "clients", "plans"
+  add_foreign_key "custom_costs", "inputs"
+  add_foreign_key "custom_costs", "resalable_products"
   add_foreign_key "energies", "clients", name: "fk_energies_client"
   add_foreign_key "equipments", "clients", name: "fk_equipments_client"
   add_foreign_key "fixed_costs", "clients", name: "fk_fixed_costs_client"
@@ -801,6 +840,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_26_151451) do
   add_foreign_key "products", "clients", name: "fk_products_client"
   add_foreign_key "professionals", "clients", name: "fk_professionals_client"
   add_foreign_key "professionals", "roles"
+  add_foreign_key "resalable_products", "categories"
+  add_foreign_key "resalable_products", "clients"
+  add_foreign_key "resalable_products", "suppliers"
+  add_foreign_key "resalable_products", "taxes"
   add_foreign_key "roles", "clients", name: "fk_roles_client"
   add_foreign_key "sales_orders", "sales_quotes"
   add_foreign_key "sales_quotes", "sales_clients", column: "client_id"
