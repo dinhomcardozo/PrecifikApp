@@ -2,7 +2,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["container", "quantityCostField", "costDisplay"];
+  static targets = ["container", "quantityCostField", "costDisplay", "requireUnitsDisplay"];
 
   connect() {
     console.log("NestedForm conectado, somando itens existentes");
@@ -39,42 +39,54 @@ export default class extends Controller {
   }
 
   updateCost(e) {
-    const row         = e.target.closest("tr");
-    const select      = row.querySelector("select");
-    const qtyInput    = row.querySelector('input[type="number"]');
-    const costDisplay = row.querySelector("[data-nested-form-target='costDisplay']");
-    const hiddenQc    = row.querySelector("[data-nested-form-target='quantityCostField']");
+  const row         = e.target.closest("tr");
+  const select      = row.querySelector("select");
+  const qtyInput    = row.querySelector('input[type="number"]');
+  const costDisplay = row.querySelector("[data-nested-form-target='costDisplay']");
+  const hiddenQc    = row.querySelector("[data-nested-form-target='quantityCostField']");
+  const hiddenRu    = row.querySelector("[data-nested-form-target='requireUnitsField']"); // 🔑 aqui
+  const requireUnitsDisplay = row.querySelector("[data-nested-form-target='requireUnitsDisplay']");
 
-    const inputId  = select.value;
-    const quantity = parseFloat(qtyInput.value);
+  const inputId  = select.value;
+  const quantity = parseFloat(qtyInput.value);
 
-    // validações iniciais
-    if (!inputId || isNaN(quantity) || quantity <= 0) {
+// validações iniciais
+  if (!inputId || isNaN(quantity) || quantity <= 0) {
+    costDisplay.textContent = "-";
+    if (hiddenQc) hiddenQc.value = "";
+    if (hiddenRu) hiddenRu.value = "";
+    if (requireUnitsDisplay) requireUnitsDisplay.textContent = "-";
+    this.updateTotal();
+    return;
+  }
+
+    fetch(`/clients/inputs/${inputId}.json`, { headers: { Accept: "application/json" } })
+    .then(r => r.json())
+    .then(data => {
+      const unitCost     = (data.cost || 0) / (data.weight_in_grams || 1);
+      const computedCost = (unitCost * quantity).toFixed(2);
+
+      costDisplay.textContent = computedCost > 0 ? `R$ ${computedCost}` : "-";
+      if (hiddenQc) hiddenQc.value = computedCost;
+
+      if (data.weight_in_grams && data.weight_in_grams > 0) {
+        const requireUnits = (quantity / data.weight_in_grams).toFixed(2);
+        if (requireUnitsDisplay) requireUnitsDisplay.textContent = requireUnits;
+        if (hiddenRu) hiddenRu.value = requireUnits;
+      } else {
+        if (requireUnitsDisplay) requireUnitsDisplay.textContent = "-";
+        if (hiddenRu) hiddenRu.value = "";
+      }
+
+      this.updateTotal();
+    })
+     .catch(() => {
       costDisplay.textContent = "-";
       if (hiddenQc) hiddenQc.value = "";
+      if (hiddenRu) hiddenRu.value = "";
+      if (requireUnitsDisplay) requireUnitsDisplay.textContent = "-";
       this.updateTotal();
-      return;
-    }
-
-    // busca o JSON do input
-    fetch(`/clients/inputs/${inputId}.json`, { headers: { Accept: "application/json" } })
-      .then(r => r.json())
-      .then(data => {
-        const unitCost     = (data.cost || 0) / (data.weight_in_grams || 1);
-        const computedCost = (unitCost * quantity).toFixed(2);
-
-        costDisplay.textContent = computedCost > 0
-          ? `R$ ${computedCost}`
-          : "-";
-
-        if (hiddenQc) hiddenQc.value = computedCost;
-        this.updateTotal();
-      })
-      .catch(() => {
-        costDisplay.textContent = "-";
-        if (hiddenQc) hiddenQc.value = "";
-        this.updateTotal();
-      });
+    });
   }
 
   updateTotal() {

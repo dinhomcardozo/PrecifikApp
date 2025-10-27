@@ -3,22 +3,30 @@
   <td>
     <%= f.collection_select :input_id, Input.order(:name), :id, :name,
                             { include_blank: "Escolha insumo" },
-                            class: "custom-field",
+                            class: "form-select",
                             data: { action: "change->nested-form#updateCost" } %>
   </td>
   <td>
     <%= f.number_field :quantity_for_a_unit,
-                       class: "custom-field",
-                       step: :any,
-                       data: { action: "input->nested-form#updateCost" } %>
+                      class: "form-control",
+                      step: :any,
+                      data: { action: "input->nested-form#updateCost" } %>
+
     <%= f.hidden_field :quantity_cost,
-                       value: f.object.quantity_cost,
-                       class: "custom-field",
-                       data: { nested_form_target: "quantityCostField" } %>
+                      value: f.object.quantity_cost,
+                      data: { nested_form_target: "quantityCostField" } %>
+
+    <%= hidden_field_tag "subproduct_composition[require_units]", f.object.require_units,
+          data: { nested_form_target: "requireUnitsField" } %>
   </td>
   <td data-nested-form-target="costDisplay" class="cost-display">
     <% qc = f.object.quantity_cost.to_f %>
     <%= qc.positive? ? number_with_precision(qc, precision: 2) : "-" %>
+  </td>
+
+  <td data-nested-form-target="requireUnitsDisplay" class="require-units-display">
+    <% ru = f.object.require_units %>
+    <%= ru.present? ? number_with_precision(ru, precision: 2) : "-" %>
   </td>
   <td>
     <%= f.hidden_field :_destroy %>

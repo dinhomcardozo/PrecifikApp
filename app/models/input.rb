@@ -44,6 +44,8 @@ class Input < ApplicationRecord
       when 'g' then weight
       when 'L' then weight * 1000
       when 'mL' then weight
+      when 'un'  then weight
+      when 'm²' then weight
       else
       0
       end

@@ -8,36 +8,72 @@
                 data: { turbo_frame: "_top" } %>
   </div>
 
-  <table class="index-table index-table--bordered">
-    <thead>
-      <tr>
-        <th>Nome</th>
-        <th>Peso Total (em g/ml)</th>
-        <th>Custo Total (R$)</th>
-        <th colspan="3">Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @subproducts.each do |sp| %>
+  <%= form_with url: subproducts_path, method: :get,
+                data: { controller: "autosubmit", turbo_frame: "subproducts_table" } do %>
+    <%= text_field_tag :q, params[:q],
+          class: "form-control",
+          placeholder: "Digite o nome de algum subproduto...",
+          data: { action: "input->autosubmit#submit" } %>
+    <button type="submit" hidden></button>
+  <% end %>
+
+  <%= turbo_frame_tag "subproducts_table" do %>
+    <table class="index-table index-table--bordered">
+      <thead>
         <tr>
-          <td><%= sp.name %></td>
-          <td><%= sp.subproduct_compositions.sum(&:quantity_for_a_unit) %></td>
-          <td>R$ <%= number_with_precision(sp.total_composition_cost, precision: 2) %></td>
-          <td class="cell-actions">
-            <%= link_to "Ver", subproduct_path(sp), class: "action-button" %>
-          </td>
-          <td class="cell-actions">
-            <%= link_to "Editar", edit_subproduct_path(sp), class: "action-button" %>
-          </td>
-          <td class="cell-actions">
-            <%= button_to "Excluir",
-                          subproduct_path(sp),
-                          method: :delete,
-                          data: { turbo_confirm: "Tem certeza?" },
-                          class: "action-button" %>
-          </td>
+          <% headers = [
+              ["subproducts.name", "Nome"],
+              ["subproducts.weight_in_grams", "Peso Total (g/ml)"],
+              ["subproducts.cost", "Custo Total (R$)"]
+            ] %>
+
+            <% headers.each do |column, title| %>
+              <% current = params[:sort] == column %>
+              <% dir     = current && params[:direction] == "asc" ? "asc" : "desc" %>
+              <% th_css  = current ? "sorted #{dir}" : nil %>
+
+            <th class="<%= th_css %>">
+              <%= link_to title,
+                    url_for(
+                      request.query_parameters
+                            .merge(sort: column,
+                                    direction: (current && dir == "asc" ? "desc" : "asc"),
+                                    page: nil)
+                    ) %>
+            </th>
+          <% end %>
+
+          <th colspan="3">Ações</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% @subproducts.each do |sp| %>
+          <tr>
+            <td><%= sp.name %></td>
+            <td><%= sp.subproduct_compositions.sum(&:quantity_for_a_unit) %></td>
+            <td>R$ <%= number_with_precision(sp.total_composition_cost, precision: 2) %></td>
+            <td class="cell-actions">
+              <%= link_to "Ver", subproduct_path(sp), class: "action-button" %>
+            </td>
+            <td class="cell-actions">
+              <%= link_to "Editar", edit_subproduct_path(sp), class: "action-button" %>
+            </td>
+            <td class="cell-actions">
+              <%= button_to "Excluir",
+                            subproduct_path(sp),
+                            method: :delete,
+                            data: { turbo_confirm: "Tem certeza?" },
+                            class: "action-button" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+
+  <% if action_name == "index" %>
+    <%= will_paginate @subproducts,
+          previous_label: '<i class="bi bi-arrow-left"></i> Anterior'.html_safe,
+          next_label: 'Próximo <i class="bi bi-arrow-right"></i>'.html_safe %>
+  <% end %>
 </main>

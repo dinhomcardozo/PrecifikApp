@@ -1,6 +1,16 @@
 <main class="index-container">
   <h1 class="title"><%= @subproduct.name %></h1>
 
+  <div>
+    <div class="custom-label">
+      <%= link_to "Voltar", subproducts_path, class: "action-button" %> | 
+      <%= link_to "[+] Novo Subproduto",
+                new_subproduct_path,
+                class: "standart-button",
+                data: { turbo_frame: "_top" } %>
+    </div>
+  </div>
+
   <p><strong>Peso Total:</strong> <%= @subproduct.subproduct_compositions.sum(&:quantity_for_a_unit) %> g</p>
   <p><strong>Custo Total:</strong> R$ <%= number_with_precision(@subproduct.subproduct_compositions.sum(&:quantity_cost), precision: 2) %></p>
 
@@ -23,8 +33,6 @@
       <% end %>
     </tbody>
   </table>
-
-  <%= link_to "Voltar", subproducts_path, class: "action-button" %>
 
   <hr>
 

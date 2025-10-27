@@ -95,5 +95,10 @@ class Subproduct < ApplicationRecord
       prod.compute_all_pricing_and_weights
       prod.save!(validate: false, touch: true)
     end
+
+    scope :search_name, ->(q) { where("subproducts.name ILIKE ?", "%#{q}%") if q.present? }
+    scope :by_name,     ->(dir) { order(name: dir) if dir.in?(%w[asc desc]) }
+    scope :by_cost,     ->(dir) { order(cost: dir) if dir.in?(%w[asc desc]) }
+    scope :by_weight,   ->(dir) { order(weight_in_grams: dir) if dir.in?(%w[asc desc]) }
   end
 end

@@ -8,6 +8,8 @@ class SubproductComposition < ApplicationRecord
   before_validation :set_default_quantity
   before_save       :compute_quantity_cost
   before_save :compute_nutrients
+  before_save :compute_quantity_cost
+  before_save :compute_require_units
   after_save        :update_parent_totals
   after_destroy     :update_parent_totals
   after_save :update_subproduct_totals
@@ -44,6 +46,11 @@ class SubproductComposition < ApplicationRecord
       sugars:         subproduct.subproduct_compositions.sum(:sugars),
       sodium:         subproduct.subproduct_compositions.sum(:sodium)
     )
+  end
+
+  def compute_require_units
+    return unless input&.weight.to_f > 0
+    self.require_units = (quantity_for_a_unit.to_f / input.weight.to_f).round(2)
   end
 
   private

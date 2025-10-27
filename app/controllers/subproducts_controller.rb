@@ -9,6 +9,15 @@ class SubproductsController < Clients::AuthenticatedController
 
   def index
     @subproducts = Subproduct.includes(:subproduct_compositions).all
+
+    # search, order and paginate
+    if params[:q].present?
+      @subproducts = @subproducts.where("subproducts.name ILIKE ?", "%#{params[:q]}%")
+    end
+
+    @subproducts = @subproducts.order("#{sort_column} #{sort_direction}")
+
+    @subproducts = @subproducts.paginate(page: params[:page])
   end
 
   def new
@@ -23,7 +32,7 @@ class SubproductsController < Clients::AuthenticatedController
   def create
     @subproduct = Subproduct.new(subproduct_params)
     if @subproduct.save
-      redirect_to subproducts_path, notice: "Criado"
+      redirect_to subproducts_path, notice: "Subproduto criado"
     else
       render :new, status: :unprocessable_entity
     end
@@ -31,7 +40,7 @@ class SubproductsController < Clients::AuthenticatedController
 
   def update
     if @subproduct.update(subproduct_params)
-      redirect_to subproducts_path, notice: "Atualizado"
+      redirect_to subproducts_path, notice: "Subproduto atualizado"
     else
       render :edit, status: :unprocessable_entity
     end
@@ -79,6 +88,22 @@ class SubproductsController < Clients::AuthenticatedController
 
   private
 
+  def sortable_columns
+    %w[
+      subproducts.name
+      subproducts.cost
+      subproducts.weight_in_grams
+    ]
+  end
+
+  def sort_column
+    sortable_columns.include?(params[:sort]) ? params[:sort] : "subproducts.created_at"
+  end
+
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+  end
+  
   def set_subproduct
     @subproduct = Subproduct.find(params[:id])
   end
@@ -87,7 +112,7 @@ class SubproductsController < Clients::AuthenticatedController
     params.require(:subproduct).permit(
       :name, :brand_id, :weight_loss,
       subproduct_compositions_attributes: %i[
-        id input_id quantity_for_a_unit quantity_cost _destroy
+        id input_id quantity_for_a_unit quantity_cost require_units _destroy
       ]
     )
   end
