@@ -81,7 +81,8 @@
 
         <div data-action="click->nested-form#blockedField" class="checkbox">
           <%= f.check_box :resalable_product,
-                disabled: f.object.used_in_subproducts? %>
+                disabled: f.object.used_in_subproducts?,
+                data: { action: (f.object.used_in_subproducts? ? "click->nested-form#blockedField" : "resalable#toggle") } %>
           <%= f.label :resalable_product, "Produto Pronto para Revenda?", class: "custom-label" %>
         </div>
       </div>

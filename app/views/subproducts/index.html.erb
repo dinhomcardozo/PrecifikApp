@@ -43,7 +43,7 @@
             </th>
           <% end %>
 
-          <th colspan="3">Ações</th>
+          <th colspan="2">Ações</th>
         </tr>
       </thead>
       <tbody>
@@ -53,21 +53,18 @@
             <td><%= sp.subproduct_compositions.sum(&:quantity_for_a_unit) %></td>
             <td>R$ <%= number_with_precision(sp.total_composition_cost, precision: 2) %></td>
             <td class="cell-actions">
-              <%= link_to "Ver", subproduct_path(sp),
-                          class: "action-button",
-                          data: { turbo_frame: "_top" } %>
+              <%= link_to subproduct_path(sp),
+                          class: "link-icon-actions",
+                          data: { turbo_frame: "_top" } do %>
+                <%= image_tag "icons/ver.png", alt: "Ver", title: "Ver", class: "action-icon" %>
+              <% end %>
             </td>
             <td class="cell-actions">
-              <%= link_to "Editar", edit_subproduct_path(sp),
-                          class: "action-button",
-                          data: { turbo_frame: "_top" } %>
-            </td>
-            <td class="cell-actions">
-              <%= button_to "Excluir",
-                            subproduct_path(sp),
-                            method: :delete,
-                            data: { turbo_confirm: "Tem certeza?" },
-                            class: "action-button" %>
+              <%= link_to edit_subproduct_path(sp),
+                          class: "link-icon-actions",
+                          data: { turbo_frame: "_top" } do %>
+                <%= image_tag "icons/editar.png", alt: "Editar", title: "Editar", class: "action-icon" %>
+              <% end %>
             </td>
           </tr>
         <% end %>

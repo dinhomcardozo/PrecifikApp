@@ -1,6 +1,6 @@
 class Subproduct < ApplicationRecord
   default_scope { where(client_id: Current.user_client.client_id) if Current.user_client }
-  self.per_page = 20
+  self.per_page = 10
   
   belongs_to :brand, optional: true
   has_many :subproduct_compositions, inverse_of: :subproduct, dependent: :destroy

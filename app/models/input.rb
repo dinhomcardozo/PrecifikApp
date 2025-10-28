@@ -1,5 +1,7 @@
 class Input < ApplicationRecord
   default_scope { where(client_id: Current.user_client.client_id) if Current.user_client }
+  self.per_page = 10
+
   before_save :set_nutritional_defaults
   belongs_to :supplier
   belongs_to :input_type
@@ -13,8 +15,6 @@ class Input < ApplicationRecord
 
   has_many :service_subproducts, through: :services, class_name: 'Services::ServiceSubproduct'
   has_many :subproducts_via_services, through: :service_subproducts, source: :subproduct
-
-  self.per_page = 20
   
   has_many :subproduct_compositions, foreign_key: :input_id, inverse_of: :input
   has_many :subproducts, through: :subproduct_compositions
@@ -114,6 +114,11 @@ class Input < ApplicationRecord
     self.selling_price = final_cost + (final_cost * profit_margin.to_f / 100.0)
     self.real_profit_margin = selling_price > 0 ? ((selling_price - final_cost) / selling_price) * 100 : 0
   end
+
+  scope :search_name, ->(q) { where("inputs.name ILIKE ?", "%#{q}%") if q.present? }
+  scope :by_name,     ->(dir) { order(name: dir) if dir.in?(%w[asc desc]) }
+  scope :by_cost,     ->(dir) { order(cost: dir) if dir.in?(%w[asc desc]) }
+  scope :by_weight,   ->(dir) { order(weight: dir) if dir.in?(%w[asc desc]) }
 
   def propagate_weight_change
     subproduct_compositions.find_each do |composition|

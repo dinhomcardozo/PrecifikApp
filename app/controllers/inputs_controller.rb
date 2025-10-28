@@ -8,6 +8,15 @@ class InputsController < Clients::AuthenticatedController
 
   def index
     @inputs = Input.all.includes(:supplier, :input_type)
+
+    # search, order and paginate
+    if params[:q].present?
+      @inputs = @inputs.where("inputs.name ILIKE ?", "%#{params[:q]}%")
+    end
+
+    @inputs = @inputs.order("#{sort_column} #{sort_direction}")
+
+    @inputs = @inputs.paginate(page: params[:page])
   end
 
   def show
@@ -94,6 +103,22 @@ class InputsController < Clients::AuthenticatedController
   end
 
   private
+
+  def sortable_columns
+    %w[
+      inputs.name
+      inputs.cost
+      inputs.weight
+    ]
+  end
+
+  def sort_column
+    sortable_columns.include?(params[:sort]) ? params[:sort] : "inputs.created_at"
+  end
+
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+  end
 
   def input_params
     params.require(:input).permit(
