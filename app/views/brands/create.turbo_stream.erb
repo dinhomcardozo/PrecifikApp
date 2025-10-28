@@ -1,3 +1,4 @@
+<%# Fluxo do modal (Inputs) - adiciona opção no select e fecha modal %>
 <turbo-stream action="append" target="brands_select">
   <template>
     <option value="<%= @brand.id %>"><%= @brand.name %></option>
@@ -14,5 +15,18 @@
         detail: { id: "<%= @brand.id %>", name: "<%= @brand.name %>" }
       }));
     </script>
+  </template>
+</turbo-stream>
+
+<%# Fluxo da página de Marcas - adiciona linha na tabela %>
+<turbo-stream action="append" target="brands_table_body">
+  <template>
+    <tr id="<%= dom_id(@brand) %>">
+      <td><%= @brand.id %></td>
+      <td><%= @brand.name %></td>
+      <td>
+        <%= link_to "Editar", edit_brand_path(@brand), class: "action-button" %>
+      </td>
+    </tr>
   </template>
 </turbo-stream>

@@ -17,17 +17,10 @@ class BrandsController < Clients::AuthenticatedController
   end
 
   def create
-    @brand = Brand.find_or_initialize_by(
-      name: params[:brand][:name],
-      client_id: Current.user_client.client_id
-    )
-    @brand.main_brand = params[:brand][:main_brand]
+    @brand = Brand.new(brand_params.merge(client_id: Current.user_client.client_id))
 
     if @brand.save
-      respond_to do |format|
-        format.turbo_stream
-        format.html { redirect_back fallback_location: inputs_path, notice: "Marca criada com sucesso." }
-      end
+      redirect_to brands_path, notice: "Marca criada com sucesso."
     else
       flash.now[:alert] = @brand.errors.full_messages.to_sentence
       render :new, status: :unprocessable_entity

@@ -1,12 +1,15 @@
 class Input < ApplicationRecord
   default_scope { where(client_id: Current.user_client.client_id) if Current.user_client }
+  scope :resalable, -> { where(resalable_product: true) }
+  scope :by_weight_units, -> { where(unit_of_measurement: ["g", "mL"]) }
+  scope :by_unit, ->(unit) { where(unit_of_measurement: unit) }
+  
   self.per_page = 10
 
   before_save :set_nutritional_defaults
   belongs_to :supplier
   belongs_to :input_type
   belongs_to :brand, optional: false
-  scope :resalable, -> { where(resalable_product: true) }
   before_save :calculate_resalable_fields, if: :resalable_product?
 
   # Serviços diretos (via service_inputs)

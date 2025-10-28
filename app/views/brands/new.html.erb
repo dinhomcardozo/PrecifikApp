@@ -1,5 +1,7 @@
 <main class="index-container">
-    <h1>Nova Marca</h1>
+  <h1>Nova Marca</h1>
 
-    <%= render 'form', brand: @brand %>
+  <%= render "form", brand: @brand %>
+
+  <%= link_to "Voltar", brands_path, class: "action-button" %>
 </main>

@@ -1,0 +1,54 @@
+<!-- app/views/subproducts/_subproduct_compositions_fields_un.html.erb -->
+<tr>
+  <!-- Unidades Necessárias (campo editável) -->
+  <td>
+    <%= f.collection_select :input_id,
+          Input.where(unit_of_measurement: "un").order(:name),
+          :id,
+          :name,
+          { include_blank: "Escolha insumo" },
+          class: "form-select",
+          data: { action: "change->nested-form#updateCost" } %>
+  </td>
+
+  <!-- Unidades Necessárias (campo editável) -->
+  <td>
+    <%= f.number_field :require_units,
+          class: "form-control",
+          step: 1,
+          min: 1,
+          inputmode: "numeric", 
+          pattern: "[0-9]*",
+          data: { action: "input->nested-form#updateCost",
+                  nested_form_target: "requireUnitsField" } %>
+  </td>
+
+  <!-- Custo calculado -->
+  <td data-nested-form-target="costDisplay" class="cost-display">
+    <% qc = f.object.quantity_cost.to_f %>
+    <%= qc.positive? ? number_with_precision(qc, precision: 2) : "-" %>
+  </td>
+
+  <!-- Quantidade total em peso (g) calculada -->
+  <td data-nested-form-target="quantityDisplay" class="quantity-display">
+    <% qf = f.object.quantity_for_a_unit.to_f %>
+    <%= qf.positive? ? number_with_precision(qf, precision: 2) : "-" %>
+  </td>
+
+  <!-- Ações -->
+  <td>
+    <!-- hidden: preenchido via Stimulus -->
+    <%= f.hidden_field :quantity_for_a_unit,
+          value: f.object.quantity_for_a_unit,
+          data: { nested_form_target: "unitQuantityInput" } %>
+
+    <%= f.hidden_field :quantity_cost,
+          value: f.object.quantity_cost,
+          data: { nested_form_target: "quantityCostField" } %>
+
+    <%= f.hidden_field :_destroy %>
+    <%= link_to "Remover", "#",
+                class: "action-button",
+                data: { action: "click->nested-form#removeField", turbo: false } %>
+  </td>
+</tr>

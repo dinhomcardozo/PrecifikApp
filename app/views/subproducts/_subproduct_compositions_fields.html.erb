@@ -1,34 +1,47 @@
 <!-- app/views/subproducts/_subproduct_compositions_fields.html.erb -->
 <tr>
+  <!-- Insumo -->
   <td>
-    <%= f.collection_select :input_id, Input.order(:name), :id, :name,
-                            { include_blank: "Escolha insumo" },
-                            class: "form-select",
-                            data: { action: "change->nested-form#updateCost" } %>
+    <%= f.collection_select :input_id,
+          Input.by_weight_units.order(:name),
+          :id,
+          :name,
+          { include_blank: "Escolha insumo" },
+          class: "form-select",
+          data: { action: "change->nested-form#updateCost" } %>
   </td>
+
+  <!-- Quantidade em g/mL (campo editável) -->
   <td>
     <%= f.number_field :quantity_for_a_unit,
           class: "form-control",
           step: :any,
+          min: 0,
           data: { action: "input->nested-form#updateCost",
-                  nested_form_target: "quantityInput" } %>
+                  nested_form_target: "weightQuantityInput" } %>
 
     <%= f.hidden_field :quantity_cost,
-                      value: f.object.quantity_cost,
-                      data: { nested_form_target: "quantityCostField" } %>
+          value: f.object.quantity_cost,
+          data: { nested_form_target: "quantityCostField" } %>
 
-    <%= hidden_field_tag "subproduct_composition[require_units]", f.object.require_units,
+    <%= f.hidden_field :require_units,
+          value: f.object.require_units,
           data: { nested_form_target: "requireUnitsField" } %>
   </td>
+
+  <!-- Custo calculado -->
   <td data-nested-form-target="costDisplay" class="cost-display">
     <% qc = f.object.quantity_cost.to_f %>
     <%= qc.positive? ? number_with_precision(qc, precision: 2) : "-" %>
   </td>
 
+  <!-- Unidades necessárias calculadas -->
   <td data-nested-form-target="requireUnitsDisplay" class="require-units-display">
     <% ru = f.object.require_units %>
     <%= ru.present? ? number_with_precision(ru, precision: 2) : "-" %>
   </td>
+
+  <!-- Ações -->
   <td>
     <%= f.hidden_field :_destroy %>
     <%= link_to "Remover", "#",

@@ -11,6 +11,13 @@
                   edit_subproduct_path(@subproduct),
                   class: "action-button",
                   data: { turbo_frame: "_top" } %>
+      <% if @products_count.to_i.zero? && @services_count.to_i.zero? %> |
+        <%= link_to "Excluir",
+                    subproduct_path(@subproduct),
+                    method: :delete,
+                    data: { turbo_confirm: "Tem certeza que deseja excluir este subproduto?" },
+                    class: "action-button" %>
+      <% end %>
     </div>
   </div>
 
@@ -23,6 +30,7 @@
       <tr>
         <th>Insumo</th>
         <th>Quantidade (g)</th>
+        <th>Unidades Necessárias</th>
         <th>Custo (R$)</th>
       </tr>
     </thead>
@@ -31,6 +39,7 @@
         <tr>
           <td><%= comp.input.name %></td>
           <td><%= comp.quantity_for_a_unit %> g</td>
+          <td><%= comp.require_units.present? ? number_with_precision(comp.require_units, precision: 2) : "-" %></td>
           <td>R$ <%= number_with_precision(comp.quantity_cost, precision: 2) %></td>
         </tr>
       <% end %>

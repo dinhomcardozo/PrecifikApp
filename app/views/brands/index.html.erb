@@ -1,6 +1,8 @@
 <main class="index-container">
   <h1>Marcas</h1>
 
+  <%= link_to "Nova Marca", new_brand_path, class: "standart-button" %>
+
   <table class="index-table index-table--bordered">
     <thead>
       <tr>
@@ -9,18 +11,24 @@
         <th>Ações</th>
       </tr>
     </thead>
-    <tbody>
-      <% @brands.each do |brand| %>
-        <tr>
-          <td><%= brand.id %></td>
-          <td><%= brand.name %></td>
-          <td>
-            <%= link_to "Editar", edit_brand_path(brand), class: "action-button" %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+      <tbody id="brands_table_body">
+        <% @brands.each do |brand| %>
+          <tr id="<%= dom_id(brand) %>">
+            <td><%= brand.id %></td>
+            <td><%= brand.name %></td>
+            <td>
+              <%= link_to "Editar", edit_brand_path(brand), class: "action-button" %>
 
-  <%= link_to "Nova Marca", new_brand_path, class: "standart-button" %>
+              <% unless brand.in_use? %>
+                <%= link_to "Excluir",
+                            brand_path(brand),
+                            method: :delete,
+                            data: { confirm: "Tem certeza que deseja excluir esta marca?" },
+                            class: "action-button danger" %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+  </table>
 </main>

@@ -6,6 +6,7 @@ class SubproductComposition < ApplicationRecord
 
   # antes de salvar linha, calcula e armazena quantity_cost
   before_validation :set_default_quantity
+  before_validation :calculate_values
   before_save       :compute_quantity_cost
   before_save :compute_nutrients
   before_save :compute_quantity_cost
@@ -51,6 +52,24 @@ class SubproductComposition < ApplicationRecord
   def compute_require_units
     return unless input&.weight.to_f > 0
     self.require_units = (quantity_for_a_unit.to_f / input.weight.to_f).round(2)
+  end
+
+  def calculate_values
+    return unless input.present?
+
+    if input.unit_of_measurement == "un"
+      # quantity_for_a_unit = peso do insumo * unidades requeridas
+      self.quantity_for_a_unit = input.weight.to_f * require_units.to_i
+      # custo = custo unitário * unidades requeridas
+      self.quantity_cost = input.cost.to_f * require_units.to_i
+    else
+      # insumos em peso: quantity_for_a_unit já vem do form
+      # custo = (custo / peso) * quantidade
+      if quantity_for_a_unit.present?
+        unit_cost = input.cost.to_f / (input.weight.to_f.nonzero? || 1)
+        self.quantity_cost = unit_cost * quantity_for_a_unit.to_f
+      end
+    end
   end
 
   private

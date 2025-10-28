@@ -9,4 +9,8 @@ class Brand < ApplicationRecord
     validates :name, presence: true, uniqueness: { scope: :client_id }
 
     scope :main_brands, -> { where(main_brand: true) }
+
+    def in_use?
+      inputs.exists? || subproducts.exists? || products.exists?
+    end
 end

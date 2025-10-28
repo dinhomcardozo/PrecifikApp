@@ -1,0 +1,11 @@
+<turbo-stream action="replace" target="<%= dom_id(@brand) %>">
+  <template>
+    <tr id="<%= dom_id(@brand) %>">
+      <td><%= @brand.id %></td>
+      <td><%= @brand.name %></td>
+      <td>
+        <%= link_to "Editar", edit_brand_path(@brand), class: "action-button" %>
+      </td>
+    </tr>
+  </template>
+</turbo-stream>

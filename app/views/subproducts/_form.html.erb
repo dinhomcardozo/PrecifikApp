@@ -8,44 +8,104 @@
         <%= f.text_field :name, class: "form-control" %>
       </div>
 
-    <h4 class="subtitle">Composição</h4>
-    <div class="custom-label" id="subproduct_total_cost">
-      Custo Total: R$ <%= number_with_precision(subproduct.total_composition_cost, precision: 2) %>
-    </div>
-    <div>                           
-      <table class="index-table index-table--bordered" >
-        <thead>
-          <tr>
-            <th class="custom-field">Insumo</th>
-            <th class="custom-field">Quantidade (g)</th>
-            <th class="custom-field">Custo (R$)</th>
-            <th class="custom-field">Unidades Necessárias (un)</th>
-            <th class="custom-field">Ações</th>
-          </tr>
-        </thead>
-          <tbody data-nested-form-target="container">
-            <%= f.fields_for :subproduct_compositions do |ff| %>
-              <%= render "subproducts/subproduct_compositions_fields", f: ff %>
+    <% if Input.where(client_id: Current.user_client.client_id, unit_of_measurement: ["g","mL"]).exists? %>
+      <h4 class="subtitle">Composição de Insumos por Peso (g/mL)</h4>
+        <div class="custom-label" id="subproduct_total_cost_weight">
+          Custo Total: R$ <%= number_with_precision(
+            subproduct.subproduct_compositions
+                      .joins(:input)
+                      .where(inputs: { unit_of_measurement: ["g","mL"] })
+                      .sum(:quantity_cost), precision: 2) %>
+        </div>
+      <div>                           
+        <table class="index-table index-table--bordered">
+          <thead>
+            <tr>
+              <th class="custom-field">Insumo (g/mL)</th>
+              <th class="custom-field">Quantidade (g/mL)</th>
+              <th class="custom-field">Custo (R$)</th>
+              <th class="custom-field">Unidades Necessárias (un)</th>
+              <th class="custom-field">Ações</th>
+            </tr>
+          </thead>
+            <tbody data-nested-form-target="weightContainer">
+              <%= f.fields_for :subproduct_compositions, @subproduct.subproduct_compositions.joins(:input).where(inputs: { unit_of_measurement: ["g","mL"] }) do |ff| %>
+                <%= render "subproducts/subproduct_compositions_fields", f: ff %>
+              <% end %>
+            </tbody>
+        </table>
+
+        <!-- template escondido -->
+        <template id="composition-fields-template-weight">
+          <%= f.fields_for :subproduct_compositions,
+                          SubproductComposition.new,
+                          child_index: "NEW_RECORD" do |ff| %>
+            <%= render "subproducts/subproduct_compositions_fields", f: ff %>
+          <% end %>
+        </template>
+      </div>
+
+      <a href="#"
+        class="action-button"
+        data-turbo="false"
+        data-action="click->nested-form#addField"
+        data-template-id="composition-fields-template-weight"
+        data-container-target="weightContainer">
+        Adicionar Insumo (g/mL)
+      </a>
+    <% end %>
+
+    <hr>
+
+    <div class="space">
+
+    <!-- ================= UNIDADES (un) ================= -->
+    <% if Input.where(client_id: Current.user_client.client_id, unit_of_measurement: "un").exists? %>
+      <h4 class="subtitle">Composição de Insumos em Unidades (un)</h4>
+      <div class="custom-label" id="subproduct_total_cost_units">
+        Custo Total: R$ <%= number_with_precision(
+          subproduct.subproduct_compositions
+                    .joins(:input)
+                    .where(inputs: { unit_of_measurement: "un" })
+                    .sum(:quantity_cost), precision: 2) %>
+      </div>
+      <div>                           
+        <table class="index-table index-table--bordered">
+          <thead>
+            <tr>
+              <th class="custom-field">Insumo (un)</th>
+              <th class="custom-field">Unidades Necessárias</th>
+              <th class="custom-field">Custo (R$)</th>
+              <th class="custom-field">Quantidade (g/mL)</th>
+              <th class="custom-field">Ações</th>
+            </tr>
+          </thead>
+          <tbody data-nested-form-target="unitContainer">
+            <%= f.fields_for :subproduct_compositions, @subproduct.subproduct_compositions.joins(:input).where(inputs: { unit_of_measurement: "un" }) do |ff| %>
+              <%= render "subproducts/subproduct_compositions_fields_un", f: ff %>
             <% end %>
           </tbody>
-      </table>
+        </table>
+
         <!-- template escondido -->
-      <template id="composition-fields-template">
-        <%= f.fields_for :subproduct_compositions,
-                        SubproductComposition.new,
-                        child_index: "NEW_RECORD" do |ff| %>
-          <%= render "subproducts/subproduct_compositions_fields", f: ff %>
-        <% end %>
-      </template>
-    </div>
-                          
-    <a href="#"
-       class="action-button"
-       data-turbo="false"
-       data-action="click->nested-form#addField"
-       data-template-id="composition-fields-template">
-      Adicionar Insumo
-    </a>
+        <template id="composition-fields-template-un">
+          <%= f.fields_for :subproduct_compositions,
+                          SubproductComposition.new,
+                          child_index: "NEW_RECORD" do |ff| %>
+            <%= render "subproducts/subproduct_compositions_fields_un", f: ff %>
+          <% end %>
+        </template>
+      </div>
+
+      <a href="#"
+        class="action-button"
+        data-turbo="false"
+        data-action="click->nested-form#addField"
+        data-template-id="composition-fields-template-un"
+        data-container-target="unitContainer">
+        Adicionar Insumo (un)
+      </a>
+    <% end %>
 
 <br>
     <div class="mt-4">

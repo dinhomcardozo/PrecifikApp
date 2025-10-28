@@ -1,4 +1,4 @@
-<%= form_with(model: brand, local: true) do |f| %>
+<%= form_with(model: @brand, local: true) do |f| %>
   <div class="mb-3">
     <%= f.label :name, "Nome da Marca" %>
     <%= f.text_field :name, class: "form-control" %>
@@ -10,6 +10,6 @@
   </div>
   
   <div>
-    <%= f.submit "Criar Marca", class: "standart-button" %>
+    <%= f.submit "Salvar", class: "standart-button" %>
   </div>
 <% end %>
