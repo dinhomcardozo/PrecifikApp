@@ -8,9 +8,10 @@
   </td>
   <td>
     <%= f.number_field :quantity_for_a_unit,
-                      class: "form-control",
-                      step: :any,
-                      data: { action: "input->nested-form#updateCost" } %>
+          class: "form-control",
+          step: :any,
+          data: { action: "input->nested-form#updateCost",
+                  nested_form_target: "quantityInput" } %>
 
     <%= f.hidden_field :quantity_cost,
                       value: f.object.quantity_cost,

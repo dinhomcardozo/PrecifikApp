@@ -2,7 +2,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static targets = ["container", "quantityCostField", "costDisplay", "requireUnitsDisplay"];
+  static targets = ["container", "quantityCostField", "costDisplay", "requireUnitsDisplay", "requireUnitsField"];
 
   connect() {
     console.log("NestedForm conectado, somando itens existentes");
@@ -41,7 +41,7 @@ export default class extends Controller {
   updateCost(e) {
   const row         = e.target.closest("tr");
   const select      = row.querySelector("select");
-  const qtyInput    = row.querySelector('input[type="number"]');
+  const qtyInput = row.querySelector("[data-nested-form-target='quantityInput']");
   const costDisplay = row.querySelector("[data-nested-form-target='costDisplay']");
   const hiddenQc    = row.querySelector("[data-nested-form-target='quantityCostField']");
   const hiddenRu    = row.querySelector("[data-nested-form-target='requireUnitsField']"); // 🔑 aqui
@@ -98,5 +98,10 @@ export default class extends Controller {
     if (totalElem) {
       totalElem.textContent = `Custo Total: R$ ${sum.toFixed(2)}`;
     }
+  }
+
+  blockedField(e) {
+    e.preventDefault();
+    alert("Ops! Tarde demais. Este insumo já está sendo utilizado por subprodutos. É possível editar seu peso, nome, fornecedor e outras informações, mas não pode mudar sua unidade de medida ou alterar seu status de um produto para revenda. Crie outro insumo se necessário.");
   }
 }

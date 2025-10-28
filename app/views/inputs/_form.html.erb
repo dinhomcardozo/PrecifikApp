@@ -68,16 +68,20 @@
                 data: { resalable_target: "cost", action: "input->resalable#recalculate" } %>
         </div>
 
-        <div class="field-inline">
+        <div data-action="click->nested-form#blockedField" class="field-inline">
           <%= f.label :unit_of_measurement, "Unidade de Venda", class: "custom-label" %>
           <%= f.select :unit_of_measurement, ['g', 'mL', 'un', 'm²'], {},
                 class: "form-select",
-                data: { resalable_target: "unitField", final_cost: f.object.cost.to_f } %>
+                disabled: f.object.used_in_subproducts?,
+                data: {
+                  resalable_target: "unitField",
+                  final_cost: f.object.cost.to_f
+                } %>
         </div>
 
-        <div class="checkbox">
+        <div data-action="click->nested-form#blockedField" class="checkbox">
           <%= f.check_box :resalable_product,
-                data: { action: "resalable#toggle" } %>
+                disabled: f.object.used_in_subproducts? %>
           <%= f.label :resalable_product, "Produto Pronto para Revenda?", class: "custom-label" %>
         </div>
       </div>

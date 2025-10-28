@@ -24,6 +24,7 @@ class Input < ApplicationRecord
 
   after_save :update_channel_prices, if: :resalable_product?
   after_create :ensure_channel_inputs, if: :resalable_product?
+  after_update :propagate_weight_change, if: :saved_change_to_weight?
 
   has_one_attached :image
 
@@ -85,6 +86,10 @@ class Input < ApplicationRecord
     end
   end
 
+  def used_in_subproducts?
+    subproducts.exists?
+  end
+
   private
 
   def log_cost_change
@@ -108,5 +113,13 @@ class Input < ApplicationRecord
     self.final_cost = cost.to_f
     self.selling_price = final_cost + (final_cost * profit_margin.to_f / 100.0)
     self.real_profit_margin = selling_price > 0 ? ((selling_price - final_cost) / selling_price) * 100 : 0
+  end
+
+  def propagate_weight_change
+    subproduct_compositions.find_each do |composition|
+      composition.update_columns(
+        quantity_for_a_unit: weight.to_f * composition.require_units.to_f
+      )
+    end
   end
 end
