@@ -1,0 +1,17 @@
+<!-- Template para Subproduct -->
+<template id="template-subproduct" data-product-composition-target="template">
+  <%= f.fields_for :product_subproducts, ProductSubproduct.new, child_index: "NEW_RECORD" do |ps| %>
+    <tr data-controller="composition-row" data-type="subproduct" data-new-record="true">
+      <td>
+        <%= ps.collection_select :subproduct_id,
+                    Subproduct.order(:name),
+                    :id, :name,
+                    { prompt: "Selecione Subproduto" },
+                    { class: "form-select",
+                        data: { action: "change->product-composition#renderSubproductFields" } },
+                    ->(s) { { "data-unit": s.unit_of_measurement } } %>
+      </td>
+      <td colspan="4">Selecione um subproduto…</td>
+    </tr>
+  <% end %>
+</template>

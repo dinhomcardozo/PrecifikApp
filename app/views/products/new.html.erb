@@ -1,5 +1,8 @@
-<%= turbo_frame_tag "product_steps" do %>
-  <%= render "steps",
-        product:    @product,
-        active_tab: (local_assigns[:active_tab] || params[:active_tab] || "config") %>
-<% end %>
+<!-- app/views/products/new.html.erb -->
+<main class="index-container">
+  <%= turbo_frame_tag "product_steps" do %>
+    <%= render "steps",
+          product:    @product,
+          active_tab: (local_assigns[:active_tab] || params[:active_tab] || "config") %>
+  <% end %>
+</main>

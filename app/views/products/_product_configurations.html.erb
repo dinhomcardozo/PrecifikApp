@@ -2,7 +2,8 @@
 <div>
   <h5 class="subtitle">1) Configurações do Produto</h5>
 </div>
-  <div class="row">
+
+<div class="row">
   <div>
     <%= f.label :description, "Descrição", class: "custom-label" %>
     <%= f.text_field :description, class: "form-control", required: true %>
@@ -32,8 +33,8 @@
     </div>
   </div>
 
-    <div class="col-md-6 mb-3">
-      <%= f.label :image, "Imagem", style: "display: block" %>
-      <%= f.file_field :image %>
-    </div>
+  <div class="col-md-6 mb-3">
+    <%= f.label :image, "Imagem", style: "display: block" %>
+    <%= f.file_field :image %>
+  </div>
 </div>

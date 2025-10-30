@@ -2,31 +2,120 @@
 <h5 class="subtitle">2) Composição do Produto</h5>
 
 <div data-controller="product-composition">
-  <button type="button"
-          class="action-button"
-          data-action="click->product-composition#addField">
-    Adicionar Linha
-  </button>
-  <br>
+  <div class="mb-3">
+    <%= render "products/add_subproduct_button" %>
+    <%= render "products/add_input_button" %>
+  </div>
 
-  <table>
+  <template id="template-subproduct" data-product-composition-target="template">
+    <%= f.fields_for :product_subproducts, ProductSubproduct.new, child_index: "NEW_RECORD" do |ps| %>
+      <tr data-controller="composition-row" data-type="subproduct" data-new-record="true">
+        <td>
+          <%= ps.collection_select :subproduct_id,
+                Subproduct.order(:name),
+                :id, :name,
+                { prompt: "Selecione Subproduto" },
+                { class: "form-select",
+                  data: { action: "change->product-composition#renderSubproductFields" } } %>
+        </td>
+        <td colspan="4">Selecione um subproduto…</td>
+      </tr>
+    <% end %>
+  </template>
+
+  <template id="template-input" data-product-composition-target="template">
+    <%= f.fields_for :product_subproducts, ProductSubproduct.new, child_index: "NEW_RECORD" do |ps| %>
+      <tr data-controller="composition-row" data-type="input" data-new-record="true">
+        <td>
+          <%= ps.collection_select :input_id,
+                Input.order(:name),
+                :id, :name,
+                { prompt: "Selecione Input" },
+                { class: "form-select",
+                  data: { action: "change->product-composition#renderInputFields" } } %>
+        </td>
+        <td colspan="4">Selecione um input…</td>
+      </tr>
+    <% end %>
+  </template>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Quantidade</th>
+        <th>Custo (R$)</th>
+        <th>Peso (g)</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+
     <tbody data-product-composition-target="list">
       <%= f.fields_for :product_subproducts do |ps| %>
-        <%= render partial: "products/product_composition_fields", locals: { f: ps } %>
+        <%# Escolha dinâmica da partial conforme tipo e unidade %>
+        <% if ps.object.subproduct.present? %>
+          <% unit = ps.object.subproduct.unit_of_measurement %>
+          <% if unit.in?(%w[g ml]) %>
+            <%= render "products/product_composition_weight", f: ps %>
+          <% elsif unit == "un" %>
+            <%= render "products/product_composition_unit", f: ps %>
+          <% elsif unit == "m2" %>
+            <%= render "products/product_composition_m2", f: ps %>
+          <% end %>
+        <% elsif ps.object.input.present? %>
+          <% unit = ps.object.input.unit_of_measurement %>
+          <% if unit.in?(%w[g ml]) %>
+            <%= render "products/product_input_composition_weight", f: ps %>
+          <% elsif unit == "un" %>
+            <%= render "products/product_input_composition_unit", f: ps %>
+          <% elsif unit == "m2" %>
+            <%= render "products/product_input_composition_m2", f: ps %>
+          <% end %>
+        <% end %>
       <% end %>
     </tbody>
   </table>
 
-  <template data-product-composition-target="template">
-    <%= f.fields_for :product_subproducts, ProductSubproduct.new,
-                     child_index: "NEW_RECORD" do |ps| %>
-      <%= render partial: "products/product_composition_fields", locals: { f: ps } %>
+  <%# Templates para adicionar novas linhas via Stimulus %>
+  <template data-product-composition-target="template" id="template-subproduct-weight">
+    <%= f.fields_for :product_subproducts, ProductSubproduct.new, child_index: "NEW_RECORD" do |ps| %>
+      <%= render "products/product_composition_weight", f: ps %>
     <% end %>
   </template>
 
-    <div class="row">
+  <template data-product-composition-target="template" id="template-subproduct-unit">
+    <%= f.fields_for :product_subproducts, ProductSubproduct.new, child_index: "NEW_RECORD" do |ps| %>
+      <%= render "products/product_composition_unit", f: ps %>
+    <% end %>
+  </template>
+
+  <template data-product-composition-target="template" id="template-subproduct-m2">
+    <%= f.fields_for :product_subproducts, ProductSubproduct.new, child_index: "NEW_RECORD" do |ps| %>
+      <%= render "products/product_composition_m2", f: ps %>
+    <% end %>
+  </template>
+
+  <template data-product-composition-target="template" id="template-input-weight">
+    <%= f.fields_for :product_subproducts, ProductSubproduct.new, child_index: "NEW_RECORD" do |ps| %>
+      <%= render "products/product_input_composition_weight", f: ps %>
+    <% end %>
+  </template>
+
+  <template data-product-composition-target="template" id="template-input-unit">
+    <%= f.fields_for :product_subproducts, ProductSubproduct.new, child_index: "NEW_RECORD" do |ps| %>
+      <%= render "products/product_input_composition_unit", f: ps %>
+    <% end %>
+  </template>
+
+  <template data-product-composition-target="template" id="template-input-m2">
+    <%= f.fields_for :product_subproducts, ProductSubproduct.new, child_index: "NEW_RECORD" do |ps| %>
+      <%= render "products/product_input_composition_m2", f: ps %>
+    <% end %>
+  </template>
+
+  <div class="row mt-3">
     <div class="col-md-3 mb-3">
-      <%= f.label :weight_loss, "Perda de Peso (%)", class: "custom-label"  %>
+      <%= f.label :weight_loss, "Perda de Peso (%)", class: "custom-label" %>
       <%= f.number_field :weight_loss,
             step: 0.01,
             class: "form-control",
@@ -37,7 +126,7 @@
     </div>
 
     <div class="col-md-3 mb-3">
-      <%= f.label :total_weight, "Peso Bruto (g)", class: "custom-label"  %>
+      <%= f.label :total_weight, "Peso Bruto (g)", class: "custom-label" %>
       <%= f.number_field :total_weight,
             readonly: true,
             class: "form-control",
@@ -45,11 +134,19 @@
     </div>
 
     <div class="col-md-3 mb-3">
-      <%= f.label :final_weight, "Peso Final (g)", class: "custom-label"  %>
+      <%= f.label :final_weight, "Peso Final (g)", class: "custom-label" %>
       <%= f.number_field :final_weight,
             readonly: true,
             class: "form-control",
             data: { product_composition_target: "finalWeight" } %>
+    </div>
+
+    <div class="col-md-3 mb-3">
+      <%= f.label :total_cost, "Custo Total (R$)", class: "custom-label" %>
+      <%= f.number_field :total_cost,
+            readonly: true,
+            class: "form-control",
+            value: @product.total_cost.to_f.round(2) %>
     </div>
   </div>
 </div>

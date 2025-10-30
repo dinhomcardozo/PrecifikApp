@@ -45,32 +45,13 @@
         Composição do Produto
       </a>
     </li>
-    <li class="nav-item">
-      <a href="#"
-        class="nav-link <%= "active" if active_tab == "pricing" %>"
-        data-tabs-target="link"
-        data-action="click->tabs#switch"
-        data-tabs-panel="panel-pricing">
-        Precificação
-      </a>
-    </li>
   </ul>
 
-
   <div class="mt-4 text-end">
-    <!-- Botão padrão Criar/Atualizar e Avançar -->
-    <%= f.submit @product.new_record? ? "Criar e Avançar →" : "Atualizar e Avançar →", 
-                class: "action-button" %>
-
-    <% if active_tab == "pricing" %>
-      <!-- Botão Finalizar -->
-      <%= f.submit "Finalizar",
-                  name: "finalize",
-                  class: "standart-button",
-                  data: { turbo_frame: "_top" } %>
-    <% end %>
+    <%= f.submit @product.new_record? ? "Criar Produto" : "Atualizar Produto", 
+                class: "action-button",
+                data: { turbo_frame: "_top" } %>
   </div>
-
 
   <div class="tab-content mt-3">
     <div id="panel-config"
@@ -78,15 +59,11 @@
          data-tabs-target="panel">
       <%= render "product_configurations", f: f %>
     </div>
+
     <div id="panel-composition"
          class="tab-pane <%= "active" if active_tab == "composition" %> d-none"
          data-tabs-target="panel">
       <%= render "product_composition", f: f %>
-    </div>
-    <div id="panel-pricing"
-         class="tab-pane <%= "active" if active_tab == "pricing" %> d-none"
-         data-tabs-target="panel">
-      <%= render "pricing", f: f %>
     </div>
   </div>
 <% end %>

@@ -1,0 +1,33 @@
+<tr data-controller="composition-row" data-type="subproduct" data-unit="un">
+  <td>
+    <%= f.collection_select :subproduct_id,
+          Subproduct.order(:name),
+          :id, :name,
+          { prompt: "Selecione Subproduto" },
+          class: "form-select" %>
+  </td>
+  <td>
+    <%= f.number_field :quantity,
+          step: 1,
+          placeholder: "Unidades",
+          class: "form-control",
+          data: { action: "input->composition-row#calculate" } %>
+  </td>
+  <td>
+    <%= f.number_field :cost,
+          step: "any",
+          readonly: true,
+          class: "form-control" %>
+  </td>
+  <td>
+    <%= f.number_field :weight,
+          step: "any",
+          readonly: true,
+          class: "form-control" %>
+  </td>
+  <td>
+    <%= f.hidden_field :_destroy, class: "destroy-flag" %>
+    <button type="button" class="mini-button"
+            data-action="composition-row#removeRow">Remover</button>
+  </td>
+</tr>

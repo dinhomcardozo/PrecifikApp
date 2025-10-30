@@ -174,16 +174,10 @@ class ProductsController < Clients::AuthenticatedController
       product_subproducts_attributes: %i[
         id
         subproduct_id
+        input_id
         quantity
         cost
         cost_per_gram_with_loss
-        _destroy
-      ],
-      product_tax_overrides_attributes: %i[
-        id
-        name
-        value
-        tax_type
         _destroy
       ]
     )
