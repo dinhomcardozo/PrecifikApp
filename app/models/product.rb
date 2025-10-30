@@ -60,7 +60,6 @@ class Product < ApplicationRecord
     total_qty = product_subproducts.sum { |ps| ps.quantity.to_f }
     pct_loss  = weight_loss.to_f.clamp(0, 100) / 100.0
 
-    # atribuições em memória, sem tocar o banco agora
     self.total_weight = total_qty.round(4)
     self.final_weight = (total_qty * (1 - pct_loss)).round(4)
 
@@ -70,7 +69,7 @@ class Product < ApplicationRecord
       total_cost_item = (cost_with_loss * ps.quantity.to_f).round(4)
 
       ps.cost_per_gram_with_loss = cost_with_loss
-      ps.cost                   = total_cost_item
+      ps.cost = total_cost_item
     end
   end
 
@@ -121,12 +120,27 @@ class Product < ApplicationRecord
       sodium: 0.0
     }
 
-    product_subproducts.includes(subproduct: :subproduct_compositions).each do |ps|
-      sub_sum = ps.subproduct.nutritional_summary
-      factor = ps.quantity.to_f / ps.subproduct.weight_in_grams.to_f
+    product_subproducts.includes(:subproduct, :input).each do |ps|
+      if ps.subproduct.present? && ps.subproduct.weight_in_grams.to_f > 0
+        # lógica atual para subproduto
+        sub_sum = ps.subproduct.nutritional_summary
+        factor  = ps.quantity.to_f / ps.subproduct.weight_in_grams.to_f
 
-      totals.each_key do |key|
-        totals[key] += sub_sum[key].to_f * factor
+        totals.each_key do |key|
+          totals[key] += sub_sum[key].to_f * factor
+        end
+
+      elsif ps.input.present?
+        # lógica para input direto
+        factor = ps.quantity.to_f / ps.input.base_weight.to_f if ps.input.base_weight.to_f > 0
+
+        totals[:calories]      += ps.input.calories.to_f      * factor
+        totals[:total_fat]     += ps.input.total_fat.to_f     * factor
+        totals[:protein]       += ps.input.protein.to_f       * factor
+        totals[:carbs]         += ps.input.carbs.to_f         * factor
+        totals[:dietary_fiber] += ps.input.dietary_fiber.to_f * factor
+        totals[:sugars]        += ps.input.sugars.to_f        * factor
+        totals[:sodium]        += ps.input.sodium.to_f        * factor
       end
     end
 
