@@ -2,7 +2,7 @@
   <h1 class="title"><%= @subproduct.name %></h1>
 
   <div>
-    <div class="custom-label">
+    <div class="inline-buttons">
       <%= link_to "Voltar",
                   subproducts_path,
                   class: "action-button",
@@ -12,11 +12,11 @@
                   class: "action-button",
                   data: { turbo_frame: "_top" } %>
       <% if @products_count.to_i.zero? && @services_count.to_i.zero? %> |
-        <%= link_to "Excluir",
+      <%= button_to "Excluir",
                     subproduct_path(@subproduct),
                     method: :delete,
-                    data: { turbo_confirm: "Tem certeza que deseja excluir este subproduto?" },
-                    class: "action-button" %>
+                    data: { confirm: "Tem certeza que deseja excluir este subproduto?" },
+                    class: "action-button danger" %>
       <% end %>
     </div>
   </div>

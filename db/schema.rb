@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_27_224441) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_30_164317) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -399,6 +399,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_27_224441) do
     t.decimal "sugars", precision: 10, scale: 2, default: "0.0", null: false
     t.decimal "sodium", precision: 10, scale: 2, default: "0.0", null: false
     t.float "quantity_with_loss"
+    t.bigint "input_id"
+    t.index ["input_id"], name: "index_product_subproducts_on_input_id"
     t.index ["product_id"], name: "index_product_subproducts_on_product_id"
     t.index ["subproduct_id"], name: "index_product_subproducts_on_subproduct_id"
   end
@@ -844,6 +846,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_27_224441) do
   add_foreign_key "product_portions", "products"
   add_foreign_key "product_portions", "taxes"
   add_foreign_key "product_subproducts", "clients", name: "fk_product_subproducts_client"
+  add_foreign_key "product_subproducts", "inputs"
   add_foreign_key "product_subproducts", "products"
   add_foreign_key "product_subproducts", "subproducts"
   add_foreign_key "production_simulations", "clients"

@@ -135,3 +135,15 @@
   background-color: #f0f0f0;
   font-weight: bold;
 }
+
+.inline-buttons form {
+  display: inline;       /* ou inline-block */
+  margin: 0;
+  padding: 0;
+}
+
+/* estiliza o botão para parecer igual ao link */
+.inline-buttons form .action-button {
+  display: inline-block;
+  margin: 0;
+}
