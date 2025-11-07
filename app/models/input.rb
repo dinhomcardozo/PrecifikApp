@@ -43,16 +43,32 @@ class Input < ApplicationRecord
   after_update_commit :log_cost_change, if: :saved_change_to_cost?
 
   def weight_in_grams
-      case unit_of_measurement
-      when 'kg' then weight * 1000
-      when 'g' then weight
-      when 'L' then weight * 1000
-      when 'mL' then weight
-      when 'un'  then weight
-      when 'm²' then weight
-      else
-      0
-      end
+    case unit_of_measurement
+    when 'kg' then weight * 1000
+    when 'g' then weight
+    when 'L' then weight * 1000
+    when 'mL' then weight
+    when 'un'  then weight
+    when 'm²' then weight
+    else
+    0
+    end
+  end
+
+  def unit_of_measurement
+    raw = read_attribute(:unit_of_measurement)
+    case raw.to_s.strip.downcase
+    when "m²", "m2"
+      "m2"
+    when "g", "grama"
+      "g"
+    when "ml"
+      "ml"
+    when "un", "unidade"
+      "un"
+    else
+      raw
+    end
   end
 
   def cost_per_gram

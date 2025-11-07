@@ -48,20 +48,20 @@
   </ul>
 
   <div class="mt-4 text-end">
-    <%= f.submit @product.new_record? ? "Criar Produto" : "Atualizar Produto", 
-                class: "action-button",
-                data: { turbo_frame: "_top" } %>
+    <%= f.submit "Salvar alterações",
+                class: "standart-button",
+                data: { turbo: true, turbo_frame: "_top" } %>
   </div>
 
   <div class="tab-content mt-3">
     <div id="panel-config"
-         class="tab-pane <%= "active" if active_tab == "config" %> d-flex"
+         class="tab-pane <%= active_tab == "config" ? "active d-flex" : "d-none" %>"
          data-tabs-target="panel">
       <%= render "product_configurations", f: f %>
     </div>
 
     <div id="panel-composition"
-         class="tab-pane <%= "active" if active_tab == "composition" %> d-none"
+         class="tab-pane <%= active_tab == "composition" ? "active" : "d-none" %>"
          data-tabs-target="panel">
       <%= render "product_composition", f: f %>
     </div>

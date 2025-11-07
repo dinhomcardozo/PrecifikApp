@@ -1,0 +1,41 @@
+<div id="totals">
+  <div class="row mt-3">
+    <div class="col-md-3 mb-3">
+      <%= label_tag :weight_loss, "Perda de Peso (%)", class: "custom-label" %>
+      <%= number_field_tag "product[weight_loss]",
+            product.weight_loss,
+            step: 0.01,
+            class: "form-control",
+            data: {
+              action: "input->product-composition#recalcWeights",
+              product_composition_target: "weightLoss"
+            } %>
+    </div>
+
+    <div class="col-md-3 mb-3">
+      <%= label_tag :total_weight, "Peso Bruto (g)", class: "custom-label" %>
+      <%= number_field_tag "product[total_weight]",
+            product.total_weight,
+            readonly: true,
+            class: "form-control",
+            data: { product_composition_target: "grossWeight" } %>
+    </div>
+
+    <div class="col-md-3 mb-3">
+      <%= label_tag :final_weight, "Peso Final (g)", class: "custom-label" %>
+      <%= number_field_tag "product[final_weight]",
+            product.final_weight,
+            readonly: true,
+            class: "form-control",
+            data: { product_composition_target: "finalWeight" } %>
+    </div>
+
+    <div class="col-md-3 mb-3">
+      <%= label_tag :total_cost, "Custo Total (R$)", class: "custom-label" %>
+      <%= number_field_tag "product[total_cost]",
+            product.total_cost.to_f.round(2),
+            readonly: true,
+            class: "form-control" %>
+    </div>
+  </div>
+</div>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_30_172431) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_04_001750) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -234,6 +234,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_30_172431) do
     t.decimal "final_cost", precision: 10, scale: 2, default: "0.0"
     t.decimal "selling_price", precision: 10, scale: 2, default: "0.0"
     t.decimal "real_profit_margin", precision: 10, scale: 2, default: "0.0"
+    t.decimal "cost_per_gram"
+    t.decimal "cost_per_unit"
+    t.decimal "cost_per_m2"
     t.index ["brand_id"], name: "index_inputs_on_brand_id"
     t.index ["input_type_id"], name: "index_inputs_on_input_type_id"
     t.index ["supplier_id"], name: "index_inputs_on_supplier_id"
@@ -401,6 +404,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_30_172431) do
     t.float "quantity_with_loss"
     t.bigint "input_id"
     t.decimal "weight"
+    t.decimal "require_units"
     t.index ["input_id"], name: "index_product_subproducts_on_input_id"
     t.index ["product_id"], name: "index_product_subproducts_on_product_id"
     t.index ["subproduct_id"], name: "index_product_subproducts_on_subproduct_id"

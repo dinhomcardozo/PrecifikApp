@@ -6,3 +6,13 @@
           active_tab: @next_tab %>
   <% end %>
 <% end %>
+
+<%# Atualiza totais de composição sem recarregar tudo %>
+<%= turbo_stream.replace "totals" do %>
+  <%= render partial: "products/totals", locals: { product: @product } %>
+<% end %>
+
+<%# Mostra flash de sucesso %>
+<%= turbo_stream.prepend "flash" do %>
+  <div class="alert alert-success">Produto atualizado com sucesso</div>
+<% end %>

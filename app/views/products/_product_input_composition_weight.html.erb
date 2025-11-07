@@ -1,27 +1,50 @@
-<tr data-controller="composition-row" data-type="input" data-unit="g">
-  <td>
-    <%= f.collection_select :input_id,
-          Input.order(:name),
-          :id, :name,
-          { prompt: "Selecione Input" },
-          class: "form-select" %>
-  </td>
-  <td>
-    <%= f.number_field :quantity,
-          step: "any",
-          placeholder: "Quantidade (g/mL)",
-          class: "form-control",
-          data: { action: "input->composition-row#calculate" } %>
-  </td>
-  <td>
-    <%= f.number_field :cost,
-          step: "any",
-          readonly: true,
-          class: "form-control" %>
-  </td>
-  <td>
-    <%= f.hidden_field :_destroy, class: "destroy-flag" %>
-    <button type="button" class="mini-button"
-            data-action="composition-row#removeRow">Remover</button>
-  </td>
-</tr>
+<!-- app/views/products/_product_input_composition_weight.html.erb -->
+<tbody data-controller="composition-row" data-type="input" data-unit="g" data-new-record="true">
+  <tr class="composition-fields">
+    <td>
+      <%= f.select :input_id,
+            Input.order(:name).map { |i|
+              [i.name, i.id, { "data-unit": i.unit_of_measurement,
+                               "data-cost": i.cost,
+                               "data-weight": i.weight }]
+            },
+            { prompt: "Selecione Input" },
+            { class: "inline",
+              data: { action: "change->product-composition#renderInputFields" } } %>
+    </td>
+
+    <!-- Peso digitado -->
+    <td>
+      <%= f.number_field :weight,
+            step: "any",
+            placeholder: "Peso (g/mL)",
+            class: "inline",
+            data: { action: "input->composition-row#calculate" } %>
+    </td>
+
+    <!-- Unidades calculadas -->
+    <td>
+      <%= f.number_field :require_units,
+            step: "any",
+            readonly: true,
+            placeholder: "Unidades necessárias",
+            class: "field-inline" %>
+    </td>
+
+    <!-- Custo calculado -->
+    <td>
+      <%= f.number_field :cost,
+            step: "any",
+            readonly: true,
+            placeholder: "Custo (R$)",
+            class: "field-inline" %>
+    </td>
+
+    <!-- Remover -->
+    <td>
+      <%= f.hidden_field :_destroy, class: "destroy-flag" %>
+      <button type="button" class="mini-button"
+              data-action="composition-row#removeRow">Remover</button>
+    </td>
+  </tr>
+</tbody>

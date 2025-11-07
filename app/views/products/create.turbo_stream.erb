@@ -6,3 +6,7 @@
           active_tab: @next_tab %>
   <% end %>
 <% end %>
+
+<%= turbo_stream.prepend "flash" do %>
+  <div class="alert alert-success">Produto criado com sucesso</div>
+<% end %>

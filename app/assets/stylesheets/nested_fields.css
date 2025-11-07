@@ -43,7 +43,7 @@
 
 .form-row-inline {
   display: flex;
-  gap: 1rem; /* espaço entre os campos */
+  gap: 1rem;
   margin-bottom: 1rem;
 }
 
@@ -61,4 +61,29 @@
 
 .form-control[readonly] {
   background-color: #f9f9f9;
+}
+
+.composition-fields {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.inline-control,
+.inline-select {
+  background-color: #ffffff;
+  border: 1px solid #3a3a32;
+  border-radius: 0.2rem;
+  color: var(--text-dark);
+  font-size: 0.750rem;
+  font-family: Raleway, sans-serif;
+  font-style: italic;
+}
+
+.inline-control:focus,
+.inline-select:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 0.2rem rgba(211, 219, 35, 0.25);
+  font-size: 0.750rem;
+  font-family: Raleway, sans-serif;
 }

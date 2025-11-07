@@ -1,4 +1,3 @@
-// app/javascript/controllers/product_composition_controller.js
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
@@ -8,7 +7,8 @@ export default class extends Controller {
     "fieldCost",
     "weightLoss",
     "grossWeight",
-    "finalWeight"
+    "finalWeight",
+    "finalizeButton"
   ]
 
   connect() {
@@ -21,8 +21,10 @@ export default class extends Controller {
     e.preventDefault()
     const tpl = document.getElementById("template-subproduct")
     if (!tpl) return
-    const html = tpl.innerHTML.replace(/NEW_RECORD/g, Date.now())
-    this.listTarget.insertAdjacentHTML("beforeend", html)
+    const frag = tpl.content.cloneNode(true)
+    const tbody = frag.firstElementChild
+    tbody.innerHTML = tbody.innerHTML.replace(/NEW_RECORD/g, Date.now())
+    this.listTarget.appendChild(tbody)
     this.refreshAll()
   }
 
@@ -31,63 +33,47 @@ export default class extends Controller {
     e.preventDefault()
     const tpl = document.getElementById("template-input")
     if (!tpl) return
-    const html = tpl.innerHTML.replace(/NEW_RECORD/g, Date.now())
-    this.listTarget.insertAdjacentHTML("beforeend", html)
+    const frag = tpl.content.cloneNode(true)
+    const html = frag.firstElementChild // <tbody ...>
+    // substitui NEW_RECORD em todos os atributos/names
+    html.innerHTML = html.innerHTML.replace(/NEW_RECORD/g, Date.now())
+    this.listTarget.appendChild(html)
     this.refreshAll()
   }
 
   // Remover linha
   removeField(e) {
     e.preventDefault()
-    const row = e.currentTarget.closest("tr")
-    if (row.dataset.newRecord === "true") {
-      row.remove()
-    } else {
-      row.querySelector("input[name*='_destroy']").value = 1
-      row.style.display = "none"
+    const block = e.currentTarget.closest("tbody[data-controller='composition-row']")
+    if (!block) return
+
+    const destroyInput = block.querySelector("input[name*='[_destroy]']")
+    if (block.dataset.newRecord === "true") {
+      block.remove()
+    } else if (destroyInput) {
+      destroyInput.value = 1
+      block.style.display = "none"
     }
+
     this.refreshAll()
-  }
-
-  // Recalcular custo de uma linha
-  recalculateCost(e) {
-    const row = e.target.closest("tr")
-    const qty = parseFloat(row.querySelector("input[name*='[quantity]']")?.value) || 0
-    const opt = row.querySelector("select option:checked")
-    if (!opt) return
-
-    // lê os data-* do option
-    const unit = opt.dataset.unit
-    const cpg  = parseFloat(opt.dataset.costPerGram) || 0
-    const cpu  = parseFloat(opt.dataset.costPerUnit) || 0
-    const cpm2 = parseFloat(opt.dataset.costPerM2)   || 0
-
-    let cost = 0
-    if (unit === "g" || unit === "ml") cost = qty * cpg
-    else if (unit === "un") cost = qty * cpu
-    else if (unit === "m2") cost = qty * cpm2
-
-    const costField = row.querySelector("input[name*='[cost]']")
-    if (costField) costField.value = cost.toFixed(2)
-
-    const fieldCost = row.querySelector("[data-product-composition-target='fieldCost']")
-    if (fieldCost) fieldCost.textContent = cost.toFixed(2)
-
-    this.recalcWeights()
   }
 
   // Atualizar todos os custos
   refreshAll() {
-    this.listTarget.querySelectorAll("[data-action*='recalculateCost']").forEach(el => {
-      el.dispatchEvent(new Event("input", { bubbles: true }))
-    })
+    // dispara cálculo nos campos que têm a ação de calcular
+    this.listTarget
+      .querySelectorAll("input[data-action*='composition-row#calculate']")
+      .forEach(el => el.dispatchEvent(new Event("input", { bubbles: true })))
+
     this.recalcWeights()
+    this.toggleFinalizeButton()
   }
 
   // Recalcular totais
   recalcWeights() {
-    const qtyEls = this.listTarget.querySelectorAll("input[name*='[quantity]']")
-    const gross = Array.from(qtyEls).reduce((s, el) => s + (parseFloat(el.value) || 0), 0)
+    // soma pesos
+    const weightEls = this.listTarget.querySelectorAll("input[name*='[weight]']")
+    const gross = Array.from(weightEls).reduce((s, el) => s + (parseFloat(el.value) || 0), 0)
 
     const lossPct = parseFloat(this.weightLossTarget?.value) || 0
     const ratio   = Math.max(0, Math.min(100, 100 - lossPct)) / 100
@@ -95,5 +81,124 @@ export default class extends Controller {
 
     if (this.grossWeightTarget) this.grossWeightTarget.value = gross.toFixed(4)
     if (this.finalWeightTarget) this.finalWeightTarget.value = finalW.toFixed(4)
+
+    // soma custos
+    const costEls = this.listTarget.querySelectorAll("input[name*='[cost]']")
+    const totalCost = Array.from(costEls).reduce((s, el) => s + (parseFloat(el.value) || 0), 0)
+
+    const totalCostField = this.element.querySelector("input[name*='[total_cost]']")
+    if (totalCostField) totalCostField.value = totalCost.toFixed(2)
+  }
+
+  // Atualiza o cabeçalho da tabela conforme a unidade
+  updateHeader(unit) {
+    const thead = this.element.querySelector("thead tr")
+    const headWrapper = this.element.querySelector("thead")
+    if (!thead || !headWrapper) return
+
+    headWrapper.classList.add("simple-head")
+
+    if (unit === "g" || unit === "ml") {
+      thead.innerHTML = `
+        <th>Item</th>
+        <th>Peso (g/mL)</th>
+        <th>Unidades necessárias</th>
+        <th>Custo (R$)</th>
+        <th>Ações</th>
+      `
+    } else if (unit === "un") {
+      thead.innerHTML = `
+        <th>Item</th>
+        <th>Unidades</th>
+        <th>Peso (g)</th>
+        <th>Custo (R$)</th>
+        <th>Ações</th>
+      `
+    } else if (unit === "m2") {
+      thead.innerHTML = `
+        <th>Item</th>
+        <th>Área (m²)</th>
+        <th>Peso (g)</th>
+        <th>Custo (R$)</th>
+        <th>Ações</th>
+      `
+    } else {
+      // fallback padrão
+      thead.innerHTML = `
+        <th>Item</th>
+        <th>Quantidade</th>
+        <th>Custo (R$)</th>
+        <th>Peso (g)</th>
+        <th>Ações</th>
+      `
+    }
+  }
+
+  renderSubproductFields(e) {
+    const block = e.target.closest("tbody[data-controller='composition-row']")
+    if (!block) return
+
+    const unit = e.target.selectedOptions[0]?.dataset.unit?.trim().toLowerCase()
+
+    let partialId = null
+    if (unit === "g" || unit === "ml") partialId = "template-subproduct-weight"
+    else if (unit === "un") partialId = "template-subproduct-unit"
+    else if (unit === "m2") partialId = "template-subproduct-m2"
+    else partialId = "template-subproduct-unit"
+
+    const tpl = document.getElementById(partialId)
+    if (!tpl) return
+
+    const frag = tpl.content.cloneNode(true)
+    const newBlock = frag.firstElementChild
+    newBlock.innerHTML = newBlock.innerHTML.replace(/NEW_RECORD/g, Date.now())
+
+    block.replaceWith(newBlock)
+
+    const newSelect = newBlock.querySelector("select[name*='[subproduct_id]']")
+    if (newSelect) newSelect.value = e.target.value
+
+    this.updateHeader(unit)
+    this.refreshAll()
+  }
+
+  renderInputFields(e) {
+    const block = e.target.closest("tbody[data-controller='composition-row']")
+    if (!block) return
+
+    const selectedId = e.target.value
+    const unit = e.target.selectedOptions[0]?.dataset.unit?.trim().toLowerCase()
+
+    let partialId = null
+    if (unit === "g" || unit === "ml") partialId = "template-input-weight"
+    else if (unit === "un") partialId = "template-input-unit"
+    else if (unit === "m2") partialId = "template-input-m2"
+    else partialId = "template-input-unit" // fallback seguro
+
+    const tpl = document.getElementById(partialId)
+    if (!tpl) return
+
+    const frag = tpl.content.cloneNode(true)
+    const newBlock = frag.firstElementChild // <tbody ...>
+
+    // substitui NEW_RECORD para ids/names únicos
+    newBlock.innerHTML = newBlock.innerHTML.replace(/NEW_RECORD/g, Date.now())
+
+    block.replaceWith(newBlock)
+
+    const newSelect = newBlock.querySelector("select[name*='[input_id]']")
+    if (newSelect) newSelect.value = selectedId
+
+    this.updateHeader(unit)
+    this.refreshAll()
+  }
+
+  toggleFinalizeButton() {
+    const hasRows = this.listTarget.querySelectorAll("tbody[data-controller='composition-row']").length > 0
+    if (hasRows) {
+      this.finalizeButtonTarget.classList.remove("d-none")
+    } else {
+      this.finalizeButtonTarget.classList.add("d-none")
+    }
   }
 }

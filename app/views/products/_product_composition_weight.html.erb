@@ -1,28 +1,35 @@
-<tr data-controller="composition-row" data-type="subproduct" data-unit="g">
-  <td>
-    <%= f.hidden_field :id %>
-    <%= f.collection_select :subproduct_id,
-          Subproduct.order(:name),
-          :id, :name,
-          { prompt: "Selecione Subproduto" },
-          class: "form-select" %>
-  </td>
-  <td>
-    <%= f.number_field :quantity,
-          step: "any",
-          placeholder: "Quantidade (g/mL)",
-          class: "form-control",
-          data: { action: "input->composition-row#calculate" } %>
-  </td>
-  <td>
-    <%= f.number_field :cost,
-          step: "any",
-          readonly: true,
-          class: "form-control" %>
-  </td>
-  <td>
-    <%= f.hidden_field :_destroy, class: "destroy-flag" %>
-    <button type="button" class="mini-button"
-            data-action="composition-row#removeRow">Remover</button>
-  </td>
-</tr>
+<tbody data-controller="composition-row" data-type="subproduct" data-unit="g" data-new-record="true">
+  <tr class="composition-fields">
+    <td>
+      <%= f.collection_select :subproduct_id,
+            Subproduct.order(:name), :id, :name,
+            { prompt: "Selecione Subproduto" },
+            { class: "inline-control",
+              data: { action: "change->product-composition#renderSubproductFields" } } %>
+    </td>
+
+    <!-- Quantidade digitada -->
+    <td>
+      <%= f.number_field :quantity,
+            step: "any",
+            placeholder: "Quantidade (g/mL)",
+            class: "inline-control",
+            data: { action: "input->composition-row#calculate" } %>
+    </td>
+
+    <!-- Custo calculado -->
+    <td>
+      <%= f.number_field :cost,
+            step: "any",
+            readonly: true,
+            class: "inline-control" %>
+    </td>
+
+    <!-- Remover -->
+    <td>
+      <%= f.hidden_field :_destroy, class: "destroy-flag" %>
+      <button type="button" class="mini-button"
+              data-action="composition-row#removeRow">Remover</button>
+    </td>
+  </tr>
+</tbody>

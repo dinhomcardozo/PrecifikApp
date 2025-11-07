@@ -1,4 +1,69 @@
-<!-- app/views/products/_steps.html.erb -->
-<%= render "form",
-      product:    product,
-      active_tab: active_tab %>
+<%= form_with model: product,
+              url: (product.new_record? ?
+                      products_path(active_tab: active_tab) :
+                      product_path(product, active_tab: active_tab)),
+              method: (product.new_record? ? :post : :patch),
+              html:  { multipart: true },
+              data: { controller: "tabs" } do |f| %>
+
+  <%= hidden_field_tag :active_tab,
+                       active_tab,
+                       data: { tabs_target: "hidden" } %>
+
+  <%# Navegação entre abas %>
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a href="#"
+         class="nav-link <%= "active" if active_tab == "config" %>"
+         data-tabs-target="link"
+         data-action="click->tabs#switch"
+         data-tabs-panel="panel-config">
+        Configurações
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="#"
+         class="nav-link <%= "active" if active_tab == "composition" %>"
+         data-tabs-target="link"
+         data-action="click->tabs#switch"
+         data-tabs-panel="panel-composition">
+        Composição
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="#"
+         class="nav-link <%= "active" if active_tab == "pricing" %>"
+         data-tabs-target="link"
+         data-action="click->tabs#switch"
+         data-tabs-panel="panel-pricing">
+        Totais
+      </a>
+    </li>
+  </ul>
+
+  <div class="mt-4 text-end">
+    <%= f.submit product.new_record? ? "Criar Produto" : "Salvar Alterações",
+                 class: "action-button",
+                 data: { turbo_frame: "_top" } %>
+  </div>
+
+  <div class="tab-content mt-3">
+    <div id="panel-config"
+         class="tab-pane <%= "active" if active_tab == "config" %>"
+         data-tabs-target="panel">
+      <%= render "products/product_configurations", f: f %>
+    </div>
+
+    <div id="panel-composition"
+         class="tab-pane <%= "active" if active_tab == "composition" %>"
+         data-tabs-target="panel">
+      <%= render "products/product_composition", f: f %>
+    </div>
+
+    <div id="panel-pricing"
+         class="tab-pane <%= "active" if active_tab == "pricing" %>"
+         data-tabs-target="panel">
+      <%= render "products/totals", product: product %>
+    </div>
+  </div>
+<% end %>

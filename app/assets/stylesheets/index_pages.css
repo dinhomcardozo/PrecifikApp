@@ -293,3 +293,10 @@
   color: #666;
   font-style: italic;
 }
+
+.simple-head {
+  font-size: 0.65rem;
+  font-weight: 300;
+  color: var(--notes-gray);
+  margin: 0%;
+}

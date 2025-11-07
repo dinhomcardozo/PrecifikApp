@@ -64,6 +64,22 @@ class Subproduct < ApplicationRecord
     totals.transform_values { |v| v.round(2) }
   end
 
+  def unit_of_measurement
+    raw = read_attribute(:unit_of_measurement)
+    case raw.to_s.strip.downcase
+    when "m²", "m2"
+      "m2"
+    when "g", "grama"
+      "g"
+    when "ml"
+      "ml"
+    when "un", "unidade"
+      "un"
+    else
+      raw
+    end
+  end
+
   private
 
   def all_blank(attrs)
@@ -100,5 +116,15 @@ class Subproduct < ApplicationRecord
     scope :by_name,     ->(dir) { order(name: dir) if dir.in?(%w[asc desc]) }
     scope :by_cost,     ->(dir) { order(cost: dir) if dir.in?(%w[asc desc]) }
     scope :by_weight,   ->(dir) { order(weight_in_grams: dir) if dir.in?(%w[asc desc]) }
+  end
+
+  def cost_per_unit
+    # lógica para calcular custo por unidade
+    total_cost / total_units if total_units.to_f > 0
+  end
+
+  def cost_per_m2
+    # lógica para calcular custo por m²
+    total_cost / total_area if total_area.to_f > 0
   end
 end
