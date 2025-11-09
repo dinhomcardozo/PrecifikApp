@@ -1,10 +1,14 @@
-<tbody data-controller="composition-row" data-type="subproduct" data-unit="g" data-new-record="true">
-  <tr class="composition-fields">
+<!-- products/_product_composition_weight.html.erb -->
+<tr data-controller="composition-row"
+    data-type="subproduct"
+    data-unit="g"
+    data-new-record="true"
+    class="composition-fields">
     <td>
       <%= f.collection_select :subproduct_id,
             Subproduct.order(:name), :id, :name,
             { prompt: "Selecione Subproduto" },
-            { class: "inline-control",
+            { class: "inline-select",
               data: { action: "change->product-composition#renderSubproductFields" } } %>
     </td>
 
@@ -27,9 +31,11 @@
 
     <!-- Remover -->
     <td>
-      <%= f.hidden_field :_destroy, class: "destroy-flag" %>
-      <button type="button" class="mini-button"
-              data-action="composition-row#removeRow">Remover</button>
+      <%= f.hidden_field :_destroy, class: "remove-btn" %>
+      <button type="button"
+              class="icon-delete"
+              data-action="composition-row#removeRow">
+        <%= image_tag("icons/excluir.png", alt: "Remover") %>
+      </button>
     </td>
-  </tr>
-</tbody>
+</tr>

@@ -1,5 +1,9 @@
-<tbody data-controller="composition-row" data-type="subproduct" data-unit="m2" data-new-record="true">
-  <tr class="composition-fields">
+<!-- products/_product_composition_m2.html.erb -->
+<tr data-controller="composition-row"
+    data-type="subproduct"
+    data-unit="m2"
+    data-new-record="true"
+    class="composition-fields">
     <td>
       <%= f.collection_select :subproduct_id,
             Subproduct.order(:name), :id, :name,
@@ -35,9 +39,11 @@
 
     <!-- Remover -->
     <td>
-      <%= f.hidden_field :_destroy, class: "destroy-flag" %>
-      <button type="button" class="mini-button"
-              data-action="composition-row#removeRow">Remover</button>
+      <%= f.hidden_field :_destroy, class: "remove-btn" %>
+      <button type="button"
+              class="icon-delete"
+              data-action="composition-row#removeRow">
+        <%= image_tag("icons/excluir.png", alt: "Remover") %>
+      </button>
     </td>
-  </tr>
-</tbody>
+</tr>
