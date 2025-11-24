@@ -21,14 +21,19 @@ class BrandsController < Clients::AuthenticatedController
 
     if @brand.save
       respond_to do |format|
-        # ✅ Fluxo do modal de Inputs: usa create.turbo_stream.erb
-        format.turbo_stream
-        # ✅ Fallback para HTML normal (quando não é Turbo)
-        format.html { redirect_to brands_path, notice: "Marca criada com sucesso." }
+        format.turbo_stream   # usa create.turbo_stream.erb (fluxo do modal de Inputs)
+        format.html { redirect_to brands_path, notice: "Marca criada com sucesso." } # fluxo normal
       end
     else
       respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.replace("new_brand_form", partial: "brands/new_modal", locals: { brand: @brand }) }
+        format.turbo_stream do
+          # re-renderiza o modal com erros
+          render turbo_stream: turbo_stream.replace(
+            "new_brand_modal_body",
+            partial: "brands/new_modal",
+            locals: { brand: @brand }
+          )
+        end
         format.html do
           flash.now[:alert] = @brand.errors.full_messages.to_sentence
           render :new, status: :unprocessable_entity
@@ -36,7 +41,7 @@ class BrandsController < Clients::AuthenticatedController
       end
     end
   end
-
+  
   def update
     if @brand.update(brand_params)
       respond_to do |format|
