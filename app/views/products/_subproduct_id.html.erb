@@ -1,4 +1,4 @@
-<!-- Template para Subproduct -->
+<!-- app/views/products/_subproduct_id.html.erb Template para Subproduct -->
 <template id="template-subproduct" data-product-composition-target="template">
   <%= f.fields_for :product_subproducts, ProductSubproduct.new, child_index: "NEW_RECORD" do |ps| %>
     <tr data-controller="composition-row" data-type="subproduct" data-new-record="true">

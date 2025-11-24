@@ -7,64 +7,64 @@
     <%= render "products/add_input_button" %>
   </div>
 
+<!-- Template inicial para INPUT -->
   <template id="template-input">
     <%= f.fields_for :product_subproducts, ProductSubproduct.new, child_index: "NEW_RECORD" do |ps| %>
-      <tbody data-controller="composition-row" data-type="input" data-new-record="true">
-        <tr>
-          <td colspan="4">
-            <%= ps.collection_select :input_id,
-                  Input.order(:name),
-                  :id,
-                  :name,
-                  { prompt: "Selecione Input" },
-                  { class: "form-select",
-                    data: { action: "change->product-composition#renderInputFields" } } do |i| %>
-              <option value="<%= i.id %>"
-                      data-unit="<%= i.unit_of_measurement %>"
-                      data-cost="<%= i.cost %>"
-                      data-weight="<%= i.weight %>">
-                <%= i.name %>
-              </option>
-            <% end %>
-          </td>
-          <td>
-            <%= ps.hidden_field :_destroy, class: "destroy-flag" %>
-            <button type="button" class="mini-button btn btn-danger"
-                    data-action="composition-row#removeRow">Remover</button>
-          </td>
-        </tr>
-      </tbody>
+      <!-- Corrigido: apenas <tr>, sem <tbody>, e sem data-unit fixo -->
+      <tr data-controller="composition-row" data-type="input" data-new-record="true">
+        <td colspan="4">
+          <%= ps.collection_select :input_id,
+                Input.order(:name),
+                :id,
+                :name,
+                { prompt: "Selecione Input" },
+                { class: "form-select",
+                  data: { action: "change->product-composition#renderInputFields" } } do |i| %>
+            <option value="<%= i.id %>"
+                    data-unit="<%= i.unit_of_measurement %>"
+                    data-cost="<%= i.cost %>"
+                    data-weight="<%= i.weight %>">
+              <%= i.name %>
+            </option>
+          <% end %>
+        </td>
+        <td>
+          <%= ps.hidden_field :_destroy, class: "destroy-flag" %>
+          <button type="button" class="mini-button btn btn-danger"
+                  data-action="composition-row#removeRow">Remover</button>
+        </td>
+      </tr>
     <% end %>
   </template>
 
+  <!-- Template inicial para SUBPRODUCT -->
   <template id="template-subproduct">
     <%= f.fields_for :product_subproducts, ProductSubproduct.new, child_index: "NEW_RECORD" do |ps| %>
-      <tbody data-controller="composition-row" data-type="subproduct" data-new-record="true">
-        <tr>
-          <td colspan="4">
-            <%= ps.collection_select :subproduct_id,
-                  Subproduct.order(:name),
-                  :id,
-                  :name,
-                  { prompt: "Selecione Subproduto" },
-                  { class: "form-select",
-                    data: { action: "change->product-composition#renderSubproductFields" } } do |s| %>
-              <option value="<%= s.id %>"
-                      data-unit="<%= s.unit_of_measurement %>"
-                      data-cost-per-gram="<%= s.cost_per_gram %>"
-                      data-cost-per-unit="<%= s.cost_per_unit %>"
-                      data-cost-per-m2="<%= s.cost_per_m2 %>">
-                <%= s.name %>
-              </option>
-            <% end %>
-          </td>
-          <td>
-            <%= ps.hidden_field :_destroy, class: "destroy-flag" %>
-            <button type="button" class="mini-button btn btn-danger"
-                    data-action="composition-row#removeRow">Remover</button>
-          </td>
-        </tr>
-      </tbody>
+      <!-- Corrigido: apenas <tr>, sem <tbody>, e sem data-unit fixo -->
+      <tr data-controller="composition-row" data-type="subproduct" data-new-record="true">
+        <td colspan="4">
+          <%= ps.collection_select :subproduct_id,
+                Subproduct.order(:name),
+                :id,
+                :name,
+                { prompt: "Selecione Subproduto" },
+                { class: "form-select",
+                  data: { action: "change->product-composition#renderSubproductFields" } } do |s| %>
+            <option value="<%= s.id %>"
+                    data-unit="<%= s.unit_of_measurement %>"
+                    data-cost-per-gram="<%= s.cost_per_gram %>"
+                    data-cost-per-unit="<%= s.cost_per_unit %>"
+                    data-cost-per-m2="<%= s.cost_per_m2 %>">
+              <%= s.name %>
+            </option>
+          <% end %>
+        </td>
+        <td>
+          <%= ps.hidden_field :_destroy, class: "destroy-flag" %>
+          <button type="button" class="mini-button btn btn-danger"
+                  data-action="composition-row#removeRow">Remover</button>
+        </td>
+      </tr>
     <% end %>
   </template>
 

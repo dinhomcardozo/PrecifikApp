@@ -1,7 +1,7 @@
 class Input < ApplicationRecord
   default_scope { where(client_id: Current.user_client.client_id) if Current.user_client }
   scope :resalable, -> { where(resalable_product: true) }
-  scope :by_weight_units, -> { where(unit_of_measurement: ["g", "mL"]) }
+  scope :by_weight_units, -> { where(unit_of_measurement: ["g", "ml"]) }
   scope :by_unit, ->(unit) { where(unit_of_measurement: unit) }
   
   self.per_page = 10
@@ -45,29 +45,23 @@ class Input < ApplicationRecord
   def weight_in_grams
     case unit_of_measurement
     when 'kg' then weight * 1000
-    when 'g' then weight
-    when 'L' then weight * 1000
-    when 'mL' then weight
-    when 'un'  then weight
-    when 'm²' then weight
-    else
-    0
+    when 'g'  then weight
+    when 'l'  then weight * 1000
+    when 'ml' then weight
+    when 'un' then weight
+    when 'm2' then weight
+    else 0
     end
   end
 
   def unit_of_measurement
     raw = read_attribute(:unit_of_measurement)
     case raw.to_s.strip.downcase
-    when "m²", "m2"
-      "m2"
-    when "g", "grama"
-      "g"
-    when "ml"
-      "ml"
-    when "un", "unidade"
-      "un"
-    else
-      raw
+    when "m²", "m2"      then "m2"
+    when "g", "grama"    then "g"
+    when "ml", "mL", "l", "ML" then "ml"
+    when "un", "unidade" then "un"
+    else raw
     end
   end
 

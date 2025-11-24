@@ -22,9 +22,9 @@ export default class extends Controller {
     const tpl = document.getElementById("template-subproduct")
     if (!tpl) return
     const frag = tpl.content.cloneNode(true)
-    const tbody = frag.firstElementChild
-    tbody.innerHTML = tbody.innerHTML.replace(/NEW_RECORD/g, Date.now())
-    this.listTarget.appendChild(tbody)
+    const row = frag.firstElementChild   // agora pega o <tr> direto
+    row.innerHTML = row.innerHTML.replace(/NEW_RECORD/g, Date.now())
+    this.listTarget.appendChild(row)
     this.refreshAll()
   }
 
@@ -34,17 +34,16 @@ export default class extends Controller {
     const tpl = document.getElementById("template-input")
     if (!tpl) return
     const frag = tpl.content.cloneNode(true)
-    const html = frag.firstElementChild // <tbody ...>
-    // substitui NEW_RECORD em todos os atributos/names
-    html.innerHTML = html.innerHTML.replace(/NEW_RECORD/g, Date.now())
-    this.listTarget.appendChild(html)
+    const row = frag.firstElementChild   // agora pega o <tr> direto
+    row.innerHTML = row.innerHTML.replace(/NEW_RECORD/g, Date.now())
+    this.listTarget.appendChild(row)
     this.refreshAll()
   }
 
   // Remover linha
   removeField(e) {
     e.preventDefault()
-    const block = e.currentTarget.closest("tbody[data-controller='composition-row']")
+    const block = e.currentTarget.closest("tr[data-controller='composition-row']")
     if (!block) return
 
     const destroyInput = block.querySelector("input[name*='[_destroy]']")
@@ -60,7 +59,6 @@ export default class extends Controller {
 
   // Atualizar todos os custos
   refreshAll() {
-    // dispara cálculo nos campos que têm a ação de calcular
     this.listTarget
       .querySelectorAll("input[data-action*='composition-row#calculate']")
       .forEach(el => el.dispatchEvent(new Event("input", { bubbles: true })))
@@ -71,7 +69,6 @@ export default class extends Controller {
 
   // Recalcular totais
   recalcWeights() {
-    // soma pesos
     const weightEls = this.listTarget.querySelectorAll("input[name*='[weight]']")
     const gross = Array.from(weightEls).reduce((s, el) => s + (parseFloat(el.value) || 0), 0)
 
@@ -82,7 +79,6 @@ export default class extends Controller {
     if (this.grossWeightTarget) this.grossWeightTarget.value = gross.toFixed(4)
     if (this.finalWeightTarget) this.finalWeightTarget.value = finalW.toFixed(4)
 
-    // soma custos
     const costEls = this.listTarget.querySelectorAll("input[name*='[cost]']")
     const totalCost = Array.from(costEls).reduce((s, el) => s + (parseFloat(el.value) || 0), 0)
 
@@ -98,6 +94,7 @@ export default class extends Controller {
 
     headWrapper.classList.add("simple-head")
 
+    unit = unit?.trim().toLowerCase()
     if (unit === "g" || unit === "ml") {
       thead.innerHTML = `
         <th>Item</th>
@@ -123,7 +120,6 @@ export default class extends Controller {
         <th>Ações</th>
       `
     } else {
-      // fallback padrão
       thead.innerHTML = `
         <th>Item</th>
         <th>Quantidade</th>
@@ -135,7 +131,7 @@ export default class extends Controller {
   }
 
   renderSubproductFields(e) {
-    const block = e.target.closest("tbody[data-controller='composition-row']")
+    const block = e.target.closest("tr[data-controller='composition-row']")
     if (!block) return
 
     const unit = e.target.selectedOptions[0]?.dataset.unit?.trim().toLowerCase()
@@ -150,7 +146,7 @@ export default class extends Controller {
     if (!tpl) return
 
     const frag = tpl.content.cloneNode(true)
-    const newBlock = frag.firstElementChild
+    const newBlock = frag.firstElementChild   // pega o <tr> direto
     newBlock.innerHTML = newBlock.innerHTML.replace(/NEW_RECORD/g, Date.now())
 
     block.replaceWith(newBlock)
@@ -163,7 +159,7 @@ export default class extends Controller {
   }
 
   renderInputFields(e) {
-    const block = e.target.closest("tbody[data-controller='composition-row']")
+    const block = e.target.closest("tr[data-controller='composition-row']")
     if (!block) return
 
     const selectedId = e.target.value
@@ -173,15 +169,13 @@ export default class extends Controller {
     if (unit === "g" || unit === "ml") partialId = "template-input-weight"
     else if (unit === "un") partialId = "template-input-unit"
     else if (unit === "m2") partialId = "template-input-m2"
-    else partialId = "template-input-unit" // fallback seguro
+    else partialId = "template-input-unit"
 
     const tpl = document.getElementById(partialId)
     if (!tpl) return
 
     const frag = tpl.content.cloneNode(true)
-    const newBlock = frag.firstElementChild // <tbody ...>
-
-    // substitui NEW_RECORD para ids/names únicos
+    const newBlock = frag.firstElementChild   // pega o <tr> direto
     newBlock.innerHTML = newBlock.innerHTML.replace(/NEW_RECORD/g, Date.now())
 
     block.replaceWith(newBlock)
@@ -194,7 +188,7 @@ export default class extends Controller {
   }
 
   toggleFinalizeButton() {
-    const hasRows = this.listTarget.querySelectorAll("tbody[data-controller='composition-row']").length > 0
+    const hasRows = this.listTarget.querySelectorAll("tr[data-controller='composition-row']").length > 0
     if (hasRows) {
       this.finalizeButtonTarget.classList.remove("d-none")
     } else {
