@@ -1,4 +1,3 @@
-<!-- app/views/products/_product_composition.html.erb -->
 <h5 class="subtitle">2) Composição do Produto</h5>
 
 <div data-controller="product-composition">
@@ -7,26 +6,22 @@
     <%= render "products/add_input_button" %>
   </div>
 
-<!-- Template inicial para INPUT -->
+  <!-- Template inicial para INPUT -->
   <template id="template-input">
     <%= f.fields_for :product_subproducts, ProductSubproduct.new, child_index: "NEW_RECORD" do |ps| %>
-      <!-- Corrigido: apenas <tr>, sem <tbody>, e sem data-unit fixo -->
       <tr data-controller="composition-row" data-type="input" data-new-record="true">
-        <td colspan="4">
-          <%= ps.collection_select :input_id,
-                Input.order(:name),
-                :id,
-                :name,
+        <td colspan="5">
+          <%= ps.select :input_id,
+                Input.order(:name).map { |i|
+                  [i.name, i.id, {
+                    "data-unit":  i.unit_of_measurement,
+                    "data-cost":  i.cost,
+                    "data-weight": i.weight
+                  }]
+                },
                 { prompt: "Selecione Input" },
                 { class: "form-select",
-                  data: { action: "change->product-composition#renderInputFields" } } do |i| %>
-            <option value="<%= i.id %>"
-                    data-unit="<%= i.unit_of_measurement %>"
-                    data-cost="<%= i.cost %>"
-                    data-weight="<%= i.weight %>">
-              <%= i.name %>
-            </option>
-          <% end %>
+                  data: { action: "change->product-composition#renderInputFields" } } %>
         </td>
         <td>
           <%= ps.hidden_field :_destroy, class: "destroy-flag" %>
@@ -40,24 +35,20 @@
   <!-- Template inicial para SUBPRODUCT -->
   <template id="template-subproduct">
     <%= f.fields_for :product_subproducts, ProductSubproduct.new, child_index: "NEW_RECORD" do |ps| %>
-      <!-- Corrigido: apenas <tr>, sem <tbody>, e sem data-unit fixo -->
       <tr data-controller="composition-row" data-type="subproduct" data-new-record="true">
         <td colspan="4">
-          <%= ps.collection_select :subproduct_id,
-                Subproduct.order(:name),
-                :id,
-                :name,
+          <%= ps.select :subproduct_id,
+                Subproduct.order(:name).map { |s|
+                  [s.name, s.id, {
+                    "data-unit":          s.unit_of_measurement,   # precisa existir no model
+                    "data-cost-per-gram": s.try(:cost_per_gram),
+                    "data-cost-per-unit": s.try(:cost_per_unit),
+                    "data-cost-per-m2":   s.try(:cost_per_m2)
+                  }]
+                },
                 { prompt: "Selecione Subproduto" },
                 { class: "form-select",
-                  data: { action: "change->product-composition#renderSubproductFields" } } do |s| %>
-            <option value="<%= s.id %>"
-                    data-unit="<%= s.unit_of_measurement %>"
-                    data-cost-per-gram="<%= s.cost_per_gram %>"
-                    data-cost-per-unit="<%= s.cost_per_unit %>"
-                    data-cost-per-m2="<%= s.cost_per_m2 %>">
-              <%= s.name %>
-            </option>
-          <% end %>
+                  data: { action: "change->product-composition#renderSubproductFields" } } %>
         </td>
         <td>
           <%= ps.hidden_field :_destroy, class: "destroy-flag" %>
@@ -69,7 +60,6 @@
   </template>
 
   <table class="table">
-
     <thead>
       <tr></tr>
     </thead>
@@ -99,14 +89,42 @@
     </tbody>
   </table>
 
-  <!-- Templates finais para substituição -->
-  <template id="template-subproduct-weight"><%= f.fields_for :product_subproducts, ProductSubproduct.new, child_index: "NEW_RECORD" do |ps| %><%= render "products/product_composition_weight", f: ps %><% end %></template>
-  <template id="template-subproduct-unit"><%= f.fields_for :product_subproducts, ProductSubproduct.new, child_index: "NEW_RECORD" do |ps| %><%= render "products/product_composition_unit", f: ps %><% end %></template>
-  <template id="template-subproduct-m2"><%= f.fields_for :product_subproducts, ProductSubproduct.new, child_index: "NEW_RECORD" do |ps| %><%= render "products/product_composition_m2", f: ps %><% end %></template>
+  <!-- Templates finais para substituição (devem gerar <tr> diretamente) -->
+  <template id="template-subproduct-weight">
+    <%= f.fields_for :product_subproducts, ProductSubproduct.new, child_index: "NEW_RECORD" do |ps| %>
+      <%= render "products/product_composition_weight", f: ps %>
+    <% end %>
+  </template>
 
-  <template id="template-input-weight"><%= f.fields_for :product_subproducts, ProductSubproduct.new, child_index: "NEW_RECORD" do |ps| %><%= render "products/product_input_composition_weight", f: ps %><% end %></template>
-  <template id="template-input-unit"><%= f.fields_for :product_subproducts, ProductSubproduct.new, child_index: "NEW_RECORD" do |ps| %><%= render "products/product_input_composition_unit", f: ps %><% end %></template>
-  <template id="template-input-m2"><%= f.fields_for :product_subproducts, ProductSubproduct.new, child_index: "NEW_RECORD" do |ps| %><%= render "products/product_input_composition_m2", f: ps %><% end %></template>
+  <template id="template-subproduct-unit">
+    <%= f.fields_for :product_subproducts, ProductSubproduct.new, child_index: "NEW_RECORD" do |ps| %>
+      <%= render "products/product_composition_unit", f: ps %>
+    <% end %>
+  </template>
+
+  <template id="template-subproduct-m2">
+    <%= f.fields_for :product_subproducts, ProductSubproduct.new, child_index: "NEW_RECORD" do |ps| %>
+      <%= render "products/product_composition_m2", f: ps %>
+    <% end %>
+  </template>
+
+  <template id="template-input-weight">
+    <%= f.fields_for :product_subproducts, ProductSubproduct.new, child_index: "NEW_RECORD" do |ps| %>
+      <%= render "products/product_input_composition_weight", f: ps %>
+    <% end %>
+  </template>
+
+  <template id="template-input-unit">
+    <%= f.fields_for :product_subproducts, ProductSubproduct.new, child_index: "NEW_RECORD" do |ps| %>
+      <%= render "products/product_input_composition_unit", f: ps %>
+    <% end %>
+  </template>
+
+  <template id="template-input-m2">
+    <%= f.fields_for :product_subproducts, ProductSubproduct.new, child_index: "NEW_RECORD" do |ps| %>
+      <%= render "products/product_input_composition_m2", f: ps %>
+    <% end %>
+  </template>
 
   <div class="row mt-3">
     <div class="col-md-3 mb-3">
